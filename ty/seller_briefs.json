@@ -125,7 +125,19 @@
       ],
       "source_mode": "prompt_only",
       "fidelity": "exact",
-      "product_in_frame": true
+      "product_in_frame": true,
+      "product_line": "word-coffee-mug",
+      "label_mode": "warp",
+      "body_prompt": "Product photograph of a plain glazed ceramic mug with a blank body, no text, no lettering, no logo, on a plain neutral studio table. Photorealistic, unlabelled.",
+      "label": {
+        "brand": "Word Coffee",
+        "product": "Ceramic Mug",
+        "weight": "350 ml (11.8 fl oz)",
+        "lines": [
+          "Empowering Moms, One Message at a Time"
+        ]
+      },
+      "note": " | pack-01: wired to the app product_picture path on the rigid-cylinder form (label_mode warp, product_line, body_prompt); the label is composed and wrapped by the app, not drawn by the model."
     },
     {
       "id": "ST-003",
@@ -218,7 +230,19 @@
       ],
       "source_mode": "prompt_only",
       "fidelity": "exact",
-      "product_in_frame": true
+      "product_in_frame": true,
+      "product_line": "harbor-body-oil",
+      "label_mode": "warp",
+      "body_prompt": "Product photograph of a plain amber glass bottle with a blank label area, no text, no lettering, no logo, on a plain neutral studio table. Photorealistic, unlabelled packaging.",
+      "label": {
+        "brand": "Harbor Sage",
+        "product": "Body Oil",
+        "weight": "100 ml (3.4 fl oz)",
+        "lines": [
+          "Four oils, nothing else"
+        ]
+      },
+      "note": " | pack-01: wired to the app product_picture path on the rigid-cylinder form (label_mode warp, product_line, body_prompt); the label is composed and wrapped by the app, not drawn by the model."
     },
     {
       "id": "ST-005",
@@ -311,7 +335,19 @@
       ],
       "source_mode": "prompt_only",
       "fidelity": "exact",
-      "product_in_frame": true
+      "product_in_frame": true,
+      "product_line": "pine-paws-joint",
+      "label_mode": "warp",
+      "body_prompt": "Product photograph of a plain plastic supplement tub with a blank label area, no text, no lettering, no logo, on a plain neutral studio table. Photorealistic, unlabelled packaging.",
+      "label": {
+        "brand": "Pine Paws",
+        "product": "Joint Chews",
+        "weight": "180 g (60 chews)",
+        "lines": [
+          "A daily chew for older dogs"
+        ]
+      },
+      "note": " | pack-01: wired to the app product_picture path on the rigid-cylinder form (label_mode warp, product_line, body_prompt); the label is composed and wrapped by the app, not drawn by the model."
     },
     {
       "id": "ST-007",
@@ -468,7 +504,19 @@
       ],
       "source_mode": "prompt_only",
       "fidelity": "exact",
-      "product_in_frame": true
+      "product_in_frame": true,
+      "product_line": "word-coffee-mug",
+      "label_mode": "warp",
+      "body_prompt": "Product photograph of a plain glazed ceramic mug with a blank body, no text, no lettering, no logo, on a plain neutral studio table. Photorealistic, unlabelled.",
+      "label": {
+        "brand": "Word Coffee",
+        "product": "Ceramic Mug",
+        "weight": "350 ml (11.8 fl oz)",
+        "lines": [
+          "Empowering Moms, One Message at a Time"
+        ]
+      },
+      "note": " | pack-01: wired to the app product_picture path on the rigid-cylinder form (label_mode warp, product_line, body_prompt); the label is composed and wrapped by the app, not drawn by the model."
     },
     {
       "id": "ST-010",
@@ -558,7 +606,19 @@
       ],
       "source_mode": "prompt_only",
       "fidelity": "exact",
-      "product_in_frame": true
+      "product_in_frame": true,
+      "product_line": "harbor-body-oil",
+      "label_mode": "warp",
+      "body_prompt": "Product photograph of a plain amber glass bottle with a blank label area, no text, no lettering, no logo, on a plain neutral studio table. Photorealistic, unlabelled packaging.",
+      "label": {
+        "brand": "Harbor Sage",
+        "product": "Body Oil",
+        "weight": "100 ml (3.4 fl oz)",
+        "lines": [
+          "Four oils, nothing else"
+        ]
+      },
+      "note": " | pack-01: wired to the app product_picture path on the rigid-cylinder form (label_mode warp, product_line, body_prompt); the label is composed and wrapped by the app, not drawn by the model."
     },
     {
       "id": "ST-012",
@@ -654,7 +714,19 @@
       ],
       "source_mode": "prompt_only",
       "fidelity": "exact",
-      "product_in_frame": true
+      "product_in_frame": true,
+      "product_line": "pine-paws-joint",
+      "label_mode": "warp",
+      "body_prompt": "Product photograph of a plain plastic supplement tub with a blank label area, no text, no lettering, no logo, on a plain neutral studio table. Photorealistic, unlabelled packaging.",
+      "label": {
+        "brand": "Pine Paws",
+        "product": "Joint Chews",
+        "weight": "180 g (60 chews)",
+        "lines": [
+          "A daily chew for older dogs"
+        ]
+      },
+      "note": " | pack-01: wired to the app product_picture path on the rigid-cylinder form (label_mode warp, product_line, body_prompt); the label is composed and wrapped by the app, not drawn by the model."
     },
     {
       "id": "ST-014",
@@ -911,7 +983,19 @@
       ],
       "source_mode": "prompt_only",
       "fidelity": "exact",
-      "product_in_frame": true
+      "product_in_frame": true,
+      "product_line": "harbor-body-oil",
+      "label_mode": "warp",
+      "body_prompt": "Product photograph of a plain amber glass bottle with a blank label area, no text, no lettering, no logo, on a plain neutral studio table. Photorealistic, unlabelled packaging.",
+      "label": {
+        "brand": "Harbor Sage",
+        "product": "Body Oil",
+        "weight": "100 ml (3.4 fl oz)",
+        "lines": [
+          "Four oils, nothing else"
+        ]
+      },
+      "note": " | pack-01: wired to the app product_picture path on the rigid-cylinder form (label_mode warp, product_line, body_prompt); the label is composed and wrapped by the app, not drawn by the model."
     },
     {
       "id": "ST-019",
@@ -1004,7 +1088,19 @@
       ],
       "source_mode": "prompt_only",
       "fidelity": "exact",
-      "product_in_frame": true
+      "product_in_frame": true,
+      "product_line": "pine-paws-joint",
+      "label_mode": "warp",
+      "body_prompt": "Product photograph of a plain plastic supplement tub with a blank label area, no text, no lettering, no logo, on a plain neutral studio table. Photorealistic, unlabelled packaging.",
+      "label": {
+        "brand": "Pine Paws",
+        "product": "Joint Chews",
+        "weight": "180 g (60 chews)",
+        "lines": [
+          "A daily chew for older dogs"
+        ]
+      },
+      "note": " | pack-01: wired to the app product_picture path on the rigid-cylinder form (label_mode warp, product_line, body_prompt); the label is composed and wrapped by the app, not drawn by the model."
     },
     {
       "id": "ST-021",
@@ -1215,7 +1311,19 @@
       ],
       "source_mode": "prompt_only",
       "fidelity": "exact",
-      "product_in_frame": true
+      "product_in_frame": true,
+      "product_line": "word-coffee-mug",
+      "label_mode": "warp",
+      "body_prompt": "Product photograph of a plain glazed ceramic mug with a blank body, no text, no lettering, no logo, on a plain neutral studio table. Photorealistic, unlabelled.",
+      "label": {
+        "brand": "Word Coffee",
+        "product": "Ceramic Mug",
+        "weight": "350 ml (11.8 fl oz)",
+        "lines": [
+          "Empowering Moms, One Message at a Time"
+        ]
+      },
+      "note": " | pack-01: wired to the app product_picture path on the rigid-cylinder form (label_mode warp, product_line, body_prompt); the label is composed and wrapped by the app, not drawn by the model."
     },
     {
       "id": "ST-025",
@@ -1264,7 +1372,19 @@
       ],
       "source_mode": "prompt_only",
       "fidelity": "exact",
-      "product_in_frame": true
+      "product_in_frame": true,
+      "product_line": "harbor-body-oil",
+      "label_mode": "warp",
+      "body_prompt": "Product photograph of a plain amber glass bottle with a blank label area, no text, no lettering, no logo, on a plain neutral studio table. Photorealistic, unlabelled packaging.",
+      "label": {
+        "brand": "Harbor Sage",
+        "product": "Body Oil",
+        "weight": "100 ml (3.4 fl oz)",
+        "lines": [
+          "Four oils, nothing else"
+        ]
+      },
+      "note": " | pack-01: wired to the app product_picture path on the rigid-cylinder form (label_mode warp, product_line, body_prompt); the label is composed and wrapped by the app, not drawn by the model."
     },
     {
       "id": "ST-026",
@@ -1354,7 +1474,19 @@
       ],
       "source_mode": "prompt_only",
       "fidelity": "exact",
-      "product_in_frame": true
+      "product_in_frame": true,
+      "product_line": "pine-paws-joint",
+      "label_mode": "warp",
+      "body_prompt": "Product photograph of a plain plastic supplement tub with a blank label area, no text, no lettering, no logo, on a plain neutral studio table. Photorealistic, unlabelled packaging.",
+      "label": {
+        "brand": "Pine Paws",
+        "product": "Joint Chews",
+        "weight": "180 g (60 chews)",
+        "lines": [
+          "A daily chew for older dogs"
+        ]
+      },
+      "note": " | pack-01: wired to the app product_picture path on the rigid-cylinder form (label_mode warp, product_line, body_prompt); the label is composed and wrapped by the app, not drawn by the model."
     },
     {
       "id": "ST-028",
@@ -1565,7 +1697,19 @@
       ],
       "source_mode": "prompt_only",
       "fidelity": "exact",
-      "product_in_frame": true
+      "product_in_frame": true,
+      "product_line": "word-coffee-mug",
+      "label_mode": "warp",
+      "body_prompt": "Product photograph of a plain glazed ceramic mug with a blank body, no text, no lettering, no logo, on a plain neutral studio table. Photorealistic, unlabelled.",
+      "label": {
+        "brand": "Word Coffee",
+        "product": "Ceramic Mug",
+        "weight": "350 ml (11.8 fl oz)",
+        "lines": [
+          "Empowering Moms, One Message at a Time"
+        ]
+      },
+      "note": " | pack-01: wired to the app product_picture path on the rigid-cylinder form (label_mode warp, product_line, body_prompt); the label is composed and wrapped by the app, not drawn by the model."
     },
     {
       "id": "ST-032",

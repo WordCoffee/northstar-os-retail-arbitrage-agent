@@ -70,15 +70,37 @@ BOX_PLATE_BRIEFS: Dict[str, str] = {
         "focus on the box"),
 }
 
+#: The rigid-cylinder form. A jar, bottle, tube or canister is not a box and not
+#: a pouch: the plate must be the round body the wrap-around label belongs on.
+CYLINDER_PLATE_BRIEFS: Dict[str, str] = {
+    "front": (
+        "a photograph of one blank unprinted rigid cylindrical package standing "
+        "upright on a pale seamless studio sweep, its front face square to the "
+        "camera, a plain body with no lettering and no label, a gentle contact "
+        "shadow, soft diffused key light from the upper left, photoreal commercial "
+        "product photography, sharp focus on the body"),
+    "back": (
+        "a photograph of one blank unprinted rigid cylindrical package standing "
+        "upright on a pale seamless studio sweep, turned around so its back is "
+        "square to the camera, a plain body with no lettering and no label, a "
+        "gentle contact shadow, soft diffused key light from the upper left, "
+        "photoreal commercial product photography, sharp focus on the body"),
+}
+
 #: Print-area insets per form. The pouch insets skip the top weld and the base
 #: gusset; a folding carton has neither, so its panel runs near the trim.
 FORM_PLATE_BRIEFS: Dict[str, Dict[str, str]] = {
     art.POUCH: PLATE_BRIEFS,
     art.GIFT_BOX: BOX_PLATE_BRIEFS,
+    art.CYLINDER: CYLINDER_PLATE_BRIEFS,
 }
 FORM_INSETS: Dict[str, Dict[str, float]] = {
     art.POUCH: {"inset_x": 0.075, "inset_top": 0.20, "inset_bottom": 0.10},
     art.GIFT_BOX: {"inset_x": 0.055, "inset_top": 0.055, "inset_bottom": 0.055},
+    # A cylinder's printable band sits below the shoulder/cap and above the base
+    # curve, and runs nearly to the silhouette's sides: the label wraps, so the
+    # side inset is small while the top inset carries the shoulder and the cap.
+    art.CYLINDER: {"inset_x": 0.03, "inset_top": 0.26, "inset_bottom": 0.10},
 }
 
 #: The print should follow the pouch surface, not sit on it as a sticker. Measured
@@ -170,6 +192,66 @@ def _guarded_plate(brief: str, *, width: int, height: int, tier: str,
     }
 
 
+def _compose_cylinder(plate: Image.Image, design: Dict[str, Any], face: str,
+                      quads: Sequence, *, shading: float) -> Dict[str, Any]:
+    """Warp a wrap-around label onto each measured cylinder body, then gate it.
+
+    A cylinder has no four-corner face: the label wraps the visible half of the
+    tube. The label also has a *real size* — `face_mm` declares the visible-half
+    width and the height — so the band is measured, not stretched: the body's
+    measured width sets the picture's px-per-mm, the declared label height gives
+    the band's height in pixels, and the label is centred on the body's printable
+    area. A label that is taller than the body is refused by name rather than
+    squeezed onto it.
+
+    The panel is drawn at the band's own pixel size, so its copy lands at the
+    resolution the picture actually has instead of being resampled twice.
+    """
+    composed_img = plate.convert("RGB")
+    width_mm, height_mm = art.face_mm(design, face)
+    bands: list = []
+    panels: list = []
+    for measured in quads:
+        xs = [float(point[0]) for point in measured]
+        ys = [float(point[1]) for point in measured]
+        x0, x1 = min(xs), max(xs)
+        y0, y1 = min(ys), max(ys)
+        px_per_mm = (x1 - x0) / max(0.1, float(width_mm))
+        label_h = float(height_mm) * px_per_mm
+        if label_h > (y1 - y0):
+            raise ValueError(
+                f"label_too_tall_for_body: the declared label is {height_mm:.0f} mm "
+                f"({label_h:.0f} px at this scale) and the printable body is "
+                f"{y1 - y0:.0f} px tall")
+        centre = (y0 + y1) / 2.0
+        band = [x0, centre - label_h / 2.0, x1, centre + label_h / 2.0]
+        bands.append(band)
+        size = (max(64, int(band[2] - band[0])), max(64, int(band[3] - band[1])))
+        panel = (art.front_panel(design, size=size) if face == "front"
+                 else art.back_panel(design, size=size))
+        panels.append(panel)
+        composed_img = mc.warp_cylinder(composed_img, panel, band,
+                                        shading=max(0.0, min(1.0, float(shading))))
+
+    gate = mq.assert_legible(composed_img, wordmark=str(design["brand"]),
+                             net_weight=str(design.get("net_weight") or "") or None)
+    return {
+        "image": composed_img,
+        "quad": [[round(x, 2), round(y, 2)] for x, y in
+                 ((bands[0][0], bands[0][1]), (bands[0][2], bands[0][1]),
+                  (bands[0][2], bands[0][3]), (bands[0][0], bands[0][3]))],
+        "quads": [[[round(x, 2), round(y, 2)] for x, y in
+                   ((band[0], band[1]), (band[2], band[1]),
+                    (band[2], band[3]), (band[0], band[3]))] for band in bands],
+        "bands": [[round(value, 2) for value in band] for band in bands],
+        "units_found": len(bands),
+        "panel": panels[0],
+        "legibility": gate,
+        "gate_ok": bool(gate.get("ok")),
+        "reason": "" if gate.get("ok") else str(gate.get("reason") or "not legible"),
+    }
+
+
 def compose_face(plate: Image.Image, design: Dict[str, Any], face: str, *,
                  shading: float = 0.45, feather: Optional[float] = 2.2,
                  form: Optional[str] = None, quad: Optional[Sequence] = None,
@@ -184,6 +266,12 @@ def compose_face(plate: Image.Image, design: Dict[str, Any], face: str, *,
     picture whose copy cannot be read returns ``gate_ok=False`` with the reason
     instead of passing silently. The print-area insets come from the design's form,
     so a carton face is not inset like a pouch weld.
+
+    A rigid cylinder has no four-corner face: its label wraps the visible half of
+    the tube, so the measured face becomes a *band* and the panel is warped round
+    the arc by :func:`mockup_compositor.warp_cylinder` instead of homographed onto
+    a quad. Printing a flat homography on a round body is what makes a label look
+    like a sticker.
     """
     form = form or art.form_of(design)
     insets = FORM_INSETS.get(form, FORM_INSETS[art.POUCH])
@@ -195,6 +283,9 @@ def compose_face(plate: Image.Image, design: Dict[str, Any], face: str, *,
         raise ValueError(
             f"units_not_found: measured {len(quads)} of {int(units)} requested")
     panel = (art.front_panel(design) if face == "front" else art.back_panel(design))
+
+    if form == art.CYLINDER:
+        return _compose_cylinder(plate, design, face, quads, shading=shading)
 
     maps = None
     composed_img = plate.convert("RGB")

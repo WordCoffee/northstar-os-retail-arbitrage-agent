@@ -203,7 +203,7 @@ def test_the_designs_endpoint_lists_every_brand_with_its_form():
 
     body = api.designs(acct="test-account")
     by_id = {d["id"]: d for d in body["designs"]}
-    assert set(by_id) == {"mogra-lions-mane", "word-coffee"}
+    assert {"mogra-lions-mane", "word-coffee"} <= set(by_id)
     assert by_id["mogra-lions-mane"]["form"] == ba.POUCH
     assert by_id["word-coffee"]["form"] == ba.GIFT_BOX
     assert "pouch" in by_id["mogra-lions-mane"]["plate_briefs"]["front"]

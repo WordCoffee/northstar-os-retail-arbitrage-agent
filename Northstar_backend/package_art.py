@@ -400,6 +400,98 @@ def render_front_box(spec: Dict[str, Any], *, logo: Optional[Image.Image] = None
     return pd.apply_paper(img, seed=_seed(spec))
 
 
+def render_front_label(spec: Dict[str, Any], *, logo: Optional[Image.Image] = None,
+                       width_mm: float = 90.0, height_mm: float = 70.0) -> Image.Image:
+    """Front of a wrap-around label on a rigid cylinder.
+
+    A carton front is a tall face with room for a bean motif and a big script
+    line; a jar label is short and wide. Reusing the carton rhythm on a 70 mm
+    label put the wordmark on the frame rule and the script on the wordmark (OCR
+    read "WORD COFFEE" as "WORDCOEEEE"), so a label gets its own rhythm: brand,
+    rule, product name, script/tagline, and the legal weight line in a band at
+    the foot. Nothing is invented — every string comes from the design.
+    """
+    W, H = float(width_mm), float(height_mm)
+    theme = _theme(spec)
+    ink, accent, muted = theme["ink"], theme["accent"], theme["muted"]
+    band = theme.get("band", (250, 244, 236))
+
+    img = Image.new("RGB", (pd.P(W), pd.P(H)), theme["ground"])
+    d = ImageDraw.Draw(img)
+
+    inset = max(3.0, min(6.5, H * 0.07))
+    pd.frame(d, W, H, accent, inset_mm=inset, width_mm=0.5,
+             inset2_mm=inset + max(0.8, W * 0.008))
+    safe_w = W - 2 * inset - 6
+
+    brand = str(spec.get("brand") or spec.get("company") or "NORTHSTAR").strip()
+    brand_mm = max(2.6, min(W * 0.052, H * 0.085))
+    y_brand = inset + brand_mm * 0.75
+    if logo is not None:
+        _paste_logo(img, logo, W, y_brand,
+                    max_w=min(42.0, W * 0.62), max_h=min(16.0, H * 0.10))
+    else:
+        pd.ctext(d, W / 2, y_brand, brand.upper(), pd.F("Inter.ttf", brand_mm, [14, 700]),
+                 ink, tracking_mm=max(0.4, min(0.8, W * 0.005)))
+    rule_y = y_brand + brand_mm * 0.85
+    pd.rule(d, W / 2 - W * 0.20, rule_y, W / 2 + W * 0.20, accent, 0.35)
+
+    y = rule_y + H * 0.055
+    product = str(spec.get("product") or spec.get("title") or "").strip()
+    product_mm = max(3.0, min(H * 0.10, W * 0.06))
+    if product:
+        f_product = pd.fit_size("PlayfairDisplay.ttf", product_mm, [700],
+                                product.upper(), safe_w)
+        pd.ctext(d, W / 2, y, product.upper(), f_product, ink)
+        # Advance by the type size, not by a fraction of the label: on a short
+        # label a fraction puts the script line into the product name.
+        y += max(H * 0.085, product_mm * 1.45)
+
+    script_line = str(spec.get("script_line") or "").strip()
+    if script_line and y < H * 0.55:
+        f_script = _fit_script(d, script_line, size_mm=H * 0.095, max_w_mm=safe_w)
+        pd.ctext(d, W / 2, y, script_line, f_script, accent)
+        y += max(H * 0.075, H * 0.095 * 1.15)
+
+    subtitle = str(spec.get("subtitle") or "").strip()
+    if subtitle and y < H * 0.62:
+        pd.ctext(d, W / 2, y, subtitle.upper(),
+                 pd.F("Inter.ttf", max(1.9, H * 0.026), [14, 650]), ink,
+                 tracking_mm=max(0.4, min(0.9, W * 0.007)))
+        y += H * 0.045
+
+    tagline = str(spec.get("tagline") or "").strip()
+    if tagline and y < H * 0.64:
+        f_tag = pd.F("CormorantGaramond-Italic.ttf", max(2.6, H * 0.040))
+        for line in _wrap_lines(d, tagline, f_tag, safe_w - 4)[:2]:
+            pd.ctext(d, W / 2, y, line, f_tag, muted)
+            y += H * 0.050
+
+    # the legal weight line, in a band at the foot: high contrast, one string
+    band_top, band_bottom = H * 0.745, H * 0.870
+    d.rectangle([pd.P(inset + 1.2), pd.P(band_top), pd.P(W - inset - 1.2), pd.P(band_bottom)],
+                fill=tuple(band))
+    weight_line = str(spec.get("net_weight_line") or spec.get("weight") or "").strip()
+    band_ink = (58, 40, 62) if sum(band) / 3 > 120 else ink
+    if weight_line:
+        pd.ctext(d, W / 2, band_top + (band_bottom - band_top) * 0.42,
+                 weight_line.upper(),
+                 pd.F("Inter.ttf", max(3.2, H * 0.055), [14, 700]), band_ink)
+    descriptor = str(spec.get("descriptor") or "").strip()
+    if descriptor:
+        pd.ctext(d, W / 2, band_top + (band_bottom - band_top) * 0.80,
+                 descriptor.upper(),
+                 pd.F("Inter.ttf", max(1.6, H * 0.020), [14, 500]), band_ink,
+                 tracking_mm=max(0.4, W * 0.006))
+
+    draft = str(spec.get("draft_note") or "").strip()
+    if draft:
+        pd.ctext(d, W / 2, H * 0.912, draft.upper(),
+                 pd.F("Inter.ttf", max(1.6, H * 0.020)), muted, tracking_mm=0.6)
+
+    return pd.apply_paper(img, seed=_seed(spec))
+
+
 def render_back_box(spec: Dict[str, Any], *, logo: Optional[Image.Image] = None,
                     width_mm: float = 100.0, height_mm: float = 200.0) -> Image.Image:
     """Back of a folding carton: what is inside, ingredients, brew, codes, UPC.
@@ -503,4 +595,106 @@ def render_back_box(spec: Dict[str, Any], *, logo: Optional[Image.Image] = None,
     return pd.apply_paper(img, seed=_seed(spec) + 1)
 
 
-__all__ = ["THEMES", "themes", "render_front", "render_front_box", "render_back_box"]
+def render_back_label(spec: Dict[str, Any], *, logo: Optional[Image.Image] = None,
+                      width_mm: float = 90.0, height_mm: float = 70.0) -> Image.Image:
+    """Back of a wrap-around label on a rigid cylinder (jar, bottle, tube, canister).
+
+    A carton's back has flaps and coffee headings; a cylinder label has neither,
+    so the sections come from the design: ``label_sections`` is a list of
+    ``{"head": str, "body": str}`` and nothing is invented here. The legal
+    footers (lot, best-by, UPC, distributor, draft note) are drawn exactly as on
+    any other label, so a rear picture can still be checked for them.
+    """
+    W, H = float(width_mm), float(height_mm)
+    theme = _theme(spec)
+    ink, accent, muted = theme["ink"], theme["accent"], theme["muted"]
+
+    img = Image.new("RGB", (pd.P(W), pd.P(H)), theme["ground"])
+    d = ImageDraw.Draw(img)
+
+    inset = max(3.0, min(6.0, H * 0.06))
+    pd.frame(d, W, H, accent, inset_mm=inset, width_mm=0.5)
+    tx = inset + 3
+    right = W - inset - 3
+    col_w = right - tx
+
+    brand = str(spec.get("brand") or spec.get("company") or "NORTHSTAR").strip()
+    if logo is not None:
+        _paste_logo(img, logo, W, H * 0.075,
+                    max_w=min(40.0, W * 0.55), max_h=min(12.0, H * 0.16))
+    else:
+        pd.ctext(d, W / 2, H * 0.095, brand.upper(),
+                 pd.F("Inter.ttf", max(2.6, H * 0.062), [14, 700]), ink,
+                 tracking_mm=max(0.5, min(0.7, W * 0.005)))
+    pd.rule(d, tx, H * 0.145, right, accent, 0.35)
+
+    weight_line = str(spec.get("net_weight_line") or spec.get("weight") or "").strip()
+    if weight_line:
+        pd.ctext(d, W / 2, H * 0.180, weight_line.upper(),
+                 pd.F("Inter.ttf", max(3.0, H * 0.050), [14, 700]), ink,
+                 tracking_mm=0.45)
+
+    f_head = pd.F("Inter.ttf", max(1.9, H * 0.024), [14, 700])
+    f_body = pd.F("Inter.ttf", max(1.8, H * 0.021), [14, 400])
+    f_small = pd.F("Inter.ttf", max(1.5, H * 0.017), [14, 400])
+
+    y = H * 0.225
+    sections = list(spec.get("label_sections") or [])
+    if not sections:
+        # No declared sections: say what is inside and what is in it, and stop.
+        sections = [{"head": "WHAT'S INSIDE",
+                     "body": str(spec.get("inside") or spec.get("tagline") or "")},
+                    {"head": "INGREDIENTS", "body": str(spec.get("ingredients") or "")}]
+    for section in sections:
+        head = str(section.get("head") or "").strip()
+        body = str(section.get("body") or "").strip()
+        if not head and not body:
+            continue
+        if head:
+            pd.ltext(d, tx, y, head.upper(), f_head, accent)
+            y += H * 0.032
+        for line in _wrap_lines(d, body, f_body, col_w):
+            if y > H * 0.80:
+                break
+            pd.ltext(d, tx, y, line, f_body, ink)
+            y += H * 0.026
+        y += H * 0.014
+
+    about = str(spec.get("about") or "").strip()
+    if about and y < H * 0.80:
+        pd.rule(d, tx, y, right, accent, 0.25)
+        y += H * 0.018
+        for line in _wrap_lines(d, about, f_small, col_w):
+            if y > H * 0.845:
+                break
+            pd.ltext(d, tx, y, line, f_small, muted)
+            y += H * 0.023
+
+    sv = str(spec.get("servings") or "").strip()
+    if sv:
+        pd.ltext(d, tx, H * 0.855, sv.upper(), f_small, ink)
+
+    box_top = H * 0.870
+    d.rectangle([pd.P(tx), pd.P(box_top), pd.P(tx + col_w * 0.46), pd.P(box_top + H * 0.058)],
+                outline=tuple(muted), width=2)
+    pd.ltext(d, tx + 1.4, box_top + H * 0.016, str(spec.get("lot_code") or ""), f_small, ink)
+    pd.ltext(d, tx + 1.4, box_top + H * 0.038, str(spec.get("best_by") or ""), f_small, ink)
+
+    digits = re.sub(r"\D", "", str(spec.get("barcode_digits") or ""))
+    if len(digits) >= 11:
+        digits = (digits + "000000000000")[:12]
+        uw = col_w * 0.44
+        pd.draw_upc(d, right - uw, box_top + H * 0.006, uw, H * 0.050, digits)
+
+    rep = str(spec.get("company") or "").strip()
+    if rep:
+        pd.ctext(d, W / 2, H * 0.955, rep.upper(), f_small, muted, tracking_mm=0.5)
+    draft = str(spec.get("back_draft_note") or spec.get("draft_note") or "").strip()
+    if draft:
+        pd.ctext(d, W / 2, H * 0.975, draft.upper(), f_small, muted, tracking_mm=0.5)
+
+    return pd.apply_paper(img, seed=_seed(spec) + 2)
+
+
+__all__ = ["THEMES", "themes", "render_front", "render_front_box", "render_back_box",
+           "render_back_label"]

@@ -1,0 +1,2942 @@
+{
+  "generated_at": "2026-11-11T05:59:36+00:00",
+  "generator": "product_pipeline",
+  "judge_enabled": false,
+  "mode_filter": null,
+  "catalog_briefs": 56,
+  "catalog_by_mode": {
+    "prompt_only": 32,
+    "stored_reference": 12,
+    "uploaded_reference": 12
+  },
+  "selected": 56,
+  "artefacts_available": null,
+  "scored": 20,
+  "not_scored": 36,
+  "not_scored_reason": "the generator had fewer artefacts than the pass selected",
+  "passed": 20,
+  "failed": 0,
+  "pass_rate": 100.0,
+  "mean_score": 96.0,
+  "gaps_filed": 0,
+  "gaps_in_file": 0,
+  "gaps_path": "state/seller/pack01_gaps.json",
+  "mirror_path": "state/seller/pack01_gaps.json",
+  "escalations": [
+    {
+      "at": "2026-11-11T05:59:33+00:00",
+      "from_brief_id": "ST-001",
+      "from_difficulty": 1,
+      "source_mode": "prompt_only",
+      "action": "raise_tier",
+      "detail": "difficulty 1 -> 2 (prompt_only)",
+      "constraint": null,
+      "to_brief_id": "ST-001",
+      "to_difficulty": 2,
+      "score": 100.0,
+      "artefact_path": "renders/heldout_cylinder3/ST-001/product_front.png"
+    },
+    {
+      "at": "2026-11-11T05:59:33+00:00",
+      "from_brief_id": "ST-002",
+      "from_difficulty": 1,
+      "source_mode": "prompt_only",
+      "action": "raise_tier",
+      "detail": "difficulty 1 -> 2 (prompt_only)",
+      "constraint": null,
+      "to_brief_id": "ST-002",
+      "to_difficulty": 2,
+      "score": 100.0,
+      "artefact_path": "renders/heldout_cylinder3/ST-002/product_front.png"
+    },
+    {
+      "at": "2026-11-11T05:59:33+00:00",
+      "from_brief_id": "ST-004",
+      "from_difficulty": 1,
+      "source_mode": "prompt_only",
+      "action": "raise_tier",
+      "detail": "difficulty 1 -> 2 (prompt_only)",
+      "constraint": null,
+      "to_brief_id": "ST-004",
+      "to_difficulty": 2,
+      "score": 100.0,
+      "artefact_path": "renders/heldout_cylinder3/ST-004/product_front.png"
+    },
+    {
+      "at": "2026-11-11T05:59:33+00:00",
+      "from_brief_id": "ST-006",
+      "from_difficulty": 1,
+      "source_mode": "prompt_only",
+      "action": "raise_tier",
+      "detail": "difficulty 1 -> 2 (prompt_only)",
+      "constraint": null,
+      "to_brief_id": "ST-006",
+      "to_difficulty": 2,
+      "score": 100.0,
+      "artefact_path": "renders/heldout_cylinder3/ST-006/product_front.png"
+    },
+    {
+      "at": "2026-11-11T05:59:33+00:00",
+      "from_brief_id": "ST-008",
+      "from_difficulty": 1,
+      "source_mode": "prompt_only",
+      "action": "raise_tier",
+      "detail": "difficulty 1 -> 2 (prompt_only)",
+      "constraint": null,
+      "to_brief_id": "ST-008",
+      "to_difficulty": 2,
+      "score": 100.0,
+      "artefact_path": "renders/heldout_cylinder3/ST-008/product_front.png"
+    },
+    {
+      "at": "2026-11-11T05:59:34+00:00",
+      "from_brief_id": "ST-009",
+      "from_difficulty": 2,
+      "source_mode": "prompt_only",
+      "action": "raise_tier",
+      "detail": "difficulty 2 -> 3 (prompt_only)",
+      "constraint": null,
+      "to_brief_id": "ST-009",
+      "to_difficulty": 3,
+      "score": 100.0,
+      "artefact_path": "renders/heldout_cylinder3/ST-009/product_front.png"
+    },
+    {
+      "at": "2026-11-11T05:59:34+00:00",
+      "from_brief_id": "ST-011",
+      "from_difficulty": 2,
+      "source_mode": "prompt_only",
+      "action": "raise_tier",
+      "detail": "difficulty 2 -> 3 (prompt_only)",
+      "constraint": null,
+      "to_brief_id": "ST-011",
+      "to_difficulty": 3,
+      "score": 70.0,
+      "artefact_path": "renders/heldout_cylinder3/ST-011/product_front.png"
+    },
+    {
+      "at": "2026-11-11T05:59:34+00:00",
+      "from_brief_id": "ST-013",
+      "from_difficulty": 2,
+      "source_mode": "prompt_only",
+      "action": "raise_tier",
+      "detail": "difficulty 2 -> 3 (prompt_only)",
+      "constraint": null,
+      "to_brief_id": "ST-013",
+      "to_difficulty": 3,
+      "score": 100.0,
+      "artefact_path": "renders/heldout_cylinder3/ST-013/product_front.png"
+    },
+    {
+      "at": "2026-11-11T05:59:34+00:00",
+      "from_brief_id": "ST-015",
+      "from_difficulty": 2,
+      "source_mode": "prompt_only",
+      "action": "raise_tier",
+      "detail": "difficulty 2 -> 3 (prompt_only)",
+      "constraint": null,
+      "to_brief_id": "ST-015",
+      "to_difficulty": 3,
+      "score": 100.0,
+      "artefact_path": "renders/heldout_cylinder3/ST-015/product_front.png"
+    },
+    {
+      "at": "2026-11-11T05:59:35+00:00",
+      "from_brief_id": "ST-016",
+      "from_difficulty": 2,
+      "source_mode": "prompt_only",
+      "action": "raise_tier",
+      "detail": "difficulty 2 -> 3 (prompt_only)",
+      "constraint": null,
+      "to_brief_id": "ST-016",
+      "to_difficulty": 3,
+      "score": 100.0,
+      "artefact_path": "renders/heldout_cylinder3/ST-016/product_front.png"
+    },
+    {
+      "at": "2026-11-11T05:59:35+00:00",
+      "from_brief_id": "ST-018",
+      "from_difficulty": 3,
+      "source_mode": "prompt_only",
+      "action": "add_constraint",
+      "detail": "added hard constraint tight_background (prompt_only)",
+      "constraint": "tight_background",
+      "to_brief_id": "ST-018",
+      "to_difficulty": 3,
+      "score": 100.0,
+      "artefact_path": "renders/heldout_cylinder3/ST-018/product_front.png"
+    },
+    {
+      "at": "2026-11-11T05:59:35+00:00",
+      "from_brief_id": "ST-020",
+      "from_difficulty": 3,
+      "source_mode": "prompt_only",
+      "action": "add_constraint",
+      "detail": "added hard constraint tight_background (prompt_only)",
+      "constraint": "tight_background",
+      "to_brief_id": "ST-020",
+      "to_difficulty": 3,
+      "score": 100.0,
+      "artefact_path": "renders/heldout_cylinder3/ST-020/product_front.png"
+    },
+    {
+      "at": "2026-11-11T05:59:35+00:00",
+      "from_brief_id": "ST-022",
+      "from_difficulty": 3,
+      "source_mode": "prompt_only",
+      "action": "add_constraint",
+      "detail": "added hard constraint tight_background (prompt_only)",
+      "constraint": "tight_background",
+      "to_brief_id": "ST-022",
+      "to_difficulty": 3,
+      "score": 100.0,
+      "artefact_path": "renders/heldout_cylinder3/ST-022/product_front.png"
+    },
+    {
+      "at": "2026-11-11T05:59:35+00:00",
+      "from_brief_id": "ST-023",
+      "from_difficulty": 3,
+      "source_mode": "prompt_only",
+      "action": "add_constraint",
+      "detail": "added hard constraint tight_background (prompt_only)",
+      "constraint": "tight_background",
+      "to_brief_id": "ST-023",
+      "to_difficulty": 3,
+      "score": 100.0,
+      "artefact_path": "renders/heldout_cylinder3/ST-023/product_front.png"
+    },
+    {
+      "at": "2026-11-11T05:59:35+00:00",
+      "from_brief_id": "ST-024",
+      "from_difficulty": 3,
+      "source_mode": "prompt_only",
+      "action": "add_constraint",
+      "detail": "added hard constraint tight_background (prompt_only)",
+      "constraint": "tight_background",
+      "to_brief_id": "ST-024",
+      "to_difficulty": 3,
+      "score": 100.0,
+      "artefact_path": "renders/heldout_cylinder3/ST-024/product_front.png"
+    },
+    {
+      "at": "2026-11-11T05:59:36+00:00",
+      "from_brief_id": "ST-025",
+      "from_difficulty": 3,
+      "source_mode": "prompt_only",
+      "action": "add_constraint",
+      "detail": "added hard constraint tight_background (prompt_only)",
+      "constraint": "tight_background",
+      "to_brief_id": "ST-025",
+      "to_difficulty": 3,
+      "score": 100.0,
+      "artefact_path": "renders/heldout_cylinder3/ST-025/product_front.png"
+    },
+    {
+      "at": "2026-11-11T05:59:36+00:00",
+      "from_brief_id": "ST-027",
+      "from_difficulty": 3,
+      "source_mode": "prompt_only",
+      "action": "add_constraint",
+      "detail": "added hard constraint tight_background (prompt_only)",
+      "constraint": "tight_background",
+      "to_brief_id": "ST-027",
+      "to_difficulty": 3,
+      "score": 70.0,
+      "artefact_path": "renders/heldout_cylinder3/ST-027/product_front.png"
+    },
+    {
+      "at": "2026-11-11T05:59:36+00:00",
+      "from_brief_id": "ST-029",
+      "from_difficulty": 3,
+      "source_mode": "prompt_only",
+      "action": "add_constraint",
+      "detail": "added hard constraint tight_background (prompt_only)",
+      "constraint": "tight_background",
+      "to_brief_id": "ST-029",
+      "to_difficulty": 3,
+      "score": 80.0,
+      "artefact_path": "renders/heldout_cylinder3/ST-029/product_front.png"
+    },
+    {
+      "at": "2026-11-11T05:59:36+00:00",
+      "from_brief_id": "ST-030",
+      "from_difficulty": 3,
+      "source_mode": "prompt_only",
+      "action": "add_constraint",
+      "detail": "added hard constraint tight_background (prompt_only)",
+      "constraint": "tight_background",
+      "to_brief_id": "ST-030",
+      "to_difficulty": 3,
+      "score": 100.0,
+      "artefact_path": "renders/heldout_cylinder3/ST-030/product_front.png"
+    },
+    {
+      "at": "2026-11-11T05:59:36+00:00",
+      "from_brief_id": "ST-031",
+      "from_difficulty": 3,
+      "source_mode": "prompt_only",
+      "action": "add_constraint",
+      "detail": "added hard constraint tight_background (prompt_only)",
+      "constraint": "tight_background",
+      "to_brief_id": "ST-031",
+      "to_difficulty": 3,
+      "score": 100.0,
+      "artefact_path": "renders/heldout_cylinder3/ST-031/product_front.png"
+    }
+  ],
+  "results": [
+    {
+      "brief_id": "ST-001",
+      "category": "supplement_pouch",
+      "situation": "white_background_main",
+      "difficulty": 1,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "product_picture",
+      "population": "generated",
+      "artefact_path": "renders/heldout_cylinder3/ST-001/product_front.png",
+      "width": 2000,
+      "height": 2000,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.020"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "corners [(255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255)] vs target (255, 255, 255) +-6; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "subject fill 25.1% vs 12.0-100.0% (distance > 20)"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "border mean 255.0 (>= 249), std 0.00 (<= 6.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "107260 bytes (0.027 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "margin ink 0.00% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "ST-001",
+        "route": "product_picture",
+        "fidelity": "exact",
+        "renderer": "drawn",
+        "design": "MOGRA",
+        "form": "stand_up_pouch",
+        "plate": {
+          "source": "synthetic_plate",
+          "prompt": "drawn blank pouch on a white field (no render lane)",
+          "model": null,
+          "width": 2000,
+          "height": 2000,
+          "seed": 7,
+          "note": "not generated: a drawn plate used only for the offline proof"
+        },
+        "build": {
+          "ok": true,
+          "form": "stand_up_pouch",
+          "units": 1,
+          "faces": [
+            {
+              "face": "front",
+              "stage": "done",
+              "gate_ok": true,
+              "reason": "",
+              "units_found": 1
+            }
+          ],
+          "manifest": "renders\\heldout_cylinder3\\ST-001\\product_picture_manifest.json"
+        },
+        "product_box": null,
+        "bytes": 107260,
+        "seconds": 8.54
+      }
+    },
+    {
+      "brief_id": "ST-002",
+      "category": "ceramic_mug",
+      "situation": "lifestyle",
+      "difficulty": 1,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "product_picture",
+      "population": "generated",
+      "artefact_path": "renders/heldout_cylinder3/ST-002/product_front.png",
+      "width": 2000,
+      "height": 2000,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.030"
+        },
+        "background": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "background is free for this brief"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "a free (scene) background gives no corner colour to measure against, and no product box was recorded: subject fill cannot be measured on this artefact"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "matte free for this brief"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "437850 bytes (0.109 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "text allowed for this brief"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "ST-002",
+        "route": "product_picture",
+        "fidelity": "exact",
+        "renderer": "drawn",
+        "design": "word-coffee-mug",
+        "form": "rigid_cylinder",
+        "plate": {
+          "source": "synthetic_plate",
+          "prompt": "drawn blank cylinder on a sweep field (no render lane)",
+          "model": null,
+          "width": 2000,
+          "height": 2000,
+          "seed": 7,
+          "note": "not generated: a drawn plate used only for the offline proof"
+        },
+        "build": {
+          "ok": true,
+          "form": "rigid_cylinder",
+          "units": 1,
+          "faces": [
+            {
+              "face": "front",
+              "stage": "done",
+              "gate_ok": true,
+              "reason": "",
+              "units_found": 1
+            }
+          ],
+          "manifest": "renders\\heldout_cylinder3\\ST-002\\product_picture_manifest.json"
+        },
+        "product_box": null,
+        "bytes": 437850,
+        "seconds": 5.31
+      }
+    },
+    {
+      "brief_id": "ST-004",
+      "category": "skincare_bottle",
+      "situation": "scale_reference",
+      "difficulty": 1,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "product_picture",
+      "population": "generated",
+      "artefact_path": "renders/heldout_cylinder3/ST-004/product_front.png",
+      "width": 2000,
+      "height": 2000,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.020"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "corners [(255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255)] vs target (255, 255, 255) +-8; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "subject fill 37.5% vs 8.0-50.0% (distance > 20)"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "border mean 255.0 (>= 249), std 0.00 (<= 6.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "531269 bytes (0.133 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "margin ink 0.00% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "ST-004",
+        "route": "product_picture",
+        "fidelity": "exact",
+        "renderer": "drawn",
+        "design": "harbor-body-oil",
+        "form": "rigid_cylinder",
+        "plate": {
+          "source": "synthetic_plate",
+          "prompt": "drawn blank cylinder on a white field (no render lane)",
+          "model": null,
+          "width": 2000,
+          "height": 2000,
+          "seed": 7,
+          "note": "not generated: a drawn plate used only for the offline proof"
+        },
+        "build": {
+          "ok": true,
+          "form": "rigid_cylinder",
+          "units": 1,
+          "faces": [
+            {
+              "face": "front",
+              "stage": "done",
+              "gate_ok": true,
+              "reason": "",
+              "units_found": 1
+            }
+          ],
+          "manifest": "renders\\heldout_cylinder3\\ST-004\\product_picture_manifest.json"
+        },
+        "product_box": null,
+        "bytes": 531269,
+        "seconds": 5.58
+      }
+    },
+    {
+      "brief_id": "ST-006",
+      "category": "pet_product",
+      "situation": "packaging_mockup",
+      "difficulty": 1,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "product_picture",
+      "population": "generated",
+      "artefact_path": "renders/heldout_cylinder3/ST-006/product_front.png",
+      "width": 2000,
+      "height": 2500,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2500 vs min 2000x2500, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 0.8000 vs 0.8000 +-0.030"
+        },
+        "background": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "background is free for this brief"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "a free (scene) background gives no corner colour to measure against, and no product box was recorded: subject fill cannot be measured on this artefact"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "matte free for this brief"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "340267 bytes (0.068 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "text allowed for this brief"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "ST-006",
+        "route": "product_picture",
+        "fidelity": "exact",
+        "renderer": "drawn",
+        "design": "pine-paws-joint",
+        "form": "rigid_cylinder",
+        "plate": {
+          "source": "synthetic_plate",
+          "prompt": "drawn blank cylinder on a sweep field (no render lane)",
+          "model": null,
+          "width": 2000,
+          "height": 2500,
+          "seed": 7,
+          "note": "not generated: a drawn plate used only for the offline proof"
+        },
+        "build": {
+          "ok": true,
+          "form": "rigid_cylinder",
+          "units": 1,
+          "faces": [
+            {
+              "face": "front",
+              "stage": "done",
+              "gate_ok": true,
+              "reason": "",
+              "units_found": 1
+            }
+          ],
+          "manifest": "renders\\heldout_cylinder3\\ST-006\\product_picture_manifest.json"
+        },
+        "product_box": null,
+        "bytes": 340267,
+        "seconds": 5.94
+      }
+    },
+    {
+      "brief_id": "ST-008",
+      "category": "food_jar",
+      "situation": "series_consistency",
+      "difficulty": 1,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "product_picture",
+      "population": "generated",
+      "artefact_path": "renders/heldout_cylinder3/ST-008/product_front.png",
+      "width": 2000,
+      "height": 2000,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2000 vs min 2000x2000, max 8000x8000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.005"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "corners [(255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255)] vs target (255, 255, 255) +-4; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "subject fill 28.1% vs 20.0-50.0% (distance > 20)"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "border mean 255.0 (>= 251), std 0.00 (<= 4.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "527299 bytes (0.132 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "margin ink 0.00% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "ST-008",
+        "route": "product_picture",
+        "fidelity": "exact",
+        "renderer": "drawn",
+        "design": "word-coffee",
+        "form": "gift_box",
+        "plate": {
+          "source": "synthetic_plate",
+          "prompt": "drawn blank gift_box on a white field (no render lane)",
+          "model": null,
+          "width": 2000,
+          "height": 2000,
+          "seed": 7,
+          "note": "not generated: a drawn plate used only for the offline proof"
+        },
+        "build": {
+          "ok": true,
+          "form": "gift_box",
+          "units": 1,
+          "faces": [
+            {
+              "face": "front",
+              "stage": "done",
+              "gate_ok": true,
+              "reason": "",
+              "units_found": 1
+            }
+          ],
+          "manifest": "renders\\heldout_cylinder3\\ST-008\\product_picture_manifest.json"
+        },
+        "product_box": null,
+        "bytes": 527299,
+        "seconds": 6.16
+      }
+    },
+    {
+      "brief_id": "ST-009",
+      "category": "ceramic_mug",
+      "situation": "white_background_main",
+      "difficulty": 2,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "product_picture",
+      "population": "generated",
+      "artefact_path": "renders/heldout_cylinder3/ST-009/product_front.png",
+      "width": 2000,
+      "height": 2000,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.020"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "corners [(255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255)] vs target (255, 255, 255) +-5; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "subject fill 31.4% vs 18.0-100.0% (distance > 20)"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "border mean 255.0 (>= 249), std 0.00 (<= 6.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "428389 bytes (0.107 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "margin ink 0.00% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "ST-009",
+        "route": "product_picture",
+        "fidelity": "exact",
+        "renderer": "drawn",
+        "design": "word-coffee-mug",
+        "form": "rigid_cylinder",
+        "plate": {
+          "source": "synthetic_plate",
+          "prompt": "drawn blank cylinder on a white field (no render lane)",
+          "model": null,
+          "width": 2000,
+          "height": 2000,
+          "seed": 7,
+          "note": "not generated: a drawn plate used only for the offline proof"
+        },
+        "build": {
+          "ok": true,
+          "form": "rigid_cylinder",
+          "units": 1,
+          "faces": [
+            {
+              "face": "front",
+              "stage": "done",
+              "gate_ok": true,
+              "reason": "",
+              "units_found": 1
+            }
+          ],
+          "manifest": "renders\\heldout_cylinder3\\ST-009\\product_picture_manifest.json"
+        },
+        "product_box": null,
+        "bytes": 428389,
+        "seconds": 5.41
+      }
+    },
+    {
+      "brief_id": "ST-011",
+      "category": "skincare_bottle",
+      "situation": "infographic",
+      "difficulty": 2,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "product_picture",
+      "population": "generated",
+      "artefact_path": "renders/heldout_cylinder3/ST-011/product_front.png",
+      "width": 1600,
+      "height": 2000,
+      "score": 70.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [
+        "text_free"
+      ],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "1600x2000 vs min 1600x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 0.8000 vs 0.8000 +-0.020"
+        },
+        "background": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "background is free for this brief"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "a free (scene) background gives no corner colour to measure against, and no product box was recorded: subject fill cannot be measured on this artefact"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "matte free for this brief"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "366341 bytes (0.114 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": false,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "margin ink 0.00% vs min 0.20% (text expected)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "ST-011",
+        "route": "product_picture",
+        "fidelity": "exact",
+        "renderer": "drawn",
+        "design": "harbor-body-oil",
+        "form": "rigid_cylinder",
+        "plate": {
+          "source": "synthetic_plate",
+          "prompt": "drawn blank cylinder on a sweep field (no render lane)",
+          "model": null,
+          "width": 1600,
+          "height": 2000,
+          "seed": 7,
+          "note": "not generated: a drawn plate used only for the offline proof"
+        },
+        "build": {
+          "ok": true,
+          "form": "rigid_cylinder",
+          "units": 1,
+          "faces": [
+            {
+              "face": "front",
+              "stage": "done",
+              "gate_ok": true,
+              "reason": "",
+              "units_found": 1
+            }
+          ],
+          "manifest": "renders\\heldout_cylinder3\\ST-011\\product_picture_manifest.json"
+        },
+        "product_box": null,
+        "bytes": 366341,
+        "seconds": 5.04
+      }
+    },
+    {
+      "brief_id": "ST-013",
+      "category": "pet_product",
+      "situation": "bundle_multipack",
+      "difficulty": 2,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "product_picture",
+      "population": "generated",
+      "artefact_path": "renders/heldout_cylinder3/ST-013/product_front.png",
+      "width": 2000,
+      "height": 2000,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.020"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "corners [(255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255)] vs target (255, 255, 255) +-5; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "subject fill 37.7% vs 28.0-80.0% (distance > 20)"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "border mean 255.0 (>= 249), std 0.00 (<= 6.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "333499 bytes (0.083 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "margin ink 0.00% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "ST-013",
+        "route": "product_picture",
+        "fidelity": "exact",
+        "renderer": "drawn",
+        "design": "pine-paws-joint",
+        "form": "rigid_cylinder",
+        "plate": {
+          "source": "synthetic_plate",
+          "prompt": "drawn blank cylinder on a white field (no render lane)",
+          "model": null,
+          "width": 2000,
+          "height": 2000,
+          "seed": 7,
+          "note": "not generated: a drawn plate used only for the offline proof"
+        },
+        "build": {
+          "ok": true,
+          "form": "rigid_cylinder",
+          "units": 1,
+          "faces": [
+            {
+              "face": "front",
+              "stage": "done",
+              "gate_ok": true,
+              "reason": "",
+              "units_found": 1
+            }
+          ],
+          "manifest": "renders\\heldout_cylinder3\\ST-013\\product_picture_manifest.json"
+        },
+        "product_box": null,
+        "bytes": 333499,
+        "seconds": 4.34
+      }
+    },
+    {
+      "brief_id": "ST-015",
+      "category": "food_jar",
+      "situation": "background_swap",
+      "difficulty": 2,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "product_picture",
+      "population": "generated",
+      "artefact_path": "renders/heldout_cylinder3/ST-015/product_front.png",
+      "width": 2000,
+      "height": 2000,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.010"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "corners [(245, 245, 245), (245, 245, 245), (245, 245, 245), (245, 245, 245)] vs target (245, 245, 245) +-3; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "subject fill 28.1% vs 18.0-60.0% (distance > 20)"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "border mean 245.0 (>= 240), std 0.00 (<= 5.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "622080 bytes (0.156 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "margin ink 0.00% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "ST-015",
+        "route": "product_picture",
+        "fidelity": "exact",
+        "renderer": "drawn",
+        "design": "word-coffee",
+        "form": "gift_box",
+        "plate": {
+          "source": "synthetic_plate",
+          "prompt": "drawn blank gift_box on a white field (no render lane)",
+          "model": null,
+          "width": 2000,
+          "height": 2000,
+          "seed": 7,
+          "note": "not generated: a drawn plate used only for the offline proof"
+        },
+        "build": {
+          "ok": true,
+          "form": "gift_box",
+          "units": 1,
+          "faces": [
+            {
+              "face": "front",
+              "stage": "done",
+              "gate_ok": true,
+              "reason": "",
+              "units_found": 1
+            }
+          ],
+          "manifest": "renders\\heldout_cylinder3\\ST-015\\product_picture_manifest.json"
+        },
+        "product_box": null,
+        "bytes": 622080,
+        "seconds": 6.02
+      }
+    },
+    {
+      "brief_id": "ST-016",
+      "category": "supplement_pouch",
+      "situation": "series_consistency",
+      "difficulty": 2,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "product_picture",
+      "population": "generated",
+      "artefact_path": "renders/heldout_cylinder3/ST-016/product_front.png",
+      "width": 2000,
+      "height": 2000,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2000 vs min 2000x2000, max 8000x8000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.005"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "corners [(255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255)] vs target (255, 255, 255) +-4; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "subject fill 25.1% vs 22.0-48.0% (distance > 20)"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "border mean 255.0 (>= 251), std 0.00 (<= 4.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "133121 bytes (0.033 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "margin ink 0.00% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "ST-016",
+        "route": "product_picture",
+        "fidelity": "exact",
+        "renderer": "drawn",
+        "design": "MOGRA",
+        "form": "stand_up_pouch",
+        "plate": {
+          "source": "synthetic_plate",
+          "prompt": "drawn blank pouch on a white field (no render lane)",
+          "model": null,
+          "width": 2000,
+          "height": 2000,
+          "seed": 7,
+          "note": "not generated: a drawn plate used only for the offline proof"
+        },
+        "build": {
+          "ok": true,
+          "form": "stand_up_pouch",
+          "units": 1,
+          "faces": [
+            {
+              "face": "front",
+              "stage": "done",
+              "gate_ok": true,
+              "reason": "",
+              "units_found": 1
+            }
+          ],
+          "manifest": "renders\\heldout_cylinder3\\ST-016\\product_picture_manifest.json"
+        },
+        "product_box": null,
+        "bytes": 133121,
+        "seconds": 5.94
+      }
+    },
+    {
+      "brief_id": "ST-018",
+      "category": "skincare_bottle",
+      "situation": "lifestyle",
+      "difficulty": 3,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "product_picture",
+      "population": "generated",
+      "artefact_path": "renders/heldout_cylinder3/ST-018/product_front.png",
+      "width": 2000,
+      "height": 2000,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.030"
+        },
+        "background": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "background is free for this brief"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "a free (scene) background gives no corner colour to measure against, and no product box was recorded: subject fill cannot be measured on this artefact"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "matte free for this brief"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "532973 bytes (0.133 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "text allowed for this brief"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "ST-018",
+        "route": "product_picture",
+        "fidelity": "exact",
+        "renderer": "drawn",
+        "design": "harbor-body-oil",
+        "form": "rigid_cylinder",
+        "plate": {
+          "source": "synthetic_plate",
+          "prompt": "drawn blank cylinder on a sweep field (no render lane)",
+          "model": null,
+          "width": 2000,
+          "height": 2000,
+          "seed": 7,
+          "note": "not generated: a drawn plate used only for the offline proof"
+        },
+        "build": {
+          "ok": true,
+          "form": "rigid_cylinder",
+          "units": 1,
+          "faces": [
+            {
+              "face": "front",
+              "stage": "done",
+              "gate_ok": true,
+              "reason": "",
+              "units_found": 1
+            }
+          ],
+          "manifest": "renders\\heldout_cylinder3\\ST-018\\product_picture_manifest.json"
+        },
+        "product_box": null,
+        "bytes": 532973,
+        "seconds": 5.47
+      }
+    },
+    {
+      "brief_id": "ST-020",
+      "category": "pet_product",
+      "situation": "scale_reference",
+      "difficulty": 3,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "product_picture",
+      "population": "generated",
+      "artefact_path": "renders/heldout_cylinder3/ST-020/product_front.png",
+      "width": 2000,
+      "height": 2000,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.020"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "corners [(255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255)] vs target (255, 255, 255) +-6; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "subject fill 37.7% vs 10.0-40.0% (distance > 20)"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "border mean 255.0 (>= 249), std 0.00 (<= 6.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "333499 bytes (0.083 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "margin ink 0.00% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "ST-020",
+        "route": "product_picture",
+        "fidelity": "exact",
+        "renderer": "drawn",
+        "design": "pine-paws-joint",
+        "form": "rigid_cylinder",
+        "plate": {
+          "source": "synthetic_plate",
+          "prompt": "drawn blank cylinder on a white field (no render lane)",
+          "model": null,
+          "width": 2000,
+          "height": 2000,
+          "seed": 7,
+          "note": "not generated: a drawn plate used only for the offline proof"
+        },
+        "build": {
+          "ok": true,
+          "form": "rigid_cylinder",
+          "units": 1,
+          "faces": [
+            {
+              "face": "front",
+              "stage": "done",
+              "gate_ok": true,
+              "reason": "",
+              "units_found": 1
+            }
+          ],
+          "manifest": "renders\\heldout_cylinder3\\ST-020\\product_picture_manifest.json"
+        },
+        "product_box": null,
+        "bytes": 333499,
+        "seconds": 4.05
+      }
+    },
+    {
+      "brief_id": "ST-022",
+      "category": "food_jar",
+      "situation": "packaging_mockup",
+      "difficulty": 3,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "product_picture",
+      "population": "generated",
+      "artefact_path": "renders/heldout_cylinder3/ST-022/product_front.png",
+      "width": 2000,
+      "height": 2500,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2500 vs min 2000x2500, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 0.8000 vs 0.8000 +-0.030"
+        },
+        "background": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "background is free for this brief"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "a free (scene) background gives no corner colour to measure against, and no product box was recorded: subject fill cannot be measured on this artefact"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "matte free for this brief"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "743647 bytes (0.149 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "text allowed for this brief"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "ST-022",
+        "route": "product_picture",
+        "fidelity": "exact",
+        "renderer": "drawn",
+        "design": "word-coffee",
+        "form": "gift_box",
+        "plate": {
+          "source": "synthetic_plate",
+          "prompt": "drawn blank gift_box on a sweep field (no render lane)",
+          "model": null,
+          "width": 2000,
+          "height": 2500,
+          "seed": 7,
+          "note": "not generated: a drawn plate used only for the offline proof"
+        },
+        "build": {
+          "ok": true,
+          "form": "gift_box",
+          "units": 1,
+          "faces": [
+            {
+              "face": "front",
+              "stage": "done",
+              "gate_ok": true,
+              "reason": "",
+              "units_found": 1
+            }
+          ],
+          "manifest": "renders\\heldout_cylinder3\\ST-022\\product_picture_manifest.json"
+        },
+        "product_box": null,
+        "bytes": 743647,
+        "seconds": 6.48
+      }
+    },
+    {
+      "brief_id": "ST-023",
+      "category": "supplement_pouch",
+      "situation": "background_swap",
+      "difficulty": 3,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "product_picture",
+      "population": "generated",
+      "artefact_path": "renders/heldout_cylinder3/ST-023/product_front.png",
+      "width": 2000,
+      "height": 2000,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.010"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "corners [(245, 245, 245), (245, 245, 245), (245, 245, 245), (245, 245, 245)] vs target (245, 245, 245) +-3; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "subject fill 25.1% vs 20.0-55.0% (distance > 20)"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "border mean 245.0 (>= 240), std 0.00 (<= 5.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "132183 bytes (0.033 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "margin ink 0.00% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "ST-023",
+        "route": "product_picture",
+        "fidelity": "exact",
+        "renderer": "drawn",
+        "design": "MOGRA",
+        "form": "stand_up_pouch",
+        "plate": {
+          "source": "synthetic_plate",
+          "prompt": "drawn blank pouch on a white field (no render lane)",
+          "model": null,
+          "width": 2000,
+          "height": 2000,
+          "seed": 7,
+          "note": "not generated: a drawn plate used only for the offline proof"
+        },
+        "build": {
+          "ok": true,
+          "form": "stand_up_pouch",
+          "units": 1,
+          "faces": [
+            {
+              "face": "front",
+              "stage": "done",
+              "gate_ok": true,
+              "reason": "",
+              "units_found": 1
+            }
+          ],
+          "manifest": "renders\\heldout_cylinder3\\ST-023\\product_picture_manifest.json"
+        },
+        "product_box": null,
+        "bytes": 132183,
+        "seconds": 5.72
+      }
+    },
+    {
+      "brief_id": "ST-024",
+      "category": "ceramic_mug",
+      "situation": "series_consistency",
+      "difficulty": 3,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "product_picture",
+      "population": "generated",
+      "artefact_path": "renders/heldout_cylinder3/ST-024/product_front.png",
+      "width": 2000,
+      "height": 2000,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2000 vs min 2000x2000, max 8000x8000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.005"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "corners [(255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255)] vs target (255, 255, 255) +-3; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "subject fill 31.4% vs 24.0-45.0% (distance > 20)"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "border mean 255.0 (>= 251), std 0.00 (<= 4.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "428389 bytes (0.107 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "margin ink 0.00% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "ST-024",
+        "route": "product_picture",
+        "fidelity": "exact",
+        "renderer": "drawn",
+        "design": "word-coffee-mug",
+        "form": "rigid_cylinder",
+        "plate": {
+          "source": "synthetic_plate",
+          "prompt": "drawn blank cylinder on a white field (no render lane)",
+          "model": null,
+          "width": 2000,
+          "height": 2000,
+          "seed": 7,
+          "note": "not generated: a drawn plate used only for the offline proof"
+        },
+        "build": {
+          "ok": true,
+          "form": "rigid_cylinder",
+          "units": 1,
+          "faces": [
+            {
+              "face": "front",
+              "stage": "done",
+              "gate_ok": true,
+              "reason": "",
+              "units_found": 1
+            }
+          ],
+          "manifest": "renders\\heldout_cylinder3\\ST-024\\product_picture_manifest.json"
+        },
+        "product_box": null,
+        "bytes": 428389,
+        "seconds": 4.44
+      }
+    },
+    {
+      "brief_id": "ST-025",
+      "category": "skincare_bottle",
+      "situation": "white_background_main",
+      "difficulty": 3,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "product_picture",
+      "population": "generated",
+      "artefact_path": "renders/heldout_cylinder3/ST-025/product_front.png",
+      "width": 2000,
+      "height": 2000,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.020"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "corners [(255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255)] vs target (255, 255, 255) +-4; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "subject fill 37.5% vs 22.0-100.0% (distance > 20)"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "border mean 255.0 (>= 249), std 0.00 (<= 6.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "531269 bytes (0.133 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "margin ink 0.00% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "ST-025",
+        "route": "product_picture",
+        "fidelity": "exact",
+        "renderer": "drawn",
+        "design": "harbor-body-oil",
+        "form": "rigid_cylinder",
+        "plate": {
+          "source": "synthetic_plate",
+          "prompt": "drawn blank cylinder on a white field (no render lane)",
+          "model": null,
+          "width": 2000,
+          "height": 2000,
+          "seed": 7,
+          "note": "not generated: a drawn plate used only for the offline proof"
+        },
+        "build": {
+          "ok": true,
+          "form": "rigid_cylinder",
+          "units": 1,
+          "faces": [
+            {
+              "face": "front",
+              "stage": "done",
+              "gate_ok": true,
+              "reason": "",
+              "units_found": 1
+            }
+          ],
+          "manifest": "renders\\heldout_cylinder3\\ST-025\\product_picture_manifest.json"
+        },
+        "product_box": null,
+        "bytes": 531269,
+        "seconds": 4.55
+      }
+    },
+    {
+      "brief_id": "ST-027",
+      "category": "pet_product",
+      "situation": "infographic",
+      "difficulty": 3,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "product_picture",
+      "population": "generated",
+      "artefact_path": "renders/heldout_cylinder3/ST-027/product_front.png",
+      "width": 1600,
+      "height": 2000,
+      "score": 70.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [
+        "text_free"
+      ],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "1600x2000 vs min 1600x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 0.8000 vs 0.8000 +-0.020"
+        },
+        "background": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "background is free for this brief"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "a free (scene) background gives no corner colour to measure against, and no product box was recorded: subject fill cannot be measured on this artefact"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "matte free for this brief"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "229591 bytes (0.072 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": false,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "margin ink 0.00% vs min 0.20% (text expected)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "ST-027",
+        "route": "product_picture",
+        "fidelity": "exact",
+        "renderer": "drawn",
+        "design": "pine-paws-joint",
+        "form": "rigid_cylinder",
+        "plate": {
+          "source": "synthetic_plate",
+          "prompt": "drawn blank cylinder on a sweep field (no render lane)",
+          "model": null,
+          "width": 1600,
+          "height": 2000,
+          "seed": 7,
+          "note": "not generated: a drawn plate used only for the offline proof"
+        },
+        "build": {
+          "ok": true,
+          "form": "rigid_cylinder",
+          "units": 1,
+          "faces": [
+            {
+              "face": "front",
+              "stage": "done",
+              "gate_ok": true,
+              "reason": "",
+              "units_found": 1
+            }
+          ],
+          "manifest": "renders\\heldout_cylinder3\\ST-027\\product_picture_manifest.json"
+        },
+        "product_box": null,
+        "bytes": 229591,
+        "seconds": 5.11
+      }
+    },
+    {
+      "brief_id": "ST-029",
+      "category": "food_jar",
+      "situation": "bundle_multipack",
+      "difficulty": 3,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "product_picture",
+      "population": "generated",
+      "artefact_path": "renders/heldout_cylinder3/ST-029/product_front.png",
+      "width": 2000,
+      "height": 2000,
+      "score": 80.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [
+        "subject_fill"
+      ],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.020"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "corners [(255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255)] vs target (255, 255, 255) +-4; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": false,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "subject fill 28.1% vs 30.0-72.0% (distance > 20)"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "border mean 255.0 (>= 249), std 0.00 (<= 6.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "527299 bytes (0.132 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "margin ink 0.00% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "ST-029",
+        "route": "product_picture",
+        "fidelity": "exact",
+        "renderer": "drawn",
+        "design": "word-coffee",
+        "form": "gift_box",
+        "plate": {
+          "source": "synthetic_plate",
+          "prompt": "drawn blank gift_box on a white field (no render lane)",
+          "model": null,
+          "width": 2000,
+          "height": 2000,
+          "seed": 7,
+          "note": "not generated: a drawn plate used only for the offline proof"
+        },
+        "build": {
+          "ok": true,
+          "form": "gift_box",
+          "units": 1,
+          "faces": [
+            {
+              "face": "front",
+              "stage": "done",
+              "gate_ok": true,
+              "reason": "",
+              "units_found": 1
+            }
+          ],
+          "manifest": "renders\\heldout_cylinder3\\ST-029\\product_picture_manifest.json"
+        },
+        "product_box": null,
+        "bytes": 527299,
+        "seconds": 5.41
+      }
+    },
+    {
+      "brief_id": "ST-030",
+      "category": "supplement_pouch",
+      "situation": "packaging_mockup",
+      "difficulty": 3,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "product_picture",
+      "population": "generated",
+      "artefact_path": "renders/heldout_cylinder3/ST-030/product_front.png",
+      "width": 2000,
+      "height": 2500,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2500 vs min 2000x2500, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 0.8000 vs 0.8000 +-0.030"
+        },
+        "background": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "background is free for this brief"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "a free (scene) background gives no corner colour to measure against, and no product box was recorded: subject fill cannot be measured on this artefact"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "matte free for this brief"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "139552 bytes (0.028 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "text allowed for this brief"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "ST-030",
+        "route": "product_picture",
+        "fidelity": "exact",
+        "renderer": "drawn",
+        "design": "MOGRA",
+        "form": "stand_up_pouch",
+        "plate": {
+          "source": "synthetic_plate",
+          "prompt": "drawn blank pouch on a sweep field (no render lane)",
+          "model": null,
+          "width": 2000,
+          "height": 2500,
+          "seed": 7,
+          "note": "not generated: a drawn plate used only for the offline proof"
+        },
+        "build": {
+          "ok": true,
+          "form": "stand_up_pouch",
+          "units": 1,
+          "faces": [
+            {
+              "face": "front",
+              "stage": "done",
+              "gate_ok": true,
+              "reason": "",
+              "units_found": 1
+            }
+          ],
+          "manifest": "renders\\heldout_cylinder3\\ST-030\\product_picture_manifest.json"
+        },
+        "product_box": null,
+        "bytes": 139552,
+        "seconds": 6.1
+      }
+    },
+    {
+      "brief_id": "ST-031",
+      "category": "ceramic_mug",
+      "situation": "background_swap",
+      "difficulty": 3,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "product_picture",
+      "population": "generated",
+      "artefact_path": "renders/heldout_cylinder3/ST-031/product_front.png",
+      "width": 2000,
+      "height": 2000,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.010"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "corners [(245, 245, 245), (245, 245, 245), (245, 245, 245), (245, 245, 245)] vs target (245, 245, 245) +-3; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "subject fill 28.4% vs 20.0-55.0% (distance > 20)"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "border mean 245.0 (>= 240), std 0.00 (<= 5.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "428404 bytes (0.107 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "margin ink 0.00% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "ST-031",
+        "route": "product_picture",
+        "fidelity": "exact",
+        "renderer": "drawn",
+        "design": "word-coffee-mug",
+        "form": "rigid_cylinder",
+        "plate": {
+          "source": "synthetic_plate",
+          "prompt": "drawn blank cylinder on a white field (no render lane)",
+          "model": null,
+          "width": 2000,
+          "height": 2000,
+          "seed": 7,
+          "note": "not generated: a drawn plate used only for the offline proof"
+        },
+        "build": {
+          "ok": true,
+          "form": "rigid_cylinder",
+          "units": 1,
+          "faces": [
+            {
+              "face": "front",
+              "stage": "done",
+              "gate_ok": true,
+              "reason": "",
+              "units_found": 1
+            }
+          ],
+          "manifest": "renders\\heldout_cylinder3\\ST-031\\product_picture_manifest.json"
+        },
+        "product_box": null,
+        "bytes": 428404,
+        "seconds": 5.43
+      }
+    }
+  ],
+  "by_population": {
+    "generated": {
+      "scored": 20,
+      "passed": 20,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 96.0
+    }
+  },
+  "by_mode": {
+    "prompt_only": {
+      "scored": 20,
+      "passed": 20,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 96.0
+    },
+    "stored_reference": {
+      "scored": 0,
+      "passed": 0,
+      "failed": 0,
+      "pass_rate": 0.0,
+      "mean_score": 0.0
+    },
+    "uploaded_reference": {
+      "scored": 0,
+      "passed": 0,
+      "failed": 0,
+      "pass_rate": 0.0,
+      "mean_score": 0.0
+    }
+  },
+  "by_situation": {
+    "background_swap": {
+      "scored": 3,
+      "passed": 3,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    },
+    "bundle_multipack": {
+      "scored": 2,
+      "passed": 2,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 90.0
+    },
+    "infographic": {
+      "scored": 2,
+      "passed": 2,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 70.0
+    },
+    "lifestyle": {
+      "scored": 2,
+      "passed": 2,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    },
+    "packaging_mockup": {
+      "scored": 3,
+      "passed": 3,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    },
+    "scale_reference": {
+      "scored": 2,
+      "passed": 2,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    },
+    "series_consistency": {
+      "scored": 3,
+      "passed": 3,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    },
+    "white_background_main": {
+      "scored": 3,
+      "passed": 3,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    }
+  },
+  "by_category": {
+    "ceramic_mug": {
+      "scored": 4,
+      "passed": 4,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    },
+    "food_jar": {
+      "scored": 4,
+      "passed": 4,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 95.0
+    },
+    "pet_product": {
+      "scored": 4,
+      "passed": 4,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 92.5
+    },
+    "skincare_bottle": {
+      "scored": 4,
+      "passed": 4,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 92.5
+    },
+    "supplement_pouch": {
+      "scored": 4,
+      "passed": 4,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    }
+  },
+  "pipeline": "app",
+  "plate_source": "drawn",
+  "refused": [
+    {
+      "brief_id": "ST-033",
+      "product_line": null,
+      "category": "supplement_pouch",
+      "reason": "brief ST-033 declares no product_line"
+    },
+    {
+      "brief_id": "ST-045",
+      "product_line": null,
+      "category": "ceramic_mug",
+      "reason": "brief ST-045 declares no product_line"
+    },
+    {
+      "brief_id": "ST-034",
+      "product_line": null,
+      "category": "supplement_pouch",
+      "reason": "brief ST-034 declares no product_line"
+    },
+    {
+      "brief_id": "ST-046",
+      "product_line": null,
+      "category": "apparel",
+      "reason": "brief ST-046 declares no product_line"
+    },
+    {
+      "brief_id": "ST-003",
+      "product_line": null,
+      "category": "apparel",
+      "reason": "brief ST-003 declares no product_line"
+    },
+    {
+      "brief_id": "ST-035",
+      "product_line": null,
+      "category": "supplement_pouch",
+      "reason": "brief ST-035 declares no product_line"
+    },
+    {
+      "brief_id": "ST-047",
+      "product_line": null,
+      "category": "skincare_bottle",
+      "reason": "brief ST-047 declares no product_line"
+    },
+    {
+      "brief_id": "ST-036",
+      "product_line": null,
+      "category": "supplement_pouch",
+      "reason": "brief ST-036 declares no product_line"
+    },
+    {
+      "brief_id": "ST-048",
+      "product_line": null,
+      "category": "small_appliance",
+      "reason": "brief ST-048 declares no product_line"
+    },
+    {
+      "brief_id": "ST-005",
+      "product_line": null,
+      "category": "small_appliance",
+      "reason": "brief ST-005 declares no product_line"
+    },
+    {
+      "brief_id": "ST-037",
+      "product_line": null,
+      "category": "supplement_pouch",
+      "reason": "brief ST-037 declares no product_line"
+    },
+    {
+      "brief_id": "ST-049",
+      "product_line": null,
+      "category": "pet_product",
+      "reason": "brief ST-049 declares no product_line"
+    },
+    {
+      "brief_id": "ST-038",
+      "product_line": null,
+      "category": "supplement_pouch",
+      "reason": "brief ST-038 declares no product_line"
+    },
+    {
+      "brief_id": "ST-050",
+      "product_line": null,
+      "category": "tool",
+      "reason": "brief ST-050 declares no product_line"
+    },
+    {
+      "brief_id": "ST-007",
+      "product_line": null,
+      "category": "tool",
+      "reason": "brief ST-007 declares no product_line"
+    },
+    {
+      "brief_id": "ST-039",
+      "product_line": null,
+      "category": "supplement_pouch",
+      "reason": "brief ST-039 declares no product_line"
+    },
+    {
+      "brief_id": "ST-051",
+      "product_line": null,
+      "category": "food_jar",
+      "reason": "brief ST-051 declares no product_line"
+    },
+    {
+      "brief_id": "ST-040",
+      "product_line": null,
+      "category": "supplement_pouch",
+      "reason": "brief ST-040 declares no product_line"
+    },
+    {
+      "brief_id": "ST-052",
+      "product_line": null,
+      "category": "supplement_pouch",
+      "reason": "brief ST-052 declares no product_line"
+    },
+    {
+      "brief_id": "ST-041",
+      "product_line": null,
+      "category": "supplement_pouch",
+      "reason": "brief ST-041 declares no product_line"
+    },
+    {
+      "brief_id": "ST-053",
+      "product_line": null,
+      "category": "apparel",
+      "reason": "brief ST-053 declares no product_line"
+    },
+    {
+      "brief_id": "ST-010",
+      "product_line": null,
+      "category": "apparel",
+      "reason": "brief ST-010 declares no product_line"
+    },
+    {
+      "brief_id": "ST-042",
+      "product_line": null,
+      "category": "supplement_pouch",
+      "reason": "brief ST-042 declares no product_line"
+    },
+    {
+      "brief_id": "ST-054",
+      "product_line": null,
+      "category": "ceramic_mug",
+      "reason": "brief ST-054 declares no product_line"
+    },
+    {
+      "brief_id": "ST-043",
+      "product_line": null,
+      "category": "supplement_pouch",
+      "reason": "brief ST-043 declares no product_line"
+    },
+    {
+      "brief_id": "ST-055",
+      "product_line": null,
+      "category": "skincare_bottle",
+      "reason": "brief ST-055 declares no product_line"
+    },
+    {
+      "brief_id": "ST-012",
+      "product_line": null,
+      "category": "small_appliance",
+      "reason": "brief ST-012 declares no product_line"
+    },
+    {
+      "brief_id": "ST-044",
+      "product_line": null,
+      "category": "supplement_pouch",
+      "reason": "brief ST-044 declares no product_line"
+    },
+    {
+      "brief_id": "ST-056",
+      "product_line": null,
+      "category": "tool",
+      "reason": "brief ST-056 declares no product_line"
+    },
+    {
+      "brief_id": "ST-014",
+      "product_line": null,
+      "category": "tool",
+      "reason": "brief ST-014 declares no product_line"
+    },
+    {
+      "brief_id": "ST-017",
+      "product_line": null,
+      "category": "apparel",
+      "reason": "brief ST-017 declares no product_line"
+    },
+    {
+      "brief_id": "ST-019",
+      "product_line": null,
+      "category": "small_appliance",
+      "reason": "brief ST-019 declares no product_line"
+    },
+    {
+      "brief_id": "ST-021",
+      "product_line": null,
+      "category": "tool",
+      "reason": "brief ST-021 declares no product_line"
+    },
+    {
+      "brief_id": "ST-026",
+      "product_line": null,
+      "category": "small_appliance",
+      "reason": "brief ST-026 declares no product_line"
+    },
+    {
+      "brief_id": "ST-028",
+      "product_line": null,
+      "category": "tool",
+      "reason": "brief ST-028 declares no product_line"
+    },
+    {
+      "brief_id": "ST-032",
+      "product_line": null,
+      "category": "apparel",
+      "reason": "brief ST-032 declares no product_line"
+    }
+  ]
+}

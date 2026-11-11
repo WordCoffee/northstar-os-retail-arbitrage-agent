@@ -511,8 +511,15 @@ def warp_cylinder(photo: Image.Image, panel: Image.Image, rect: Sequence,
     the visible arc (180deg) with horizontal foreshortening toward the edges and
     a cylindrical luminance falloff, multiplied with the plate's own shading so
     the print follows the tube's light.
+
+    A design panel is RGB (the vector artwork is opaque), and this function
+    indexes an alpha channel, so the panel is converted here: passing an RGB
+    panel used to raise a broadcast error instead of printing a label.
     """
     x0, y0, x1, y1 = [int(v) for v in rect]
+    if x1 - x0 < 4 or y1 - y0 < 4:
+        raise ValueError(f"label band has no area: {(x0, y0, x1, y1)}")
+    panel = panel.convert("RGBA")
     cx = (x0 + x1) / 2.0
     R = max(1.0, (x1 - x0) / 2.0)
     PW, PH = panel.size
@@ -659,6 +666,32 @@ def find_panel_quad(image: Union[Image.Image, str, Path], *,
             f"plate_face_unreliable: edge/mesh residual {float(residual):.2f} px "
             f"exceeds {pouch_label.MAX_GEOM_RESIDUAL_PX:.1f} px")
     return [[float(p[0]), float(p[1])] for p in quad]
+
+
+def find_label_band(image: Union[Image.Image, str, Path], *,
+                    inset_x: float = 0.045, inset_top: float = 0.12,
+                    inset_bottom: float = 0.09,
+                    threshold: float = 26.0) -> Dict[str, Any]:
+    """Measure the printable label band of a rigid cylinder, or refuse.
+
+    A cylinder has no four-corner face: the label runs around the visible half
+    of the tube, so what is measured is a *band* — the axis-aligned rectangle of
+    the package's front face, inset from the shoulder and the base. The
+    measurement reuses :func:`find_panel_quad` (the proven chroma segmentation
+    and side-edge fit) and takes the bounding rectangle of that quad, so a bowed
+    side still yields the band the label wraps.
+
+    Raises ``ValueError('plate_face_not_found: …')`` when there is no cylinder
+    in the plate. A plate with no package is never composited onto.
+    """
+    quad = find_panel_quad(image, inset_x=inset_x, inset_top=inset_top,
+                           inset_bottom=inset_bottom, threshold=threshold)
+    xs = [float(point[0]) for point in quad]
+    ys = [float(point[1]) for point in quad]
+    band = [min(xs), min(ys), max(xs), max(ys)]
+    if band[2] - band[0] < 8 or band[3] - band[1] < 8:
+        raise ValueError(f"plate_face_not_found: measured band has no area {band}")
+    return {"band": [round(value, 2) for value in band], "quad": quad}
 
 
 # ── several faces in one plate (a bundle) ───────────────────────────────────

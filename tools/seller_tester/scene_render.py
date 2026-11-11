@@ -377,6 +377,35 @@ def synthetic_plate(*, width: int = 1536, height: int = 1536, kind: str = "pouch
                        (left + w + int(w * 0.03), top_y + h),
                        (left - int(w * 0.03), top_y + h)], fill=body)
             d.rectangle([left, top_y, left + w, top_y + max(6, h // 40)], fill=top)
+    elif kind == "cylinder":
+        # A rigid cylinder (jar, bottle, tube, canister): a round body with a
+        # shoulder, a cap and a base curve. Drawn, never called a photograph.
+        base = tuple(stock) if stock else (214, 199, 178)
+        body = base
+        cap = tuple(max(0, int(c * 0.62)) for c in base)
+        # A cylinder has to meet a brief's fill band in the frame: 0.52 of the
+        # width and 0.70 of the height measures ~37% of the frame as subject,
+        # which sits inside the bands the catalog declares (18-45%).
+        unit_w = int(width * 0.52 / max(1, units) * (0.92 if units > 1 else 1.0))
+        h = int(height * 0.70)
+        gap = int(width * 0.04) if units > 1 else 0
+        span = unit_w * units + gap * (units - 1)
+        start = (width - span) // 2
+        top_y = int(height * 0.19)
+        for index in range(max(1, units)):
+            left = start + index * (unit_w + gap)
+            w = unit_w
+            shoulder = int(h * 0.10)
+            d.rounded_rectangle([left, top_y + shoulder, left + w, top_y + h],
+                                radius=max(4, w // 7), fill=body)
+            d.polygon([(left, top_y + shoulder),
+                       (left + int(w * 0.20), top_y),
+                       (left + int(w * 0.80), top_y),
+                       (left + w, top_y + shoulder)], fill=body)
+            d.rectangle([left + int(w * 0.18), top_y - int(h * 0.06),
+                         left + w - int(w * 0.18), top_y + int(h * 0.02)], fill=cap)
+            d.ellipse([left - w // 9, top_y + h - h // 34,
+                       left + w + w // 9, top_y + h + h // 20], fill=(206, 204, 200))
     else:
         base = tuple(stock) if stock else (213, 167, 122)
         body = base
@@ -484,8 +513,19 @@ def renderer_from_name(name: str) -> Any:
             if inside_lane is not None:
                 raise RuntimeError(
                     "a drawn plate has no lane to run an in-lane cutout on")
-            kind = ("gift_box" if str(brief.get("category") or "") in
-                    ("food_jar", "gift_box", "box") else "pouch")
+            # The blank body must be the shape the design's panel belongs on: a
+            # brief's category is the seller's taxonomy, the design's form is what
+            # the app will print. Reading the category alone drew a box for a jar.
+            kind = None
+            try:
+                import brand_art  # noqa: PLC0415
+
+                kind = brand_art.plate_kind(brand_art.design_for_brief(brief))
+            except Exception:  # noqa: BLE001 - an unresolved design falls back to category
+                kind = None
+            if kind is None:
+                kind = ("gift_box" if str(brief.get("category") or "") in
+                        ("food_jar", "gift_box", "box") else "pouch")
             constraints = brief.get("constraints") or {}
             background = constraints.get("background") or {}
             matte = constraints.get("matte") or {}

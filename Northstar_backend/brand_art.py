@@ -30,10 +30,20 @@ import package_art
 
 POUCH = "stand_up_pouch"
 GIFT_BOX = "gift_box"
+CYLINDER = "rigid_cylinder"
 
 FORM_NAMES: Dict[str, str] = {
     POUCH: "stand-up pouch, front and back panels",
     GIFT_BOX: "folding carton (gift box), front and back panels",
+    CYLINDER: "rigid cylinder (jar, bottle, tube or canister), wrap-around label",
+}
+
+#: Which blank body the *drawn* plate draws for a form. The plate must be the
+#: shape the panel belongs on, or the label is printed on the wrong object.
+PLATE_KINDS: Dict[str, str] = {
+    POUCH: "pouch",
+    GIFT_BOX: "gift_box",
+    CYLINDER: "cylinder",
 }
 
 #: Word Coffee — a slim pale-pink and cream gift box. The briefs in
@@ -75,12 +85,161 @@ WORD_COFFEE: Dict[str, Any] = {
                "note": "no certification is claimed that the brand has not got"},
 }
 
+#: A rigid-cylinder SKU on the Word Coffee brand: a 250 g canister of the same
+#: ground coffee the gift box holds. The label wraps the body, so `face_mm` is
+#: the VISIBLE HALF of the circumference by the label height (the compositor maps
+#: the panel across the 180-degree arc), not a flat carton face.
+WORD_COFFEE_CANISTER: Dict[str, Any] = {
+    "id": "word-coffee-canister",
+    "brand": "WORD COFFEE",
+    "product": "GROUND COFFEE",
+    "form": CYLINDER,
+    "face_mm": {"front": [118.0, 100.0], "back": [118.0, 100.0]},
+    "theme": "blush",
+    "script_line": "Every Morning",
+    "subtitle": "MEDIUM ROAST  ·  100% ARABICA",
+    "tagline": "Empowering Moms, One Message at a Time",
+    "descriptor": "Ground coffee  ·  medium roast  ·  100% arabica",
+    "net_weight": "250 g (8.8 oz)",
+    "net_weight_line": "NET WT. 250 g (8.8 oz)",
+    "servings": "25 servings · 10 g each",
+    "inside": ("A resealable canister of medium-roast arabica, ground for filter "
+               "and pour-over."),
+    "ingredients": "Ground roasted coffee (100% arabica).",
+    "label_sections": [
+        {"head": "ROAST", "body": "Medium roast, ground for filter and pour-over."},
+        {"head": "HOW TO BREW", "body": "One heaped tablespoon per 250 ml of water "
+                                       "just off the boil. Steep 3 minutes, stir, serve."},
+        {"head": "STORAGE", "body": "Keep the lid closed, in a cool dark place."},
+    ],
+    "about": ("Word Coffee pairs a good cup with something worth reading. The canister "
+              "is refillable and made to sit on the counter."),
+    "company": "DISTRIBUTED BY T2 HOLDINGS LLC",
+    "lot_code": "LOT  WC-1000",
+    "best_by": "BEST BY  00/0000",
+    "barcode_digits": "8 50000 00000 5",
+    "draft_note": "DRAFT  ·  VERIFY BEFORE PRINT",
+    "back_draft_note": "DRAFT  ·  VERIFY INGREDIENTS AND UPC BEFORE PRINT",
+    "status": "DRAFT - copy, ingredients and UPC must be verified before print",
+    "claims": {"organic_seal": False, "fda": False,
+               "note": "no certification is claimed that the brand has not got"},
+}
+
+#: A printed ceramic mug on the Word Coffee brand: the wrap label is the print.
+WORD_COFFEE_MUG: Dict[str, Any] = {
+    "id": "word-coffee-mug",
+    "brand": "WORD COFFEE",
+    "product": "CERAMIC MUG",
+    "form": CYLINDER,
+    "face_mm": {"front": [129.0, 100.0], "back": [129.0, 100.0]},
+    "theme": "blush",
+    "script_line": "One Message",
+    "subtitle": "CERAMIC  ·  350 ML",
+    "tagline": "Empowering Moms, One Message at a Time",
+    "net_weight": "350 ml (11.8 fl oz)",
+    "net_weight_line": "350 ml (11.8 fl oz)",
+    "servings": "Dishwasher and microwave safe",
+    "inside": "A glazed stoneware mug, 350 ml, printed around the body.",
+    "ingredients": "Stoneware, lead-free glaze, ceramic print.",
+    "label_sections": [
+        {"head": "CARE", "body": "Dishwasher and microwave safe. Do not use on a "
+                                 "direct flame or under a grill."},
+        {"head": "MADE", "body": "Printed and fired in small batches."},
+    ],
+    "about": "The print wraps the body; the handle stays plain.",
+    "company": "DISTRIBUTED BY T2 HOLDINGS LLC",
+    "lot_code": "LOT  WC-2000",
+    "best_by": "NO EXPIRY",
+    "barcode_digits": "8 50000 00000 8",
+    "draft_note": "DRAFT  ·  VERIFY BEFORE PRINT",
+    "back_draft_note": "DRAFT  ·  VERIFY COPY AND UPC BEFORE PRINT",
+    "status": "DRAFT - copy and UPC must be verified before print",
+    "claims": {"organic_seal": False, "fda": False, "food_safe": False,
+               "note": "no certification is claimed that the brand has not got"},
+}
+
+#: A body-oil bottle on its own brand. A cylinder label has no carton panels, so
+#: the back is driven by `label_sections` rather than by coffee-specific headings.
+HARBOR_BODY_OIL: Dict[str, Any] = {
+    "id": "harbor-body-oil",
+    "brand": "HARBOR SAGE",
+    "product": "BODY OIL",
+    "form": CYLINDER,
+    "face_mm": {"front": [63.0, 50.0], "back": [63.0, 50.0]},
+    "theme": "sage",
+    "script_line": "Calm",
+    "subtitle": "BODY OIL  ·  LIGHTWEIGHT",
+    "tagline": "Four oils, nothing else",
+    "net_weight": "100 ml (3.4 fl oz)",
+    "net_weight_line": "100 ml (3.4 fl oz)",
+    "servings": "100 ml",
+    "inside": "A light body oil of jojoba, sweet almond, rosehip and vitamin E.",
+    "ingredients": ("Simmondsia chinensis (jojoba) seed oil, Prunus amygdalus dulcis "
+                    "(sweet almond) oil, Rosa canina (rosehip) seed oil, tocopherol."),
+    "label_sections": [
+        {"head": "HOW TO USE", "body": "Warm two or three drops between the palms and "
+                                       "press onto damp skin after a shower."},
+        {"head": "STORAGE", "body": "Keep out of direct sunlight, below 25 C."},
+    ],
+    "about": "Made in small batches. Patch test before first use.",
+    "company": "DISTRIBUTED BY T2 HOLDINGS LLC",
+    "lot_code": "LOT  HS-0000",
+    "best_by": "BEST BY  00/0000",
+    "barcode_digits": "8 50000 00000 6",
+    "draft_note": "DRAFT  ·  VERIFY BEFORE PRINT",
+    "back_draft_note": "DRAFT  ·  VERIFY INGREDIENTS AND UPC BEFORE PRINT",
+    "status": "DRAFT - copy, ingredients and UPC must be verified before print",
+    "claims": {"organic_seal": False, "fda": False, "cruelty_free": False,
+               "note": "no certification is claimed that the brand has not got"},
+}
+
+#: A pet supplement tub: a short, wide cylinder. The claims block is explicit
+#: that nothing is approved for any condition, because a pet supplement label is
+#: where an invented claim would be worst.
+PINE_PAWS_JOINT: Dict[str, Any] = {
+    "id": "pine-paws-joint",
+    "brand": "PINE PAWS",
+    "product": "JOINT CHEWS",
+    "form": CYLINDER,
+    "face_mm": {"front": [141.0, 70.0], "back": [141.0, 70.0]},
+    "theme": "forest",
+    "script_line": "For the Long Walk",
+    "subtitle": "SOFT CHEWS  ·  GLUCOSAMINE",
+    "tagline": "A daily chew for older dogs",
+    "net_weight": "180 g (60 chews)",
+    "net_weight_line": "NET WT. 180 g (60 chews)",
+    "servings": "60 soft chews · 3 g each",
+    "inside": "Soft chicken-flavoured chews with glucosamine and green-lipped mussel.",
+    "ingredients": ("Chicken meal, glycerin, glucosamine hydrochloride, green-lipped "
+                    "mussel powder, flaxseed, mixed tocopherols."),
+    "label_sections": [
+        {"head": "FEEDING GUIDE", "body": "One chew daily for dogs up to 15 kg, two "
+                                          "for larger dogs. Fresh water alongside."},
+        {"head": "STORAGE", "body": "Reseal after use; keep cool and dry."},
+    ],
+    "about": ("A supplement, not a medicine. Not evaluated by any authority; no "
+              "disease claim is made."),
+    "company": "DISTRIBUTED BY T2 HOLDINGS LLC",
+    "lot_code": "LOT  PP-0000",
+    "best_by": "BEST BY  00/0000",
+    "barcode_digits": "8 50000 00000 7",
+    "draft_note": "DRAFT  ·  VERIFY BEFORE PRINT",
+    "back_draft_note": "DRAFT  ·  VERIFY INGREDIENTS AND UPC BEFORE PRINT",
+    "status": "DRAFT - copy, ingredients and UPC must be verified before print",
+    "claims": {"organic_seal": False, "fda": False, "vet_approved": False,
+               "note": "no certification and no disease claim is made"},
+}
+
 _DESIGN_IDS = {
     "mogra-lions-mane": "mogra-lions-mane",
     "mogra_lions_mane": "mogra-lions-mane",
     "mogra": "mogra-lions-mane",
     "word-coffee": "word-coffee",
     "word_coffee": "word-coffee",
+    "word-coffee-canister": "word-coffee-canister",
+    "word-coffee-mug": "word-coffee-mug",
+    "harbor-body-oil": "harbor-body-oil",
+    "pine-paws-joint": "pine-paws-joint",
 }
 
 #: Seller brief `product_line` -> design id. Explicit: a brief that names a line
@@ -91,6 +250,11 @@ _PRODUCT_LINES = {
     "mogra": "mogra-lions-mane",
     "word-coffee": "word-coffee",
     "word_coffee": "word-coffee",
+    "word-coffee-canister": "word-coffee-canister",
+    "word_coffee_canister": "word-coffee-canister",
+    "word-coffee-mug": "word-coffee-mug",
+    "harbor-body-oil": "harbor-body-oil",
+    "pine-paws-joint": "pine-paws-joint",
 }
 
 
@@ -99,14 +263,25 @@ def known() -> List[str]:
     return sorted({v for v in _DESIGN_IDS.values()})
 
 
+#: The designs that live in this module as data (rather than in
+#: `mogra_label_art`, whose pouch artwork is shipped and byte-locked).
+_LOCAL_DESIGNS: Dict[str, Dict[str, Any]] = {
+    "word-coffee": WORD_COFFEE,
+    "word-coffee-canister": WORD_COFFEE_CANISTER,
+    "word-coffee-mug": WORD_COFFEE_MUG,
+    "harbor-body-oil": HARBOR_BODY_OIL,
+    "pine-paws-joint": PINE_PAWS_JOINT,
+}
+
+
 def design_for(product: str = "mogra-lions-mane") -> Dict[str, Any]:
     """A copy of the declared design; callers may edit it without side effects."""
     key = _DESIGN_IDS.get(str(product or "").strip().lower())
     if key is None:
         raise ValueError(
             f"unknown label design {product!r}; known designs: {', '.join(known())}")
-    if key == "word-coffee":
-        return copy.deepcopy(WORD_COFFEE)
+    if key in _LOCAL_DESIGNS:
+        return copy.deepcopy(_LOCAL_DESIGNS[key])
     return mogra_label_art.design_for(key)
 
 
@@ -144,8 +319,19 @@ def face_mm(design: Dict[str, Any], face: str = "front") -> Tuple[float, float]:
         return float(declared[0]), float(declared[1])
     if form_of(design) == GIFT_BOX:
         return (100.0, 200.0)
+    if form_of(design) == CYLINDER:
+        # A cylinder with no declared label is refused rather than given a
+        # made-up circumference: the wrap width IS the physical measurement.
+        raise ValueError(
+            f"design {design.get('id') or design.get('brand')!r} declares no "
+            "face_mm; a cylinder label must declare its visible-half width and height")
     w, h = mogra_label_art.BASE_SIZE
     return (w / mogra_label_art.DPI * 25.4, h / mogra_label_art.DPI * 25.4)
+
+
+def plate_kind(design: Dict[str, Any]) -> str:
+    """The blank body a drawn plate must draw for this design's form."""
+    return PLATE_KINDS[form_of(design)]
 
 
 def _spec(design: Dict[str, Any]) -> Dict[str, Any]:
@@ -163,8 +349,12 @@ def front_panel(design: Optional[Dict[str, Any]] = None,
     if form_of(dsn) == POUCH:
         return mogra_label_art.front_panel(dsn, size=size)
     width_mm, height_mm = face_mm(dsn, "front")
-    img = package_art.render_front_box(_spec(dsn), width_mm=width_mm,
-                                       height_mm=height_mm)
+    if form_of(dsn) == CYLINDER:
+        img = package_art.render_front_label(_spec(dsn), width_mm=width_mm,
+                                             height_mm=height_mm)
+    else:
+        img = package_art.render_front_box(_spec(dsn), width_mm=width_mm,
+                                           height_mm=height_mm)
     if size is not None:
         img = img.resize((int(size[0]), int(size[1])), Image.LANCZOS)
     return img
@@ -177,8 +367,12 @@ def back_panel(design: Optional[Dict[str, Any]] = None,
     if form_of(dsn) == POUCH:
         return mogra_label_art.back_panel(dsn, size=size)
     width_mm, height_mm = face_mm(dsn, "back")
-    img = package_art.render_back_box(_spec(dsn), width_mm=width_mm,
-                                      height_mm=height_mm)
+    if form_of(dsn) == CYLINDER:
+        img = package_art.render_back_label(_spec(dsn), width_mm=width_mm,
+                                            height_mm=height_mm)
+    else:
+        img = package_art.render_back_box(_spec(dsn), width_mm=width_mm,
+                                          height_mm=height_mm)
     if size is not None:
         img = img.resize((int(size[0]), int(size[1])), Image.LANCZOS)
     return img
@@ -206,6 +400,8 @@ def manifest(design: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     }
 
 
-__all__ = ["POUCH", "GIFT_BOX", "FORM_NAMES", "WORD_COFFEE", "known",
-           "design_for", "design_for_brief", "form_of", "face_mm",
+__all__ = ["POUCH", "GIFT_BOX", "CYLINDER", "FORM_NAMES", "PLATE_KINDS",
+           "WORD_COFFEE", "WORD_COFFEE_CANISTER", "WORD_COFFEE_MUG", "HARBOR_BODY_OIL",
+           "PINE_PAWS_JOINT", "known",
+           "design_for", "design_for_brief", "form_of", "face_mm", "plate_kind",
            "front_panel", "back_panel", "panels", "manifest"]
