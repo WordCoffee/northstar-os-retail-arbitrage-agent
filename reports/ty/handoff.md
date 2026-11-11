@@ -10,6 +10,28 @@ A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.m
 > and `reports/ty/handoff.md`, then continue from the first unfinished unit. No
 > questions, no reports between cycles. Idle means re-plan.
 
+## Position, 2026-11-11 cycle 5 — bundles measure as bundles
+
+Report: `reports/ty/sel07_bundle_units.md`.
+
+| # | job | result |
+|---|---|---|
+| 1 | `sel-07-bundle-and-body-shape` — PO-012 asked for three units and measured one | merged. `package_components` keeps every package-sized component (the single-subject mask held **1** component of 343,596 px — the first box only); `find_panel_quads` measures each on its own crop with the neighbours flattened; `build(units=3)` warps one panel per measured face and refuses `units_not_found: measured N of M`. PO-004/PO-012: **3 quads, fill 25.9 % (was 20.3 %), score 100**. The briefs' `body_prompt` said "one unit shown" against a three-unit prompt — corrected. |
+
+**Also fixed, and worth remembering:** `stock_from_brief` matched colour words as substrings, so the
+tagline "One Message at a Time" contains **sage** and every Word Coffee box was painted sage-green.
+Word boundaries now.
+
+**Judged pass: 12/12, mean 98.3** (was 11/12, 94.9). Seller dimension **98.3**, design-studio
+**89.8**, 4 services at bar. The judge moved on PO-002 — the *lifestyle* brief — on the **same flat
+sweep**, so its verdict tracked colour, not scene. It is weak evidence for colour and copy and no
+evidence for a scene; recorded in the report.
+
+**Next, in rank order:** `sel-refs-designs` (21 stored rows are 2 product designs) →
+`sel-04-packaging` → `ux-0610-live-verify` (still parked: `python tools/ty_unlock_checks.py --status`).
+Arming `MEDIA_GEN_LIVE` and running `--renderer comfy` remains the one thing that turns every plate
+from drawn to real.
+
 ## Position, 2026-11-11 cycle 4 — the app prints two forms, and the seller number is the product's
 
 Two jobs merged, both of them structural. Reports: `reports/ty/sel06b_second_brand.md`,
