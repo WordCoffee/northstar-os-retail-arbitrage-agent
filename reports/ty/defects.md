@@ -222,6 +222,33 @@ as a normal short turn, and the stream file is not read by anything.
 heartbeat red when the stream's last line is an error, so this can never again look healthy for a
 day.
 
+**Closed 2026-11-11:** `scripts/ty_director.py::stream_health` reads the last line of the stream and
+sets `heartbeat.red`; `death_note()` names a lane error instead of "session gone". 243 error lines
+were already on disk when it was written. Five new tests in `test_ty_director_launcher.py`.
+
+## D-011 — the Seller-Tester scores a lookalike pipeline, not the one the product sells (2026-11-11)
+
+**Measured:** the app renders a product picture through
+`Northstar_backend/product_picture_api.py:115` → `product_picture.build` (`product_picture.py:191`),
+which uses `mockup_compositor`, `mogra_label_art` (print-resolution label art) and `text_fidelity`.
+The Seller-Tester renders through `tools/seller_tester/generators.py:766` →
+`product_composite.place_product` + `label_warp` (`generators.py:798-801`).
+
+A count of `product_picture|mockup_compositor|mogra_label_art` across `tools/seller_tester/*.py` is
+**0**.
+
+**Consequence:** every seller number in this repo (the 40-output replay at mean 22.1, the held-out
+mode means, the 2026-11-11 prompt-only result at 93.7 judged) measures the harness pipeline. It may
+be a good pipeline; it is not the product's. A score that does not exercise the shipped path cannot
+close a seller gap, and the two implementations drift — the harness needed the shadow-framing and
+label-truncation fixes made on 2026-11-11, and the app's own path may not have them.
+
+**Fix, not yet done:** the harness's prompt-only and composite routes must call
+`product_picture.build` (or the shared module both import), and the score must be produced from that
+output. Until then, seller scores are labelled "harness pipeline" wherever they appear. Queued as
+`sel-06-exercise-product-pipeline` at rank 1.
+
+
 
 
 

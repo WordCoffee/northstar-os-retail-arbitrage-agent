@@ -333,8 +333,12 @@ def set_status(job_id: str, status: str, *, db: Optional[Path] = None,
             if key in extra:
                 fields[key] = float(extra[key])
         assignments = ", ".join(f"{key}=?" for key in fields)
-        conn.execute(f"UPDATE jobs SET {assignments} WHERE id=?",
-                     (*fields.values(), job_id))
+        cursor = conn.execute(f"UPDATE jobs SET {assignments} WHERE id=?",
+                              (*fields.values(), job_id))
+        if cursor.rowcount == 0:
+            # A status write that changed nothing must not report success: the caller
+            # would record a merge against a job the store never had.
+            return {"ok": False, "reason": "no_such_job", "id": job_id}
         _event(conn, job_id, status, str(extra.get("detail") or ""))
     finally:
         conn.close()
@@ -619,13 +623,26 @@ def main(argv: Optional[List[str]] = None) -> int:
                         help="adopt jobs that exist only in reports/ty/director_queue.json")
     parser.add_argument("--mirror", action="store_true",
                         help="rewrite the readable mirror from the store")
+    parser.add_argument("--set-status", nargs=2, metavar=("JOB", "STATUS"),
+                        help="record a job's status in the store and mirror")
+    parser.add_argument("--rank", nargs=2, metavar=("JOB", "RANK"), type=str,
+                        help="put a job at a position in the ranked list")
+    parser.add_argument("--evidence", default="", help="with --set-status")
     args = parser.parse_args(argv)
 
+    if args.rank:
+        job_id, rank = args.rank
+        print(json.dumps(set_rank(job_id, int(rank)), indent=2))
+        return 0
     if args.import_mirror:
         print(json.dumps(import_mirror(), indent=2))
         return 0
     if args.mirror:
         print(json.dumps(mirror(), indent=2))
+        return 0
+    if args.set_status:
+        job_id, status = args.set_status
+        print(json.dumps(set_status(job_id, status, evidence=args.evidence), indent=2))
         return 0
     if args.add:
         print(json.dumps(add_job(unit=args.unit, title=args.title,

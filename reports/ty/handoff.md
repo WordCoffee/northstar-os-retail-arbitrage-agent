@@ -10,7 +10,40 @@ A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.m
 > and `reports/ty/handoff.md`, then continue from the first unfinished unit. No
 > questions, no reports between cycles. Idle means re-plan.
 
-## Queue lease, 2026-11-11T00:45Z — this session holds it
+## Position, 2026-11-11 cycle 3 — prompt-only is honest now, and the label gap is named
+
+Unit report: `reports/ty/rerender_prompt_only_20261111.md`. Six jobs merged, two defects closed.
+
+| # | job | status |
+|---|---|---|
+| 1 | `rerender-prompt-only` — 12 briefs re-rendered at the same seeds: 9/12 mean 86.4 → 10/12 mean 93.9 | merged |
+| 2 | `fix-shadow-frame-clip` — the contact shadow ran past the frame edge and was cut; the six "exactly 90.0" rows were this, not the flat() branch | merged |
+| 3 | `fix-fill-and-judge-instruments` — `subject_fill` measured the corner colour on a scene; the judge rubric named the taxonomy slot instead of the product | merged |
+| 4 | `fix-queue-mirror-divergence` — the store held 35 jobs while the resume mirror held 51; `mirror()` deleted the difference. 16 jobs recovered, 14 statuses refreshed, `rank` migrated | merged |
+| 5 | `fix-launcher-heartbeat-red` (D-010) — heartbeat is red when the stream's last line is an error (243 such lines were on disk) | merged |
+| 6 | `fix-dev-start-pids` (D-009) — the pid record is resolved from the listeners and pruned of the dead | merged |
+| 7 | `ppc-upload-live` — upload → propose → approve → write v1 → write v2 → download, hash matches | merged |
+
+**The seller number, per mode, never blended:** prompt-only 12 scored / **10 passed / 93.9**
+mechanically; with the local vision judge (`gemma3:4b`, loopback) **11 passed / 83.5**. Stored 12/11/91.8,
+uploaded 21/16/90.0.
+
+**What the judge says is still wrong** — and it is one thing: **lettering**. The briefs describe exact
+label copy and hand it to the diffusion model, which spells "MOGGARA" for "MOGRA ORGANICS" and "AOW"
+for "Word Coffee", drops the tagline, and paints glossy where the brief asked matte. The repo has
+`tools/seller_tester/label_warp.py` (compose, warp, blend with the body's own shading) but **0 of 12
+prompt-only briefs set `label_mode`**, so it never ran. That is job 1 now (`sel-05-label-fidelity`,
+claimed): unlettered body prompts + a label block per brief + judge-measured.
+
+**Next, in rank order:** `sel-05-label-fidelity` (in flight) → `sel-coverage-44` (still 12 of 56
+briefs have a reference: the unchanged rank-1 blocker) → `ux-0610-live-verify` (needs an unlocked
+desktop) → `sel-04-packaging`.
+
+**Defects filed or closed this cycle:** D-008 closed (it was misdiagnosed; the proof carries the
+correction), D-009 closed, D-010 closed, plus three new ones in-repo: the queue/mirror divergence,
+the clipped shadow, and the two invalid instruments.
+
+## Queue lease, 2026-11-11T02:08Z — this session holds it (pid 24680, launcher-started)
 
 Step (1) of the resume order, measured before any work:
 
