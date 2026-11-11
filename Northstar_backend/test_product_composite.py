@@ -79,7 +79,11 @@ def test_shadow_darkens_below_the_product_and_can_be_disabled():
     with_shadow = pc.place_product(scene, cut, scale=0.5, shadow=True)
     without = pc.place_product(scene, cut, scale=0.5, shadow=False)
     left, top, right, bottom = with_shadow["product_box"]
-    probe = ((left + right) // 2, min(799, bottom + 6))
+    # The shadow is now reserved inside the margin, so the two placements do not share a
+    # box: probe below *both* of them, at the same absolute pixel, so the comparison is
+    # "is there a shadow here" and not "is one product 70 px lower than the other".
+    deepest = max(bottom, without["product_box"][3])
+    probe = ((left + right) // 2, min(799, deepest + 6))
     with Image.open(BytesIO(with_shadow["bytes"])) as a, \
             Image.open(BytesIO(without["bytes"])) as b:
         shaded = sum(a.convert("RGB").getpixel(probe)) / 3

@@ -43,17 +43,20 @@ def trim_to_alpha(im, *, threshold: int = 8):
 
 
 def _contact_shadow(product_w: int, product_h: int, *, opacity: int = 96,
-                    spread: float = 0.06):
+                    spread: float = 0.06, factor: float = 1.0):
     """A soft ellipse that sits *under the product's base*.
 
     Sized relative to the product (1.15x wide, ~0.22x tall) so the blob reads as
     a contact shadow at any scale, and blurred by about 4 percent of its width.
+    ``factor`` shrinks the whole footprint when the frame has less slack than the
+    nominal shadow needs; it never grows it.
     """
     from PIL import Image, ImageDraw, ImageFilter
 
-    pad = max(6, int(product_w * spread))
-    w = int(product_w * 1.15)
-    h = max(6, int(product_h * 0.22))
+    k = max(0.30, min(1.0, float(factor)))
+    pad = max(6, int(product_w * spread * k))
+    w = max(6, int(product_w * 1.15 * k))
+    h = max(6, int(product_h * 0.22 * k))
     canvas = Image.new("L", (w + 2 * pad, h + 2 * pad), 0)
     draw = ImageDraw.Draw(canvas)
     draw.ellipse([pad, pad, pad + w, pad + h], fill=opacity)
@@ -71,6 +74,16 @@ def place_product(scene_png: bytes, cutout_png: bytes, *,
     so a very tall product cannot overflow the width). ``anchor`` is the centre of
     the product's box as a fraction of the scene (0-1). Nothing is cropped: if the
     product would not fit, the scale is reduced and the reduction is reported.
+
+    **The shadow is part of the subject.** It used to sit half its height below the
+    product's base with no reservation, so at scale 0.62 with anchor 0.6 it ran past
+    the frame edge and was cut off by it. That is a visible defect in every such
+    picture (a hard straight edge under the product) and it is what failed the
+    white-matte ring check on six held-out prompt-only briefs, measured 2026-11-11:
+    border mean 252.1, std 7.19 against a limit of 6.0, all of it in the bottom
+    twenty rows. The footprint is now reserved inside the frame margin, shrinking
+    the *shadow* first and the product only when the frame genuinely cannot hold
+    both.
     """
     from PIL import Image
 
@@ -103,10 +116,45 @@ def place_product(scene_png: bytes, cutout_png: bytes, *,
     left = max(margin, min(sw - target_w - margin, left))
     top = max(margin, min(sh - target_h - margin, top))
 
-    out = scene.copy()
+    opacity = max(0, min(255, int(96 * shadow_strength)))
+    shadow_mask = None
+    shadow_below = 0
     if shadow:
-        shadow_mask = _contact_shadow(target_w, target_h,
-                                      opacity=max(0, min(255, int(96 * shadow_strength))))
+        avail_w = sw - 2 * margin
+        slack_h = (sh - 2 * margin) - target_h
+        factor = 1.0
+        for _ in range(3):
+            shadow_mask = _contact_shadow(target_w, target_h, opacity=opacity, factor=factor)
+            shadow_below = shadow_mask.height - shadow_mask.height // 2
+            too_tall = shadow_below > slack_h > 0
+            too_wide = shadow_mask.width > avail_w
+            if not (too_tall or too_wide):
+                break
+            if too_tall:
+                factor = max(0.30, factor * (slack_h / float(shadow_below)))
+            if too_wide:
+                factor = max(0.30, factor * (avail_w / float(shadow_mask.width)))
+        if target_h + shadow_below > (sh - 2 * margin):
+            # Last resort: the frame cannot hold both, so the product gives way and the
+            # reduction is reported. The shadow has already shrunk to its floor.
+            ratio = max(0.05, ((sh - 2 * margin) - shadow_below) / float(target_h))
+            target_h = max(1, int(target_h * ratio))
+            target_w = max(1, int(target_w * ratio))
+            product = product.resize((target_w, target_h), Image.LANCZOS)
+            shadow_mask = _contact_shadow(target_w, target_h, opacity=opacity, factor=0.9)
+            shadow_below = shadow_mask.height - shadow_mask.height // 2
+        # Horizontal: the shadow is wider than the product, so the product's box is
+        # clamped inwards by half that difference; otherwise the blob would be cut by
+        # the left or right edge, which is the same defect as the clipped base.
+        over = max(0, shadow_mask.width - target_w) // 2
+        lo = margin + over
+        hi = sw - margin - target_w - over
+        left = lo if hi < lo else max(lo, min(hi, left))
+        # The product now sits high enough that its shadow ends inside the margin.
+        top = max(margin, min(sh - margin - target_h - shadow_below, top))
+
+    out = scene.copy()
+    if shadow and shadow_mask is not None:
         dark = Image.new("RGBA", shadow_mask.size, (18, 14, 10, 255))
         dark.putalpha(shadow_mask)
         sx = left + (target_w - shadow_mask.width) // 2
@@ -126,6 +174,9 @@ def place_product(scene_png: bytes, cutout_png: bytes, *,
         "product_scale": round(target_h / float(sh), 4),
         "scale_clamped": abs((target_h / float(sh)) - wanted) > 0.01,
         "shadow": bool(shadow),
+        "shadow_below_px": shadow_below,
+        "shadow_inside_frame": bool(
+            not shadow or top + target_h + shadow_below <= sh - margin + 1),
     }
 
 
