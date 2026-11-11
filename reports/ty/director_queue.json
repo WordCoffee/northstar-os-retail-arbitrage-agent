@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-11T05:10:40+00:00",
+  "updated_at": "2026-11-11T05:11:53+00:00",
   "cycle": 2,
   "unit_in_flight": "",
   "unit_order": [
@@ -1676,6 +1676,32 @@
       "rank": 4
     },
     {
+      "id": "pack-01-rigid-cylinder-form",
+      "unit": "D4",
+      "title": "A rigid-cylinder packaging form (jar, bottle, tube): measure the label band with warp_cylinder and print the brand panel on it, so skincare_bottle, food_jar and the bottle briefs stop being unrenderable",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "Northstar_backend/mockup_compositor.py",
+        "Northstar_backend/brand_art.py",
+        "Northstar_backend/product_picture.py",
+        "Northstar_backend/test_*.py",
+        "tools/seller_tester/",
+        "ty/seller_briefs.json"
+      ],
+      "branch": "ty/pack-01-rigid-cylinder-form",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-11T05:11:53+00:00",
+      "updated_at": "2026-11-11T05:11:53+00:00",
+      "rank": 4
+    },
+    {
       "id": "sel-03-aplus",
       "unit": "D12",
       "title": "A+ content modules: briefs, real renders, scored like a seller would",
@@ -1716,7 +1742,7 @@
       "score_after": null,
       "evidence": "",
       "created_at": "2026-11-08T21:21:18+00:00",
-      "updated_at": "2026-11-11T03:31:33+00:00",
+      "updated_at": "2026-11-11T05:11:53+00:00",
       "rank": 5
     },
     {
