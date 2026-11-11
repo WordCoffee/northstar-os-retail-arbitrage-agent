@@ -10,6 +10,36 @@ A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.m
 > and `reports/ty/handoff.md`, then continue from the first unfinished unit. No
 > questions, no reports between cycles. Idle means re-plan.
 
+## Position, 2026-11-11 cycle 15 — a main image gets a shadowless plate, drawn and real
+
+Unit report: `reports/ty/d021_drawn_plate_shadow.md`. Tag `ty-dir-fix-drawn-plate-shadow`.
+
+| # | job | result |
+|---|---|---|
+| 1 | `fix-drawn-plate-shadow` (D-021, rank 1) — the drawn plate drew a base ellipse and **every** plate prompt asked FLUX for "a gentle contact shadow", including main images, where the cutout then keeps it inside the silhouette and no check can see it | **D-021 closed.** `synthetic_plate(shadow=False)` draws no ellipse and the drawn renderer passes `shadow=not white`; `plate_brief(..., shadow=False)` rewrites the clause in every branch (package, bundle, cylinder, `plate_subject`) and `build()` chooses it from the background |
+
+**Measured, drawn route, before → after** (`reports/ty/d021_plate_shadow.json`,
+`reports/ty/d021_contact.png`): PO-001's neutral mid-grey px **941 848 → 30 820** and its
+product box **1280 × 1748 → 1192 × 1877** — the product is 7 % taller because the crop no
+longer wastes height on a shadow. PO-003 **64 405 → 8 006**. PO-004 (gift box) **unchanged**,
+the control: that form never drew a shadow. Pass unchanged: 4/4, mean 100.0.
+
+**The real route is proven by test, not by a re-render:** `plate_brief(shadow=False)` carries
+no shadow ask on all three forms and on a bundle; a fresh FLUX plate is a 70–90 s lane and
+belongs to the next real pass.
+
+**New, and the reason the 8 failing published outputs are still failing:** **D-022** — a
+full generation (`SDXL`/`FLUX` scene) has no white-composite step, so a main-image brief gets
+a generated sweep with a grey pool (10.2–25.6 % of the frame). Queued rank 2.
+
+**Tests:** 5 in `test_plate_shadow_brief.py` (written first), 34 + 1 skipped in the
+picture/plate group, 136 in the seller/package group.
+
+**Next, in rank order:** `fix-fullgen-white-composite` (D-022) → `sel-04-packaging` →
+`pack-02-apparel-flat-print` → `reference-depth` → `pack-03-boxart-forms` →
+`block3-workspaces` → `block4-seller-tests` → `block5-production-hardening` →
+`block7-verification` → D-019.
+
 ## Position, 2026-11-11 cycle 14 — the background is measured on the whole frame, and eight published 100.0s do not survive it
 
 Unit report: `reports/ty/d020_matte_residue.md`. Tag `ty-dir-fix-matte-residue-check`.
