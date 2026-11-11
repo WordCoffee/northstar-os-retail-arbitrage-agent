@@ -297,7 +297,8 @@ def _compose_cylinder(plate: Image.Image, design: Dict[str, Any], face: str,
 
 
 def _place_on_flat(composed: Image.Image, *, value: int = 255,
-                   fill: float = 0.80, method: str = "background_distance"
+                   fill: float = 0.80, method: str = "background_distance",
+                   matte: str = "auto", matte_url: Optional[str] = None
                    ) -> Dict[str, Any]:
     """Cut the product out of its plate and stand it on a flat white canvas.
 
@@ -307,24 +308,56 @@ def _place_on_flat(composed: Image.Image, *, value: int = 255,
     white-background brief failed `background` and `alpha_matte` on a real plate
     (measured 2026-11-11: ST-001 at 70). This does the last step of the product
     picture: cut, scale, centre, paste.
+
+    ``matte`` chooses the instrument (D-017):
+
+    * ``"birefnet"`` — a real matte through the media lane. It **raises** when the
+      lane cannot supply one; it never degrades into a colour cut quietly.
+    * ``"auto"`` — the real matte when the lane answers, otherwise the colour cut,
+      with the fallback and its reason recorded on the picture.
+    * ``"none"`` — the colour cut alone. A plate's opaque contact shadow then
+      survives, which is D-017; use it only where that is deliberate.
     """
+    import time
+
     import numpy as np
 
     import product_cutout as pc
 
     rgb = np.asarray(composed.convert("RGB"))
-    try:
-        cut = pc.cutout(rgb, method)
-        alpha = cut.alpha
-    except Exception:  # noqa: BLE001 - a cutout that cannot run is stated, not swapped
-        cut = pc.cutout(rgb, "grabcut")
-        alpha = cut.alpha
-        method = "grabcut"
+    wanted = str(matte or "auto").strip().lower()
+    if wanted not in ("auto", "birefnet", "none"):
+        raise ValueError(f"unknown matte {matte!r}; known: auto, birefnet, none")
+    matte_record: Dict[str, Any] = {"requested": wanted, "method": "none",
+                                    "seconds": 0.0, "rejected_px": 0, "reason": ""}
+    alpha = None
+    if wanted in ("auto", "birefnet"):
+        started = time.perf_counter()
+        try:
+            alpha = pc.matte_alpha(rgb, **({"url": matte_url} if matte_url else {}))
+            matte_record.update(method="birefnet",
+                                seconds=round(time.perf_counter() - started, 2))
+        except pc.MatteUnavailable as exc:
+            matte_record["reason"] = str(exc)
+            if wanted == "birefnet":
+                raise
+    if alpha is None:
+        try:
+            alpha = pc.cutout(rgb, method).alpha
+        except Exception:  # noqa: BLE001 - a cutout that cannot run is stated, not swapped
+            alpha = pc.cutout(rgb, "grabcut").alpha
+            method = "grabcut"
+        matte_record["reason"] = matte_record["reason"] or "no real matte was requested"
     mask = np.asarray(alpha, dtype=np.uint8)
+    if matte_record["method"] == "birefnet":
+        # The measured statement of what the matte bought: the pixels the colour cut
+        # had kept and the matte rejected. On a plate those are the contact shadow.
+        kept = pc.background_distance_alpha(rgb) > 200
+        matte_record["rejected_px"] = int((kept & (mask <= 8)).sum())
     # A studio plate carries a soft contact shadow. It is part of the same colour
-    # difference as the product but it is translucent, so a solid alpha keeps the
-    # product and drops the shadow: threshold high, keep the largest blob, fill
-    # its holes, then feather the edge so the paste is not jagged.
+    # difference as the product, so a colour cut keeps it; a real matte does not. The
+    # solid pass below keeps the product and drops a *translucent* shadow, and never
+    # widens what a matte already decided.
     solid = (mask > 200).astype(np.uint8)
     if solid.sum() > 0:
         import cv2
@@ -336,9 +369,9 @@ def _place_on_flat(composed: Image.Image, *, value: int = 255,
         solid = cv2.morphologyEx(solid, cv2.MORPH_CLOSE, np.ones((5, 5), np.uint8))
         solid = cv2.GaussianBlur(solid * 255, (3, 3), 0)
         # Keep the union: the solid pass restores any part of the product a soft
-        # alpha lost, and never clips the product's own bright edge. A shadow that
-        # is opaque enough to survive the solid pass stays — removing it needs a
-        # real matte (BiRefNet in the lane), which is filed as D-017.
+        # alpha lost, and never clips the product's own bright edge. On the colour
+        # cut an opaque shadow attached to the product survives this pass — that is
+        # D-017, and the cure is the real matte above, not a higher threshold.
         mask = np.maximum(mask, solid)
     ys, xs = np.nonzero(mask > 8)
     if xs.size < 16:
@@ -365,7 +398,7 @@ def _place_on_flat(composed: Image.Image, *, value: int = 255,
     canvas.paste(scaled, position, scaled)
     buffer = io.BytesIO()
     cut_rgba.save(buffer, format="PNG")
-    return {"image": canvas, "method": method,
+    return {"image": canvas, "method": method, "matte": matte_record,
             "box": [position[0], position[1], position[0] + size[0], position[1] + size[1]],
             "fill": round(size[0] * size[1] / float(canvas.width * canvas.height), 4),
             "cutout": buffer.getvalue()}
@@ -461,7 +494,8 @@ def build(design: Optional[Dict[str, Any]] = None, *,
           units: int = 1,
           background: Optional[str] = None,
           background_value: int = 255,
-          fill: float = 0.85) -> Dict[str, Any]:
+          fill: float = 0.85,
+          matte: str = "auto") -> Dict[str, Any]:
     """Render the plates, compose the panels and gate every picture.
 
     ``generator(brief, width=…, height=…, tier=…, seed=…)`` is injectable so the
@@ -557,7 +591,8 @@ def build(design: Optional[Dict[str, Any]] = None, *,
             # label's own light panel out of it (measured 2026-11-11 — the wordmark
             # went with it).
             try:
-                placed = _place_on_flat(plate, value=background_value, fill=fill)
+                placed = _place_on_flat(plate, value=background_value, fill=fill,
+                                        matte=matte)
             except ValueError as exc:
                 record.update({"ok": False, "stage": "background", "reason": str(exc)})
                 plate.save(rejected / f"{face}_plate.png")
@@ -568,6 +603,9 @@ def build(design: Optional[Dict[str, Any]] = None, *,
             record["background"] = {"mode": "flat", "value": int(background_value),
                                     "method": placed["method"], "box": placed["box"],
                                     "fill": placed["fill"]}
+            # D-017: a delivered main image states which matte produced it, and what
+            # the matte rejected. "auto" on a cold lane is a colour cut, said plainly.
+            record["matte"] = placed["matte"]
             record["product_box"] = list(placed["box"])
             cutout_bytes["png"] = placed.get("cutout")
 
@@ -626,6 +664,8 @@ def build(design: Optional[Dict[str, Any]] = None, *,
                    "tier": tier},
         "checks": {
             "plate_face_measured": all(bool(r.get("quad")) for r in records),
+            "matte": {r["face"]: (r.get("matte") or {}).get("method", "none")
+                      for r in records},
             "units": {r["face"]: r.get("units_found") for r in records},
             "units_complete": all(r.get("units_found") == units for r in records),
             "panel_gate": {r["face"]: r.get("gate_ok") for r in records},

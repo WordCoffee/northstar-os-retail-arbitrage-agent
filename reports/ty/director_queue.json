@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-11T08:45:10+00:00",
+  "updated_at": "2026-11-11T09:10:38+00:00",
   "cycle": 3,
   "unit_in_flight": "",
   "unit_order": [
@@ -1472,7 +1472,7 @@
       "id": "fix-plate-shadow-matte",
       "unit": "D4",
       "title": "D-017: a plate's opaque contact shadow survives the cutout; remove it with a real matte (BiRefNet in the lane), not a colour threshold",
-      "status": "queued",
+      "status": "merged",
       "owner": "",
       "write_paths": [
         "Northstar_backend/product_picture.py",
@@ -1486,9 +1486,9 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": "D-017 closed: product_cutout.matte_alpha (BiRefNet via the lane) refuses by name when the lane is down; _place_on_flat/build take matte=birefnet|auto|none and record it per face and in the manifest; real plate renders/comfy_plate7/ST-002/_rejected/front_plate.png measured: matte box 1162x1000 in 3.68s, rejected 130357 px of the colour cut 99.73% dark neutral, colour cut keeps 53.2% of the product; 7+30+66+78 tests; reports/ty/d017_plate_shadow_matte.md",
       "created_at": "2026-11-11T08:44:13+00:00",
-      "updated_at": "2026-11-11T08:44:13+00:00",
+      "updated_at": "2026-11-11T09:10:29+00:00",
       "rank": 0
     },
     {
@@ -1838,6 +1838,30 @@
       "evidence": "label_warp.face_quad measures the face on the silhouette body band and clips every pixel to the mask (0 px outside on 12/12); product_composite drops detached specks and thin attached runs (PO-001 230 rows); 12 prompt-only briefs re-rendered at pinned seeds 12/12 mean 100.0; local judge 12/12 label-on-pack, 10/12 no-stray (D-019 filed for scene strays); 12+97 tests; reports/ty/label_conform.md",
       "created_at": "2026-11-11T07:35:10+00:00",
       "updated_at": "2026-11-11T08:21:08+00:00",
+      "rank": 1
+    },
+    {
+      "id": "fix-matte-residue-check",
+      "unit": "U",
+      "title": "D-020: the white-matte checks are blind to a shadow under the product; add a whole-frame residue check against the product's own silhouette",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "tools/seller_tester/scorers.py",
+        "tools/seller_tester/harness.py",
+        "Northstar_backend/test_*.py",
+        "ty/seller_scores.json"
+      ],
+      "branch": "ty/fix-matte-residue-check",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-11T09:10:34+00:00",
+      "updated_at": "2026-11-11T09:10:34+00:00",
       "rank": 1
     },
     {

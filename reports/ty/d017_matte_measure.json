@@ -1,0 +1,34 @@
+{
+  "plate": "renders\\comfy_plate7\\ST-002\\_rejected\\front_plate.png",
+  "matte_seconds": 3.68,
+  "colour_box": [
+    33,
+    431,
+    1967,
+    1568
+  ],
+  "matte_box": [
+    201,
+    312,
+    1799,
+    1688
+  ],
+  "colour_box_aspect": 1.701,
+  "matte_box_aspect": 1.161,
+  "matte_subject_px": 856497,
+  "matte_subject_box": [
+    592,
+    505,
+    1753,
+    1504
+  ],
+  "matte_subject_w": 1162,
+  "matte_subject_h": 1000,
+  "matte_border_contact": 0.0,
+  "matte_edge_gradient_px": 2.731,
+  "colour_alpha_px": 585744,
+  "colour_kept_of_matte": 0.5317,
+  "rejected_px": 130357,
+  "rejected_dark_neutral_px": 130003,
+  "rejected_share_dark_neutral": 0.9973
+}

@@ -309,8 +309,35 @@ beside the picture. Re-scoring the twelve prompt-only artefacts leaves all twelv
 **Still owed:** ST-024/ST-031 were rendered before the provenance existed and must be
 re-rendered for their new number.
 
-## D-017 — a plate's opaque contact shadow survives the cutout (open 2026-11-11)
+## D-017 — a plate's opaque contact shadow survives the cutout (closed 2026-11-11)
 
-`_place_on_flat` keeps a contact shadow that is opaque enough to pass its solid-alpha
-threshold; its own comment says a real matte (BiRefNet in the lane) is what removes it.
-Not claimed as done. Queued as `fix-plate-shadow-matte`.
+`_place_on_flat` kept a contact shadow that was opaque enough to pass its solid-alpha
+threshold; its own comment said a real matte (BiRefNet in the lane) is what removes it.
+
+**Closed 2026-11-11** (`ty-dir-fix-plate-shadow-matte`). `product_cutout.matte_alpha`
+runs BiRefNet through the media lane and refuses by name (`MatteUnavailable`) when the
+lane cannot supply one; `_place_on_flat(..., matte="birefnet" | "auto" | "none")` and
+`build(matte=)` route it, and every face record and manifest states which matte produced
+the picture. Measured on the real plate `renders/comfy_plate7/ST-002/_rejected/
+front_plate.png`: the matte returns the mug (1162 × 1000) in **3.68 s** and rejects
+**130 357 px** the colour cut had kept, **99.73 %** of them dark neutral — the shadow.
+The colour cut was found to be worse than "it keeps the shadow": it cut a 1934 × 1137 band
+across the frame, kept **53.2 %** of the product and left the handle in fragments
+(`renders/_d017/d017_contact.png`). `reports/ty/d017_plate_shadow_matte.md`.
+
+**Still owed:** the published seller dimension does not move (96.2 over 32 drawn-plate
+outputs); a real-plate white-main pass at pinned seeds is the measuring run.
+
+## D-020 — the white-matte checks cannot see a shadow under the product (open 2026-11-11)
+
+Found while closing D-017. `check_background` samples the four corner patches and
+`check_alpha_matte`'s `white_matte` branch samples an outer ring; **a grey contact shadow
+under the product passes both**. Every white-main score in the published seller sample was
+produced through that blind spot, and the bruised colour-cut picture D-017 measured
+(handle in three pieces) would still score 100 on `background` and `alpha_matte` — the
+product-region check, not the matte check, is what catches that.
+
+**Not yet done:** a flat-background main image needs a whole-frame check — pixels below
+the asked-for value outside the product's own silhouette (the cutout `D-018` now records)
+— and it belongs in `tools/seller_tester/scorers.py`. Queued as `fix-matte-residue-check`
+when the scorer lane is next open; until then it is stated here, not hidden.

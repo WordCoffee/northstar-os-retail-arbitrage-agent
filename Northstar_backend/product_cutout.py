@@ -48,6 +48,16 @@ class CutoutUnavailable(RuntimeError):
     """The requested method cannot run here. Never swapped for another method."""
 
 
+class MatteUnavailable(CutoutUnavailable):
+    """A real matte was asked for and the media lane could not supply one.
+
+    D-017: a plate's contact shadow is opaque and attached, so no colour threshold
+    separates it from the product. The matte is the only honest instrument, and when
+    it cannot run the caller is told by name rather than handed a colour cut that
+    looks like a matte.
+    """
+
+
 @dataclass
 class Cutout:
     method: str
@@ -268,6 +278,85 @@ def _png_bytes(rgb: np.ndarray) -> bytes:
     return buffer.getvalue()
 
 
+#: The lane the matte runs in. Callers may override; nothing is retried elsewhere.
+LANE_URL = "http://127.0.0.1:8188"
+
+#: A blob smaller than this share of the frame is plate grain, not a product.
+MATTE_SPECK = 0.0004
+
+#: How long a *failed* lane probe is remembered. Only negatives are cached, so a
+#: lane that comes up is seen on the very next call; a pass with the lane down does
+#: not pay the probe's timeout once per face.
+PROBE_TTL = 10.0
+_PROBES: Dict[str, Tuple[float, bool]] = {}
+
+
+def lane_reachable(url: str = LANE_URL, *, timeout: float = 0.5,
+                   ttl: float = PROBE_TTL) -> bool:
+    """Is a ComfyUI instance answering on ``url``? Never raises.
+
+    The timeout is short on purpose: on this box a closed port is silently dropped
+    rather than refused, so the probe costs its whole timeout (measured 2026-11-11:
+    2.03 s at a 2 s timeout). A live lane answers `/system_stats` in milliseconds.
+    """
+    now = time.time()
+    remembered = _PROBES.get(url)
+    if remembered and not remembered[1] and now - remembered[0] < float(ttl):
+        return False
+    try:
+        with urllib.request.urlopen(url.rstrip("/") + "/system_stats", timeout=timeout):
+            _PROBES[url] = (now, True)
+            return True
+    except Exception:  # noqa: BLE001 - unreachable is the normal state between lanes
+        _PROBES[url] = (now, False)
+        return False
+
+
+def matte_alpha(rgb: np.ndarray, *, url: str = LANE_URL, timeout: float = 600.0,
+                speck: float = MATTE_SPECK) -> np.ndarray:
+    """The product's real matte (BiRefNet), cleaned of plate grain.
+
+    Why this exists (D-017, measured 2026-11-11 on a real FLUX plate of a white mug on
+    a grey sweep): the sweep is 199, the contact shadow reaches 130 and the product's
+    own dark base is 120. Any colour threshold that keeps the product keeps the shadow,
+    and the shadow is attached, so the largest-blob pass keeps both. BiRefNet segments
+    the object, not the light, so its alpha is the only one that separates them.
+
+    Raises :class:`MatteUnavailable` — never a silent substitution — when the lane does
+    not answer or the run fails.
+    """
+    import cv2
+
+    rgb = np.ascontiguousarray(rgb, dtype=np.uint8)
+    if not lane_reachable(url):
+        raise MatteUnavailable(
+            f"the media lane is unreachable at {url}: a real matte needs ComfyUI with "
+            f"birefnet.safetensors, and a colour cut is not a matte")
+    try:
+        alpha = birefnet_alpha(rgb, url=url, timeout=timeout)
+    except CutoutUnavailable:
+        raise
+    except Exception as exc:  # noqa: BLE001 - the lane's failure is the reason
+        raise MatteUnavailable(f"the matte run failed: {exc}") from exc
+    alpha = np.asarray(alpha, dtype=np.uint8)
+    if alpha.shape[:2] != rgb.shape[:2]:
+        alpha = _upscale(alpha, (int(rgb.shape[1]), int(rgb.shape[0])))
+    solid = (alpha >= SOLID).astype(np.uint8)
+    if not solid.any():
+        raise MatteUnavailable("the matte found no product at all")
+    count, labels, stats, _ = cv2.connectedComponentsWithStats(solid, connectivity=8)
+    floor = max(16, int(float(speck) * solid.size))
+    keep = np.zeros_like(solid)
+    for index in range(1, count):
+        if int(stats[index, cv2.CC_STAT_AREA]) >= floor:
+            keep |= (labels == index).astype(np.uint8)
+    if not keep.any():
+        raise MatteUnavailable("the matte found only plate grain")
+    # keep the soft edge the matte produced, but only around what it actually chose
+    support = cv2.dilate(keep, np.ones((5, 5), np.uint8))
+    return np.where(support > 0, alpha, 0).astype(np.uint8)
+
+
 def cutout(source: str | Path | bytes | np.ndarray, method: str,
            **kwargs: Any) -> Cutout:
     """Run one named method. Unknown or unavailable methods are refused, never swapped."""
@@ -378,7 +467,10 @@ __all__ = [
     "CANDIDATES",
     "Cutout",
     "CutoutUnavailable",
+    "LANE_URL",
+    "MATTE_SPECK",
     "METHODS",
+    "MatteUnavailable",
     "SOLID",
     "WORKING_MAX_SIDE",
     "alpha_metrics",
@@ -390,7 +482,9 @@ __all__ = [
     "coverage_plausible",
     "cutout",
     "grabcut_alpha",
+    "lane_reachable",
     "load_rgb",
+    "matte_alpha",
     "otsu_lab_alpha",
     "rgba_png_bytes",
 ]
