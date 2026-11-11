@@ -24,6 +24,11 @@ interrupted through the server API (`POST /api/session/<id>/interrupt`) rather t
 killing processes. **No lane may navigate, click, type or walk pages until the owner lifts
 it.** Delete `state/vision/PAUSE` only on the owner's word — never to make a check pass.
 
+**What this means for `block3-workspaces` (the next unit) and any UI work:** its click-path
+acceptance is Playwright Test against `127.0.0.1` only, **headless**, launched by the harness
+— never the owner's Chrome, never a headed window, never a page walk through the visible
+browser. That is the localhost exception in `AGENTS.md`, not a loophole in the pause.
+
 ## Position, 2026-11-11 cycle 25 — every pack carries its own illustration
 
 Unit report: `reports/ty/d027_design_motifs.md`. Tag `ty-dir-design-motifs`.
