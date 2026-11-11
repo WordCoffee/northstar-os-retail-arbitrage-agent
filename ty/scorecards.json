@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-11T04:29:48+00:00",
+  "at": "2026-11-11T04:50:22+00:00",
   "bar": 85.0,
   "weights": {
     "works": 0.23,
@@ -1415,7 +1415,7 @@
       "route": "/design-studio",
       "impact": 0.95,
       "bar": 85.0,
-      "score": 89.3,
+      "score": 89.8,
       "meets_bar": false,
       "weakest": "correct",
       "gap": 0.0,
@@ -1429,8 +1429,8 @@
           "evidence": "166 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
         },
         "seller": {
-          "score": 94.9,
-          "evidence": "12 Seller-Tester outputs (generated/composite), mean 94.9, 11 passed; 40 replayed artefact(s) excluded as context (mean 22.1)"
+          "score": 98.3,
+          "evidence": "12 Seller-Tester outputs (generated/composite), mean 98.3, 12 passed; 40 replayed artefact(s) excluded as context (mean 22.1)"
         },
         "complete": {
           "score": 100.0,

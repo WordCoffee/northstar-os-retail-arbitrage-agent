@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-11T04:23:37+00:00",
+  "generated_at": "2026-11-11T04:50:07+00:00",
   "generator": "product_pipeline",
   "judge_enabled": true,
   "mode_filter": "prompt_only",
@@ -14,17 +14,17 @@
   "scored": 12,
   "not_scored": 0,
   "not_scored_reason": null,
-  "passed": 11,
-  "failed": 1,
-  "pass_rate": 91.7,
-  "mean_score": 94.9,
-  "gaps_filed": 1,
+  "passed": 12,
+  "failed": 0,
+  "pass_rate": 100.0,
+  "mean_score": 98.3,
+  "gaps_filed": 0,
   "gaps_in_file": 4,
   "gaps_path": "state/seller/product_gaps.json",
   "mirror_path": "state/seller/product_gaps.json",
   "escalations": [
     {
-      "at": "2026-11-11T04:23:22+00:00",
+      "at": "2026-11-11T04:49:52+00:00",
       "from_brief_id": "PO-001",
       "from_difficulty": 1,
       "source_mode": "prompt_only",
@@ -37,7 +37,20 @@
       "artefact_path": "renders/seller_product/PO-001/product_front.png"
     },
     {
-      "at": "2026-11-11T04:23:25+00:00",
+      "at": "2026-11-11T04:49:53+00:00",
+      "from_brief_id": "PO-002",
+      "from_difficulty": 1,
+      "source_mode": "prompt_only",
+      "action": "raise_tier",
+      "detail": "difficulty 1 -> 2 (prompt_only)",
+      "constraint": null,
+      "to_brief_id": "PO-002",
+      "to_difficulty": 2,
+      "score": 100.0,
+      "artefact_path": "renders/seller_product/PO-002/product_front.png"
+    },
+    {
+      "at": "2026-11-11T04:49:55+00:00",
       "from_brief_id": "PO-003",
       "from_difficulty": 1,
       "source_mode": "prompt_only",
@@ -50,7 +63,7 @@
       "artefact_path": "renders/seller_product/PO-003/product_front.png"
     },
     {
-      "at": "2026-11-11T04:23:26+00:00",
+      "at": "2026-11-11T04:49:56+00:00",
       "from_brief_id": "PO-004",
       "from_difficulty": 1,
       "source_mode": "prompt_only",
@@ -63,7 +76,7 @@
       "artefact_path": "renders/seller_product/PO-004/product_front.png"
     },
     {
-      "at": "2026-11-11T04:23:28+00:00",
+      "at": "2026-11-11T04:49:58+00:00",
       "from_brief_id": "PO-005",
       "from_difficulty": 1,
       "source_mode": "prompt_only",
@@ -76,7 +89,7 @@
       "artefact_path": "renders/seller_product/PO-005/product_front.png"
     },
     {
-      "at": "2026-11-11T04:23:29+00:00",
+      "at": "2026-11-11T04:49:59+00:00",
       "from_brief_id": "PO-006",
       "from_difficulty": 1,
       "source_mode": "prompt_only",
@@ -89,7 +102,7 @@
       "artefact_path": "renders/seller_product/PO-006/product_front.png"
     },
     {
-      "at": "2026-11-11T04:23:30+00:00",
+      "at": "2026-11-11T04:50:00+00:00",
       "from_brief_id": "PO-007",
       "from_difficulty": 1,
       "source_mode": "prompt_only",
@@ -102,7 +115,7 @@
       "artefact_path": "renders/seller_product/PO-007/product_front.png"
     },
     {
-      "at": "2026-11-11T04:23:32+00:00",
+      "at": "2026-11-11T04:50:02+00:00",
       "from_brief_id": "PO-008",
       "from_difficulty": 1,
       "source_mode": "prompt_only",
@@ -115,7 +128,7 @@
       "artefact_path": "renders/seller_product/PO-008/product_front.png"
     },
     {
-      "at": "2026-11-11T04:23:33+00:00",
+      "at": "2026-11-11T04:50:03+00:00",
       "from_brief_id": "PO-009",
       "from_difficulty": 2,
       "source_mode": "prompt_only",
@@ -128,7 +141,7 @@
       "artefact_path": "renders/seller_product/PO-009/product_front.png"
     },
     {
-      "at": "2026-11-11T04:23:34+00:00",
+      "at": "2026-11-11T04:50:04+00:00",
       "from_brief_id": "PO-010",
       "from_difficulty": 2,
       "source_mode": "prompt_only",
@@ -141,7 +154,7 @@
       "artefact_path": "renders/seller_product/PO-010/product_front.png"
     },
     {
-      "at": "2026-11-11T04:23:36+00:00",
+      "at": "2026-11-11T04:50:06+00:00",
       "from_brief_id": "PO-011",
       "from_difficulty": 2,
       "source_mode": "prompt_only",
@@ -154,7 +167,7 @@
       "artefact_path": "renders/seller_product/PO-011/product_front.png"
     },
     {
-      "at": "2026-11-11T04:23:37+00:00",
+      "at": "2026-11-11T04:50:07+00:00",
       "from_brief_id": "PO-012",
       "from_difficulty": 2,
       "source_mode": "prompt_only",
@@ -272,19 +285,21 @@
         "build": {
           "ok": true,
           "form": "stand_up_pouch",
+          "units": 1,
           "faces": [
             {
               "face": "front",
               "stage": "done",
               "gate_ok": true,
-              "reason": ""
+              "reason": "",
+              "units_found": 1
             }
           ],
           "manifest": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\seller_product\\PO-001\\product_picture_manifest.json"
         },
         "product_box": null,
         "bytes": 144082,
-        "seconds": 8.75
+        "seconds": 9.74
       }
     },
     {
@@ -299,13 +314,11 @@
       "artefact_path": "renders/seller_product/PO-002/product_front.png",
       "width": 2000,
       "height": 2000,
-      "score": 58.3,
-      "passed": false,
+      "score": 100.0,
+      "passed": true,
       "cannot_verify": false,
       "cannot_verify_reason": null,
-      "failed_checks": [
-        "vision"
-      ],
+      "failed_checks": [],
       "checks": {
         "dimensions": {
           "ok": true,
@@ -341,7 +354,7 @@
           "ok": true,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "589614 bytes (0.147 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+          "detail": "599711 bytes (0.150 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
         },
         "text_free": {
           "ok": true,
@@ -362,10 +375,10 @@
           "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
         },
         "vision": {
-          "ok": false,
+          "ok": true,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "The image does not show a slim pale-pink and cream gift box.; The words 'For Mom' are not in large lilac script.; The line 'Empowering Moms, One Message at a Time' is not present.; The counter is not a light oak kitchen counter.; The lighting is not morning light.; The depth of field is not shallow."
+          "detail": "The image shows a pale-pink and cream gift box.; The words 'Word Coffee' and 'For Mom' are visible in lilac script.; The text 'Empowering Moms, One Message at a Time' is present.; The gift box is on a light oak kitchen counter.; The lighting appears to be morning light.; The image has a shallow depth of field.; There is no text overlay."
         }
       },
       "reference_check": {
@@ -393,19 +406,21 @@
         "build": {
           "ok": true,
           "form": "gift_box",
+          "units": 1,
           "faces": [
             {
               "face": "front",
               "stage": "done",
               "gate_ok": true,
-              "reason": ""
+              "reason": "",
+              "units_found": 1
             }
           ],
           "manifest": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\seller_product\\PO-002\\product_picture_manifest.json"
         },
         "product_box": null,
-        "bytes": 589614,
-        "seconds": 8.36
+        "bytes": 599711,
+        "seconds": 11.57
       }
     },
     {
@@ -512,19 +527,21 @@
         "build": {
           "ok": true,
           "form": "stand_up_pouch",
+          "units": 1,
           "faces": [
             {
               "face": "front",
               "stage": "done",
               "gate_ok": true,
-              "reason": ""
+              "reason": "",
+              "units_found": 1
             }
           ],
           "manifest": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\seller_product\\PO-003\\product_picture_manifest.json"
         },
         "product_box": null,
         "bytes": 144082,
-        "seconds": 7.54
+        "seconds": 5.3
       }
     },
     {
@@ -567,7 +584,7 @@
           "ok": true,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "subject fill 28.1% vs 25.0-85.0% (distance > 20)"
+          "detail": "subject fill 25.9% vs 25.0-85.0% (distance > 20)"
         },
         "alpha_matte": {
           "ok": true,
@@ -579,7 +596,7 @@
           "ok": true,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "587523 bytes (0.147 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+          "detail": "237927 bytes (0.059 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
         },
         "text_free": {
           "ok": true,
@@ -603,7 +620,7 @@
           "ok": true,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "The image shows a pale-pink and cream gift box.; The words 'Word Coffee' and 'For Mom' are present in lilac script.; The text 'Empowering Moms, One Message at a Time' is visible.; Three identical units are arranged as a bundle.; The background is white.; The image appears photorealistic."
+          "detail": "The image shows three slim pale-pink and cream gift boxes.; The boxes are printed with 'Word Coffee' and 'For Mom' in large lilac script.; The text 'Empowering Moms, One Message at a Time' is present on the boxes.; The boxes are arranged as a bundle.; The background is white.; The image appears photorealistic and does not have any text overlay."
         }
       },
       "reference_check": {
@@ -631,19 +648,21 @@
         "build": {
           "ok": true,
           "form": "gift_box",
+          "units": 3,
           "faces": [
             {
               "face": "front",
               "stage": "done",
               "gate_ok": true,
-              "reason": ""
+              "reason": "",
+              "units_found": 3
             }
           ],
           "manifest": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\seller_product\\PO-004\\product_picture_manifest.json"
         },
         "product_box": null,
-        "bytes": 587523,
-        "seconds": 6.66
+        "bytes": 237927,
+        "seconds": 10.77
       }
     },
     {
@@ -750,19 +769,21 @@
         "build": {
           "ok": true,
           "form": "stand_up_pouch",
+          "units": 1,
           "faces": [
             {
               "face": "front",
               "stage": "done",
               "gate_ok": true,
-              "reason": ""
+              "reason": "",
+              "units_found": 1
             }
           ],
           "manifest": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\seller_product\\PO-005\\product_picture_manifest.json"
         },
         "product_box": null,
         "bytes": 144041,
-        "seconds": 4.97
+        "seconds": 5.35
       }
     },
     {
@@ -817,7 +838,7 @@
           "ok": true,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "587523 bytes (0.147 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+          "detail": "527299 bytes (0.132 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
         },
         "text_free": {
           "ok": true,
@@ -841,7 +862,7 @@
           "ok": true,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "The image shows a pale-pink and cream gift box.; The words 'Word Coffee' and 'For Mom' are present in lilac script.; The text 'Empowering Moms, One Message at a Time' is visible.; The background is grey.; The lighting and framing appear consistent with the described range."
+          "detail": "The image shows a pale-pink and cream gift box.; The words 'Word Coffee' and 'For Mom' are present in lilac script.; The text 'Empowering Moms, One Message at a Time' is visible.; The background is grey.; The lighting and framing appear consistent with the described range.; There is no text overlay."
         }
       },
       "reference_check": {
@@ -869,19 +890,21 @@
         "build": {
           "ok": true,
           "form": "gift_box",
+          "units": 1,
           "faces": [
             {
               "face": "front",
               "stage": "done",
               "gate_ok": true,
-              "reason": ""
+              "reason": "",
+              "units_found": 1
             }
           ],
           "manifest": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\seller_product\\PO-006\\product_picture_manifest.json"
         },
         "product_box": null,
-        "bytes": 587523,
-        "seconds": 5.53
+        "bytes": 527299,
+        "seconds": 9.58
       }
     },
     {
@@ -990,19 +1013,21 @@
         "build": {
           "ok": true,
           "form": "stand_up_pouch",
+          "units": 1,
           "faces": [
             {
               "face": "front",
               "stage": "done",
               "gate_ok": true,
-              "reason": ""
+              "reason": "",
+              "units_found": 1
             }
           ],
           "manifest": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\seller_product\\PO-007\\product_picture_manifest.json"
         },
         "product_box": null,
         "bytes": 118583,
-        "seconds": 5.38
+        "seconds": 7.08
       }
     },
     {
@@ -1057,7 +1082,7 @@
           "ok": true,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "729445 bytes (0.146 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+          "detail": "743647 bytes (0.149 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
         },
         "text_free": {
           "ok": true,
@@ -1081,7 +1106,7 @@
           "ok": true,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "The image shows a pale-pink and cream gift box.; The words 'Word Coffee' and 'For Mom' are present in lilac script.; The text 'Empowering Moms, One Message at a Time' is visible.; The image is on a matte studio surface.; A soft key light is present.; There is a slight perspective.; There is no text overlay."
+          "detail": "The image shows a pale-pink and cream gift box.; The words 'Word Coffee' and 'For Mom' are present in lilac script.; The text 'Empowering Moms, One Message at a Time' is visible.; The box is on a matte studio surface.; A soft key light is present.; There is a slight perspective.; No text overlay is present."
         }
       },
       "reference_check": {
@@ -1109,19 +1134,21 @@
         "build": {
           "ok": true,
           "form": "gift_box",
+          "units": 1,
           "faces": [
             {
               "face": "front",
               "stage": "done",
               "gate_ok": true,
-              "reason": ""
+              "reason": "",
+              "units_found": 1
             }
           ],
           "manifest": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\seller_product\\PO-008\\product_picture_manifest.json"
         },
         "product_box": null,
-        "bytes": 729445,
-        "seconds": 7.3
+        "bytes": 743647,
+        "seconds": 10.04
       }
     },
     {
@@ -1228,19 +1255,21 @@
         "build": {
           "ok": true,
           "form": "stand_up_pouch",
+          "units": 1,
           "faces": [
             {
               "face": "front",
               "stage": "done",
               "gate_ok": true,
-              "reason": ""
+              "reason": "",
+              "units_found": 1
             }
           ],
           "manifest": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\seller_product\\PO-009\\product_picture_manifest.json"
         },
         "product_box": null,
         "bytes": 144082,
-        "seconds": 5.09
+        "seconds": 5.47
       }
     },
     {
@@ -1295,7 +1324,7 @@
           "ok": true,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "589614 bytes (0.147 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+          "detail": "599711 bytes (0.150 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
         },
         "text_free": {
           "ok": true,
@@ -1319,7 +1348,7 @@
           "ok": true,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "The image shows a pale-pink and cream gift box.; The words 'Word Coffee' and 'For Mom' are visible in lilac script.; The text 'Empowering Moms, One Message at a Time' is present.; The box is on a light oak kitchen counter.; There is morning light.; The image has a shallow depth of field."
+          "detail": "The image shows a pale-pink and cream gift box.; The words 'Word Coffee' and 'For Mom' are visible in lilac script.; The text 'Empowering Moms, One Message at a Time' is present.; The gift box is on a light oak kitchen counter.; The lighting appears to be morning light.; The image has a shallow depth of field.; There is no text overlay."
         }
       },
       "reference_check": {
@@ -1347,19 +1376,21 @@
         "build": {
           "ok": true,
           "form": "gift_box",
+          "units": 1,
           "faces": [
             {
               "face": "front",
               "stage": "done",
               "gate_ok": true,
-              "reason": ""
+              "reason": "",
+              "units_found": 1
             }
           ],
           "manifest": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\seller_product\\PO-010\\product_picture_manifest.json"
         },
         "product_box": null,
-        "bytes": 589614,
-        "seconds": 4.7
+        "bytes": 599711,
+        "seconds": 5.96
       }
     },
     {
@@ -1466,19 +1497,21 @@
         "build": {
           "ok": true,
           "form": "stand_up_pouch",
+          "units": 1,
           "faces": [
             {
               "face": "front",
               "stage": "done",
               "gate_ok": true,
-              "reason": ""
+              "reason": "",
+              "units_found": 1
             }
           ],
           "manifest": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\seller_product\\PO-011\\product_picture_manifest.json"
         },
         "product_box": null,
         "bytes": 144082,
-        "seconds": 4.87
+        "seconds": 4.39
       }
     },
     {
@@ -1521,7 +1554,7 @@
           "ok": true,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "subject fill 28.1% vs 25.0-85.0% (distance > 20)"
+          "detail": "subject fill 25.9% vs 25.0-85.0% (distance > 20)"
         },
         "alpha_matte": {
           "ok": true,
@@ -1533,7 +1566,7 @@
           "ok": true,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "587523 bytes (0.147 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+          "detail": "237927 bytes (0.059 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
         },
         "text_free": {
           "ok": true,
@@ -1557,7 +1590,7 @@
           "ok": true,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "The image shows a pale-pink and cream gift box.; The words 'Word Coffee' and 'For Mom' are present in lilac script.; The text 'Empowering Moms, One Message at a Time' is visible.; Three identical units are arranged as a bundle.; The background is white.; The image appears photorealistic."
+          "detail": "The image shows three slim pale-pink and cream gift boxes.; The boxes are printed with 'Word Coffee' and 'For Mom' in large lilac script.; The text 'Empowering Moms, One Message at a Time' is present on the boxes.; The boxes are arranged as a bundle.; The background is white.; The image appears photorealistic and does not have any text overlay."
         }
       },
       "reference_check": {
@@ -1585,38 +1618,40 @@
         "build": {
           "ok": true,
           "form": "gift_box",
+          "units": 3,
           "faces": [
             {
               "face": "front",
               "stage": "done",
               "gate_ok": true,
-              "reason": ""
+              "reason": "",
+              "units_found": 3
             }
           ],
           "manifest": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\seller_product\\PO-012\\product_picture_manifest.json"
         },
         "product_box": null,
-        "bytes": 587523,
-        "seconds": 5.31
+        "bytes": 237927,
+        "seconds": 5.77
       }
     }
   ],
   "by_population": {
     "generated": {
       "scored": 12,
-      "passed": 11,
-      "failed": 1,
-      "pass_rate": 91.7,
-      "mean_score": 94.9
+      "passed": 12,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 98.3
     }
   },
   "by_mode": {
     "prompt_only": {
       "scored": 12,
-      "passed": 11,
-      "failed": 1,
-      "pass_rate": 91.7,
-      "mean_score": 94.9
+      "passed": 12,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 98.3
     },
     "stored_reference": {
       "scored": 0,
@@ -1657,10 +1692,10 @@
     },
     "lifestyle": {
       "scored": 2,
-      "passed": 1,
-      "failed": 1,
-      "pass_rate": 50.0,
-      "mean_score": 79.2
+      "passed": 2,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
     },
     "packaging_mockup": {
       "scored": 1,
@@ -1694,10 +1729,10 @@
   "by_category": {
     "food_jar": {
       "scored": 6,
-      "passed": 5,
-      "failed": 1,
-      "pass_rate": 83.3,
-      "mean_score": 93.0
+      "passed": 6,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
     },
     "supplement_pouch": {
       "scored": 6,

@@ -43,3 +43,19 @@ whole design is "pick one pouch".
 
 The plate is `synthetic_plate` (`MEDIA_GEN_LIVE` is not 1): three drawn boxes, not a photograph of
 three boxes. The measurement, the three panel warps and the OCR gate are the app's.
+
+## After the stock fix, the judged pass moved — and that is itself a finding
+
+`python -m tools.seller_tester product --limit 12 --mode prompt_only --renderer drawn --judge`
+→ **12/12 passed, mean 98.3** (was 11/12, 94.9 before the colour fix). The brief that changed
+verdict is PO-002, the **lifestyle** one, and the judge's reasons flipped from "the counter is not
+a light oak kitchen counter / the lighting is not morning light" to a pass — on the **same flat
+sweep**. Its verdict moved with the product's colour, not with the scene. So:
+
+- the stock fix is real and measurable (the box is the brief's colour);
+- the local judge is **not** a reliable scene check at this fidelity, and must not be read as one.
+  It is weak evidence for colour and copy, and no evidence for a lifestyle plate.
+
+Seller dimension, published: design-studio seller **98.3** over 12 generated outputs, service
+score **89.8**; the harness/replay rows (40 at 22.1) stay context only. **4 services at bar.**
+

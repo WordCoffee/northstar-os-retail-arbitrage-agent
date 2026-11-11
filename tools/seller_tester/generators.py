@@ -187,12 +187,15 @@ class ProductPipelineGenerator:
                 width=width,
                 height=height,
                 seed=self.seed,
+                units=int(brief.get("units") or 1),
                 generator=_plate_source,
             )
             record["build"] = {
                 "ok": result.get("ok"),
                 "form": (result.get("product") or {}).get("form"),
-                "faces": [{k: face.get(k) for k in ("face", "stage", "gate_ok", "reason")}
+                "units": (result.get("product") or {}).get("units"),
+                "faces": [{k: face.get(k) for k in ("face", "stage", "gate_ok", "reason",
+                                                    "units_found")}
                           for face in result.get("faces") or []],
                 "manifest": str(self.out_dir / brief_id / "product_picture_manifest.json"),
             }
