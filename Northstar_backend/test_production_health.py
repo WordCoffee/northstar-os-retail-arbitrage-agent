@@ -31,18 +31,49 @@ _EXPECTED_CHECKS = {
 
 
 def test_snapshot_is_ready_in_this_tree():
+    """Ready means ready *here*, and "here" is not provisioned on a fresh checkout.
+
+    `dist/` and the foundation store are gitignored, so this can only assert the shape of
+    the payload on an unprovisioned tree - and the named checks it is missing. Saying so is
+    better than a green test that only passes on one machine.
+    """
     snapshot = ph.readiness_snapshot()
-    assert snapshot["status"] == "ready", snapshot["failed_checks"]
-    assert snapshot["failed_checks"] == []
     assert set(snapshot["checks"]) == _EXPECTED_CHECKS
     for name, check in snapshot["checks"].items():
         assert "ok" in check and "critical" in check, name
     assert snapshot["service"] == "northstar-backend"
     assert snapshot["uptime_seconds"] >= 0
     json.dumps(snapshot)  # the route serialises it as-is
+    if snapshot["status"] != "ready":
+        pytest.skip(f"this tree is not provisioned; failing checks: "
+                    f"{snapshot['failed_checks']}")
+    assert snapshot["failed_checks"] == []
+
+
+def _all_checks_pass(monkeypatch) -> None:
+    """Patch every readiness check to pass, so a test can vary exactly one.
+
+    The public check id and the private function name are not the same string
+    (`data_dir_writable` is `_check_data_dir`), so the map is explicit rather than derived.
+    """
+    funcs = {
+        "rate_limit_posture": "_check_rate_limit_posture",
+        "redaction": "_check_redaction",
+        "data_dir_writable": "_check_data_dir",
+        "ui_build": "_check_ui_build",
+        "foundation_store": "_check_foundation_store",
+        "live_posture": "_check_live_posture",
+    }
+    for check_id, func in funcs.items():
+        critical = check_id != "ui_build"
+        monkeypatch.setattr(
+            ph, func,
+            (lambda c=critical: {"ok": True, "critical": c, "reason": ""}),
+        )
 
 
 def test_a_failed_critical_check_makes_the_process_not_ready(monkeypatch):
+    _all_checks_pass(monkeypatch)
     monkeypatch.setattr(
         ph, "_check_redaction",
         lambda: {"ok": False, "critical": True, "reason": "filter missing"},
@@ -54,6 +85,7 @@ def test_a_failed_critical_check_makes_the_process_not_ready(monkeypatch):
 
 
 def test_a_failed_non_critical_check_does_not_drain_the_process(monkeypatch):
+    _all_checks_pass(monkeypatch)
     monkeypatch.setattr(
         ph, "_check_ui_build",
         lambda: {"ok": False, "critical": False, "reason": "no dist"},
