@@ -1,0 +1,107 @@
+{
+ "briefs": [
+  {
+   "id": "ST-012",
+   "category": "small_appliance",
+   "situation": "scale_reference",
+   "difficulty": 2,
+   "constraints": {
+    "dimensions": {
+     "min_width": 2000,
+     "min_height": 2000,
+     "max_width": 10000,
+     "max_height": 10000
+    },
+    "aspect": {
+     "ratio": 1.0,
+     "tolerance": 0.02
+    },
+    "background": {
+     "value": 255,
+     "tolerance": 7,
+     "mode": "uniform"
+    },
+    "fill_pct": {
+     "min": 8,
+     "max": 45,
+     "distance": 20
+    },
+    "text_rule": "no_text",
+    "matte": {
+     "mode": "white_matte",
+     "value": 255,
+     "tolerance": 6,
+     "max_border_std": 6
+    },
+    "file_size": {
+     "min_bytes": 20000,
+     "max_bytes": 12000000
+    }
+   },
+   "pass_score": 70,
+   "critical": [
+    "dimensions",
+    "aspect",
+    "background"
+   ],
+   "source_mode": "prompt_only",
+   "fidelity": "exact",
+   "product_in_frame": true,
+   "product_line": "t2-kettle-box",
+   "label_mode": "warp",
+   "body_prompt": "Product photograph of a plain unprinted folding carton for a stainless steel kettle, standing upright on a seamless white studio background, no text, no lettering, no logo, soft even lighting"
+  },
+  {
+   "id": "ST-028",
+   "category": "tool",
+   "situation": "scale_reference",
+   "difficulty": 3,
+   "constraints": {
+    "dimensions": {
+     "min_width": 2000,
+     "min_height": 2000,
+     "max_width": 10000,
+     "max_height": 10000
+    },
+    "aspect": {
+     "ratio": 1.0,
+     "tolerance": 0.02
+    },
+    "background": {
+     "value": 255,
+     "tolerance": 6,
+     "mode": "uniform"
+    },
+    "fill_pct": {
+     "min": 10,
+     "max": 40,
+     "distance": 20
+    },
+    "text_rule": "no_text",
+    "matte": {
+     "mode": "white_matte",
+     "value": 255,
+     "tolerance": 6,
+     "max_border_std": 6
+    },
+    "file_size": {
+     "min_bytes": 20000,
+     "max_bytes": 12000000
+    }
+   },
+   "pass_score": 70,
+   "critical": [
+    "dimensions",
+    "aspect",
+    "background"
+   ],
+   "source_mode": "prompt_only",
+   "fidelity": "exact",
+   "product_in_frame": true,
+   "product_line": "t2-drill-box",
+   "label_mode": "warp",
+   "body_prompt": "Product photograph of a plain unprinted folding carton for a cordless drill, lying flat on a seamless white studio background, no text, no lettering, no logo, soft even lighting"
+  }
+ ],
+ "note": "box-art unit (pack-03): ST-012 small appliance, ST-028 tool"
+}

@@ -273,6 +273,84 @@ MOGRA_TEE: Dict[str, Any] = {
                "note": "no certification is claimed that the brand has not got"},
 }
 
+
+#: Box art for a boxed small appliance and a boxed hand tool. Same folding-carton form
+#: as the Word Coffee gift box, so the proven carton renderer prints it — a drill and a
+#: kettle are not new geometry, they are new **faces** with their own millimetres.
+#: The copy is a DRAFT fixture for the seller-tester: no certification is claimed and
+#: every panel says so, exactly like the apparel teardown.
+T2_KETTLE_BOX: Dict[str, Any] = {
+    "id": "t2-kettle-box",
+    "plate_subject": "printed folding carton for a small kitchen appliance",
+    "brand": "T2 HOME",
+    "product": "1.7 L STAINLESS KETTLE",
+    "form": "gift_box",
+    "face_mm": {"front": [180.0, 260.0], "back": [180.0, 260.0],
+                "side": [90.0, 260.0]},
+    "theme": "slate",
+    "script_line": "Boils in Minutes",
+    "subtitle": "CORDLESS  \u00b7  1.7 LITRE",
+    "tagline": "Stainless steel, brushed finish",
+    "net_weight": "1.2 kg",
+    "net_weight_line": "NET WT. 1.2 kg",
+    "servings": "220\u2013240 V  \u00b7  1500 W",
+    "inside": "One stainless steel kettle with a cordless base and a water-level window.",
+    "ingredients": "Stainless steel body, polypropylene handle, borosilicate window.",
+    "label_sections": [
+        {"head": "BEFORE FIRST USE",
+         "body": "Fill to the MAX line, boil once and discard the water."},
+        {"head": "CARE",
+         "body": "Wipe the outside with a damp cloth. Do not immerse the base."},
+    ],
+    "about": "Draft carton artwork for a boxed appliance. Colours and copy are mock-up "
+             "values, not a print-approved pack.",
+    "company": "PACKED FOR T2 HOLDINGS LLC",
+    "lot_code": "LOT  KB-0000",
+    "best_by": "MODEL  KB-0000",
+    "barcode_digits": "8 50000 00000 8",
+    "draft_note": "DRAFT  \u00b7  VERIFY BEFORE PRINT",
+    "back_draft_note": "DRAFT  \u00b7  VERIFY SPECIFICATIONS BEFORE PRINT",
+    "status": "DRAFT - electrical specifications must be verified before print",
+    "claims": {"organic_seal": False, "fda": False, "energy_rating": False,
+               "note": "no certification or efficiency rating is claimed"},
+}
+
+T2_DRILL_BOX: Dict[str, Any] = {
+    "id": "t2-drill-box",
+    "plate_subject": "printed folding carton for a cordless hand tool",
+    "brand": "T2 WORKSHOP",
+    "product": "18 V CORDLESS DRILL",
+    "form": "gift_box",
+    "face_mm": {"front": [170.0, 240.0], "back": [170.0, 240.0],
+                "side": [90.0, 240.0]},
+    "theme": "graphite",
+    "script_line": "Two Batteries, One Case",
+    "subtitle": "18 V  \u00b7  2.0 Ah  \u00b7  13 mm CHUCK",
+    "tagline": "Brushless motor, 24 torque settings",
+    "net_weight": "2.4 kg",
+    "net_weight_line": "NET WT. 2.4 kg",
+    "servings": "INCLUDES 2 BATTERIES + CHARGER",
+    "inside": "One drill, two 2.0 Ah batteries, a charger and a moulded carry case.",
+    "ingredients": "Glass-filled nylon body, steel chuck, lithium-ion cells.",
+    "label_sections": [
+        {"head": "IN THE CASE",
+         "body": "Drill, 2 batteries, charger, belt clip, 13 mm keyless chuck, case."},
+        {"head": "SAFETY",
+         "body": "Read the manual before use. Wear eye protection. Do not open the pack."},
+    ],
+    "about": "Draft carton artwork for a boxed hand tool. Copy is mock-up value, not a "
+             "print-approved pack.",
+    "company": "PACKED FOR T2 HOLDINGS LLC",
+    "lot_code": "LOT  DB-0000",
+    "best_by": "MODEL  DB-0000",
+    "barcode_digits": "8 50000 00000 8",
+    "draft_note": "DRAFT  \u00b7  VERIFY BEFORE PRINT",
+    "back_draft_note": "DRAFT  \u00b7  VERIFY SAFETY COPY BEFORE PRINT",
+    "status": "DRAFT - battery and safety copy must be verified before print",
+    "claims": {"organic_seal": False, "fda": False, "voltage_rating": False,
+               "note": "no certification or rating is claimed"},
+}
+
 _DESIGN_IDS = {
     "mogra-lions-mane": "mogra-lions-mane",
     "mogra_lions_mane": "mogra-lions-mane",
@@ -284,6 +362,10 @@ _DESIGN_IDS = {
     "harbor-body-oil": "harbor-body-oil",
     "pine-paws-joint": "pine-paws-joint",
     "mogra-tee": "mogra-tee",
+    "t2-kettle-box": "t2-kettle-box",
+    "t2_kettle_box": "t2-kettle-box",
+    "t2-drill-box": "t2-drill-box",
+    "t2_drill_box": "t2-drill-box",
 }
 
 #: Seller brief `product_line` -> design id. Explicit: a brief that names a line
@@ -301,6 +383,10 @@ _PRODUCT_LINES = {
     "pine-paws-joint": "pine-paws-joint",
     "mogra-tee": "mogra-tee",
     "mogra_tee": "mogra-tee",
+    "t2-kettle-box": "t2-kettle-box",
+    "t2_kettle_box": "t2-kettle-box",
+    "t2-drill-box": "t2-drill-box",
+    "t2_drill_box": "t2-drill-box",
 }
 
 
@@ -318,6 +404,8 @@ _LOCAL_DESIGNS: Dict[str, Dict[str, Any]] = {
     "harbor-body-oil": HARBOR_BODY_OIL,
     "pine-paws-joint": PINE_PAWS_JOINT,
     "mogra-tee": MOGRA_TEE,
+    "t2-kettle-box": T2_KETTLE_BOX,
+    "t2-drill-box": T2_DRILL_BOX,
 }
 
 
