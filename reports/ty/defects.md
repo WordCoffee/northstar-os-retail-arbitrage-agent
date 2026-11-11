@@ -367,6 +367,16 @@ product on white with a grey shadow under it, and two instruments agree it is cl
 `synthetic_plate` omits the base shadow when the brief is a main image, or `_place_on_flat`
 drops it by geometry rather than by colour. Queued as `fix-drawn-plate-shadow`.
 
+**Closed 2026-11-11** (`ty-dir-fix-drawn-plate-shadow`). `synthetic_plate(shadow=False)`
+draws no base ellipse and the drawn renderer passes `shadow=not white`;
+`plate_brief(..., shadow=False)` removes the "contact shadow" clause from every form and
+from the bundle branch, and `build()` chooses it from the background. Measured on the drawn
+route: PO-001's neutral mid-grey px **941 848 → 30 820** and the product 7 % taller in the
+frame; PO-003 **64 405 → 8 006**; PO-004 (gift box) unchanged, which is the control —
+that form never drew a shadow. `reports/ty/d021_plate_shadow.json`,
+`reports/ty/d021_contact.png`, `reports/ty/d021_drawn_plate_shadow.md`. 5 new tests, 34 + 136
+related green.
+
 ## D-022 — a full generation has no white-composite step, so its background is a sweep (open 2026-11-11)
 
 The eight failing artefacts above are `route: full_generation` (`SDXL`/`FLUX` scenes): the

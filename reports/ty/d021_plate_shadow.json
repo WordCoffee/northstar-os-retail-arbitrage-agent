@@ -1,0 +1,76 @@
+{
+  "at": "2026-11-11",
+  "check": "drawn plate base shadow (D-021)",
+  "runs": {
+    "before": "renders/d020",
+    "after": "renders/d021"
+  },
+  "briefs": {
+    "PO-001": {
+      "before": {
+        "box": [
+          360,
+          126,
+          1640,
+          1874
+        ],
+        "box_h": 1748,
+        "shadow_grey_px": 122652
+      },
+      "after": {
+        "box": [
+          404,
+          61,
+          1596,
+          1938
+        ],
+        "box_h": 1877,
+        "shadow_grey_px": 3126
+      }
+    },
+    "PO-003": {
+      "before": {
+        "box": [
+          539,
+          371,
+          1460,
+          1629
+        ],
+        "box_h": 1258,
+        "shadow_grey_px": 64405
+      },
+      "after": {
+        "box": [
+          571,
+          324,
+          1429,
+          1675
+        ],
+        "box_h": 1351,
+        "shadow_grey_px": 8006
+      }
+    },
+    "PO-004": {
+      "before": {
+        "box": [
+          353,
+          150,
+          1647,
+          1849
+        ],
+        "box_h": 1699,
+        "shadow_grey_px": 821
+      },
+      "after": {
+        "box": [
+          353,
+          150,
+          1647,
+          1849
+        ],
+        "box_h": 1699,
+        "shadow_grey_px": 821
+      }
+    }
+  }
+}

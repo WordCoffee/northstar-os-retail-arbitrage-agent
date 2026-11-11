@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-11T09:23:57+00:00",
+  "updated_at": "2026-11-11T09:32:34+00:00",
   "cycle": 3,
   "unit_in_flight": "",
   "unit_order": [
@@ -1868,7 +1868,7 @@
       "id": "fix-drawn-plate-shadow",
       "unit": "U",
       "title": "D-021: the drawn plate bakes a base shadow into the silhouette, so a white-main picture ships with a shadow the residue check cannot see",
-      "status": "queued",
+      "status": "merged",
       "owner": "",
       "write_paths": [
         "tools/seller_tester/scene_render.py",
@@ -1884,9 +1884,9 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": "D-021 closed: synthetic_plate(shadow=False) draws no base ellipse and the drawn renderer passes shadow=not white; plate_brief(shadow=False) removes the contact-shadow clause in every form and the bundle branch, chosen by build() from the background; drawn before/after PO-001 941848 -> 30820 neutral mid-grey px, box 1280x1748 -> 1192x1877; PO-003 64405 -> 8006; PO-004 unchanged (control); pass 4/4 100.0; 5 new tests, 34+136 green; reports/ty/d021_drawn_plate_shadow.md",
       "created_at": "2026-11-11T09:23:53+00:00",
-      "updated_at": "2026-11-11T09:23:57+00:00",
+      "updated_at": "2026-11-11T09:32:34+00:00",
       "rank": 1
     },
     {

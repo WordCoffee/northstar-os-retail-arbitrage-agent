@@ -146,9 +146,31 @@ def resolve_out_dir(out_dir: Optional[str], *, base: Optional[str] = None) -> Pa
     return target
 
 
+def _shadow_phrase(brief: str, shadow: bool) -> str:
+    """Ask for a contact shadow, or ask for its absence, in the same sentence position.
+
+    D-021 (measured 2026-11-11): the plate prompts asked the model for "a gentle contact
+    shadow" on every brief, including main images, where the shadow is exactly what the
+    picture must not have. The plate is where it has to be prevented — once the cutout
+    keeps it, the silhouette contains it and no downstream check can see it.
+    """
+    if shadow:
+        return brief
+    if "a gentle contact shadow" in brief:
+        return brief.replace("a gentle contact shadow",
+                             "even shadowless light, no shadow and no cast shadow")
+    if "a soft contact shadow under each" in brief:
+        return brief.replace("a soft contact shadow under each",
+                             "no shadow and no cast shadow under any of them")
+    if "a soft contact shadow" in brief:
+        return brief.replace("a soft contact shadow",
+                             "even shadowless light, no shadow and no cast shadow")
+    return brief
+
+
 def plate_brief(face: str, form: str = art.POUCH,
                 design: Optional[Dict[str, Any]] = None,
-                units: int = 1) -> str:
+                units: int = 1, shadow: bool = True) -> str:
     briefs = FORM_PLATE_BRIEFS.get(form)
     if briefs is None:
         raise ValueError(f"unknown form {form!r}; known: {', '.join(FORM_PLATE_BRIEFS)}")
@@ -163,20 +185,21 @@ def plate_brief(face: str, form: str = art.POUCH,
         word = {2: "two", 3: "three", 4: "four"}.get(count, str(count))
         base = subject or "rigid cylindrical package" if form == art.CYLINDER else (
             "slim folding gift box" if form == art.GIFT_BOX else "kraft stand-up pouch")
-        return (f"a photograph of {word} identical blank unprinted {base}s standing "
-                f"side by side in a row on a pale grey seamless studio sweep, every "
-                f"package in frame and separated from its neighbours, no lettering and "
-                f"no label, a soft contact shadow under each, soft diffused key light "
-                f"from the upper left, photoreal commercial product photography, sharp "
-                f"focus on the packages")
+        return _shadow_phrase(
+            (f"a photograph of {word} identical blank unprinted {base}s standing "
+             f"side by side in a row on a pale grey seamless studio sweep, every "
+             f"package in frame and separated from its neighbours, no lettering and "
+             f"no label, a soft contact shadow under each, soft diffused key light "
+             f"from the upper left, photoreal commercial product photography, sharp "
+             f"focus on the packages"), shadow)
     if subject and form == art.CYLINDER:
         # A design that names its own body gets a plate of that object; a plain
         # cylinder is only the default. Without this a mug was drawn as a tube.
-        return CYLINDER_PLATE_TEMPLATE.format(
+        return _shadow_phrase(CYLINDER_PLATE_TEMPLATE.format(
             subject=subject,
             turn=("its front square to the camera" if face == "front" else
-                  "turned around so its back is square to the camera"))
-    return briefs[face]
+                  "turned around so its back is square to the camera")), shadow)
+    return _shadow_phrase(briefs[face], shadow)
 
 
 def _guarded_plate(brief: str, *, width: int, height: int, tier: str,
@@ -520,7 +543,12 @@ def build(design: Optional[Dict[str, Any]] = None, *,
         if face not in ("front", "back"):
             raise ValueError(f"unknown face {face!r}; known: front, back")
         face_seed = None if base_seed is None else base_seed + offset
-        brief = plate_brief(face, form, dsn, units=units)
+        # A main image is the product alone on a flat value, so its plate is asked for
+        # no contact shadow (D-021). A free/scene brief keeps the shadow: a lifestyle
+        # picture with the product floating above its own shadow would be the wrong
+        # defect.
+        wants_shadow = str(background or "").strip().lower() not in ("white", "flat")
+        brief = plate_brief(face, form, dsn, units=units, shadow=wants_shadow)
         plate_record: Dict[str, Any] = {}
         cutout_bytes: Dict[str, Any] = {}
         try:

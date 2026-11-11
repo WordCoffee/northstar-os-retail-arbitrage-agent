@@ -349,6 +349,7 @@ class ComfySceneRenderer:
 def synthetic_plate(*, width: int = 1536, height: int = 1536, kind: str = "pouch",
                     field: str = "sweep", value: int = 255,
                     stock: Optional[Any] = None, units: int = 1,
+                    shadow: bool = True,
                     seed: int = 7) -> Dict[str, Any]:
     """A **drawn** blank package on a field — the plate stand-in for the app pipeline.
 
@@ -356,6 +357,11 @@ def synthetic_plate(*, width: int = 1536, height: int = 1536, kind: str = "pouch
     and print on. When the render lane is down this draws one instead of pretending:
     the record says ``source: "synthetic_plate"`` and the summary repeats it. It is
     not a generated scene and must never be reported as one.
+
+    ``shadow=False`` omits the drawn base shadow. A **main-image** brief is the product
+    alone on a flat value: a shadow under it is a defect, not a selling cue, and because
+    the ellipse is attached the cutout keeps it — the silhouette then contains it and no
+    later check can see it (D-021, measured 2026-11-11).
     """
     import numpy as np
     from PIL import Image, ImageDraw
@@ -409,8 +415,9 @@ def synthetic_plate(*, width: int = 1536, height: int = 1536, kind: str = "pouch
                        (left + w, top_y + shoulder)], fill=body)
             d.rectangle([left + int(w * 0.18), top_y - int(h * 0.06),
                          left + w - int(w * 0.18), top_y + int(h * 0.02)], fill=cap)
-            d.ellipse([left - w // 9, top_y + h - h // 34,
-                       left + w + w // 9, top_y + h + h // 20], fill=(206, 204, 200))
+            if shadow:
+                d.ellipse([left - w // 9, top_y + h - h // 34,
+                           left + w + w // 9, top_y + h + h // 20], fill=(206, 204, 200))
     else:
         base = tuple(stock) if stock else (213, 167, 122)
         body = base
@@ -428,9 +435,11 @@ def synthetic_plate(*, width: int = 1536, height: int = 1536, kind: str = "pouch
                        (left + w + max(2, w // 60), top_y + h),
                        (left - max(2, w // 60), top_y + h)], fill=body)
             d.rectangle([left, top_y, left + w, top_y + max(6, h // 40)], fill=top)
-            # base shadow so the plate is not a sticker on a flat field
-            d.ellipse([left - w // 8, top_y + h - h // 40,
-                       left + w + w // 8, top_y + h + h // 22], fill=(206, 204, 200))
+            # base shadow so the plate is not a sticker on a flat field — but never on a
+            # main image, where the product must be alone on the value (D-021).
+            if shadow:
+                d.ellipse([left - w // 8, top_y + h - h // 40,
+                           left + w + w // 8, top_y + h + h // 22], fill=(206, 204, 200))
 
     if field != "white":
         # a vertical light ramp, so the measured surface has real shading
@@ -547,7 +556,10 @@ def renderer_from_name(name: str) -> Any:
             width, height = (int(size[0]), int(size[1])) if size else (1536, 1536)
             return synthetic_plate(width=max(1024, width), height=max(1024, height),
                                    kind=kind, field=field, value=value,
-                                   stock=stock_colour, units=unit_count)
+                                   stock=stock_colour, units=unit_count,
+                                   # a main image is the product alone on the value:
+                                   # no drawn shadow to survive the cutout (D-021)
+                                   shadow=not white)
 
         return _drawn
     if name == "synthetic":
