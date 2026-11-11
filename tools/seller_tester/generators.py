@@ -45,6 +45,191 @@ class GeneratorUnavailable(RuntimeError):
     """The generator cannot produce an image right now. Never retried silently."""
 
 
+class ProductPipelineGenerator:
+    """Render the seller's brief through the **app's own** product-picture path.
+
+    D-011: the harness used to draw its own label (`label_warp.compose_label`) and
+    warp it with its own quad, so every seller number was a number about the
+    harness. `product_picture.build` is what the product actually ships, and it
+    takes an injectable plate, so this adapter supplies the plate and lets the app
+    measure the face, compose its own artwork and run its own OCR gate.
+
+    Contract is the same as `CompositeGenerator`: `generate(brief) -> Path`,
+    `pair(briefs)`, `route(brief)`, `record_for(brief_id)`. A brief the app cannot
+    serve raises `GeneratorUnavailable` with the app's own refusal reason — it is
+    never replayed as a lookalike.
+
+    The records carry the build manifest per face, so a summary can say *why* a
+    picture was refused instead of only that it was.
+    """
+
+    name = "product_pipeline"
+
+    def __init__(self, *, renderer: Optional[Any] = None,
+                 renderer_name: str = "comfy",
+                 out_dir: Optional[str | Path] = None,
+                 repo_root: str | Path = REPO_ROOT,
+                 seed: Optional[int] = None,
+                 face: str = "front") -> None:
+        self.repo_root = Path(repo_root)
+        self.out_dir = Path(out_dir) if out_dir is not None else (
+            self.repo_root / "renders" / "seller_product")
+        self.seed = seed
+        self.face = face
+        if renderer is not None:
+            self.renderer = renderer
+            if type(renderer).__name__ == "ComfySceneRenderer":
+                self.renderer_name = "comfy"
+            elif renderer_name in ("drawn", "synthetic"):
+                self.renderer_name = renderer_name
+            else:
+                self.renderer_name = "injected"
+        else:
+            from .scene_render import renderer_from_name  # noqa: PLC0415
+
+            self.renderer = renderer_from_name(renderer_name)
+            self.renderer_name = renderer_name
+        self.records: List[Dict[str, Any]] = []
+
+    # ---------------------------------------------------------------- contract
+    def available(self) -> Tuple[bool, str]:
+        if self.renderer_name in ("injected", "drawn", "synthetic"):
+            return True, f"{self.renderer_name} plate"
+        from .scene_render import lane_ready  # noqa: PLC0415
+
+        return lane_ready()
+
+    def route(self, brief: Dict[str, Any]) -> str:
+        return "product_picture"
+
+    def pair(self, briefs: Sequence[Dict[str, Any]], limit: Optional[int] = None
+             ) -> List[Tuple[Dict[str, Any], Path]]:
+        if not briefs:
+            raise GeneratorUnavailable("no briefs supplied")
+        count = len(briefs) if limit is None else min(len(briefs), max(0, int(limit)))
+        pairs: List[Tuple[Dict[str, Any], Path]] = []
+        for brief in briefs[:count]:
+            pairs.append((brief, self.generate(brief)))
+        return pairs
+
+    # ---------------------------------------------------------------- work
+    def _design(self, brief: Dict[str, Any]) -> Dict[str, Any]:
+        import brand_art  # noqa: PLC0415
+
+        try:
+            return brand_art.design_for_brief(brief)
+        except ValueError as exc:
+            raise GeneratorUnavailable(str(exc)) from exc
+
+    def _plate(self, brief: Dict[str, Any], size: Tuple[int, int]) -> Dict[str, Any]:
+        """The photograph the app prints on: an unlettered body on the brief's field."""
+        if str(brief.get("label_mode") or "") != "warp":
+            raise GeneratorUnavailable(
+                "brief asks the model for the lettering; the app composes lettering "
+                "from the design, so this brief needs label_mode 'warp' with a "
+                "body_prompt before the app path can serve it")
+        kwargs: Dict[str, Any] = {}
+        if self.renderer_name == "drawn":
+            kwargs["size"] = (int(size[0]), int(size[1]))
+        scene = self.renderer(brief, **kwargs)
+        record = {
+            "source": scene.get("source"),
+            "prompt": scene.get("prompt"),
+            "model": scene.get("model"),
+            "width": scene.get("width"),
+            "height": scene.get("height"),
+            "seed": scene.get("seed"),
+            "note": scene.get("note"),
+        }
+        if scene.get("source") == "synthetic_plate":
+            return {"bytes": scene["bytes"], "plate": record}
+        raise GeneratorUnavailable(
+            "the render lane returned a scene, not a plate: this adapter has no "
+            "plate step for a scene ('synthetic_plate' or a real blank-package "
+            f"render is required, got {scene.get('source')!r})")
+
+    def generate(self, brief: Dict[str, Any]) -> Path:
+        started = time.time()
+        brief_id = str(brief.get("id") or "brief")
+        size = _required_size(brief) or (1536, 1536)
+        width, height = int(size[0]), int(size[1])
+        record: Dict[str, Any] = {
+            "brief_id": brief_id,
+            "route": "product_picture",
+            "fidelity": brief.get("fidelity"),
+            "renderer": self.renderer_name,
+            "design": None,
+            "form": None,
+            "plate": None,
+            "build": None,
+            "product_box": None,
+        }
+        try:
+            import brand_art  # noqa: PLC0415
+            import product_picture as pp  # noqa: PLC0415
+
+            design = self._design(brief)
+            record["design"] = design.get("id") or design.get("brand")
+            plate = self._plate(brief, (width, height))
+            payload = plate["bytes"]
+            record["plate"] = plate["plate"]
+            record["form"] = brand_art.form_of(design)
+
+            def _plate_source(_brief_text, *, width, height, tier, seed):
+                return {"bytes": payload, "seed": seed, "model": "supplied-plate",
+                        "width": width, "height": height, "contains_text": False}
+
+            result = pp.build(
+                design,
+                out_dir=str(self.out_dir / brief_id),
+                out_root=str(self.out_dir),
+                faces=(self.face,),
+                width=width,
+                height=height,
+                seed=self.seed,
+                generator=_plate_source,
+            )
+            record["build"] = {
+                "ok": result.get("ok"),
+                "form": (result.get("product") or {}).get("form"),
+                "faces": [{k: face.get(k) for k in ("face", "stage", "gate_ok", "reason")}
+                          for face in result.get("faces") or []],
+                "manifest": str(self.out_dir / brief_id / "product_picture_manifest.json"),
+            }
+            face_record = (result.get("faces") or [{}])[0]
+            if not result.get("ok") or not face_record.get("file"):
+                reasons = "; ".join(
+                    f"{row.get('face')}: {row.get('reason')}"
+                    for row in result.get("faces") or [] if not row.get("ok"))
+                raise GeneratorUnavailable(
+                    f"product_picture refused brief {brief_id}: {reasons or 'no file'}")
+        except GeneratorUnavailable as exc:
+            record["error"] = str(exc)
+            record["artefact"] = None
+            record["seconds"] = round(time.time() - started, 2)
+            self.records.append(record)
+            raise
+        except Exception as exc:  # noqa: BLE001 - a lane failure is the reason
+            record["error"] = f"{type(exc).__name__}: {exc}"
+            record["artefact"] = None
+            record["seconds"] = round(time.time() - started, 2)
+            self.records.append(record)
+            raise GeneratorUnavailable(str(exc)) from exc
+
+        target = Path(face_record["file"])
+        record["artefact"] = str(target)
+        record["bytes"] = int(face_record.get("bytes") or 0)
+        record["seconds"] = round(time.time() - started, 2)
+        self.records.append(record)
+        return target
+
+    def record_for(self, brief_id: Any) -> Optional[Dict[str, Any]]:
+        for record in reversed(self.records):
+            if str(record.get("brief_id")) == str(brief_id):
+                return record
+        return None
+
+
 def discover_images(roots: Iterable[str | Path]) -> List[Path]:
     """Deterministic, deduplicated list of image files under the roots."""
     found: List[Path] = []

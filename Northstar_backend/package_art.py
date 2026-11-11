@@ -330,9 +330,11 @@ def render_front_box(spec: Dict[str, Any], *, logo: Optional[Image.Image] = None
         _paste_logo(img, logo, W, H * 0.085,
                     max_w=min(42.0, W * 0.62), max_h=min(16.0, H * 0.07))
     else:
+        # Tracking on a wordmark is decoration; too much of it and OCR reads the
+        # brand as two unrelated words, which fails the picture's own gate.
         pd.ctext(d, W / 2, H * 0.085, brand.upper(),
                  pd.F("Inter.ttf", max(2.6, W * 0.048), [14, 700]), ink,
-                 tracking_mm=max(1.2, W * 0.024))
+                 tracking_mm=max(0.5, W * 0.010))
     pd.rule(d, W / 2 - W * 0.22, H * 0.125, W / 2 + W * 0.22, accent, 0.35)
 
     script_line = str(spec.get("script_line") or "").strip()
@@ -378,10 +380,11 @@ def render_front_box(spec: Dict[str, Any], *, logo: Optional[Image.Image] = None
     weight_line = str(spec.get("net_weight_line") or spec.get("weight") or "").strip()
     band_ink = (58, 40, 62) if sum(band) / 3 > 120 else ink
     if weight_line:
+        # No letter-spacing on the legal weight line: tracking opens gaps between
+        # glyphs and OCR then reads "NET WT.120" and "G" as separate runs.
         pd.ctext(d, W / 2, band_top + (band_bottom - band_top) * 0.42,
                  weight_line.upper(),
-                 pd.F("Inter.ttf", max(2.6, H * 0.026), [14, 700]), band_ink,
-                 tracking_mm=max(0.8, W * 0.012))
+                 pd.F("Inter.ttf", max(2.6, H * 0.026), [14, 700]), band_ink)
     descriptor = str(spec.get("descriptor") or "").strip()
     if descriptor:
         pd.ctext(d, W / 2, band_top + (band_bottom - band_top) * 0.78,

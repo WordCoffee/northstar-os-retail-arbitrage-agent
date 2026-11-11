@@ -25,12 +25,14 @@ from .briefs import (
 )
 from .escalate import escalate
 from .generators import (CompositeGenerator, ComfyGenerator, GeneratorUnavailable,
-                         StoredGenerator)
+                         ProductPipelineGenerator, StoredGenerator)
 from .harness import run_pass
 from .judge import local_judge
 
 DEFAULT_SUMMARY_PATH = Path(__file__).resolve().parents[2] / "state" / "seller" / "last_run.json"
 DEFAULT_COMPOSITE_CATALOG = Path(__file__).resolve().parent / "mogra_briefs.json"
+DEFAULT_HELDOUT_MODES_CATALOG = (Path(__file__).resolve().parents[2]
+                                 / "ty" / "seller_briefs_heldout_modes.json")
 
 
 def _cmd_catalog(args: argparse.Namespace) -> int:
@@ -203,6 +205,59 @@ def _cmd_aplus(args: argparse.Namespace) -> int:
     return 0 if proof["ok"] else 1
 
 
+def _cmd_product(args: argparse.Namespace) -> int:
+    """The app's own product-picture path, end to end, scored like a seller would.
+
+    D-011: until this exists every seller number is a number about the harness.
+    Here the plate is supplied and **the app** measures the face, composes its
+    branding and runs its OCR gate.
+    """
+    from .scene_render import lane_ready, renderer_from_name
+
+    catalog_path = Path(args.catalog or DEFAULT_HELDOUT_MODES_CATALOG)
+    payload = load_catalog(catalog_path)
+    errors = validate_catalog(payload, require_coverage=False)
+    if errors:
+        print("catalog invalid:\n  " + "\n  ".join(errors), file=sys.stderr)
+        return 1
+    if args.renderer == "comfy":
+        ok, detail = lane_ready()
+        if not ok:
+            print(f"refused: {detail}", file=sys.stderr)
+            return 2
+    generator = ProductPipelineGenerator(
+        renderer=renderer_from_name(args.renderer), renderer_name=args.renderer,
+        out_dir=args.out_dir, repo_root=Path(args.root), seed=args.seed)
+    summary = run_pass(generator=generator, briefs=payload.get("briefs", []),
+                       limit=args.limit, mode=args.mode,
+                       judge=local_judge if args.judge else None,
+                       gaps_path=Path(args.gaps) if args.gaps else None,
+                       mirror_path=Path(args.gaps) if args.gaps else None,
+                       escalation_path=None)
+    summary["pipeline"] = "app"          # product_picture.build, not the harness composite
+    summary["plate_source"] = args.renderer
+    out = Path(args.summary_out) if args.summary_out else DEFAULT_SUMMARY_PATH
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    for row in summary["results"]:
+        print(json.dumps({
+            "brief": row.get("brief_id"), "form": (row.get("generation") or {}).get("form"),
+            "design": (row.get("generation") or {}).get("design"),
+            "passed": row.get("passed"), "score": row.get("score"),
+            "failed": row.get("failed_checks"),
+            "plate": ((row.get("generation") or {}).get("plate") or {}).get("source"),
+            "artefact": row.get("artefact_path"),
+        }, ensure_ascii=False))
+    head = {k: summary[k] for k in ("generator", "selected", "scored", "passed",
+                                    "failed", "pass_rate", "mean_score")}
+    head["by_mode"] = {name: {"scored": row["scored"], "passed": row["passed"],
+                              "mean_score": row["mean_score"]}
+                       for name, row in summary["by_mode"].items()}
+    print(json.dumps(head, ensure_ascii=False))
+    print(f"summary: {out}")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="tools.seller_tester",
                                      description="Seller-Tester harness (D9)")
@@ -266,6 +321,27 @@ def build_parser() -> argparse.ArgumentParser:
         Path(__file__).resolve().parents[2] / "state" / "seller" / "aplus_proof.json"))
     ap.add_argument("--no-determinism-check", action="store_true",
                     help="produce each brief once instead of twice; the proof says so")
+
+    pr = sub.add_parser(
+        "product",
+        help="run the app's own product_picture.build path (D-011), scored")
+    pr.add_argument("--catalog", default=None,
+                    help=f"default {DEFAULT_HELDOUT_MODES_CATALOG}")
+    pr.add_argument("--limit", type=int, default=12)
+    pr.add_argument("--mode", default=None, choices=list(SOURCE_MODES),
+                    help="restrict the pass to one input mode (default: all three)")
+    pr.add_argument("--renderer", default="comfy", choices=["comfy", "drawn"],
+                    help="comfy renders a real plate; drawn is the labelled offline stand-in")
+    pr.add_argument("--judge", action="store_true",
+                    help="enable the LOCAL vision judge (off by default)")
+    pr.add_argument("--seed", type=int, default=None)
+    pr.add_argument("--out-dir", default=None)
+    pr.add_argument("--root", default=str(Path(__file__).resolve().parents[2]))
+    pr.add_argument("--summary-out", default=str(
+        Path(__file__).resolve().parents[2] / "state" / "seller" / "product_proof.json"))
+    pr.add_argument("--gaps", default=str(
+        Path(__file__).resolve().parents[2] / "state" / "seller" / "product_gaps.json"),
+        help="gap file for this run (kept out of the shared ty/seller_gaps.json)")
     return parser
 
 
@@ -281,6 +357,8 @@ def main(argv: list[str] | None = None) -> int:
             return _cmd_composite(args)
         if args.command == "aplus":
             return _cmd_aplus(args)
+        if args.command == "product":
+            return _cmd_product(args)
         return _cmd_escalate(args)
     except GeneratorUnavailable as exc:
         print(f"generator unavailable: {exc}", file=sys.stderr)

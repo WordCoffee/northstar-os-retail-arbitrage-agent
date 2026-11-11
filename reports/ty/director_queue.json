@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-11T03:42:11+00:00",
+  "updated_at": "2026-11-11T04:23:37+00:00",
   "cycle": 2,
   "unit_in_flight": "",
   "unit_order": [
@@ -1473,7 +1473,7 @@
       "id": "sel-06b-second-brand",
       "unit": "D12",
       "title": "The app can render one brand: mogra_label_art.design_for raises 'unknown label design: word-coffee', so 6 of 12 prompt-only briefs are unreachable through product_picture.build",
-      "status": "queued",
+      "status": "merged",
       "owner": "",
       "write_paths": [
         "Northstar_backend/mogra_label_art.py",
@@ -1488,9 +1488,9 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": "brand_art.py dispatch + package_art carton form; pouch sha256 e0160055bf0884c1 identical; 17 new tests, 55 packaging tests pass; OCR gate both carton faces; judge 4/4 95 (synthetic plate, MEDIA_GEN_LIVE not 1); reports/ty/sel06b_second_brand.md",
       "created_at": "2026-11-11T03:31:33+00:00",
-      "updated_at": "2026-11-11T03:31:33+00:00",
+      "updated_at": "2026-11-11T04:03:37+00:00",
       "rank": 1
     },
     {
@@ -1541,7 +1541,7 @@
       "id": "sel-06-exercise-product-pipeline",
       "unit": "D9",
       "title": "D-011: render the seller briefs through product_picture.build, not a parallel composite pipeline",
-      "status": "queued",
+      "status": "merged",
       "owner": "",
       "write_paths": [
         "tools/seller_tester/",
@@ -1554,9 +1554,9 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": "ProductPipelineGenerator drives product_picture.build; both brands reach the scorers; prompt-only 12/12/97.5 (drawn plate, labelled); 8 new tests + 98 harness tests; reports/ty/sel06_product_pipeline.md",
       "created_at": "2026-11-11T03:18:44+00:00",
-      "updated_at": "2026-11-11T03:31:33+00:00",
+      "updated_at": "2026-11-11T04:23:20+00:00",
       "rank": 2
     },
     {

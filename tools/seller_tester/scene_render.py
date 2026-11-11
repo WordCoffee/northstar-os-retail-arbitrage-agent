@@ -340,6 +340,71 @@ class ComfySceneRenderer:
                             inside_lane=inside_lane, model=self.model)
 
 
+def synthetic_plate(*, width: int = 1536, height: int = 1536, kind: str = "pouch",
+                    field: str = "sweep", value: int = 255,
+                    stock: Optional[Any] = None,
+                    seed: int = 7) -> Dict[str, Any]:
+    """A **drawn** blank package on a field — the plate stand-in for the app pipeline.
+
+    `product_picture.build` needs a photograph of an unlettered package to measure
+    and print on. When the render lane is down this draws one instead of pretending:
+    the record says ``source: "synthetic_plate"`` and the summary repeats it. It is
+    not a generated scene and must never be reported as one.
+    """
+    import numpy as np
+    from PIL import Image, ImageDraw
+
+    level = max(0, min(255, int(value))) if field == "white" else 232
+    ground = (level, level, level) if field == "white" else (232, 230, 226)
+    img = Image.new("RGB", (width, height), ground)
+    d = ImageDraw.Draw(img)
+
+    if kind == "gift_box":
+        base = tuple(stock) if stock else (240, 196, 202)
+        body = base
+        top = tuple(max(0, int(c * 0.94)) for c in base)
+        w = int(width * 0.44)
+        h = int(height * 0.62)
+        left = (width - w) // 2
+        top_y = int(height * 0.19)
+        d.polygon([(left, top_y), (left + w, top_y),
+                   (left + w + int(w * 0.03), top_y + h),
+                   (left - int(w * 0.03), top_y + h)], fill=body)
+        d.rectangle([left, top_y, left + w, top_y + max(6, h // 40)], fill=top)
+    else:
+        base = tuple(stock) if stock else (213, 167, 122)
+        body = base
+        top = tuple(max(0, int(c * 0.92)) for c in base)
+        w = int(width * 0.38)
+        h = int(height * 0.62)
+        left = (width - w) // 2
+        top_y = int(height * 0.20)
+        d.polygon([(left, top_y), (left + w, top_y),
+                   (left + w + max(2, w // 60), top_y + h),
+                   (left - max(2, w // 60), top_y + h)], fill=body)
+        d.rectangle([left, top_y, left + w, top_y + max(6, h // 40)], fill=top)
+        # base shadow so the plate is not a sticker on a flat field
+        d.ellipse([left - w // 8, top_y + h - h // 40,
+                   left + w + w // 8, top_y + h + h // 22], fill=(206, 204, 200))
+
+    if field != "white":
+        # a vertical light ramp, so the measured surface has real shading
+        array = np.asarray(img).astype(np.float32)
+        ramp = np.linspace(1.03, 0.94, height, dtype=np.float32)[:, None, None]
+        array = np.clip(array * ramp, 0, 255).astype(np.uint8)
+        img = Image.fromarray(array)
+
+    from io import BytesIO
+
+    buffer = BytesIO()
+    img.save(buffer, format="PNG")
+    return {"bytes": buffer.getvalue(), "source": "synthetic_plate",
+            "prompt": f"drawn blank {kind} on a {field} field (no render lane)",
+            "width": width, "height": height, "seed": seed, "steps": 0,
+            "image_path": None, "lane": None,
+            "note": "not generated: a drawn plate used only for the offline proof"}
+
+
 def synthetic_scene(*, width: int = 1024, height: int = 1024, kind: str = "linen",
                     seed: int = 7) -> Dict[str, Any]:
     """A deterministic, honestly-labelled backdrop. Never called a generated scene."""
@@ -366,10 +431,63 @@ def synthetic_scene(*, width: int = 1024, height: int = 1024, kind: str = "linen
             "note": "not generated: a synthetic backdrop used only for the offline proof"}
 
 
+def stock_from_brief(brief: Dict[str, Any]) -> Optional[Any]:
+    """The stock colour a brief asks for, from its own body prompt.
+
+    A drawn plate is still a stand-in, but it should not contradict the brief:
+    a forest-green pouch drawn kraft makes every vision check fail on the plate
+    rather than on the artwork. Only explicit colour words are read; anything
+    unrecognised keeps the form's default stock.
+    """
+    text = " ".join(str(brief.get(key) or "") for key in ("body_prompt", "prompt")).lower()
+    palette = (
+        (("forest-green", "forest green", "dark green"), (37, 54, 40)),
+        (("olive",), (96, 108, 70)),
+        (("sage",), (150, 168, 146)),
+        (("pale-pink", "pale pink", "blush", "lilac"), (240, 196, 202)),
+        (("pink",), (238, 206, 208)),
+        (("matte black", "black", "charcoal"), (38, 38, 40)),
+        (("navy", "midnight"), (32, 44, 58)),
+        (("white", "ivory", "bone"), (245, 238, 226)),
+        (("cream",), (238, 226, 205)),
+        (("kraft", "brown", "tan"), (213, 167, 122)),
+    )
+    for words, colour in palette:
+        if any(word in text for word in words):
+            return colour
+    return None
+
+
 def renderer_from_name(name: str) -> Any:
-    """'comfy' (default) or 'synthetic' — an explicit choice, never a silent fallback."""
+    """'comfy' (default), 'synthetic' or 'drawn' — an explicit choice, never a silent fallback."""
     if name == "comfy":
         return ComfySceneRenderer()
+    if name == "drawn":
+        def _drawn(brief: Dict[str, Any], mode: str = "plate",
+                   inside_lane: Optional[Any] = None,
+                   size: Optional[Any] = None) -> Dict[str, Any]:
+            if inside_lane is not None:
+                raise RuntimeError(
+                    "a drawn plate has no lane to run an in-lane cutout on")
+            kind = ("gift_box" if str(brief.get("category") or "") in
+                    ("food_jar", "gift_box", "box") else "pouch")
+            constraints = brief.get("constraints") or {}
+            background = constraints.get("background") or {}
+            matte = constraints.get("matte") or {}
+            mode = str(background.get("mode") or "").lower()
+            # The same rule as `generators.flat`: a uniform field or a clean white
+            # matte needs a flat canvas, or the edge grain fails the matte check.
+            white = (mode == "uniform"
+                     or str(matte.get("mode") or "").lower() == "white_matte"
+                     or mode.startswith("white") or mode.startswith("solid"))
+            field = "white" if white else "sweep"
+            value = int(background.get("value", 255)) if white else 232
+            width, height = (int(size[0]), int(size[1])) if size else (1536, 1536)
+            return synthetic_plate(width=max(1024, width), height=max(1024, height),
+                                   kind=kind, field=field, value=value,
+                                   stock=stock_from_brief(brief))
+
+        return _drawn
     if name == "synthetic":
         def _synthetic(brief: Dict[str, Any], mode: str = "scene",
                        inside_lane: Optional[Any] = None) -> Dict[str, Any]:
@@ -399,5 +517,6 @@ __all__ = [
     "renderer_from_name",
     "scene_prompt",
     "sdxl_graph",
+    "synthetic_plate",
     "synthetic_scene",
 ]
