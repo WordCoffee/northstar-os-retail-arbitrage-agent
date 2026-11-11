@@ -33,6 +33,27 @@ function EvaluatePanel() {
   }
 
   const dec = state.phase === 'done' && state.value ? state.value.decision : null
+  // The result block renders whatever the API returns. `resale_score` is an object (a scored
+  // payload with code_name/component_scores), and rendering it directly crashed the whole page
+  // with "Objects are not valid as a React child" — which is why no click path had ever completed
+  // here. Everything shown is coerced to text at the edge, and an unknown shape reads UNKNOWN
+  // instead of taking the page down.
+  const asText = (value) => {
+    if (value == null) return ''
+    if (typeof value === 'string' || typeof value === 'number') return String(value)
+    if (typeof value === 'object') {
+      return value.detail || value.message || value.code_name || value.label || JSON.stringify(value)
+    }
+    return String(value)
+  }
+  const resale = state.phase === 'done' && state.value ? state.value.resale_score : null
+  const resaleText = (() => {
+    if (resale == null) return null
+    if (typeof resale === 'number' || typeof resale === 'string') return asText(resale)
+    const scalar = resale.overall_score ?? resale.score ?? resale.overall ?? resale.value
+    return scalar == null ? null : asText(scalar)
+  })()
+  const listText = (rows) => (Array.isArray(rows) ? rows.map(asText).filter(Boolean) : [])
 
   return (
     <div className="card" data-testid="gg-evaluate" style={{ marginBottom: 20 }}>
@@ -81,18 +102,18 @@ function EvaluatePanel() {
             <span className={`pill ${dec.decision_state === 'PURCHASE_READY' ? 'pill-ok' : dec.decision_state === 'APPROVAL_REQUIRED' ? 'pill-ochre' : 'pill-muted'}`}>{dec.decision_state}</span>
             <span className={`pill ${dec.purchase_ready ? 'pill-ok' : 'pill-muted'}`} title="Purchase authorization is never granted by a score">{dec.purchase_ready ? 'purchase-ready' : 'purchase NOT authorized'}</span>
             {dec.overall_score != null && <span className="pill pill-muted">score {dec.overall_score}</span>}
-            {state.value.resale_score != null && <span className="pill pill-muted">resale {state.value.resale_score}</span>}
+            {resaleText != null && <span className="pill pill-muted">resale {resaleText}</span>}
             <span className="pill pill-muted">approval: {dec.approval_state}</span>
           </div>
           {dec.missing_information && dec.missing_information.length > 0 && (
             <div className="inline-flex" style={{ gap: 6, flexWrap: 'wrap', marginBottom: 8 }}>
               <span className="text-low" style={{ fontSize: 11 }}>Missing:</span>
-              {dec.missing_information.map(m => <span key={m} className="pill pill-unknown" style={{ fontSize: 10 }}>{m}</span>)}
+              {listText(dec.missing_information).map((m, i) => <span key={`${m}-${i}`} className="pill pill-unknown" style={{ fontSize: 10 }}>{m}</span>)}
             </div>
           )}
           {dec.warnings && dec.warnings.length > 0 && (
             <div className="inline-flex" style={{ gap: 6, flexWrap: 'wrap' }}>
-              {dec.warnings.map((w, i) => <span key={i} className="pill pill-warn" style={{ fontSize: 10 }}>{w}</span>)}
+              {listText(dec.warnings).map((w, i) => <span key={`${w}-${i}`} className="pill pill-warn" style={{ fontSize: 10 }}>{w}</span>)}
             </div>
           )}
         </div>

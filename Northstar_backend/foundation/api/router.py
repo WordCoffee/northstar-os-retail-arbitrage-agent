@@ -400,15 +400,39 @@ def _gg_decision(body):
 
 @router.post("/golden-goose/evaluate")
 def golden_goose_evaluate(body: GoldenGooseEvalBody,
+                          state: FoundationState = Depends(get_state),
                           ctx: RequestContext = Depends(get_context)):
+    from uuid import uuid4
+
+    from ..golden_goose_store import record_decision, upsert_item
     from ..permissions import evaluate as eval_perm, PERM_VIEW
     from ..resale_score import score as resale_score
     allowed, reason = eval_perm(ctx, PERM_VIEW)
     if not allowed:
         raise _err("permission_denied", reason, 403)
     decision = _gg_decision(body)
-    return {"item_id": body.item_id, "decision": decision,
-            "resale_score": resale_score(body.resale_inputs or {})}
+    resale = resale_score(body.resale_inputs or {})
+    # G1, measured 2026-11-11: evaluate computed a decision and threw it away, so the panel's
+    # result vanished on reload and /golden-goose/{id} could only ever read *ingested* items.
+    # A decision the seller cannot return to is a report, not a tool, so the item and its decision
+    # are stored here in the same transaction-shaped step that returns them.
+    item_id = str(getattr(body, "item_id", "") or "").strip() or f"GG-{uuid4().hex[:10].upper()}"
+    org = ctx.effective_organization_id
+    resale_value = resale.get("overall") if isinstance(resale, dict) else resale
+    upsert_item(state.db, org, {
+        "item_id": item_id,
+        "match_state": decision.get("decision_state"),
+        "resale_score": resale_value,
+        "economics_complete": body.economics_readiness == "COMPLETE_VERIFIED",
+        "policy_exclusion_flag": 0,
+        "sample": bool(body.sample),
+        "decision_state": decision.get("decision_state"),
+        "purchase_ready": bool(decision.get("purchase_ready")),
+    })
+    record_decision(state.db, org, item_id, decision)
+    return {"item_id": item_id, "decision": decision, "resale_score": resale,
+            "persisted": True,
+            "note": "the decision is stored org-scoped; GET /golden-goose/{item_id} reads it back"}
 
 
 @router.get("/golden-goose/queue")
