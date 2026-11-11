@@ -90,6 +90,16 @@
     "at": "2026-11-10T03:56:57+00:00"
   },
   {
+    "id": "gap-92b189d0a283",
+    "brief_id": "PO-X",
+    "score": 60.0,
+    "failed_checks": [
+      "subject_fill"
+    ],
+    "artefact_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tmpo5mjt4gy\\PO-X.png",
+    "at": "2026-11-11T01:55:36+00:00"
+  },
+  {
     "id": "gap-2b79b5c9d656",
     "brief_id": "PO-X",
     "score": 60.0,
@@ -98,6 +108,16 @@
     ],
     "artefact_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tmpt5zobb6n\\PO-X.png",
     "at": "2026-11-10T02:59:56+00:00"
+  },
+  {
+    "id": "gap-f6e6a6cce028",
+    "brief_id": "PO-X",
+    "score": 60.0,
+    "failed_checks": [
+      "subject_fill"
+    ],
+    "artefact_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tmpx1i17xv0\\PO-X.png",
+    "at": "2026-11-11T02:04:00+00:00"
   },
   {
     "id": "gap-d15b2b0eec83",
