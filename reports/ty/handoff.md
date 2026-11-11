@@ -23,25 +23,27 @@ Unit report: `reports/ty/rerender_prompt_only_20261111.md`. Six jobs merged, two
 | 5 | `fix-launcher-heartbeat-red` (D-010) — heartbeat is red when the stream's last line is an error (243 such lines were on disk) | merged |
 | 6 | `fix-dev-start-pids` (D-009) — the pid record is resolved from the listeners and pruned of the dead | merged |
 | 7 | `ppc-upload-live` — upload → propose → approve → write v1 → write v2 → download, hash matches | merged |
+| 8 | `sel-05-label-fidelity` — label composed and warped onto an unlettered body: judged **83.5 → 98.7**, 12/12 | merged |
 
-**The seller number, per mode, never blended:** prompt-only 12 scored / **10 passed / 93.9**
-mechanically; with the local vision judge (`gemma3:4b`, loopback) **11 passed / 83.5**. Stored 12/11/91.8,
-uploaded 21/16/90.0.
+**The seller number, per mode, never blended:** prompt-only 12 scored / **12 passed / 98.3**
+mechanically; with the local vision judge (`gemma3:4b`, loopback) **12 passed / 98.7**. Stored
+12/11/91.8, uploaded 21/16/90.0 — 45 scored, 39 passed, mean 92.7. **All of it is the harness
+pipeline, not the app's** (D-011 below).
 
-**What the judge says is still wrong** — and it is one thing: **lettering**. The briefs describe exact
-label copy and hand it to the diffusion model, which spells "MOGGARA" for "MOGRA ORGANICS" and "AOW"
-for "Word Coffee", drops the tagline, and paints glossy where the brief asked matte. The repo has
-`tools/seller_tester/label_warp.py` (compose, warp, blend with the body's own shading) but **0 of 12
-prompt-only briefs set `label_mode`**, so it never ran. That is job 1 now (`sel-05-label-fidelity`,
-claimed): unlettered body prompts + a label block per brief + judge-measured.
+**Next, in rank order:** `sel-06-exercise-product-pipeline` (D-011 — until it lands, every seller
+number is a harness number) → `sel-07-bundle-and-body-shape` (PO-012 measures one unit of three; the
+pouch prompts drew a box twice) → `sel-refs-designs` (21 stored rows are 2 product designs) →
+`sel-04-packaging` → `ux-0610-live-verify` (desktop still locked: `tools/ty_unlock_checks.py
+--status` says `no foreground window`).
 
-**Next, in rank order:** `sel-05-label-fidelity` (in flight) → `sel-coverage-44` (still 12 of 56
-briefs have a reference: the unchanged rank-1 blocker) → `ux-0610-live-verify` (needs an unlocked
-desktop) → `sel-04-packaging`.
+**`sel-coverage-44` was blocked on a measuring error, not on missing work:** 32 of its 44 are
+prompt-only briefs, which must *not* have a reference — a prompt-only brief with a stored reference
+stops being prompt-only. The real gap is 12 uploaded-reference briefs with no file, plus design depth.
 
 **Defects filed or closed this cycle:** D-008 closed (it was misdiagnosed; the proof carries the
-correction), D-009 closed, D-010 closed, plus three new ones in-repo: the queue/mirror divergence,
-the clipped shadow, and the two invalid instruments.
+correction), D-009 closed, D-010 closed, D-011 filed (the seller tester renders a lookalike
+pipeline), plus three new ones in-repo: the queue/mirror divergence, the clipped shadow, and the two
+invalid instruments.
 
 ## Queue lease, 2026-11-11T02:08Z — this session holds it (pid 24680, launcher-started)
 
