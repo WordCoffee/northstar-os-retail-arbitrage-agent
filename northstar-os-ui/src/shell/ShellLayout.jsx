@@ -58,6 +58,7 @@ import TabBar from './TabBar.jsx'
 import WorkspacePanel from './WorkspacePanels.jsx'
 import useWorkspaceTabs from './useWorkspaceTabs.js'
 import SceneHost from './SceneHost.jsx'
+import { workspaceForService, resolveView } from '../lib/workspaceSpecs.js'
 import './tabs.css'
 
 const MOBILE_ACTIVE = [
@@ -110,7 +111,19 @@ export default function ShellLayout({ role = 'invitee', mainClassName = '', chil
     tabs: openTabs, activeId, activeTab, visited, mainRef, summary,
     activate: activateTab, close: closeTab,
   } = useWorkspaceTabs(location, navigate)
-  const summaryJson = JSON.stringify(summary)
+  // The workspace spec names the Bojo tool the open tab opens and the view the
+  // room is showing. The tab hook is pure and knows nothing about either, so the
+  // shell adds them to the published summary here — Bojo then reads the tool and
+  // the resolved view with the tab instead of guessing from a query string.
+  const activeWorkspace = workspaceForService(activeId)
+  const resolvedView = activeWorkspace ? resolveView(activeWorkspace, location.search) : ''
+  const published = {
+    ...summary,
+    view: resolvedView || summary.view,
+    workspace: activeWorkspace ? activeWorkspace.id : '',
+    tool: activeWorkspace ? (activeWorkspace.bojo_tool?.id || '') : '',
+  }
+  const summaryJson = JSON.stringify(published)
 
   // The shell -> Bojo contract. One object, three ways to read it: the DOM
   // attribute (a browser lane or a test can read it without a React handle),

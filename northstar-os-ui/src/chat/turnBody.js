@@ -29,6 +29,8 @@ export function tabContextFromSummary(summary) {
   const state = {}
   if (summary.view) state.view = summary.view
   if (summary.query && Object.keys(summary.query).length) state.query = { ...summary.query }
+  if (summary.workspace) state.workspace = summary.workspace
+  if (summary.tool) state.tool = summary.tool
   if (Array.isArray(summary.openTabs)) {
     const openTabs = summary.openTabs.map((t) => (t && t.id ? t.id : '')).filter(Boolean)
     if (openTabs.length) state.openTabs = openTabs

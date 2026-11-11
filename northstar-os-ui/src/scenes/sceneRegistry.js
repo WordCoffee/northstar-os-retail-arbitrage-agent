@@ -23,6 +23,10 @@ const SERVICE_SCENES = {
     label: 'Carina Ridge', variant: 'carina-cliffs', route: '/design-studio',
     spec: { stars: 74, drift: 0.55, arcs: 2, ax: 0.62, ay: 0.54 },
   },
+  'product-pictures': {
+    label: 'Carina Ridge', variant: 'carina-cliffs', route: '/product-pictures',
+    spec: { stars: 70, drift: 0.5, arcs: 2, ax: 0.66, ay: 0.5 },
+  },
   'product-finder': {
     label: 'Orion Cradle', variant: 'orion-nursery', route: '/product-finder',
     spec: { stars: 104, drift: 0.4, arcs: 3, ax: 0.44, ay: 0.58 },

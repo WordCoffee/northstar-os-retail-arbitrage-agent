@@ -53,13 +53,14 @@ async function expectOutletOwnsThePage(page: Page, label: string) {
   expect(owns, `${label}: the outlet rendered no page content`).toBe(true)
 }
 
-test('the route table is the 72 routes App.jsx registers', () => {
-  expect(ROUTE_PATHS).toHaveLength(72)
+// block3-workspaces added `/product-pictures`, the sixth core service workspace
+// (Product Pictures), so the table is 73 patterns: 67 concrete in-shell patterns
+// + the catch-all + the 5 exempt entry surfaces.
+test('the route table is the 73 routes App.jsx registers', () => {
+  expect(ROUTE_PATHS).toHaveLength(73)
   const exempt = ROUTE_PATHS.filter((p) => p !== '*' && isShellExempt(p))
   expect(exempt).toEqual(['/sign-in', '/recovery', '/beta', '/beta/accept', '/legal'])
-  // 72 = 66 concrete in-shell patterns + the catch-all (asserted below) + 5
-  // exempt entry surfaces.
-  expect(SHELL_ROUTES).toHaveLength(66)
+  expect(SHELL_ROUTES).toHaveLength(67)
   expect(SHELL_ROUTES).not.toContain('*')
 })
 

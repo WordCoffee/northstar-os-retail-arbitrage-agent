@@ -29,6 +29,7 @@ export const SCENES = {
   ppc: { id: 'ppc', label: 'Asteroid field', built: false },
   research: { id: 'research', label: 'Black hole', built: false },
   goose: { id: 'goose', label: 'Comet pass', built: false },
+  'product-pictures': { id: 'product-pictures', label: 'Carina Ridge', built: true },
 }
 
 /** Theme ids. Tokens live in `src/styles/themes.css` from U4; ids are stable here. */
@@ -73,6 +74,9 @@ const APP_ROUTE_SERVICES = [
   { id: 'design-studio', label: 'Design Studio', group: 'Create', route: '/design-studio',
     kind: 'studio', scene: 'studio', theme: 'studio', workspaceType: 'canvas',
     tools: ['generate_image', 'list_templates', 'build_dieline'], source: 'app-route' },
+  { id: 'product-pictures', label: 'Product Pictures', group: 'Create', route: '/product-pictures',
+    kind: 'workspace', scene: 'product-pictures', theme: 'studio', workspaceType: 'canvas',
+    tools: ['generate_image'], source: 'app-route' },
   { id: 'product-finder', label: 'SourceScout', group: 'Sourcing', route: '/product-finder',
     kind: 'workspace', scene: 'goose', theme: 'goose', workspaceType: 'list',
     tools: ['scan_products'], source: 'app-route' },

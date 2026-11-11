@@ -25,6 +25,9 @@ import {
 import { sceneForService } from './sceneRegistry.js'
 import './scene.css'
 
+/** The document event the bed fires when the scene it paints changes. */
+export const SCENE_EVENT = 'northstar:scene'
+
 export default function SceneSurface({
   serviceId = 'home',
   scene: sceneProp = null,
@@ -37,6 +40,7 @@ export default function SceneSurface({
   const [mode, setMode] = useState(planned)
   const canvasRef = useRef(null)
   const hostRef = useRef(null)
+  const lastSceneRef = useRef(null)
   if (!hostRef.current) hostRef.current = createSceneHost()
 
   // Keep the callback out of the effect's dependency list: the shell passes a
@@ -64,6 +68,36 @@ export default function SceneSurface({
     if (notifyRef.current) notifyRef.current(runtime.mode, runtime.reason)
     return () => { host.unmount() }
   }, [scene.id, planned]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // WHO CHANGED THE SCENE, AND TO WHAT.
+  //
+  // The bed is the one place a scene swap happens, so it is the one place that
+  // can say so truthfully. The event carries the scene the registry resolved
+  // (id, variant, label) and the mode the engine settled on, and it is
+  // dispatched ONLY when that identity changes — not on every render, and not
+  // for a mode flip inside the same scene.
+  //
+  // Why an event and not just the attribute: a listener (a browser lane, the
+  // workspace frame, a future scene-aware tool) has to react to the change.
+  // `data-scene-id` on the bed is the state; `northstar:scene` is the transition.
+  useEffect(() => {
+    const detail = {
+      serviceId: scene.serviceId,
+      sceneId: scene.id,
+      variantId: scene.variantId,
+      label: scene.label,
+      mode,
+      swappedFrom: lastSceneRef.current,
+      at: new Date().toISOString(),
+    }
+    lastSceneRef.current = scene.id
+    try { globalThis.__northstarScene = detail } catch { /* no global: not fatal */ }
+    const doc = globalThis.document
+    if (!doc || typeof doc.dispatchEvent !== 'function' || typeof globalThis.CustomEvent !== 'function') {
+      return
+    }
+    doc.dispatchEvent(new globalThis.CustomEvent(SCENE_EVENT, { detail }))
+  }, [scene.id]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // A background tab must not keep painting. The shell owns the only canvas, so
   // this is the single place frames are suspended.

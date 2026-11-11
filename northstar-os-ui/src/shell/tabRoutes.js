@@ -24,6 +24,7 @@ export const TAB_STORAGE_KEY = 'ns-workspace-tabs'
 // `<Routes location={tab path}>`.
 export const TAB_ROUTE_PATTERNS = {
   'design-studio': ['/design-studio/*'],
+  'product-pictures': ['/product-pictures'],
   'product-finder': ['/product-finder', '/product-finder/:id'],
   'golden-goose': ['/golden-goose', '/golden-goose/:id'],
   listings: ['/listings'],
@@ -173,8 +174,14 @@ export function sameTabs(a = [], b = []) {
  * Only facts the shell actually owns: which workspace, where in it, which
  * other workspaces are open, and the last scroll offset it recorded for the
  * tab. Nothing is inferred about page content the shell cannot see.
+ *
+ * `workspace` and `tool` come from the workspace spec
+ * (`lib/workspaceSpecs.js`, mirrored from `ty/northstar_workspaces.json`) and
+ * are empty for a service with no spec — an absent tool is a fact, not a gap.
  */
-export function tabSummary({ tabs = [], activeTab = null, scrollTop = 0, at = null } = {}) {
+export function tabSummary({
+  tabs = [], activeTab = null, scrollTop = 0, at = null, workspace = '', tool = '',
+} = {}) {
   const query = {}
   if (activeTab?.search) {
     try {
@@ -192,6 +199,8 @@ export function tabSummary({ tabs = [], activeTab = null, scrollTop = 0, at = nu
     query,
     openTabs: tabs.map((t) => ({ id: t.id, label: t.label, path: t.path })),
     tabCount: tabs.length,
+    workspace: workspace || '',
+    tool: tool || '',
     scrollTop: Number.isFinite(scrollTop) ? Math.max(0, Math.round(scrollTop)) : 0,
     capturedAt: at || new Date().toISOString(),
   }

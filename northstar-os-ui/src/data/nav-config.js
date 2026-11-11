@@ -10,6 +10,7 @@ const RAW_GROUPS = [
   ]},
   { id: 'create', label: 'Create', icon: 'brush', sections: [
     { id: 'design-studio', label: 'Design Studio', route: '/design-studio', roles: ['operator', 'platform_admin'] },
+    { id: 'product-pictures', label: 'Product Pictures', route: '/product-pictures', roles: ['operator', 'platform_admin'] },
   ]},
   { id: 'grow', label: 'Grow', icon: 'chart', sections: [
     { id: 'listingforge', label: 'ListingForge', route: '/listingforge', roles: ['operator', 'platform_admin'] },

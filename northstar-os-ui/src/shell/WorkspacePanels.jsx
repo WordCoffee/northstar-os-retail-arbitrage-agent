@@ -18,11 +18,13 @@
 import { lazy } from 'react'
 import { Route, Routes, UNSAFE_LocationContext } from 'react-router-dom'
 import { TAB_ROUTE_PATTERNS } from './tabRoutes.js'
+import WorkspaceFrame from '../workspaces/WorkspaceFrame.jsx'
 
 // Lazy so a tab strip with five open workspaces does not pay for five pages on
 // first paint. Same modules App.jsx routes to; nothing new is loaded.
 export const TAB_PANELS = {
   'design-studio': lazy(() => import('../pages/internal/DesignStudio.jsx')),
+  'product-pictures': lazy(() => import('../pages/internal/ProductPictures.jsx')),
   'product-finder': lazy(() => import('../pages/internal/ProductFinder.jsx')),
   'golden-goose': lazy(() => import('../pages/internal/GoldenGoose.jsx')),
   listings: lazy(() => import('../pages/internal/ListingGuardian.jsx')),
@@ -58,14 +60,19 @@ export default function WorkspacePanel({ tab }) {
   const patterns = TAB_ROUTE_PATTERNS[tab.id] || []
   return (
     <UNSAFE_LocationContext.Provider value={{ location, navigationType: 'POP' }}>
-      <Routes location={location}>
-        {patterns.map((pattern) => (
-          <Route key={pattern} path={pattern} element={<Panel />} />
-        ))}
-        {/* Safety net: a route variant App.jsx adds before this map is updated
-            still renders the workspace instead of a blank tab. */}
-        <Route path="*" element={<Panel />} />
-      </Routes>
+      {/* The workspace frame reads the spec for this service. A service with no
+          spec gets its page unwrapped — the frame is chrome for a workspace the
+          file can argue for, not for every room. */}
+      <WorkspaceFrame serviceId={tab.id}>
+        <Routes location={location}>
+          {patterns.map((pattern) => (
+            <Route key={pattern} path={pattern} element={<Panel />} />
+          ))}
+          {/* Safety net: a route variant App.jsx adds before this map is updated
+              still renders the workspace instead of a blank tab. */}
+          <Route path="*" element={<Panel />} />
+        </Routes>
+      </WorkspaceFrame>
     </UNSAFE_LocationContext.Provider>
   )
 }

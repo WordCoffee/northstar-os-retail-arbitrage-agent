@@ -22,6 +22,7 @@ const lazyNamed = (loader, name) => lazy(() => loader().then(m => ({ default: m[
 const CommandCenter = lazy(() => import('./pages/internal/CommandCenter.jsx'))
 const ProductFinder = lazy(() => import('./pages/internal/ProductFinder.jsx'))
 const DesignStudio = lazy(() => import('./pages/internal/DesignStudio.jsx'))
+const ProductPictures = lazy(() => import('./pages/internal/ProductPictures.jsx'))
 const WorkbenchShell = lazy(() => import('./shell/WorkbenchShell.jsx'))
 const GoldenGooseDesk = lazy(() => import('./pages/internal/GoldenGoose.jsx'))
 const ListingGuardian = lazy(() => import('./pages/internal/ListingGuardian.jsx'))
@@ -181,6 +182,7 @@ function GuardedRoutes({ role, authenticated, loaded }) {
         <Route path="/product-finder" element={<ProductFinder />} />
         <Route path="/product-finder/:id" element={<ProductFinder />} />
         <Route path="/design-studio/*" element={<DesignStudio />} />
+        <Route path="/product-pictures" element={<ProductPictures />} />
         <Route path="/workbench" element={<WorkspaceProvider><WorkbenchShell /></WorkspaceProvider>} />
         <Route path="/product-designer" element={<LegacyStudioRedirect section="3d-scene" />} />
         <Route path="/packify-design" element={<PackifyDesign />} />

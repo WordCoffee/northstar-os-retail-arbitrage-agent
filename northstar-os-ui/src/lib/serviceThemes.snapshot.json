@@ -319,6 +319,22 @@
       "--wb-shift-ms": "600ms"
     }
   },
+  "product-pictures": {
+    "theme": "studio",
+    "vars": {
+      "--wb-accent": "#e8b04b",
+      "--wb-accent-soft": "#3a2c12",
+      "--wb-accent-ink": "#1a1204",
+      "--wb-ink": "#f2f6fb",
+      "--wb-ink-dim": "#d7e1ec",
+      "--wb-glass": "rgba(22, 29, 39, 0.72)",
+      "--wb-glass-2": "rgba(29, 38, 51, 0.8)",
+      "--wb-line": "rgba(255, 255, 255, 0.12)",
+      "--wb-scene-worst": "#4a3418",
+      "--wb-solid": "#161d27",
+      "--wb-shift-ms": "600ms"
+    }
+  },
   "product-finder": {
     "theme": "goose",
     "vars": {
