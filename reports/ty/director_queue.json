@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-11T17:57:10+00:00",
+  "updated_at": "2026-11-11T18:04:02+00:00",
   "cycle": 3,
   "unit_in_flight": "",
   "unit_order": [
@@ -1123,6 +1123,29 @@
       "evidence": "",
       "created_at": "2026-11-11T17:43:51+00:00",
       "updated_at": "2026-11-11T17:43:51+00:00",
+      "rank": 0
+    },
+    {
+      "id": "fix-beta-complete",
+      "unit": "U",
+      "title": "four beta services declare Bojo tools with no handler (complete 0.0)",
+      "status": "merged",
+      "owner": "",
+      "write_paths": [
+        "Northstar_backend/chat_tools.py",
+        "Northstar_backend/bojo_tools_registry.py",
+        "ty/services.json"
+      ],
+      "branch": "ty/fix-beta-complete",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "onboarding_status, redeem_invite, submit_support_ticket, beta_cohort wired to real services (no stubs). complete 0.0 -> 100.0 on all four; beta 74.7->88.5, beta-signup 74.7->88.5, beta-ops 74.7->88.5, beta-support 63.2->77.0 (measured stays 0: /beta#support is not a UI route). Ranked gap 32.5 -> 4.0; 22 of 29 at bar. 21 new tests, 536 related pass; test_tool_offering 8 failed/10 passed at HEAD too (reg-03 tools, next unit). restore point rollback/pre-beta-complete; tag ty-dir-beta-complete",
+      "created_at": "2026-11-11T18:03:54+00:00",
+      "updated_at": "2026-11-11T18:04:02+00:00",
       "rank": 0
     },
     {

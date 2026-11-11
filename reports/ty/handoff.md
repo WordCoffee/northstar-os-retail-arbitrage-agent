@@ -49,6 +49,35 @@ no visible browser and Playwright headless on `127.0.0.1` only; no GPU work; no 
 verdict on the merged tree. If a lane leaves the tree red, its work waits — the tree on `main`
 stays green.
 
+## Position, 2026-11-11 cycle 32 — the four beta services stop declaring tools they do not have
+
+Unit report: `reports/ty/lane_beta_complete.md`. Tag `ty-dir-beta-complete`. Restore point
+`rollback/pre-beta-complete`, **made before the unit** — the first one created in the right
+order since the rule was enforced.
+
+| service | tool wired | complete | score |
+|---|---|---|---|
+| beta | `onboarding_status` → `SupportService.onboarding_status` + role-filtered `PlanUsageService.view` | 0.0 → **100.0** | 74.7 → **88.5** |
+| beta-signup | `redeem_invite` → `InviteService.signup` (the signup route's own non-revealing denial) | 0.0 → **100.0** | 74.7 → **88.5** |
+| beta-support | `submit_support_ticket` → `SupportService.submit_ticket`, handler re-reads the queued row | 0.0 → **100.0** | 63.2 → **77.0** |
+| beta-ops | `beta_cohort` → `TesterDashboard.list_orgs`, admin gate re-read from `memberships` | 0.0 → **100.0** | 74.7 → **88.5** |
+
+**Ranked gap 32.5 → 4.0. Portfolio: 22 of 29 at or above the bar (was 19).**
+
+**beta-support is the honest exception:** `complete` is 100.0 but `measured` is still 0.0
+because `/beta#support` is not a UI route — the service cannot be observed live, so it moved
+only 63.2 → 77.0 and is **not** called done.
+
+**Not a regression, verified at HEAD:** `test_tool_offering.py` reports 8 failed / 10 passed
+both before and after this unit — it fails for the seven reg-03 tools that are still unwired
+(`adpilot`'s `plan_campaign`, `product-finder`'s `scan_products` among them). That is the next
+queued unit, measured rather than assumed.
+
+**Next:** `fix-product-finder-wiring` (a tool with no action at all, and `towncrier` with
+none), `fix-seller-offer-caption` (the scorer that would move offerchisel / socialpulse /
+towncrier), `fix-golden-goose-scoring` (GG-002/GG-003), `fix-chat-composer-spec`,
+`retire-goldengoose-alias`, `fix-po006-stray-dashes`.
+
 ## Position, 2026-11-11 cycle 31 — verification said 3 of 7 failed, and all three are now closed
 
 Unit report: `reports/ty/verify_block7_20261111.md`. Tag `ty-dir-rollback-guard`. Independent
