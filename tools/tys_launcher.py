@@ -980,6 +980,38 @@ def _run_cycle(*, worker: Worker, dry_run: bool, cycle_budget: int) -> Dict[str,
             "commit": committed.get("commit") or ""}
 
 
+def _director_lease_holder() -> Optional[int]:
+    """The pid the director lease names, if a live process still holds it.
+
+    D-011's lesson, applied to this launcher: two writers on one tree cost a block of
+    work (a session's uncommitted files were wiped while it was mid-unit). The director
+    writes `state/director/director.pid`; while that pid is alive this launcher must not
+    start a worker, or the scheduled watchdog quietly restarts an autonomous lane on top
+    of an owner-driven session.
+    """
+    record_path = ROOT / "state" / "director" / "director.pid"
+    try:
+        record = json.loads(record_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    try:
+        holder = int(record.get("pid") or 0)
+    except (TypeError, ValueError):
+        return None
+    if not holder or holder == os.getpid():
+        return None
+    try:
+        import ctypes  # noqa: PLC0415 - Windows-only check, kept local
+
+        handle = ctypes.windll.kernel32.OpenProcess(0x00100000, False, holder)
+        if not handle:
+            return None
+        ctypes.windll.kernel32.CloseHandle(handle)
+        return holder
+    except Exception:  # noqa: BLE001 - unknown means "do not assume alive"
+        return None
+
+
 def main(argv: Optional[List[str]] = None) -> int:
     parser = argparse.ArgumentParser(description="Loop driver: next -> worker -> complete.")
     parser.add_argument("--max-cycles", type=int, default=100)
@@ -1007,6 +1039,20 @@ def main(argv: Optional[List[str]] = None) -> int:
 
     heartbeat(state="starting", dry_run=ns.dry_run, max_cycles=ns.max_cycles,
               max_hours=ns.max_hours)
+    # One writer per tree. A live director lease means an owner-driven session owns the
+    # worktree; starting here would have two agents editing (and reverting) the same files.
+    holder = _director_lease_holder()
+    if holder and not ns.dry_run:
+        _append(JOURNAL, {"event": "launcher_refused", "reason": "director_lease_held",
+                          "holder_pid": holder})
+        heartbeat(state="refused", reason="director_lease_held", holder_pid=holder,
+                  cycles=0)
+        print(json.dumps({"stopped": True, "reason": "director_lease_held",
+                          "holder_pid": holder,
+                          "hint": "a director session holds state/director/director.pid; "
+                                  "stop it or clear the file before starting this lane"},
+                         indent=2))
+        return 0
     lane = "deepseek" if ns.worker == "deepseek" else "ty"
     if not ns.dry_run:
         # Preflight the lane the worker will actually use. Before this, a deepseek
