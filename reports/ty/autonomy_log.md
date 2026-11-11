@@ -47,3 +47,4 @@ One line per cycle: workstream, role, cycle, score before/after, tag, tokens.
 | 2026-11-11 | reference-depth | director | 6 public references fetched (Openverse, licence+URL per row), 5 kept / 1 refused on visual review; ceramic_mug 2->3, food_jar 1->3 usable depth; acceptance NOT met (pet_product 1, toy 2, tool 2, small_appliance 1, electronics 1 after earlier rejections) -> reference-review-backfill; 5 tests | `ty-dir-reference-depth` | 0 |
 2026-11-11T10:22Z | director | cycle 21 | d025_matte_cutout | seller 100.0 (1 brief, real lane) | tag ty-dir-d025-fullgen-matte | tokens n/a (owner session)
 2026-11-11T10:55Z | director | cycle 24 | pack03_boxart + reference_backfill_blocked | boxart 2/2 at 100.0 | tag ty-dir-pack-03-boxart | tokens n/a (owner session)
+2026-11-11T11:02Z | director | cycle 25 | d027_design_motifs | boxart 2/2 at 100.0, motifs now per design | tag ty-dir-design-motifs | tokens n/a (owner session)

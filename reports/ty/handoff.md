@@ -24,6 +24,29 @@ interrupted through the server API (`POST /api/session/<id>/interrupt`) rather t
 killing processes. **No lane may navigate, click, type or walk pages until the owner lifts
 it.** Delete `state/vision/PAUSE` only on the owner's word — never to make a check pass.
 
+## Position, 2026-11-11 cycle 25 — every pack carries its own illustration
+
+Unit report: `reports/ty/d027_design_motifs.md`. Tag `ty-dir-design-motifs`.
+
+| # | job | result |
+|---|---|---|
+| 1 | `design-motifs` (D-027, rank 6) — `brand_art._spec` did `spec.setdefault("motif", "bean")`, and no design declared one, so every carton printed **three coffee beans**; a drill box and a kettle box had beans as their only illustration | **D-027 closed.** `package_art.draw_motif()` draws original line art — `bean` (unchanged), `tool`, `appliance`, `bottle`, `leaf` — and returns **False** for a name it cannot draw. `_spec` invents nothing; each design declares its own motif |
+
+**Measured: kettle box → a kettle outline, drill box → a drill outline, both 100.0, 2/2 pass
+— the same numbers as pack-03, which is the point.** The named-vs-none renders of the same
+panel differ by >200 px and every differing row sits between 50 % and 75 % of the panel
+height, so the motif is the only thing that moved.
+
+**The rule, stated so it is not re-litigated:** a pack that names no motif prints **none**. A
+loaner illustration is worse than a blank hero area, because nobody notices it is wrong.
+
+**Tests:** 9 in `test_design_motifs.py` (written first), 44 in the motif/boxart/apparel/package
+group.
+
+**Next, in rank order:** `block3-workspaces` → `block4-seller-tests` →
+`block5-production-hardening` → `block7-verification` → D-019. `reference-review-backfill`
+stays parked on the owner action (an Openverse key or the word on storefront sourcing).
+
 ## Position, 2026-11-11 cycle 24 — box art prints for a kettle and a drill, and reference depth is blocked on a source
 
 Unit reports: `reports/ty/pack03_boxart_forms.md` (tag `ty-dir-pack-03-boxart`) and
