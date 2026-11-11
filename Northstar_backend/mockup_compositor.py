@@ -668,6 +668,143 @@ def find_panel_quad(image: Union[Image.Image, str, Path], *,
     return [[float(p[0]), float(p[1])] for p in quad]
 
 
+def _filled_run(share, minimum: float, offset: int, stop: int):
+    """The longest contiguous run of indices whose `share` clears `minimum`.
+
+    Used to trim a contact shadow off a measured body: a shadow column covers a
+    small share of the component's height, the body's columns cover most of it.
+    Falls back to the whole span when no run clears the threshold, so a genuinely
+    soft-edged package is measured rather than refused.
+    """
+    import numpy as np
+
+    values = np.asarray(share, dtype=np.float32)
+    if values.size == 0:
+        return float(offset), float(stop)
+    inside = values >= float(minimum)
+    best_start, best_len, run_start = 0, 0, None
+    for index, flag in enumerate(inside):
+        if flag and run_start is None:
+            run_start = index
+        elif not flag and run_start is not None:
+            if index - run_start > best_len:
+                best_start, best_len = run_start, index - run_start
+            run_start = None
+    if run_start is not None and len(inside) - run_start > best_len:
+        best_start, best_len = run_start, len(inside) - run_start
+    if best_len <= 0:
+        return float(offset), float(stop)
+    return float(offset + best_start), float(offset + best_start + best_len)
+
+
+def _runs(flags):
+    """The contiguous True runs of a 1-D boolean array, as (start, stop) inclusive."""
+    runs = []
+    start = None
+    for index, flag in enumerate(flags):
+        if flag and start is None:
+            start = index
+        elif not flag and start is not None:
+            runs.append((start, index - 1))
+            start = None
+    if start is not None:
+        runs.append((start, len(flags) - 1))
+    return runs
+
+
+def find_cylinder_bands(image: Union[Image.Image, str, Path], *, count: int = 1,
+                        threshold: float = 16.0,
+                        min_width_frac: float = 0.12,
+                        min_height_frac: float = 0.22,
+                        ) -> List[List[float]]:
+    """Measure the body of each rigid cylinder in a studio plate, or refuse.
+
+    A pouch face is measured by chroma segmentation, which assumes the package is
+    saturated kraft against a pale sweep. A real FLUX plate of a beige cylinder on
+    a beige sweep defeats it: measured on the first real plate (2026-11-11) the
+    "face" was a 153 x 121 px patch of shadow, and a correctly-gated picture went
+    out with a 15 % label on a 70 % body.
+
+    So a cylinder is measured by **difference from its own background**: the
+    background colour is the median of the four corner patches, and a body is a
+    column band that differs from it for most of its height. A contact shadow is
+    different in colour but only for a thin slice of a column, so a column profile
+    separates body from shadow without merging two units into one blob. A band too
+    small to be a package is a refusal, never a smaller label.
+    """
+    import numpy as np
+
+    if isinstance(image, Image.Image):
+        img = image.convert("RGB")
+    else:
+        try:
+            img = Image.open(image).convert("RGB")
+        except Exception as exc:  # noqa: BLE001 - an unreadable plate is a refusal
+            raise ValueError(f"plate_face_not_found: cannot open plate ({exc})") from exc
+    try:
+        import cv2
+    except Exception as exc:  # noqa: BLE001 - without cv2 there is no component pass
+        raise ValueError(f"plate_face_not_found: cylinder measurement needs cv2 ({exc})") from exc
+
+    rgb = np.asarray(img).astype(np.float32)
+    h, w = rgb.shape[:2]
+    patch = max(8, min(w, h) // 40)
+    corners = np.concatenate([
+        rgb[:patch, :patch].reshape(-1, 3), rgb[:patch, -patch:].reshape(-1, 3),
+        rgb[-patch:, :patch].reshape(-1, 3), rgb[-patch:, -patch:].reshape(-1, 3)])
+    background = np.median(corners, axis=0)
+    diff = np.abs(rgb - background.reshape(1, 1, 3)).max(axis=2)
+    mask = (diff > float(threshold)).astype(np.uint8)
+    mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, np.ones((5, 5), np.uint8))
+    mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, np.ones((9, 9), np.uint8))
+
+    total = int(mask.sum())
+    if total < 0.02 * w * h:
+        raise ValueError("plate_face_not_found: the plate has no subject against its "
+                         "own background")
+
+    # A body is a column band that is masked for most of its height; a contact
+    # shadow is masked for only a thin slice of a column. So each body is found
+    # from the tallest column and grown outwards while the columns stay above a
+    # fraction of that peak (hysteresis), which does not need the body and the
+    # background to be far apart in colour at every pixel.
+    columns = mask.sum(axis=0).astype(np.float32)
+    bodies: List[List[float]] = []
+    working = columns.copy()
+    for _ in range(max(1, int(count))):
+        if working.max() <= 0:
+            break
+        peak = int(working.argmax())
+        threshold = max(0.35 * float(working[peak]), 0.02 * h)
+        left = peak
+        while left > 0 and columns[left - 1] >= threshold:
+            left -= 1
+        right = peak
+        while right < w - 1 and columns[right + 1] >= threshold:
+            right += 1
+        working[max(0, left - 8):min(w, right + 9)] = 0.0
+        if right - left < min_width_frac * w:
+            continue
+        band = mask[:, left:right + 1]
+        rows = band.sum(axis=1).astype(np.float32) / float(right - left + 1)
+        row_runs = [run for run in _runs(rows >= 0.35)
+                    if run[1] - run[0] >= min_height_frac * h]
+        if not row_runs:
+            continue
+        top, bottom = max(row_runs, key=lambda run: run[1] - run[0])
+        bodies.append([float(left), float(top), float(right + 1), float(bottom + 1)])
+    if not bodies:
+        raise ValueError(
+            "plate_face_not_found: no package-sized body in the plate "
+            f"(nothing at least {min_width_frac:.0%} of the width and "
+            f"{min_height_frac:.0%} of the height)")
+    bodies.sort(key=lambda body: body[0])
+    if len(bodies) < max(1, int(count)):
+        raise ValueError(f"units_not_found: measured {len(bodies)} of {int(count)} "
+                         "cylinder bodies")
+    return [[round(value, 2) for value in body] for body in bodies[:max(1, int(count))]]
+
+
 def find_label_band(image: Union[Image.Image, str, Path], *,
                     inset_x: float = 0.045, inset_top: float = 0.12,
                     inset_bottom: float = 0.09,

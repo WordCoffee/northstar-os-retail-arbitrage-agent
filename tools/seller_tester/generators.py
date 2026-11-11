@@ -184,26 +184,47 @@ class ProductPipelineGenerator:
 
             design = self._design(brief)
             record["design"] = design.get("id") or design.get("brand")
-            plate = self._plate(brief, (width, height))
-            payload = plate["bytes"]
-            record["plate"] = plate["plate"]
             record["form"] = brand_art.form_of(design)
 
-            def _plate_source(_brief_text, *, width, height, tier, seed):
-                return {"bytes": payload, "seed": seed, "model": "supplied-plate",
-                        "width": width, "height": height, "contains_text": False}
+            if self.renderer_name == "comfy":
+                # The app's own plate lane IS the render lane: FLUX 3 Klein through
+                # `_guarded_plate`, with the text-safe guard and the legibility
+                # gate. Handing the harness a "scene" and calling it a plate was
+                # refused by `_plate` for exactly this reason, so the comfy route
+                # does not inject a plate at all.
+                record["plate"] = {"source": "comfy-flux3",
+                                   "prompt": pp.plate_brief(self.face,
+                                                            brand_art.form_of(design))}
+                result = pp.build(
+                    design,
+                    out_dir=str(self.out_dir / brief_id),
+                    out_root=str(self.out_dir),
+                    faces=(self.face,),
+                    width=width,
+                    height=height,
+                    seed=self.seed,
+                    units=int(brief.get("units") or 1),
+                )
+            else:
+                plate = self._plate(brief, (width, height))
+                payload = plate["bytes"]
+                record["plate"] = plate["plate"]
 
-            result = pp.build(
-                design,
-                out_dir=str(self.out_dir / brief_id),
-                out_root=str(self.out_dir),
-                faces=(self.face,),
-                width=width,
-                height=height,
-                seed=self.seed,
-                units=int(brief.get("units") or 1),
-                generator=_plate_source,
-            )
+                def _plate_source(_brief_text, *, width, height, tier, seed):
+                    return {"bytes": payload, "seed": seed, "model": "supplied-plate",
+                            "width": width, "height": height, "contains_text": False}
+
+                result = pp.build(
+                    design,
+                    out_dir=str(self.out_dir / brief_id),
+                    out_root=str(self.out_dir),
+                    faces=(self.face,),
+                    width=width,
+                    height=height,
+                    seed=self.seed,
+                    units=int(brief.get("units") or 1),
+                    generator=_plate_source,
+                )
             record["build"] = {
                 "ok": result.get("ok"),
                 "form": (result.get("product") or {}).get("form"),

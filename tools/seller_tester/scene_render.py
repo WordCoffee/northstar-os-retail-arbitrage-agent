@@ -96,6 +96,11 @@ def lane_ready() -> Tuple[bool, str]:
         if not python.is_file() or not main.is_file():
             return False, f"ComfyUI runtime not found under {home}"
         if comfy_lane.reachable():
+            # Inside a lane the running instance IS the lane's own, freshly started
+            # with a cold cache; refusing it there made the real-plate pass
+            # unreachable from the very wrapper that owns the GPU.
+            if os.environ.get("COMFY_LANE_OWNED") == "1":
+                return True, f"lane owns the running instance ({home})"
             return False, ("ComfyUI is already running; a lane starts its own instance so it "
                            "can prove it stopped the one it used")
         return True, f"lane can start from {home}"

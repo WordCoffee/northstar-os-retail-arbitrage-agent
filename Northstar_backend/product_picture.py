@@ -72,19 +72,26 @@ BOX_PLATE_BRIEFS: Dict[str, str] = {
 
 #: The rigid-cylinder form. A jar, bottle, tube or canister is not a box and not
 #: a pouch: the plate must be the round body the wrap-around label belongs on.
+#: The plate is also a *measurement target*: a body the same colour as the sweep
+#: has no measurable silhouette (measured 2026-11-11: a beige body on a beige
+#: sweep left the right-hand edge undetectable), so the brief asks for contrast
+#: and for the whole package in frame.
 CYLINDER_PLATE_BRIEFS: Dict[str, str] = {
     "front": (
         "a photograph of one blank unprinted rigid cylindrical package standing "
-        "upright on a pale seamless studio sweep, its front face square to the "
-        "camera, a plain body with no lettering and no label, a gentle contact "
-        "shadow, soft diffused key light from the upper left, photoreal commercial "
-        "product photography, sharp focus on the body"),
+        "upright on a pale grey seamless studio sweep, the whole package in frame "
+        "with its silhouette clearly separated from the background, a plain matte "
+        "white body with no lettering and no label, a soft contact shadow, soft "
+        "diffused key light from the upper left, photoreal commercial product "
+        "photography, sharp focus on the body"),
     "back": (
         "a photograph of one blank unprinted rigid cylindrical package standing "
-        "upright on a pale seamless studio sweep, turned around so its back is "
-        "square to the camera, a plain body with no lettering and no label, a "
-        "gentle contact shadow, soft diffused key light from the upper left, "
-        "photoreal commercial product photography, sharp focus on the body"),
+        "upright on a pale grey seamless studio sweep, the whole package in frame "
+        "with its silhouette clearly separated from the background, turned around "
+        "so its back is square to the camera, a plain matte white body with no "
+        "lettering and no label, a soft contact shadow, soft diffused key light "
+        "from the upper left, photoreal commercial product photography, sharp "
+        "focus on the body"),
 }
 
 #: Print-area insets per form. The pouch insets skip the top weld and the base
@@ -193,7 +200,8 @@ def _guarded_plate(brief: str, *, width: int, height: int, tier: str,
 
 
 def _compose_cylinder(plate: Image.Image, design: Dict[str, Any], face: str,
-                      quads: Sequence, *, shading: float) -> Dict[str, Any]:
+                      insets: Dict[str, float], units: int,
+                      *, shading: float) -> Dict[str, Any]:
     """Warp a wrap-around label onto each measured cylinder body, then gate it.
 
     A cylinder has no four-corner face: the label wraps the visible half of the
@@ -204,27 +212,37 @@ def _compose_cylinder(plate: Image.Image, design: Dict[str, Any], face: str,
     area. A label that is taller than the body is refused by name rather than
     squeezed onto it.
 
+    The body itself is measured by difference from the plate's own background
+    (`find_cylinder_bands`), because chroma segmentation measured a patch of
+    shadow on the first real FLUX plate of a beige cylinder on a beige sweep.
+
     The panel is drawn at the band's own pixel size, so its copy lands at the
     resolution the picture actually has instead of being resampled twice.
     """
     composed_img = plate.convert("RGB")
     width_mm, height_mm = art.face_mm(design, face)
+    bodies = mc.find_cylinder_bands(plate, count=max(1, int(units)))
     bands: list = []
     panels: list = []
-    for measured in quads:
-        xs = [float(point[0]) for point in measured]
-        ys = [float(point[1]) for point in measured]
-        x0, x1 = min(xs), max(xs)
-        y0, y1 = min(ys), max(ys)
-        px_per_mm = (x1 - x0) / max(0.1, float(width_mm))
+    for body in bodies:
+        bx0, by0, bx1, by1 = body
+        body_w = bx1 - bx0
+        body_h = by1 - by0
+        # the printable area: below the shoulder/cap and above the base curve,
+        # and never to the very silhouette edge (the label wraps inside it)
+        px0 = bx0 + body_w * float(insets.get("inset_x", 0.03))
+        px1 = bx1 - body_w * float(insets.get("inset_x", 0.03))
+        py0 = by0 + body_h * float(insets.get("inset_top", 0.26))
+        py1 = by1 - body_h * float(insets.get("inset_bottom", 0.10))
+        px_per_mm = (px1 - px0) / max(0.1, float(width_mm))
         label_h = float(height_mm) * px_per_mm
-        if label_h > (y1 - y0):
+        if label_h > (py1 - py0):
             raise ValueError(
                 f"label_too_tall_for_body: the declared label is {height_mm:.0f} mm "
                 f"({label_h:.0f} px at this scale) and the printable body is "
-                f"{y1 - y0:.0f} px tall")
-        centre = (y0 + y1) / 2.0
-        band = [x0, centre - label_h / 2.0, x1, centre + label_h / 2.0]
+                f"{py1 - py0:.0f} px tall")
+        centre = (py0 + py1) / 2.0
+        band = [px0, centre - label_h / 2.0, px1, centre + label_h / 2.0]
         bands.append(band)
         size = (max(64, int(band[2] - band[0])), max(64, int(band[3] - band[1])))
         panel = (art.front_panel(design, size=size) if face == "front"
@@ -275,6 +293,10 @@ def compose_face(plate: Image.Image, design: Dict[str, Any], face: str, *,
     """
     form = form or art.form_of(design)
     insets = FORM_INSETS.get(form, FORM_INSETS[art.POUCH])
+    if form == art.CYLINDER:
+        # A cylinder measures its own body (difference from the plate's own
+        # background) and warps round the visible arc; there is no quad to take.
+        return _compose_cylinder(plate, design, face, insets, units, shading=shading)
     if quad is not None:
         quads = [quad]
     else:
@@ -283,9 +305,6 @@ def compose_face(plate: Image.Image, design: Dict[str, Any], face: str, *,
         raise ValueError(
             f"units_not_found: measured {len(quads)} of {int(units)} requested")
     panel = (art.front_panel(design) if face == "front" else art.back_panel(design))
-
-    if form == art.CYLINDER:
-        return _compose_cylinder(plate, design, face, quads, shading=shading)
 
     maps = None
     composed_img = plate.convert("RGB")
