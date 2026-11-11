@@ -227,7 +227,8 @@ def _cmd_product(args: argparse.Namespace) -> int:
             return 2
     generator = ProductPipelineGenerator(
         renderer=renderer_from_name(args.renderer), renderer_name=args.renderer,
-        out_dir=args.out_dir, repo_root=Path(args.root), seed=args.seed)
+        out_dir=args.out_dir, repo_root=Path(args.root), seed=args.seed,
+        skip_unavailable=bool(getattr(args, "skip_unavailable", False)))
     summary = run_pass(generator=generator, briefs=payload.get("briefs", []),
                        limit=args.limit, mode=args.mode,
                        judge=local_judge if args.judge else None,
@@ -236,6 +237,7 @@ def _cmd_product(args: argparse.Namespace) -> int:
                        escalation_path=None)
     summary["pipeline"] = "app"          # product_picture.build, not the harness composite
     summary["plate_source"] = args.renderer
+    summary["refused"] = list(getattr(generator, "refusals", []) or [])
     out = Path(args.summary_out) if args.summary_out else DEFAULT_SUMMARY_PATH
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
@@ -253,7 +255,12 @@ def _cmd_product(args: argparse.Namespace) -> int:
     head["by_mode"] = {name: {"scored": row["scored"], "passed": row["passed"],
                               "mean_score": row["mean_score"]}
                        for name, row in summary["by_mode"].items()}
+    head["refused"] = len(summary.get("refused") or [])
     print(json.dumps(head, ensure_ascii=False))
+    for refusal in summary.get("refused") or []:
+        print(json.dumps({"refused_brief": refusal["brief_id"],
+                          "category": refusal["category"],
+                          "reason": refusal["reason"][:200]}, ensure_ascii=False))
     print(f"summary: {out}")
     return 0
 
@@ -332,6 +339,8 @@ def build_parser() -> argparse.ArgumentParser:
                     help="restrict the pass to one input mode (default: all three)")
     pr.add_argument("--renderer", default="comfy", choices=["comfy", "drawn"],
                     help="comfy renders a real plate; drawn is the labelled offline stand-in")
+    pr.add_argument("--skip-unavailable", action="store_true",
+                    help="record a refused brief and keep going (never silent: printed at the end)")
     pr.add_argument("--judge", action="store_true",
                     help="enable the LOCAL vision judge (off by default)")
     pr.add_argument("--seed", type=int, default=None)

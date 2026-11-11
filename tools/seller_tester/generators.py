@@ -70,12 +70,18 @@ class ProductPipelineGenerator:
                  out_dir: Optional[str | Path] = None,
                  repo_root: str | Path = REPO_ROOT,
                  seed: Optional[int] = None,
-                 face: str = "front") -> None:
+                 face: str = "front",
+                 skip_unavailable: bool = False) -> None:
         self.repo_root = Path(repo_root)
         self.out_dir = Path(out_dir) if out_dir is not None else (
             self.repo_root / "renders" / "seller_product")
         self.seed = seed
         self.face = face
+        #: A catalog pass over 56 briefs must not die on the first brief the app
+        #: cannot serve. With this set, `pair` records the refusal and continues;
+        #: `refusals` is the evidence, and the CLI prints it. Never silent.
+        self.skip_unavailable = bool(skip_unavailable)
+        self.refusals: List[Dict[str, Any]] = []
         if renderer is not None:
             self.renderer = renderer
             if type(renderer).__name__ == "ComfySceneRenderer":
@@ -109,7 +115,15 @@ class ProductPipelineGenerator:
         count = len(briefs) if limit is None else min(len(briefs), max(0, int(limit)))
         pairs: List[Tuple[Dict[str, Any], Path]] = []
         for brief in briefs[:count]:
-            pairs.append((brief, self.generate(brief)))
+            try:
+                pairs.append((brief, self.generate(brief)))
+            except GeneratorUnavailable as exc:
+                if not self.skip_unavailable:
+                    raise
+                self.refusals.append({"brief_id": brief.get("id"),
+                                      "product_line": brief.get("product_line"),
+                                      "category": brief.get("category"),
+                                      "reason": str(exc)})
         return pairs
 
     # ---------------------------------------------------------------- work

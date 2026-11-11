@@ -70,7 +70,17 @@
       ],
       "source_mode": "prompt_only",
       "fidelity": "exact",
-      "product_in_frame": true
+      "product_in_frame": true,
+      "label_mode": "warp",
+      "product_line": "lions-mane",
+      "label": {
+        "brand": "Mogra Organics",
+        "product": "Organic Lion's Mane Mushroom Powder",
+        "weight": "6 oz (170 g)",
+        "lines": []
+      },
+      "body_prompt": "Product photograph of a plain matte stand-up pouch with a blank front panel, no text, no lettering, no logo, on a seamless white studio background, product centred, no props. Photorealistic, unlabelled packaging.",
+      "note": " | sel-08: wired to the app product_picture path (label_mode warp, product_line, body_prompt) so it can be produced and scored through the shipped packaging lane."
     },
     {
       "id": "ST-002",
@@ -397,7 +407,19 @@
       ],
       "source_mode": "prompt_only",
       "fidelity": "exact",
-      "product_in_frame": true
+      "product_in_frame": true,
+      "label_mode": "warp",
+      "product_line": "word-coffee",
+      "label": {
+        "brand": "Word Coffee",
+        "product": "For Mom",
+        "weight": "120 g (4.2 oz)",
+        "lines": [
+          "Empowering Moms, One Message at a Time"
+        ]
+      },
+      "body_prompt": "Product photograph of a plain slim folding gift box with a blank front panel, no text, no lettering, no logo, on a plain neutral studio table. Photorealistic, unlabelled packaging.",
+      "note": " | sel-08: wired to the app product_picture path (label_mode warp, product_line, body_prompt) so it can be produced and scored through the shipped packaging lane."
     },
     {
       "id": "ST-009",
@@ -725,7 +747,19 @@
       ],
       "source_mode": "prompt_only",
       "fidelity": "exact",
-      "product_in_frame": true
+      "product_in_frame": true,
+      "label_mode": "warp",
+      "product_line": "word-coffee",
+      "label": {
+        "brand": "Word Coffee",
+        "product": "For Mom",
+        "weight": "120 g (4.2 oz)",
+        "lines": [
+          "Empowering Moms, One Message at a Time"
+        ]
+      },
+      "body_prompt": "Product photograph of a plain slim folding gift box with a blank front panel, no text, no lettering, no logo, on a soft beige studio background. Photorealistic, unlabelled packaging.",
+      "note": " | sel-08: wired to the app product_picture path (label_mode warp, product_line, body_prompt) so it can be produced and scored through the shipped packaging lane."
     },
     {
       "id": "ST-016",
@@ -773,7 +807,17 @@
       ],
       "source_mode": "prompt_only",
       "fidelity": "exact",
-      "product_in_frame": true
+      "product_in_frame": true,
+      "label_mode": "warp",
+      "product_line": "lions-mane",
+      "label": {
+        "brand": "Mogra Organics",
+        "product": "Organic Lion's Mane Mushroom Powder",
+        "weight": "6 oz (170 g)",
+        "lines": []
+      },
+      "body_prompt": "Product photograph of a plain matte stand-up pouch with a blank front panel, no text, no lettering, no logo, on a plain neutral studio table. Photorealistic, unlabelled packaging.",
+      "note": " | sel-08: wired to the app product_picture path (label_mode warp, product_line, body_prompt) so it can be produced and scored through the shipped packaging lane."
     },
     {
       "id": "ST-017",
@@ -1053,7 +1097,19 @@
       ],
       "source_mode": "prompt_only",
       "fidelity": "exact",
-      "product_in_frame": true
+      "product_in_frame": true,
+      "label_mode": "warp",
+      "product_line": "word-coffee",
+      "label": {
+        "brand": "Word Coffee",
+        "product": "For Mom",
+        "weight": "120 g (4.2 oz)",
+        "lines": [
+          "Empowering Moms, One Message at a Time"
+        ]
+      },
+      "body_prompt": "Product photograph of a plain slim folding gift box with a blank front panel, no text, no lettering, no logo, on a dusk forest clearing backdrop. Photorealistic, unlabelled packaging.",
+      "note": " | sel-08: wired to the app product_picture path (label_mode warp, product_line, body_prompt) so it can be produced and scored through the shipped packaging lane."
     },
     {
       "id": "ST-023",
@@ -1101,7 +1157,17 @@
       ],
       "source_mode": "prompt_only",
       "fidelity": "exact",
-      "product_in_frame": true
+      "product_in_frame": true,
+      "label_mode": "warp",
+      "product_line": "lions-mane",
+      "label": {
+        "brand": "Mogra Organics",
+        "product": "Organic Lion's Mane Mushroom Powder",
+        "weight": "6 oz (170 g)",
+        "lines": []
+      },
+      "body_prompt": "Product photograph of a plain matte stand-up pouch with a blank front panel, no text, no lettering, no logo, on a soft beige studio background. Photorealistic, unlabelled packaging.",
+      "note": " | sel-08: wired to the app product_picture path (label_mode warp, product_line, body_prompt) so it can be produced and scored through the shipped packaging lane."
     },
     {
       "id": "ST-024",
@@ -1384,7 +1450,19 @@
       ],
       "source_mode": "prompt_only",
       "fidelity": "exact",
-      "product_in_frame": true
+      "product_in_frame": true,
+      "label_mode": "warp",
+      "product_line": "word-coffee",
+      "label": {
+        "brand": "Word Coffee",
+        "product": "For Mom",
+        "weight": "120 g (4.2 oz)",
+        "lines": [
+          "Empowering Moms, One Message at a Time"
+        ]
+      },
+      "body_prompt": "Product photograph of a plain slim folding gift box with a blank front panel, no text, no lettering, no logo, arranged as a bundle on a warm oak table top. Photorealistic, unlabelled packaging.",
+      "note": " | sel-08: wired to the app product_picture path (label_mode warp, product_line, body_prompt) so it can be produced and scored through the shipped packaging lane."
     },
     {
       "id": "ST-030",
@@ -1429,7 +1507,17 @@
       ],
       "source_mode": "prompt_only",
       "fidelity": "exact",
-      "product_in_frame": true
+      "product_in_frame": true,
+      "label_mode": "warp",
+      "product_line": "lions-mane",
+      "label": {
+        "brand": "Mogra Organics",
+        "product": "Organic Lion's Mane Mushroom Powder",
+        "weight": "6 oz (170 g)",
+        "lines": []
+      },
+      "body_prompt": "Product photograph of a plain matte stand-up pouch with a blank front panel, no text, no lettering, no logo, on a dusk forest clearing backdrop. Photorealistic, unlabelled packaging.",
+      "note": " | sel-08: wired to the app product_picture path (label_mode warp, product_line, body_prompt) so it can be produced and scored through the shipped packaging lane."
     },
     {
       "id": "ST-031",
@@ -2962,9 +3050,9 @@
         }
       ],
       "text_sources": {
-        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
         "1500MG PER SERVING": "owner-stated 2,000 mg per 2 g serving (needs_you.md A3, DRAFT)",
-        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
         "SERVINGS PER CONTAINER 30": "owner-stated container count (needs_you.md A3, DRAFT)"
       }
     },
@@ -3053,9 +3141,9 @@
         }
       ],
       "text_sources": {
-        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
         "1500MG PER SERVING": "owner-stated 2,000 mg per 2 g serving (needs_you.md A3, DRAFT)",
-        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
         "SERVINGS PER CONTAINER 30": "owner-stated container count (needs_you.md A3, DRAFT)"
       }
     },
@@ -3145,9 +3233,9 @@
         }
       ],
       "text_sources": {
-        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
         "1500MG PER SERVING": "owner-stated 2,000 mg per 2 g serving (needs_you.md A3, DRAFT)",
-        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
         "SERVINGS PER CONTAINER 30": "owner-stated container count (needs_you.md A3, DRAFT)"
       }
     },
@@ -3234,9 +3322,9 @@
         }
       ],
       "text_sources": {
-        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
         "1500MG PER SERVING": "owner-stated 2,000 mg per 2 g serving (needs_you.md A3, DRAFT)",
-        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
         "SERVINGS PER CONTAINER 30": "owner-stated container count (needs_you.md A3, DRAFT)"
       }
     },
@@ -3320,9 +3408,9 @@
         }
       },
       "text_sources": {
-        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
         "1500MG PER SERVING": "owner-stated 2,000 mg per 2 g serving (needs_you.md A3, DRAFT)",
-        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
         "SERVINGS PER CONTAINER 30": "owner-stated container count (needs_you.md A3, DRAFT)"
       }
     },
@@ -3435,9 +3523,9 @@
         }
       ],
       "text_sources": {
-        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
         "1500MG PER SERVING": "owner-stated 2,000 mg per 2 g serving (needs_you.md A3, DRAFT)",
-        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
         "SERVINGS PER CONTAINER 30": "owner-stated container count (needs_you.md A3, DRAFT)"
       }
     },
@@ -3924,9 +4012,9 @@
       "product_line": "lions-mane",
       "note": "A+ ingredient_grid for lions mane, built on the same module shape as the existing family so the module type is comparable.",
       "text_sources": {
-        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
         "1500MG PER SERVING": "owner-stated 2,000 mg per 2 g serving (needs_you.md A3, DRAFT)",
-        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
         "SERVINGS PER CONTAINER 30": "owner-stated container count (needs_you.md A3, DRAFT)"
       }
     },
@@ -4011,9 +4099,9 @@
       },
       "product_line": "lions-mane",
       "text_sources": {
-        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
         "1500MG PER SERVING": "owner-stated 2,000 mg per 2 g serving (needs_you.md A3, DRAFT)",
-        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
         "SERVINGS PER CONTAINER 30": "owner-stated container count (needs_you.md A3, DRAFT)"
       }
     },
@@ -4104,9 +4192,9 @@
       "product_line": "lions-mane",
       "note": "A+ comparison_table for lions mane, built on the same module shape as the existing family so the module type is comparable.",
       "text_sources": {
-        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
         "1500MG PER SERVING": "owner-stated 2,000 mg per 2 g serving (needs_you.md A3, DRAFT)",
-        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
         "SERVINGS PER CONTAINER 30": "owner-stated container count (needs_you.md A3, DRAFT)"
       }
     },
@@ -4222,9 +4310,9 @@
       "product_line": "lions-mane",
       "note": "A+ hero_band for lions mane, built on the same module shape as the existing family so the module type is comparable.",
       "text_sources": {
-        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
         "1500MG PER SERVING": "owner-stated 2,000 mg per 2 g serving (needs_you.md A3, DRAFT)",
-        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
         "SERVINGS PER CONTAINER 30": "owner-stated container count (needs_you.md A3, DRAFT)"
       }
     }

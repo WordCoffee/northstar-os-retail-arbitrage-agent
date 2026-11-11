@@ -42,6 +42,8 @@ COMPOSITE = ROOT / "state" / "seller" / "composite_proof.json"
 #: The pass that renders through the app's own `product_picture.build` (D-011).
 PRODUCT = ROOT / "state" / "seller" / "product_proof.json"
 PRODUCT_JUDGED = ROOT / "state" / "seller" / "product_proof_judged.json"
+#: The app-path pass over the full seller catalog (`ty/seller_briefs.json`).
+PRODUCT_CATALOG = ROOT / "state" / "seller" / "product_catalog.json"
 MIN_SCORED = 5
 
 POPULATIONS = ("generated", "replay")
@@ -131,12 +133,40 @@ def _sources(summary: Any = None, composite: Any = None,
 
 
 def _app_pass() -> Optional[Dict[str, Any]]:
-    """The product-picture pass on disk, preferring the judged one when present."""
-    for path in (PRODUCT_JUDGED, PRODUCT):
+    """Every app-path pass on disk, merged by brief: the seller sample is all of it.
+
+    The judged held-out pass wins for a brief it covers (it is the stricter one),
+    then the mechanical held-out pass, then the catalog pass. A brief appears once.
+    """
+    merged: Dict[str, Dict[str, Any]] = {}
+    sources: List[str] = []
+    judged = False
+    plates: set = set()
+    at = ""
+    for path in (PRODUCT_JUDGED, PRODUCT, PRODUCT_CATALOG):
         data = _read(path)
-        if isinstance(data, dict) and data.get("results"):
-            return data
-    return None
+        if not isinstance(data, dict) or not data.get("results"):
+            continue
+        sources.append(path.name)
+        judged = judged or bool(data.get("judge_enabled"))
+        if data.get("plate_source"):
+            plates.add(str(data["plate_source"]))
+        at = at or str(data.get("generated_at") or "")
+        for row in data["results"]:
+            brief_id = str(row.get("brief_id") or "")
+            if brief_id and brief_id not in merged:
+                merged[brief_id] = row
+    if not merged:
+        return None
+    return {
+        "generator": "product_pipeline",
+        "pipeline": "app",
+        "generated_at": at,
+        "judge_enabled": judged,
+        "plate_source": "+".join(sorted(plates)) or None,
+        "sources": sources,
+        "results": list(merged.values()),
+    }
 
 
 def _rows(data: Dict[str, Any]) -> List[Dict[str, Any]]:

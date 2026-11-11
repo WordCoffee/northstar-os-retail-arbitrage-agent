@@ -1,6 +1,6 @@
 # Target spec — what production-ready means, per service
 
-Derived 2026-11-11T04:50:22+00:00 from `state/director/services.json`, 7465 measured test ids and 1 readiness findings. **Scores are measured, never asserted**: a dimension with no artefact scores 0 and says why.
+Derived 2026-11-11T05:04:46+00:00 from `state/director/services.json`, 7465 measured test ids and 1 readiness findings. **Scores are measured, never asserted**: a dimension with no artefact scores 0 and says why.
 
 Bar: **85 on every dimension** (not an average). A service is at the bar only when its weakest dimension clears it. Impact weight is what a paying seller needs first; gap = impact x (bar - score).
 
@@ -31,7 +31,7 @@ Bar: **85 on every dimension** (not an average). A service is at the bar only wh
 | Operations Hub (`foundation`) | 86.2 | complete | no | 0.0 | 0.7 |
 | Jobs & Schedules (`jobs`) | 86.2 | complete | no | 0.0 | 0.4 |
 | Keywords & SEO (`keywords`) | 86.2 | complete | no | 0.0 | 0.6 |
-| Design Studio (`design-studio`) | 89.8 | correct | no | 0.0 | 0.95 |
+| Design Studio (`design-studio`) | 89.7 | correct | no | 0.0 | 0.95 |
 | Keyword Tracker (`keyword-tracker`) | 100.0 | works | yes | 0.0 | 0.6 |
 | Competitor Monitor (`competitor-monitor`) | 88.5 | contract | no | 0.0 | 0.5 |
 | Profitability (`profitability`) | 100.0 | works | yes | 0.0 | 0.75 |
@@ -579,13 +579,13 @@ Seller scenarios:
 product pictures in any seller situation, and A+ content, from a prompt, stored references, or uploads - Canva-grade to use.
 
 - route `/design-studio`, group Create, kind studio
-- **score 89.8 / bar 85** (impact 0.95, gap 0.0)
+- **score 89.7 / bar 85** (impact 0.95, gap 0.0)
 
 | dimension | score | weight | evidence |
 |---|---|---|---|
 | works | 100.0 | 0.23 | 166 test id(s) prove it |
 | correct | 60.0 | 0.25 | 166 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
-| seller | 98.3 | 0.13 | 12 Seller-Tester outputs (generated/composite), mean 98.3, 12 passed; 40 replayed artefact(s) excluded as context (mean 22.1) |
+| seller | 98.0 | 0.13 | 20 Seller-Tester outputs (generated/composite), mean 98.0, 20 passed; 40 replayed artefact(s) excluded as context (mean 22.1) |
 | complete | 100.0 | 0.12 | 3/3 declared Bojo tools wired: build_dieline, generate_image, list_templates |
 | usable | 100.0 | 0.07 | no readiness finding names this service |
 | measured | 100.0 | 0.1 | route /design-studio -> northstar-os-ui\src\pages\internal\DesignStudio.jsx; app p95 3.4 ms |
