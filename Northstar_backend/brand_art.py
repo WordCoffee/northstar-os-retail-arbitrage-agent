@@ -54,6 +54,7 @@ PLATE_KINDS: Dict[str, str] = {
 #: exactly this object, and until now no renderer could draw it.
 WORD_COFFEE: Dict[str, Any] = {
     "id": "word-coffee",
+    "motif": "bean",
     "brand": "WORD COFFEE",
     "product": "FOR MOM",
     "form": GIFT_BOX,
@@ -94,6 +95,7 @@ WORD_COFFEE: Dict[str, Any] = {
 #: the panel across the 180-degree arc), not a flat carton face.
 WORD_COFFEE_CANISTER: Dict[str, Any] = {
     "id": "word-coffee-canister",
+    "motif": "bean",
     "plate_subject": "cylindrical coffee canister with a screw lid",
     "brand": "WORD COFFEE",
     "product": "GROUND COFFEE",
@@ -132,6 +134,7 @@ WORD_COFFEE_CANISTER: Dict[str, Any] = {
 #: A printed ceramic mug on the Word Coffee brand: the wrap label is the print.
 WORD_COFFEE_MUG: Dict[str, Any] = {
     "id": "word-coffee-mug",
+    "motif": "bean",
     "plate_subject": "ceramic mug with a handle",
     "brand": "WORD COFFEE",
     "product": "CERAMIC MUG",
@@ -167,6 +170,7 @@ WORD_COFFEE_MUG: Dict[str, Any] = {
 #: the back is driven by `label_sections` rather than by coffee-specific headings.
 HARBOR_BODY_OIL: Dict[str, Any] = {
     "id": "harbor-body-oil",
+    "motif": "bottle",
     "plate_subject": "slim amber glass bottle with a pump cap",
     "brand": "HARBOR SAGE",
     "product": "BODY OIL",
@@ -204,6 +208,7 @@ HARBOR_BODY_OIL: Dict[str, Any] = {
 #: where an invented claim would be worst.
 PINE_PAWS_JOINT: Dict[str, Any] = {
     "id": "pine-paws-joint",
+    "motif": "leaf",
     "plate_subject": "wide plastic supplement tub with a screw lid",
     "brand": "PINE PAWS",
     "product": "JOINT CHEWS",
@@ -242,6 +247,7 @@ PINE_PAWS_JOINT: Dict[str, Any] = {
 #: scaled from the garment's own measurement instead of being stretched to fit.
 MOGRA_TEE: Dict[str, Any] = {
     "id": "mogra-tee",
+    "motif": "leaf",
     "plate_subject": "heavyweight cotton t-shirt laid flat",
     "brand": "MOGRA ORGANICS",
     "product": "LION'S MANE",
@@ -281,6 +287,7 @@ MOGRA_TEE: Dict[str, Any] = {
 #: every panel says so, exactly like the apparel teardown.
 T2_KETTLE_BOX: Dict[str, Any] = {
     "id": "t2-kettle-box",
+    "motif": "appliance",
     "plate_subject": "printed folding carton for a small kitchen appliance",
     "brand": "T2 HOME",
     "product": "1.7 L STAINLESS KETTLE",
@@ -317,6 +324,7 @@ T2_KETTLE_BOX: Dict[str, Any] = {
 
 T2_DRILL_BOX: Dict[str, Any] = {
     "id": "t2-drill-box",
+    "motif": "tool",
     "plate_subject": "printed folding carton for a cordless hand tool",
     "brand": "T2 WORKSHOP",
     "product": "18 V CORDLESS DRILL",
@@ -473,7 +481,8 @@ def _spec(design: Dict[str, Any]) -> Dict[str, Any]:
     spec = dict(design)
     spec.setdefault("theme", "blush")
     spec.setdefault("weight", design.get("net_weight_line") or design.get("net_weight"))
-    spec.setdefault("motif", "bean")
+    # No default motif (D-027): a design that does not name its own illustration gets
+    # none. The old default was the coffee bean, so a drill carton carried three beans.
     return spec
 
 

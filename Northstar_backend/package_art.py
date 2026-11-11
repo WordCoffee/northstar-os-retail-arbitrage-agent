@@ -309,6 +309,101 @@ def _bean(d: ImageDraw.ImageDraw, cx_mm: float, cy_mm: float, w_mm: float,
     d.line(pts, fill=tuple(color), width=w)
 
 
+#: Drawn motifs, one per kind of pack. All original geometry, line art only, drawn in the
+#: theme's accent so a pack never borrows another product's illustration (D-027).
+MOTIFS = ("bean", "tool", "appliance", "bottle", "leaf")
+
+
+def _motif_tool(d, cx, cy, w, h, color, lw) -> None:
+    """A cordless drill outline: body, chuck, bit — side profile, pointing right."""
+    left, right = cx - w / 2, cx + w / 2
+    top, bottom = cy - h / 2, cy + h / 2
+    body_right = right - w * 0.34
+    d.rounded_rectangle([pd.P(left), pd.P(cy - h * 0.20), pd.P(body_right), pd.P(cy + h * 0.16)],
+                        radius=int(pd.P(h * 0.08)), outline=tuple(color), width=lw)
+    # grip, angled down from the body's rear third
+    gx = pd.P(left + w * 0.20)
+    d.polygon([(gx, pd.P(cy + h * 0.12)), (pd.P(left + w * 0.44), pd.P(cy + h * 0.12)),
+               (pd.P(left + w * 0.40), pd.P(bottom)), (pd.P(left + w * 0.16), pd.P(bottom))],
+              outline=tuple(color), width=lw)
+    # chuck and bit
+    d.rectangle([pd.P(body_right), pd.P(cy - h * 0.10), pd.P(body_right + w * 0.09),
+                 pd.P(cy + h * 0.06)], outline=tuple(color), width=lw)
+    d.line([(pd.P(body_right + w * 0.09), pd.P(cy - h * 0.02)),
+            (pd.P(right), pd.P(cy - h * 0.02))], fill=tuple(color), width=lw)
+
+
+def _motif_appliance(d, cx, cy, w, h, color, lw) -> None:
+    """A kettle outline: body, lid, spout, handle."""
+    left, right = cx - w * 0.36, cx + w * 0.30
+    top, bottom = cy - h * 0.34, cy + h * 0.34
+    d.rounded_rectangle([pd.P(left), pd.P(top), pd.P(right), pd.P(bottom)],
+                        radius=int(pd.P(w * 0.10)), outline=tuple(color), width=lw)
+    d.line([(pd.P(left + w * 0.12), pd.P(top)), (pd.P(right - w * 0.12), pd.P(top))],
+           fill=tuple(color), width=lw)
+    # spout, out to the right and up
+    d.line([(pd.P(right - w * 0.02), pd.P(cy + h * 0.14)),
+            (pd.P(right + w * 0.14), pd.P(cy - h * 0.06)),
+            (pd.P(right + w * 0.22), pd.P(cy - h * 0.14))],
+           fill=tuple(color), width=lw, joint="curve")
+    # handle, on the left
+    d.arc([pd.P(left - w * 0.16), pd.P(cy - h * 0.18), pd.P(left + w * 0.06),
+           pd.P(cy + h * 0.22)], start=90, end=270, fill=tuple(color), width=lw)
+
+
+def _motif_bottle(d, cx, cy, w, h, color, lw) -> None:
+    """A bottle outline: shoulders, neck, cap."""
+    body_l, body_r = cx - w * 0.26, cx + w * 0.26
+    neck_l, neck_r = cx - w * 0.10, cx + w * 0.10
+    top, bottom = cy - h / 2, cy + h / 2
+    shoulder = top + h * 0.30
+    d.line([(pd.P(body_l), pd.P(bottom - h * 0.04)), (pd.P(body_l), pd.P(shoulder)),
+            (pd.P(neck_l), pd.P(top + h * 0.12)), (pd.P(neck_l), pd.P(top + h * 0.04))],
+           fill=tuple(color), width=lw, joint="curve")
+    d.line([(pd.P(body_r), pd.P(bottom - h * 0.04)), (pd.P(body_r), pd.P(shoulder)),
+            (pd.P(neck_r), pd.P(top + h * 0.12)), (pd.P(neck_r), pd.P(top + h * 0.04))],
+           fill=tuple(color), width=lw, joint="curve")
+    d.line([(pd.P(neck_l), pd.P(top + h * 0.04)), (pd.P(neck_r), pd.P(top + h * 0.04))],
+           fill=tuple(color), width=lw)
+    d.line([(pd.P(body_l), pd.P(bottom - h * 0.04)), (pd.P(body_r), pd.P(bottom - h * 0.04))],
+           fill=tuple(color), width=lw)
+
+
+def _motif_leaf(d, cx, cy, w, h, color, lw) -> None:
+    """A leaf sprig: one pointed leaf and a midrib."""
+    pts = [(pd.P(cx), pd.P(cy - h / 2)), (pd.P(cx + w * 0.26), pd.P(cy)),
+           (pd.P(cx), pd.P(cy + h / 2)), (pd.P(cx - w * 0.26), pd.P(cy))]
+    d.polygon(pts, outline=tuple(color), width=lw)
+    d.line([(pd.P(cx), pd.P(cy - h * 0.44)), (pd.P(cx), pd.P(cy + h * 0.44))],
+           fill=tuple(color), width=lw)
+
+
+_SHAPES = {"bean": None, "tool": _motif_tool, "appliance": _motif_appliance,
+           "bottle": _motif_bottle, "leaf": _motif_leaf}
+
+
+def draw_motif(d: ImageDraw.ImageDraw, name: str, cx_mm: float, cy_mm: float,
+               w_mm: float, h_mm: float, color, width_mm: float = 0.4) -> bool:
+    """Draw the named motif centred at (cx, cy). False when the name is unknown.
+
+    A pack that names a motif this module cannot draw gets **nothing** — it never gets
+    the coffee bean as a loaner, which is how a drill carton ended up with three beans.
+    """
+    lw = max(2, pd.P(width_mm))
+    if name == "bean":
+        span = w_mm
+        for i in (-1, 0, 1):
+            _bean(d, cx_mm + i * span / 2.4, cy_mm, w_mm=max(7.0, w_mm * 0.26),
+                  h_mm=h_mm, color=color, width_mm=width_mm)
+        return True
+    shape = _SHAPES.get(name)
+    if shape is None:
+        return False
+    shape(d, cx_mm, cy_mm, w_mm, h_mm, color, lw)
+    return True
+
+
+
 def render_front_box(spec: Dict[str, Any], *, logo: Optional[Image.Image] = None,
                      width_mm: float = 100.0, height_mm: float = 200.0) -> Image.Image:
     """Front of a folding carton: brand, script line, tagline, weight band."""
@@ -365,13 +460,11 @@ def render_front_box(spec: Dict[str, Any], *, logo: Optional[Image.Image] = None
             pd.ctext(d, W / 2, ty, line, f_tag, muted)
             ty += H * 0.032
 
-    # motif: three beans in a row, contained by the safe width
-    if str(spec.get("motif") or "bean") == "bean":
-        span = min(34.0, safe_w * 0.55)
-        for i in (-1, 0, 1):
-            _bean(d, W / 2 + i * span / 2.4, H * 0.615,
-                  w_mm=max(7.0, W * 0.085), h_mm=max(11.0, W * 0.13),
-                  color=accent, width_mm=0.4)
+    # motif: the design's own illustration, or nothing at all. A pack never borrows
+    # another product's motif (D-027: a drill carton carried three coffee beans).
+    draw_motif(d, str(spec.get("motif") or ""), W / 2, H * 0.615,
+               w_mm=max(20.0, min(34.0, safe_w * 0.55)),
+               h_mm=max(11.0, H * 0.10), color=accent, width_mm=0.4)
 
     # cream band: the legal weight line, high contrast, one string
     band_top, band_bottom = H * 0.735, H * 0.865

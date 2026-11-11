@@ -1,0 +1,359 @@
+{
+  "generated_at": "2026-11-11T11:00:58+00:00",
+  "generator": "product_pipeline",
+  "judge_enabled": false,
+  "mode_filter": null,
+  "catalog_briefs": 2,
+  "catalog_by_mode": {
+    "prompt_only": 2,
+    "stored_reference": 0,
+    "uploaded_reference": 0
+  },
+  "selected": 2,
+  "artefacts_available": null,
+  "scored": 2,
+  "not_scored": 0,
+  "not_scored_reason": null,
+  "passed": 2,
+  "failed": 0,
+  "pass_rate": 100.0,
+  "mean_score": 100.0,
+  "gaps_filed": 0,
+  "gaps_in_file": 0,
+  "gaps_path": "reports/ty/d027_boxart_motifs_gaps.json",
+  "mirror_path": "reports/ty/d027_boxart_motifs_gaps.json",
+  "escalations": [
+    {
+      "at": "2026-11-11T11:00:58+00:00",
+      "from_brief_id": "ST-012",
+      "from_difficulty": 2,
+      "source_mode": "prompt_only",
+      "action": "raise_tier",
+      "detail": "difficulty 2 -> 3 (prompt_only)",
+      "constraint": null,
+      "to_brief_id": "ST-012",
+      "to_difficulty": 3,
+      "score": 100.0,
+      "artefact_path": "renders/d027/ST-012/product_front.png"
+    },
+    {
+      "at": "2026-11-11T11:00:58+00:00",
+      "from_brief_id": "ST-028",
+      "from_difficulty": 3,
+      "source_mode": "prompt_only",
+      "action": "add_constraint",
+      "detail": "added hard constraint tight_background (prompt_only)",
+      "constraint": "tight_background",
+      "to_brief_id": "ST-028",
+      "to_difficulty": 3,
+      "score": 100.0,
+      "artefact_path": "renders/d027/ST-028/product_front.png"
+    }
+  ],
+  "results": [
+    {
+      "brief_id": "ST-012",
+      "category": "small_appliance",
+      "situation": "scale_reference",
+      "difficulty": 2,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "product_picture",
+      "population": "generated",
+      "artefact_path": "renders/d027/ST-012/product_front.png",
+      "width": 2000,
+      "height": 2000,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.020"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "corners [(255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255)] vs target (255, 255, 255) +-7; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "subject fill 25.2% vs 8.0-45.0% (distance > 20)"
+        },
+        "matte_residue": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "background residue 0.00% of the frame (0 px) outside the product's silhouette, 0 px of it neutral (shadow-shaped); limit 0.5% at value 255 ±7"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "border mean 255.0 (>= 249), std 0.00 (<= 6.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "568695 bytes (0.142 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "margin ink 0.00% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "ST-012",
+        "route": "product_picture",
+        "fidelity": "exact",
+        "renderer": "drawn",
+        "design": "t2-kettle-box",
+        "form": "gift_box",
+        "plate": {
+          "source": "synthetic_plate",
+          "prompt": "drawn blank gift_box on a white field (no render lane)",
+          "model": null,
+          "width": 2000,
+          "height": 2000,
+          "seed": 7,
+          "note": "not generated: a drawn plate used only for the offline proof"
+        },
+        "build": {
+          "ok": true,
+          "form": "gift_box",
+          "units": 1,
+          "faces": [
+            {
+              "face": "front",
+              "stage": "done",
+              "gate_ok": true,
+              "reason": "",
+              "units_found": 1
+            }
+          ],
+          "manifest": "renders\\d027\\ST-012\\product_picture_manifest.json"
+        },
+        "product_box": null,
+        "flat_background": true,
+        "bytes": 568695,
+        "seconds": 8.66
+      }
+    },
+    {
+      "brief_id": "ST-028",
+      "category": "tool",
+      "situation": "scale_reference",
+      "difficulty": 3,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "product_picture",
+      "population": "generated",
+      "artefact_path": "renders/d027/ST-028/product_front.png",
+      "width": 2000,
+      "height": 2000,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.020"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "corners [(255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255)] vs target (255, 255, 255) +-6; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "subject fill 23.8% vs 10.0-40.0% (distance > 20)"
+        },
+        "matte_residue": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "background residue 0.00% of the frame (0 px) outside the product's silhouette, 0 px of it neutral (shadow-shaped); limit 0.5% at value 255 ±6"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "border mean 255.0 (>= 249), std 0.00 (<= 6.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "624236 bytes (0.156 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "margin ink 0.00% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "ST-028",
+        "route": "product_picture",
+        "fidelity": "exact",
+        "renderer": "drawn",
+        "design": "t2-drill-box",
+        "form": "gift_box",
+        "plate": {
+          "source": "synthetic_plate",
+          "prompt": "drawn blank gift_box on a white field (no render lane)",
+          "model": null,
+          "width": 2000,
+          "height": 2000,
+          "seed": 7,
+          "note": "not generated: a drawn plate used only for the offline proof"
+        },
+        "build": {
+          "ok": true,
+          "form": "gift_box",
+          "units": 1,
+          "faces": [
+            {
+              "face": "front",
+              "stage": "done",
+              "gate_ok": true,
+              "reason": "",
+              "units_found": 1
+            }
+          ],
+          "manifest": "renders\\d027\\ST-028\\product_picture_manifest.json"
+        },
+        "product_box": null,
+        "flat_background": true,
+        "bytes": 624236,
+        "seconds": 5.57
+      }
+    }
+  ],
+  "by_population": {
+    "generated": {
+      "scored": 2,
+      "passed": 2,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    }
+  },
+  "by_mode": {
+    "prompt_only": {
+      "scored": 2,
+      "passed": 2,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    },
+    "stored_reference": {
+      "scored": 0,
+      "passed": 0,
+      "failed": 0,
+      "pass_rate": 0.0,
+      "mean_score": 0.0
+    },
+    "uploaded_reference": {
+      "scored": 0,
+      "passed": 0,
+      "failed": 0,
+      "pass_rate": 0.0,
+      "mean_score": 0.0
+    }
+  },
+  "by_situation": {
+    "scale_reference": {
+      "scored": 2,
+      "passed": 2,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    }
+  },
+  "by_category": {
+    "small_appliance": {
+      "scored": 1,
+      "passed": 1,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    },
+    "tool": {
+      "scored": 1,
+      "passed": 1,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    }
+  },
+  "pipeline": "app",
+  "plate_source": "drawn",
+  "refused": []
+}
