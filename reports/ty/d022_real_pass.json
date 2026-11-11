@@ -1,0 +1,960 @@
+{
+  "generated_at": "2026-11-11T09:54:03+00:00",
+  "generator": "composite",
+  "judge_enabled": false,
+  "mode_filter": null,
+  "catalog_briefs": 12,
+  "catalog_by_mode": {
+    "prompt_only": 12,
+    "stored_reference": 0,
+    "uploaded_reference": 0
+  },
+  "selected": 3,
+  "artefacts_available": null,
+  "scored": 3,
+  "not_scored": 0,
+  "not_scored_reason": null,
+  "passed": 3,
+  "failed": 0,
+  "pass_rate": 100.0,
+  "mean_score": 100.0,
+  "gaps_filed": 0,
+  "gaps_in_file": 0,
+  "gaps_path": "reports/ty/d022_real_gaps.json",
+  "mirror_path": "reports/ty/d022_real_gaps.json",
+  "escalations": [
+    {
+      "at": "2026-11-11T09:54:03+00:00",
+      "from_brief_id": "PO-001",
+      "from_difficulty": 1,
+      "source_mode": "prompt_only",
+      "action": "raise_tier",
+      "detail": "difficulty 1 -> 2 (prompt_only)",
+      "constraint": null,
+      "to_brief_id": "PO-001",
+      "to_difficulty": 2,
+      "score": 100.0,
+      "artefact_path": "renders/heldout_prompt_only11/PO-001.png"
+    },
+    {
+      "at": "2026-11-11T09:54:03+00:00",
+      "from_brief_id": "PO-002",
+      "from_difficulty": 1,
+      "source_mode": "prompt_only",
+      "action": "raise_tier",
+      "detail": "difficulty 1 -> 2 (prompt_only)",
+      "constraint": null,
+      "to_brief_id": "PO-002",
+      "to_difficulty": 2,
+      "score": 100.0,
+      "artefact_path": "renders/heldout_prompt_only11/PO-002.png"
+    },
+    {
+      "at": "2026-11-11T09:54:03+00:00",
+      "from_brief_id": "PO-003",
+      "from_difficulty": 1,
+      "source_mode": "prompt_only",
+      "action": "raise_tier",
+      "detail": "difficulty 1 -> 2 (prompt_only)",
+      "constraint": null,
+      "to_brief_id": "PO-003",
+      "to_difficulty": 2,
+      "score": 100.0,
+      "artefact_path": "renders/heldout_prompt_only11/PO-003.png"
+    }
+  ],
+  "results": [
+    {
+      "brief_id": "PO-001",
+      "category": "supplement_pouch",
+      "situation": "white_background_main",
+      "difficulty": 1,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "full_generation",
+      "population": "generated",
+      "artefact_path": "renders/heldout_prompt_only11/PO-001.png",
+      "width": 2000,
+      "height": 2000,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.020"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "corners [(255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255)] vs target (255, 255, 255) +-6; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "subject fill 17.1% vs 12.0-100.0% (distance > 20)"
+        },
+        "matte_residue": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "background residue 0.00% of the frame (0 px) outside the product's silhouette, 0 px of it neutral (shadow-shaped); limit 0.5% at value 255 ±6"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "border mean 255.0 (>= 249), std 0.00 (<= 6.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "761124 bytes (0.190 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "margin ink 0.00% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "PO-001",
+        "route": "full_generation",
+        "fidelity": "tolerant",
+        "renderer": "comfy",
+        "method": null,
+        "scene": {
+          "source": "generated",
+          "prompt": "Product photograph of a matte forest-green stand-up pouch with a white round label reading MOGRA ORGANICS and ORGANIC LION'S MANE MUSHROOM POWDER, gold mushroom line art, 6 oz (170 g) printed at the base, on a seamless white studio background, product centred, no props. Photorealistic, no text overlay.",
+          "model": "sdxl",
+          "image_path": "C:\\Users\\T2Hol\\ComfyUI\\output\\ns-scene_00258_.png",
+          "seed": 2771967432,
+          "steps": 20,
+          "width": 768,
+          "height": 768,
+          "lane": {
+            "event": "lane",
+            "role": "scene:sdxl",
+            "needed_gb": 8.2,
+            "reserve_gb": 1.0,
+            "watchlist": [
+              "bojo:latest",
+              "qwen3-embedding:0.6b"
+            ],
+            "stopped": {
+              "ok": true,
+              "pid": 22860,
+              "stopped": true,
+              "seconds": 1.5
+            },
+            "gpu_before": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 2040,
+              "free_mb": 13964,
+              "util_pct": 0,
+              "free_gb": 13.64,
+              "used_gb": 1.99
+            },
+            "ollama_ps_before": {
+              "ok": true,
+              "models": [
+                {
+                  "name": "qwen3-embedding:0.6b",
+                  "size_vram_gb": 1.6
+                }
+              ],
+              "resident": [
+                "qwen3-embedding:0.6b"
+              ]
+            },
+            "resident_before": [
+              "qwen3-embedding:0.6b"
+            ],
+            "unloaded": [
+              {
+                "tag": "qwen3-embedding:0.6b",
+                "api_ok": true,
+                "verified": true,
+                "reason": ""
+              }
+            ],
+            "ollama_ps_after_unload": {
+              "ok": true,
+              "models": [],
+              "resident": []
+            },
+            "unload_verified": {
+              "qwen3-embedding:0.6b": true
+            },
+            "gpu_ready": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 205,
+              "free_mb": 15799,
+              "util_pct": 4,
+              "free_gb": 15.43,
+              "used_gb": 0.2
+            },
+            "gpu_settle_samples": 3,
+            "budget": {
+              "ok": true,
+              "checked": true,
+              "free_gb": 15.43,
+              "needed_gb": 8.2,
+              "reserve_gb": 1.0,
+              "headroom_gb": 7.23,
+              "reason": "fits: 15.43 GB free - 8.2 GB needed = 7.23 GB >= 1.0 GB reserve"
+            },
+            "start": {
+              "ok": true,
+              "pid": 22860,
+              "reason": null
+            },
+            "ready": {
+              "ok": true,
+              "seconds": 43.1
+            },
+            "gpu_before_work": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 376,
+              "free_mb": 15628,
+              "util_pct": 0,
+              "free_gb": 15.26,
+              "used_gb": 0.37
+            },
+            "gpu_after_work": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 478,
+              "free_mb": 15526,
+              "util_pct": 0,
+              "free_gb": 15.16,
+              "used_gb": 0.47
+            },
+            "gpu_after": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 205,
+              "free_mb": 15799,
+              "util_pct": 0,
+              "free_gb": 15.43,
+              "used_gb": 0.2
+            },
+            "reloaded": [
+              {
+                "tag": "qwen3-embedding:0.6b",
+                "api_ok": true,
+                "verified": true,
+                "reason": ""
+              }
+            ],
+            "reload_verified": {
+              "qwen3-embedding:0.6b": true
+            },
+            "ollama_ps_after": {
+              "ok": true,
+              "models": [
+                {
+                  "name": "qwen3-embedding:0.6b",
+                  "size_vram_gb": 1.6
+                }
+              ],
+              "resident": [
+                "qwen3-embedding:0.6b"
+              ]
+            },
+            "gpu_after_reload": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 2038,
+              "free_mb": 13966,
+              "util_pct": 16,
+              "free_gb": 13.64,
+              "used_gb": 1.99
+            },
+            "vram_before_gb": 13.64,
+            "vram_after_gb": 15.43,
+            "vram_freed_gb": 1.79,
+            "seconds": 77.5,
+            "work_ok": true
+          },
+          "lane_stopped": true,
+          "note": null
+        },
+        "cutout": null,
+        "product_box": [
+          585,
+          580,
+          1414,
+          1820
+        ],
+        "identity": null,
+        "background_path": "flat_canvas",
+        "flat_level": 255,
+        "cut_from_generation": {
+          "method": "grabcut",
+          "subject_px": 56694854,
+          "note": "prompt-only runs generate -> cut -> compose -> layout; the product is the model's drawing, not the seller's pixels"
+        },
+        "cutout_path": "renders\\heldout_prompt_only11\\PO-001.cutout.png",
+        "bytes": 761124,
+        "seconds": 84.21,
+        "sidecar": "renders\\heldout_prompt_only11\\PO-001.json"
+      },
+      "text_embedding_similarity": null
+    },
+    {
+      "brief_id": "PO-002",
+      "category": "food_jar",
+      "situation": "lifestyle",
+      "difficulty": 1,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "full_generation",
+      "population": "generated",
+      "artefact_path": "renders/heldout_prompt_only11/PO-002.png",
+      "width": 2000,
+      "height": 2000,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.030"
+        },
+        "background": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "background is free for this brief"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "product box 50.0% of the frame vs 15.0-85.0% (free background: the box is the measure, not the corner colour)"
+        },
+        "matte_residue": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "background is free for this brief"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "matte free for this brief"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2368814 bytes (0.592 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "text allowed for this brief"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "PO-002",
+        "route": "full_generation",
+        "fidelity": "tolerant",
+        "renderer": "comfy",
+        "method": null,
+        "scene": {
+          "source": "generated",
+          "prompt": "Product photograph of a slim pale-pink and cream gift box printed Word Coffee, the words For Mom in large lilac script, and the line Empowering Moms, One Message at a Time, on a light oak kitchen counter in morning light, shallow depth of field. Photorealistic, no text overlay.",
+          "model": "sdxl",
+          "image_path": "C:\\Users\\T2Hol\\ComfyUI\\output\\ns-scene_00259_.png",
+          "seed": 2726882844,
+          "steps": 20,
+          "width": 768,
+          "height": 768,
+          "lane": {
+            "event": "lane",
+            "role": "scene:sdxl",
+            "needed_gb": 8.2,
+            "reserve_gb": 1.0,
+            "watchlist": [
+              "bojo:latest",
+              "qwen3-embedding:0.6b"
+            ],
+            "stopped": {
+              "ok": true,
+              "pid": 9680,
+              "stopped": true,
+              "seconds": 1.5
+            },
+            "gpu_before": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 2038,
+              "free_mb": 13966,
+              "util_pct": 0,
+              "free_gb": 13.64,
+              "used_gb": 1.99
+            },
+            "ollama_ps_before": {
+              "ok": true,
+              "models": [
+                {
+                  "name": "qwen3-embedding:0.6b",
+                  "size_vram_gb": 1.6
+                }
+              ],
+              "resident": [
+                "qwen3-embedding:0.6b"
+              ]
+            },
+            "resident_before": [
+              "qwen3-embedding:0.6b"
+            ],
+            "unloaded": [
+              {
+                "tag": "qwen3-embedding:0.6b",
+                "api_ok": true,
+                "verified": true,
+                "reason": ""
+              }
+            ],
+            "ollama_ps_after_unload": {
+              "ok": true,
+              "models": [],
+              "resident": []
+            },
+            "unload_verified": {
+              "qwen3-embedding:0.6b": true
+            },
+            "gpu_ready": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 205,
+              "free_mb": 15799,
+              "util_pct": 0,
+              "free_gb": 15.43,
+              "used_gb": 0.2
+            },
+            "gpu_settle_samples": 3,
+            "budget": {
+              "ok": true,
+              "checked": true,
+              "free_gb": 15.43,
+              "needed_gb": 8.2,
+              "reserve_gb": 1.0,
+              "headroom_gb": 7.23,
+              "reason": "fits: 15.43 GB free - 8.2 GB needed = 7.23 GB >= 1.0 GB reserve"
+            },
+            "start": {
+              "ok": true,
+              "pid": 9680,
+              "reason": null
+            },
+            "ready": {
+              "ok": true,
+              "seconds": 15.1
+            },
+            "gpu_before_work": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 376,
+              "free_mb": 15628,
+              "util_pct": 0,
+              "free_gb": 15.26,
+              "used_gb": 0.37
+            },
+            "gpu_after_work": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 478,
+              "free_mb": 15526,
+              "util_pct": 0,
+              "free_gb": 15.16,
+              "used_gb": 0.47
+            },
+            "gpu_after": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 205,
+              "free_mb": 15799,
+              "util_pct": 0,
+              "free_gb": 15.43,
+              "used_gb": 0.2
+            },
+            "reloaded": [
+              {
+                "tag": "qwen3-embedding:0.6b",
+                "api_ok": true,
+                "verified": true,
+                "reason": ""
+              }
+            ],
+            "reload_verified": {
+              "qwen3-embedding:0.6b": true
+            },
+            "ollama_ps_after": {
+              "ok": true,
+              "models": [
+                {
+                  "name": "qwen3-embedding:0.6b",
+                  "size_vram_gb": 1.6
+                }
+              ],
+              "resident": [
+                "qwen3-embedding:0.6b"
+              ]
+            },
+            "gpu_after_reload": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 2038,
+              "free_mb": 13966,
+              "util_pct": 5,
+              "free_gb": 13.64,
+              "used_gb": 1.99
+            },
+            "vram_before_gb": 13.64,
+            "vram_after_gb": 15.43,
+            "vram_freed_gb": 1.79,
+            "seconds": 46.7,
+            "work_ok": true
+          },
+          "lane_stopped": true,
+          "note": null
+        },
+        "cutout": null,
+        "product_box": [
+          193,
+          502,
+          1806,
+          1742
+        ],
+        "identity": null,
+        "background_resampled": {
+          "from": "scene",
+          "to": 2000
+        },
+        "cut_from_generation": {
+          "method": "grabcut",
+          "subject_px": 56476629,
+          "note": "prompt-only runs generate -> cut -> compose -> layout; the product is the model's drawing, not the seller's pixels"
+        },
+        "cutout_path": "renders\\heldout_prompt_only11\\PO-002.cutout.png",
+        "bytes": 2368814,
+        "seconds": 53.47,
+        "sidecar": "renders\\heldout_prompt_only11\\PO-002.json"
+      },
+      "text_embedding_similarity": null
+    },
+    {
+      "brief_id": "PO-003",
+      "category": "supplement_pouch",
+      "situation": "scale_reference",
+      "difficulty": 1,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "full_generation",
+      "population": "generated",
+      "artefact_path": "renders/heldout_prompt_only11/PO-003.png",
+      "width": 2000,
+      "height": 2000,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.020"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "corners [(255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255)] vs target (255, 255, 255) +-8; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "subject fill 21.7% vs 8.0-50.0% (distance > 20)"
+        },
+        "matte_residue": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "background residue 0.00% of the frame (0 px) outside the product's silhouette, 0 px of it neutral (shadow-shaped); limit 0.5% at value 255 ±8"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "border mean 255.0 (>= 249), std 0.00 (<= 6.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "962089 bytes (0.241 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "margin ink 0.00% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "PO-003",
+        "route": "full_generation",
+        "fidelity": "tolerant",
+        "renderer": "comfy",
+        "method": null,
+        "scene": {
+          "source": "generated",
+          "prompt": "Product photograph of a matte forest-green stand-up pouch with a white round label reading MOGRA ORGANICS and ORGANIC LION'S MANE MUSHROOM POWDER, gold mushroom line art, 6 oz (170 g) printed at the base, standing beside a coffee cup for scale, white background. Photorealistic, no text overlay.",
+          "model": "sdxl",
+          "image_path": "C:\\Users\\T2Hol\\ComfyUI\\output\\ns-scene_00260_.png",
+          "seed": 2572653623,
+          "steps": 20,
+          "width": 768,
+          "height": 768,
+          "lane": {
+            "event": "lane",
+            "role": "scene:sdxl",
+            "needed_gb": 8.2,
+            "reserve_gb": 1.0,
+            "watchlist": [
+              "bojo:latest",
+              "qwen3-embedding:0.6b"
+            ],
+            "stopped": {
+              "ok": true,
+              "pid": 17524,
+              "stopped": true,
+              "seconds": 1.5
+            },
+            "gpu_before": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 2038,
+              "free_mb": 13966,
+              "util_pct": 0,
+              "free_gb": 13.64,
+              "used_gb": 1.99
+            },
+            "ollama_ps_before": {
+              "ok": true,
+              "models": [
+                {
+                  "name": "qwen3-embedding:0.6b",
+                  "size_vram_gb": 1.6
+                }
+              ],
+              "resident": [
+                "qwen3-embedding:0.6b"
+              ]
+            },
+            "resident_before": [
+              "qwen3-embedding:0.6b"
+            ],
+            "unloaded": [
+              {
+                "tag": "qwen3-embedding:0.6b",
+                "api_ok": true,
+                "verified": true,
+                "reason": ""
+              }
+            ],
+            "ollama_ps_after_unload": {
+              "ok": true,
+              "models": [],
+              "resident": []
+            },
+            "unload_verified": {
+              "qwen3-embedding:0.6b": true
+            },
+            "gpu_ready": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 205,
+              "free_mb": 15799,
+              "util_pct": 0,
+              "free_gb": 15.43,
+              "used_gb": 0.2
+            },
+            "gpu_settle_samples": 3,
+            "budget": {
+              "ok": true,
+              "checked": true,
+              "free_gb": 15.43,
+              "needed_gb": 8.2,
+              "reserve_gb": 1.0,
+              "headroom_gb": 7.23,
+              "reason": "fits: 15.43 GB free - 8.2 GB needed = 7.23 GB >= 1.0 GB reserve"
+            },
+            "start": {
+              "ok": true,
+              "pid": 17524,
+              "reason": null
+            },
+            "ready": {
+              "ok": true,
+              "seconds": 13.1
+            },
+            "gpu_before_work": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 376,
+              "free_mb": 15628,
+              "util_pct": 0,
+              "free_gb": 15.26,
+              "used_gb": 0.37
+            },
+            "gpu_after_work": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 478,
+              "free_mb": 15526,
+              "util_pct": 0,
+              "free_gb": 15.16,
+              "used_gb": 0.47
+            },
+            "gpu_after": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 205,
+              "free_mb": 15799,
+              "util_pct": 0,
+              "free_gb": 15.43,
+              "used_gb": 0.2
+            },
+            "reloaded": [
+              {
+                "tag": "qwen3-embedding:0.6b",
+                "api_ok": true,
+                "verified": true,
+                "reason": ""
+              }
+            ],
+            "reload_verified": {
+              "qwen3-embedding:0.6b": true
+            },
+            "ollama_ps_after": {
+              "ok": true,
+              "models": [
+                {
+                  "name": "qwen3-embedding:0.6b",
+                  "size_vram_gb": 1.6
+                }
+              ],
+              "resident": [
+                "qwen3-embedding:0.6b"
+              ]
+            },
+            "gpu_after_reload": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 2038,
+              "free_mb": 13966,
+              "util_pct": 49,
+              "free_gb": 13.64,
+              "used_gb": 1.99
+            },
+            "vram_before_gb": 13.64,
+            "vram_after_gb": 15.43,
+            "vram_freed_gb": 1.79,
+            "seconds": 49.6,
+            "work_ok": true
+          },
+          "lane_stopped": true,
+          "note": null
+        },
+        "cutout": null,
+        "product_box": [
+          396,
+          580,
+          1604,
+          1820
+        ],
+        "identity": null,
+        "background_path": "flat_canvas",
+        "flat_level": 255,
+        "cut_from_generation": {
+          "method": "grabcut",
+          "subject_px": 50257638,
+          "note": "prompt-only runs generate -> cut -> compose -> layout; the product is the model's drawing, not the seller's pixels"
+        },
+        "cutout_path": "renders\\heldout_prompt_only11\\PO-003.cutout.png",
+        "bytes": 962089,
+        "seconds": 55.81,
+        "sidecar": "renders\\heldout_prompt_only11\\PO-003.json"
+      },
+      "text_embedding_similarity": null
+    }
+  ],
+  "by_population": {
+    "generated": {
+      "scored": 3,
+      "passed": 3,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    }
+  },
+  "by_mode": {
+    "prompt_only": {
+      "scored": 3,
+      "passed": 3,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    },
+    "stored_reference": {
+      "scored": 0,
+      "passed": 0,
+      "failed": 0,
+      "pass_rate": 0.0,
+      "mean_score": 0.0
+    },
+    "uploaded_reference": {
+      "scored": 0,
+      "passed": 0,
+      "failed": 0,
+      "pass_rate": 0.0,
+      "mean_score": 0.0
+    }
+  },
+  "by_situation": {
+    "lifestyle": {
+      "scored": 1,
+      "passed": 1,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    },
+    "scale_reference": {
+      "scored": 1,
+      "passed": 1,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    },
+    "white_background_main": {
+      "scored": 1,
+      "passed": 1,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    }
+  },
+  "by_category": {
+    "food_jar": {
+      "scored": 1,
+      "passed": 1,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    },
+    "supplement_pouch": {
+      "scored": 2,
+      "passed": 2,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    }
+  }
+}

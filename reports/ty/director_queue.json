@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-11T10:01:54+00:00",
+  "updated_at": "2026-11-11T10:05:59+00:00",
   "cycle": 3,
   "unit_in_flight": "",
   "unit_order": [
@@ -1209,6 +1209,31 @@
       "rank": 1
     },
     {
+      "id": "fix-fullgen-matte-cutout",
+      "unit": "D22",
+      "title": "D-025: a generated white-main brief keeps the plate's own cast shadow; route the generation cutout through the real matte (BiRefNet) and re-measure at seed 2747063199",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "tools/seller_tester/",
+        "Northstar_backend/product_cutout.py",
+        "Northstar_backend/test_*.py",
+        "reports/ty/",
+        "renders/"
+      ],
+      "branch": "ty/fix-fullgen-matte-cutout",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-11T10:05:53+00:00",
+      "updated_at": "2026-11-11T10:05:59+00:00",
+      "rank": 1
+    },
+    {
       "id": "ux-05-render-routes",
       "unit": "D12",
       "title": "26 of 29 service routes render the chat shell instead of their own page",
@@ -1341,9 +1366,33 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "real lane: composite --limit 2 --renderer comfy --method birefnet --model sdxl -> SR-001 100.0 passed (was 93.3 failed); check_matte_residue SR-001 11.473% (458901 px, 458900 neutral) -> 0.037% (1488 px); PO-001 0.000% again; reports/ty/d024_sample_pass.json, reports/ty/d022_residue_before_after.json",
+      "evidence": "D-024 retired on a real lane: SR-001 composite 10.49% -> 0.482% (419583 -> 19282 px), 100.0 pass, deterministic (sha a3dfed02/... twice); earlier 0.037% not reproducible and its artefact was overwritten by this run's out-dir - recorded as unexplained. reports/ty/d024_real_residue.md",
       "created_at": "2026-11-11T09:52:52+00:00",
-      "updated_at": "2026-11-11T09:55:54+00:00",
+      "updated_at": "2026-11-11T10:05:53+00:00",
+      "rank": 2
+    },
+    {
+      "id": "fix-fullgen-silhouette",
+      "unit": "D22",
+      "title": "D-026: record the mask that was actually composited and make the residue check refuse a silhouette that does not agree with the painted product",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "tools/seller_tester/",
+        "Northstar_backend/product_composite.py",
+        "Northstar_backend/test_*.py",
+        "reports/ty/"
+      ],
+      "branch": "ty/fix-fullgen-silhouette",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-11T10:05:59+00:00",
+      "updated_at": "2026-11-11T10:05:59+00:00",
       "rank": 2
     },
     {
@@ -1433,9 +1482,9 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "real lane run: composite --limit 2 --renderer comfy --method birefnet --model sdxl -> PO-001 (full_generation) 100.0 passed; check_matte_residue on the artefacts: PO-001 before (heldout_prompt_only10) 25.647% residue (1025874 px, 1022424 neutral) -> after (renders/d022) 0.000% (0 px); reports/ty/d022_residue_before_after.json",
+      "evidence": "D-022 partially retired: real lanes. Fresh seeds PO-001/002/003 3/3 100.0 residue 0.00%; pinned seeds PO-001 90.0 residue 14.760% (25.647->14.760, -10.887 pts at identical seed), PO-002 100.0, PO-003 100.0. Plate shadow survives grabcut and the silhouette masks it -> D-025/D-026. reports/ty/d022_real_rerender.md",
       "created_at": "2026-11-11T09:37:20+00:00",
-      "updated_at": "2026-11-11T09:52:46+00:00",
+      "updated_at": "2026-11-11T10:05:46+00:00",
       "rank": 3
     },
     {

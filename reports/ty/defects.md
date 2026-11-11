@@ -328,6 +328,43 @@ across the frame, kept **53.2 %** of the product and left the handle in fragment
 **Still owed:** the published seller dimension does not move (96.2 over 32 drawn-plate
 outputs); a real-plate white-main pass at pinned seeds is the measuring run.
 
+**Measured twice on 2026-11-11** (`ty-dir-d022-real-rerender`). Fresh seeds: PO-001,
+PO-002, PO-003 at 2771967432 / 2726882844 / 2572653623 → **3/3 100.0, residue 0.00 %** on
+PO-001 and PO-003. At the original seeds (2747063199 / 3952987930 / 3268127863) the same
+three briefs score **PO-001 90.0 — 14.760 % residue, 590 541 px — PO-002 100.0, PO-003
+100.0**. The composite's shadow is measurably gone (−10.887 points, −435 333 px at an
+identical seed) and **the picture is still not clean**: the plate's own cast shadow survives
+the grabcut cutout, and the silhouette the check is given does not follow the product, so the
+same defect scores 0.00 % on one seed and 14.76 % on another. **D-022 is partially retired**,
+not closed. `reports/ty/d022_real_rerender.md`, `reports/ty/d022_pinned_diagnostic.png`.
+
+## D-025 — a generated white-main brief keeps the plate's own cast shadow (open 2026-11-11)
+
+Found by the D-022 real re-render. PO-001 at its original seed 2747063199 still carries a
+wide grey smear to the right of and under the pouch after the composite's shadow is off
+(`reports/ty/d022_pinned_diagnostic.png`, red = every off-white painted pixel outside the
+recorded silhouette). `generators._cut(..., method="grabcut")` keeps it because it is opaque
+and attached to the product — the same defect D-017 fixed on the app's plate route with a
+real matte.
+
+**Not yet done:** route the generation cutout through `product_cutout.matte_alpha` (BiRefNet
+in the lane), falling back to grabcut **with a recorded reason**, and re-measure at the
+pinned seed: residue ≤ 0.5 % and no painted band outside the matte-derived silhouette.
+Queued `fix-fullgen-matte-cutout`, rank 1.
+
+## D-026 — the residue check's silhouette is not the product's silhouette (open 2026-11-11)
+
+Found by the same run. `check_matte_residue` counts pixels outside the **recorded**
+silhouette; on the generation route that silhouette is a coarse shape that covers pouch and
+shadow together on one seed (1 280 943 px) and a tighter, offset shape on another
+(881 410 px). A picture with a visible smear therefore scores **0.00 %** by being masked
+rather than by being clean.
+
+**Not yet done:** record the mask that was actually composited (post-scale, post-placement)
+and make the check refuse a silhouette that does not agree with the painted product, or
+measure residue against a matte rather than against a rectangle. Queued
+`fix-fullgen-silhouette`, rank 2.
+
 ## D-020 — the white-matte checks cannot see a shadow under the product (open 2026-11-11)
 
 Found while closing D-017. `check_background` samples the four corner patches and
@@ -453,4 +490,12 @@ fix → **SR-001 residue 11.473 % → 0.037 %** (458 901 px → 1 488 px) and it
 (failed) → 100.0 (passed)**. PO-001 re-measured 0.000 % in the same run.
 `renders/d024/`, `reports/ty/d024_sample_pass.json`,
 `reports/ty/d022_residue_before_after.json`.
+
+**Re-measured independently** (`ty-dir-d024-real-residue`): the brief alone, in its own
+catalog and its own out-dir → **10.49 % (419 583 px) before, 0.482 % (19 282 px) after,
+100.0, pass**. The run is deterministic: two invocations write a byte-identical artefact
+(`sha256 a3dfed02…`) and cutout (`fb370d3d…`). It does **not** reproduce 0.037 %; that
+artefact was overwritten by this run's `--out-dir`, so the difference cannot be explained
+from disk and is recorded as unexplained rather than smoothed. Both numbers pass the 0.5 %
+limit. `reports/ty/d024_real_residue.md`.
 

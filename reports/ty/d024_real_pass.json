@@ -1,0 +1,335 @@
+{
+  "generated_at": "2026-11-11T10:01:47+00:00",
+  "generator": "composite",
+  "judge_enabled": false,
+  "mode_filter": null,
+  "catalog_briefs": 1,
+  "catalog_by_mode": {
+    "prompt_only": 0,
+    "stored_reference": 1,
+    "uploaded_reference": 0
+  },
+  "selected": 1,
+  "artefacts_available": null,
+  "scored": 1,
+  "not_scored": 0,
+  "not_scored_reason": null,
+  "passed": 1,
+  "failed": 0,
+  "pass_rate": 100.0,
+  "mean_score": 100.0,
+  "gaps_filed": 0,
+  "gaps_in_file": 0,
+  "gaps_path": "state/seller/d024_gaps.json",
+  "mirror_path": "state/seller/d024_gaps.json",
+  "escalations": [
+    {
+      "at": "2026-11-11T10:01:47+00:00",
+      "from_brief_id": "SR-001",
+      "from_difficulty": 1,
+      "source_mode": "stored_reference",
+      "action": "raise_tier",
+      "detail": "difficulty 1 -> 2 (stored_reference)",
+      "constraint": null,
+      "to_brief_id": "SR-001",
+      "to_difficulty": 2,
+      "score": 100.0,
+      "artefact_path": "renders/d024/SR-001.png"
+    }
+  ],
+  "results": [
+    {
+      "brief_id": "SR-001",
+      "category": "supplement_pouch",
+      "situation": "white_background_main",
+      "difficulty": 1,
+      "source_mode": "stored_reference",
+      "fidelity": "exact",
+      "route": "composite",
+      "population": "generated",
+      "artefact_path": "renders/d024/SR-001.png",
+      "width": 2000,
+      "height": 2000,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.020"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "corners [(255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255)] vs target (255, 255, 255) +-6; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "subject fill 34.0% vs 12.0-100.0% (distance > 20)"
+        },
+        "matte_residue": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "background residue 0.14% of the frame (5781 px) outside the product's silhouette, 5781 px of it neutral (shadow-shaped); limit 0.5% at value 255 ±6"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "border mean 255.0 (>= 249), std 0.00 (<= 6.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "1804150 bytes (0.451 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "margin ink 0.00% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "printed_text: pass — 8/9 key words present (0.89, min 0.60)"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "product region 1694x1211 at (153,394): structure 0.902 over 1539201 opaque pixels (mean-abs 0.953, trimmed)"
+        }
+      },
+      "reference": {
+        "kind": "stored_asset",
+        "path": "renders/references/mogra/mogra_pair_main.png"
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": false,
+        "cannot_verify": false,
+        "detail": "printed_text: pass — 8/9 key words present (0.89, min 0.60)",
+        "decided_by": "printed_text",
+        "text": {
+          "ok": true,
+          "cannot_verify": false,
+          "detail": "8/9 key words present (0.89, min 0.60)",
+          "matched": [
+            "mograorganics",
+            "hlealthyorganic",
+            "mogra",
+            "organics",
+            "healthyorganic",
+            "organislionsmane",
+            "organic",
+            "mushroompowder"
+          ],
+          "missing": [
+            "shiitake"
+          ],
+          "recall": 0.889,
+          "min_recall": 0.6,
+          "produced_text": "2023 EST 2023 MOGRAORGAAICS Healthy&Organic MOGRA ORGAAICS Healthy&Organic INISLION'SMANE ORGANIC SH SHROOMPOWDER MUSHROOM 6 oz (170 g) 8oz (227 g",
+          "reference_text": "EST 2023 EST 2023 MOGRAORGANICS Hlealthy&Organic MOGRA ORGANICS Healthy&Organic ORGANISLION'SMANE ORGANIC SHIITAKE MUSHROOMPOWDER MUSHROOMPOWDER 6 oz (170 g) 8 oz (227 g)",
+          "skipped": false,
+          "check": "reference_subject"
+        },
+        "meaning": {
+          "ok": true,
+          "cannot_verify": false,
+          "detail": "embedding agreement 0.942 (min 0.72)",
+          "similarity": 0.9422,
+          "min_similarity": 0.72,
+          "produced_desc": "The page displays packaging for organic mushroom powders. MOGRA ORGANICS Healthy & Organic EST 2023 ORGANIC LION'S MANE SHROOM POWDER 6 oz (170 g) ORGANIC SHI MUSHROOM 8 oz (227 g) 6 170 2023 227 8 2023",
+          "reference_desc": "The page displays two packages of organic mushroom powder. ORGANIC LION'S MANE MUSHROOM POWDER ORGANIC SHIITAKE MUSHROOM POWDER 6 oz (170 g) 8 oz (227 g) MOGRA ORGANICS EST 2023 6 170 8 227 2023 2",
+          "skipped": false,
+          "check": "reference_subject"
+        },
+        "diagnostic": {
+          "colour_agreement": 0.6714,
+          "colour_gate": false,
+          "produced_aspect": 1.403,
+          "reference_aspect": 1.404
+        },
+        "reference_path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\references\\mogra\\mogra_pair_main.png",
+        "reference_kind": "stored_asset",
+        "description": {
+          "requested": true,
+          "produced": true,
+          "reference": true,
+          "produced_chars": 202,
+          "reference_chars": 196,
+          "produced_error": "",
+          "reference_error": "",
+          "produced_text": "The page displays packaging for organic mushroom powders. MOGRA ORGANICS Healthy & Organic EST 2023 ORGANIC LION'S MANE SHROOM POWDER 6 oz (170 g) ORGANIC SHI MUSHROOM 8 oz (227 g) 6 170 2023 227 8 2023",
+          "reference_text": "The page displays two packages of organic mushroom powder. ORGANIC LION'S MANE MUSHROOM POWDER ORGANIC SHIITAKE MUSHROOM POWDER 6 oz (170 g) 8 oz (227 g) MOGRA ORGANICS EST 2023 6 170 8 227 2023 2"
+        }
+      },
+      "generation": {
+        "brief_id": "SR-001",
+        "route": "composite",
+        "fidelity": "exact",
+        "renderer": "comfy",
+        "method": "grabcut",
+        "scene": {
+          "source": "flat_white_canvas",
+          "prompt": null,
+          "prompt_used": "a seamless pure white studio sweep, one soft shadow area, even light, empty, no objects, no text, product photography",
+          "model": null,
+          "image_path": null,
+          "seed": null,
+          "steps": 0,
+          "width": null,
+          "height": null,
+          "lane": null,
+          "lane_stopped": false,
+          "note": "flat 255 canvas; the subject is the only ink, so the background check is exact rather than approximate"
+        },
+        "cutout": {
+          "coverage": 0.4113,
+          "edge_gradient_px": 7.547,
+          "boundary_roughness": 2.762,
+          "border_contact": 0.0,
+          "transition_px": 94769,
+          "perimeter_px": 12558,
+          "bbox": [
+            125,
+            375,
+            1879,
+            1625
+          ],
+          "subject_px": 1645171,
+          "reference_coverage": 0.4497,
+          "coverage_delta": 0.0384,
+          "seconds": 6.487
+        },
+        "product_box": [
+          153,
+          394,
+          1847,
+          1605
+        ],
+        "identity": 0.9894,
+        "reference_path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\references\\mogra\\mogra_pair_main.png",
+        "cutout_refused": {
+          "method": "birefnet",
+          "reason": "birefnet runs inside the ComfyUI lane; the white-main path starts no lane. grabcut (14/14 on the same eval, 5.08 px mean edge) was used instead."
+        },
+        "background_path": "flat_canvas",
+        "flat_level": 255,
+        "cutout_in_lane": false,
+        "fill_basis": "longest side 85 % of the canvas (cutout bbox 1754x1250)",
+        "white_canvas": {
+          "canvas": [
+            2000,
+            2000
+          ],
+          "corners": [
+            [
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              255
+            ]
+          ],
+          "level": 255,
+          "corners_exactly_255": true,
+          "corners_exact": true,
+          "subject_fill_pct": 34.05,
+          "height_fill_pct": 60.55,
+          "width_fill_pct": 84.7
+        },
+        "shadow": false,
+        "product_quad": null,
+        "product_scale": 0.6055,
+        "identity_verdict": "identity_preserved",
+        "cutout_path": "renders\\d024\\SR-001.cutout.png",
+        "bytes": 1804150,
+        "seconds": 7.97,
+        "sidecar": "renders\\d024\\SR-001.json"
+      },
+      "text_embedding_similarity": 0.8897
+    }
+  ],
+  "by_population": {
+    "generated": {
+      "scored": 1,
+      "passed": 1,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    }
+  },
+  "by_mode": {
+    "prompt_only": {
+      "scored": 0,
+      "passed": 0,
+      "failed": 0,
+      "pass_rate": 0.0,
+      "mean_score": 0.0
+    },
+    "stored_reference": {
+      "scored": 1,
+      "passed": 1,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    },
+    "uploaded_reference": {
+      "scored": 0,
+      "passed": 0,
+      "failed": 0,
+      "pass_rate": 0.0,
+      "mean_score": 0.0
+    }
+  },
+  "by_situation": {
+    "white_background_main": {
+      "scored": 1,
+      "passed": 1,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    }
+  },
+  "by_category": {
+    "supplement_pouch": {
+      "scored": 1,
+      "passed": 1,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    }
+  }
+}
