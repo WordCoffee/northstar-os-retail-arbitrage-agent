@@ -29,6 +29,26 @@ acceptance is Playwright Test against `127.0.0.1` only, **headless**, launched b
 — never the owner's Chrome, never a headed window, never a page walk through the visible
 browser. That is the localhost exception in `AGENTS.md`, not a loophole in the pause.
 
+## Lanes in flight, 2026-11-11 05:1x local (owner instruction: parallelise)
+
+Four lanes launched for the remaining actionable units. Cap is 4; write manifests are disjoint
+by directory, and the independent verifier is a separate session that built nothing.
+
+| lane | unit | write manifest | report |
+|---|---|---|---|
+| A | `block5-production-hardening` | `Northstar_backend/**`, `docs/**`, `Northstar_backend/test_production_*` | `reports/ty/lane_block5.md` |
+| B | `block4-seller-tests` (+ D-019 verdict) | `tools/seller_tester/**`, `ty/scorecards.json`, `tests/e2e/seller/**` | `reports/ty/lane_block4.md` |
+| C | `block3-workspaces` | `ty/northstar_workspaces.json`, `northstar-os-ui/**`, `tests/e2e/workspaces/**` | `reports/ty/lane_block3.md` |
+| D | `block7-verification` (independent) | read-only + `reports/ty/verify_20261111.md` | same file |
+
+Rules given to every lane: no Amazon, no spend, no credentials; `state/vision/PAUSE` holds, so
+no visible browser and Playwright headless on `127.0.0.1` only; no GPU work; no `git add`/
+`git commit` (the director commits); real commands and real counts only.
+
+**Integration order:** A → B → C (each: targeted tests, then the director's gate), then D's
+verdict on the merged tree. If a lane leaves the tree red, its work waits — the tree on `main`
+stays green.
+
 ## Position, 2026-11-11 cycle 25 — every pack carries its own illustration
 
 Unit report: `reports/ty/d027_design_motifs.md`. Tag `ty-dir-design-motifs`.
