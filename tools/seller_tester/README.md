@@ -30,6 +30,9 @@ There is no fourth input. A brief that forgets its mode is bucketed as
 | `scorers.py` | Pure PIL+numpy checks and the 0-100 subscore |
 | `reference_check.py` | Reference fidelity: printed text (OCR), embedding agreement, colour as a diagnostic only |
 | `judge.py` | Optional vision adapter (local Ollama verifier only; OFF by default) |
+| `services.py` | The four non-image service paths, scored: listing, PPC, Golden Goose, research |
+| `service_briefs.json` | The offline fixtures those four paths run against |
+| `stray_report.py` | D-019: stray marks measured with code, plus the composed-page control |
 | `generators.py` | `stored` replay, documented local `comfy` adapter, and the `composite` path |
 | `scene_render.py` | Scene generation through a fresh `tools/comfy_lane.py` instance (SDXL / SD1.5 / FLUX 3) |
 | `editor_bench.py` | Measures cutout methods on the Mogra uploads and writes the `editors` leaderboard row |
@@ -127,6 +130,53 @@ reference brief keeps a reference. `escalate()` always returns a brief; the step
 is recorded in `EscalationLog` (`state/seller/escalation.json` at runtime) and in
 the run summary.
 
+## Beyond images: the four service paths
+
+A seller does not only buy pictures. `services` walks the four non-image paths a seller
+actually uses, each against a real code path and a local fixture, and scores each one with
+named checks (the share of graded checks that passed; a skip is never a pass):
+
+| path | the path it exercises | what is checked |
+| --- | --- | --- |
+| `listing` | `bojo_tools.publishing.compose_listing` -> `reasoning_tasks.listing_proposal`, the function behind `POST /api/v1/reasoning/listing-proposal` | title ≤ 200, 3-5 bullets ≤ 500, description ≤ 2000, no prohibited phrase, copy audit clear, no invented number, reasons + provenance recorded, never applied |
+| `ppc` | the bulksheet API: upload -> propose -> approve -> write -> download | kind/rows parsed, sheet detected, before/after bid, unblocked, approved, v1 written, round-trip ok, a second write is a new v2 file, the download hashes to the written checksum, the original is untouched |
+| `golden_goose` | `bojo_tools.sourcing.golden_goose_scan` (real fee stack + real scorer) | every candidate evaluated, REJECT dropped, descending rank, filters reported, economics present, "why" recorded, thresholds echoed |
+| `research` | `research_graph.research` (deconstruct -> traverse -> cross-validate) | three axes, evidence returned, distinct sources, corroboration counted, single-source claims labelled, a numeric disagreement surfaced as a conflict, headline leads with the count, no web crawl claimed |
+
+The listing path's model answer is a **recorded fixture**: a live reasoning call is a paid
+action. Every deterministic step applied to it — the limits, the prohibited-phrase list, the
+copy audit, the provenance record — is the app's own. The other three paths are real end to
+end, and none of them contacts a network.
+
+```powershell
+python -m tools.seller_tester services
+python -m tools.seller_tester services --only ppc,golden_goose
+```
+
+`--only` takes a comma list from `listing,ppc,golden_goose,research`; an unknown name is
+refused by name. The proof lands in `state/seller/services_proof.json`, per-path artefacts
+in `state/seller/services/<path>/`, and every refusal is recorded with its reason.
+
+## Stray marks (D-019)
+
+`check_stray_marks` measures "is the picture free of stray marks" the way a seller means
+it — a small, detached, stroke-like object on or beside the product — and it asks it of the
+right population:
+
+* a **photograph** is measured on the frame, against the product's recorded silhouette;
+* a **composed page** (`infographic`, `packaging_mockup`, laid out by
+  `deterministic.infographic`) is measured **inside its photo panel**, because its accent
+  rule, headings, callout chips, leader lines and anchor dots are the layout, not strays.
+
+It is skipped — never passed — when no silhouette was recorded, or when the background is
+not a field (a gradient scene cannot separate a mark from the scene). It is recorded as a
+**diagnostic** (`stray_marks`) and has no weight, so no published score moves for it.
+
+```powershell
+python -m tools.seller_tester.stray_report            # the twelve prompt-only artefacts
+python -m tools.seller_tester.stray_report --json --out state/seller/d019.json
+```
+
 ## Commands
 
 ```powershell
@@ -136,6 +186,8 @@ python -m tools.seller_tester run --limit 12 --mode stored_reference
 python -m tools.seller_tester run --limit 5 --judge     # local vision only
 python -m tools.seller_tester escalate --brief ST-034 --steps 6
 python -m tools.seller_tester composite --limit 3   # real cutout + generated scene
+python -m tools.seller_tester services               # the four non-image paths
+python -m tools.seller_tester.stray_report           # D-019, measured with code
 python -m tools.seller_tester editor_bench --with-lane   # cutout leaderboard
 python -m pytest Northstar_backend/test_seller_tester.py \
     Northstar_backend/test_seller_tester_composite.py -q

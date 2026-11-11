@@ -1,0 +1,195 @@
+{
+  "version": 1,
+  "note": "Offline fixtures for the four non-image service paths. Nothing here contacts a network. The PPC sheet is a bulksheet the seller uploads; the Golden Goose candidates are wholesale rows the seller's buyer enters; the research corpus is a small local document set; each listing brief is the product facts the seller has plus a recorded model answer, so the app's own deterministic normalisation is exercised without a paid call.",
+  "listing": [
+    {
+      "id": "LST-001",
+      "sku": "MOGRA-LM-170",
+      "brand": "Mogra Organics",
+      "title": "Mogra Organics Lions Mane Powder",
+      "bullets": [
+        "100 percent fruiting-body lion's mane, ground fine",
+        "Resealable stand-up pouch, 170 g"
+      ],
+      "description": "A single-ingredient lion's mane powder in a resealable stand-up pouch.",
+      "attributes": {
+        "form": "powder",
+        "net_weight": "170 g",
+        "ingredients": "dried lion's mane fruiting body",
+        "packaging": "resealable stand-up pouch"
+      },
+      "keywords": ["lions mane powder", "mushroom powder"],
+      "facts": ["170 g", "100 percent"],
+      "recorded_proposal": {
+        "title": "Mogra Organics Lions Mane Powder, 170 g, Single-Ingredient Fruiting Body Powder",
+        "bullets": [
+          "ONE INGREDIENT: dried lion's mane fruiting body, ground fine, 170 g in a resealable stand-up pouch",
+          "EASY TO PORTION: a fine powder that dissolves into coffee, tea or a smoothie",
+          "RESEALABLE POUCH: the stand-up pouch keeps the powder dry between uses",
+          "SIMPLE FACT PANEL: form, net weight and ingredients are listed exactly as supplied",
+          "PACKED FOR STORAGE: a matte stand-up pouch that stands level on a shelf"
+        ],
+        "description": "Mogra Organics lion's mane powder is a single-ingredient supplement powder: dried lion's mane fruiting body, ground fine, packed 170 g in a resealable stand-up pouch. The back panel carries the form, net weight and ingredient list exactly as supplied.",
+        "attributes": {
+          "form": "powder",
+          "net_weight": "170 g",
+          "ingredients": "dried lion's mane fruiting body"
+        },
+        "reasons": [
+          "led with the single-ingredient fact the seller supplied",
+          "moved the net weight into the title so the pack size is visible in the search result",
+          "replaced the vague description with the supplied attribute panel"
+        ],
+        "missing_evidence": ["farming origin", "batch lab certificate"],
+        "warnings": []
+      }
+    },
+    {
+      "id": "LST-002",
+      "sku": "WC-FORMOM-12",
+      "brand": "Word Coffee",
+      "title": "Word Coffee For Mom gift box",
+      "bullets": ["Twelve cards", "Letterpress on cotton stock"],
+      "description": "A twelve-card gift box of Word Coffee greeting cards.",
+      "attributes": {
+        "count": "12 cards",
+        "stock": "cotton paper",
+        "print": "letterpress",
+        "box": "pale-pink rigid gift box"
+      },
+      "keywords": ["greeting cards", "gift box"],
+      "facts": ["12 cards"],
+      "recorded_proposal": {
+        "title": "Word Coffee For Mom Greeting Card Gift Box, 12 Letterpress Cards on Cotton Stock",
+        "bullets": [
+          "TWELVE CARDS: 12 letterpress cards on cotton stock in a pale-pink rigid gift box",
+          "ONE MESSAGE PER CARD: each card carries a single line, printed letterpress",
+          "GIFT-READY BOX: the rigid box is designed to be handed over without wrapping",
+          "COTTON STOCK: a thick, textured paper that takes a deep letterpress impression",
+          "MADE AS A SET: the cards ship together in the box they were designed for"
+        ],
+        "description": "Word Coffee's For Mom gift box holds 12 letterpress greeting cards on cotton stock in a pale-pink rigid box. Each card carries one printed line; the box is designed to be given as it arrives.",
+        "attributes": {
+          "count": "12 cards",
+          "stock": "cotton paper",
+          "print": "letterpress"
+        },
+        "reasons": [
+          "put the count and the print method in the title",
+          "each bullet now states a supplied fact rather than a mood",
+          "description says what is in the box and how it is given"
+        ],
+        "missing_evidence": ["envelope count", "card dimensions"],
+        "warnings": []
+      }
+    }
+
+  ],
+  "ppc": [
+    {
+      "id": "PPC-001",
+      "filename": "bulk-20261111.xlsx",
+      "sheet_title": "Sponsored Products Campaigns",
+      "rows": [
+        ["Product", "Entity", "Operation", "Campaign ID", "Ad Group ID", "Keyword ID",
+         "Campaign Name", "Ad Group Name", "Keyword Text", "Match Type", "Bid", "State"],
+        ["Sponsored Products", "Campaign", "Update", "C100", "", "",
+         "Lions Mane Launch", "", "", "", "", "enabled"],
+        ["Sponsored Products", "Ad Group", "Update", "C100", "A200", "",
+         "Lions Mane Launch", "Exact", "", "", "", "enabled"],
+        ["Sponsored Products", "Keyword", "Update", "C100", "A200", "K300",
+         "Lions Mane Launch", "Exact", "lions mane powder", "exact", "0.75", "enabled"],
+        ["Sponsored Products", "Keyword", "Update", "C100", "A200", "K301",
+         "Lions Mane Launch", "Exact", "mushroom coffee", "phrase", "1.10", "enabled"],
+        ["Sponsored Products", "Keyword", "Update", "C100", "A200", "K302",
+         "Lions Mane Launch", "Exact", "cheap supplement", "broad", "0.40", "enabled"]
+      ],
+      "expect": {
+        "row_index": 3,
+        "before_bid": "1.10",
+        "after_bid": "0.90",
+        "reason": "raise the bid on the converting term"
+      }
+    }
+  ],
+  "golden_goose": [
+    {
+      "id": "GG-001",
+      "roi_floor": 10.0,
+      "min_monthly_sales": 1000,
+      "candidates": [
+        {
+          "asin": "B0TEST0001",
+          "title": "Harbor Body Oil 8 oz, pack of 3",
+          "brand": "Harbor",
+          "category_slug": "beauty",
+          "amazon_price": 34.99,
+          "wholesale_price": 24.99,
+          "pack_count": 3,
+          "bsr": 1200,
+          "review_rating": 4.6,
+          "review_count": 2400,
+          "fba_sellers": 0,
+          "weight_oz": 10.0,
+          "monthly_sales_estimate": 1800,
+          "seller_name": "Joes Resale",
+          "is_brand_seller": false,
+          "is_amazon_seller": false
+        },
+        {
+          "asin": "B0TEST0002",
+          "title": "Harbor Body Oil 8 oz, pack of 3",
+          "brand": "Harbor",
+          "category_slug": "beauty",
+          "amazon_price": 24.99,
+          "wholesale_price": 19.99,
+          "pack_count": 3,
+          "bsr": 1200,
+          "review_rating": 4.6,
+          "review_count": 2400,
+          "fba_sellers": 0,
+          "weight_oz": 10.0,
+          "monthly_sales_estimate": 1800,
+          "seller_name": "Joes Resale",
+          "is_brand_seller": false,
+          "is_amazon_seller": false
+        },
+        {
+          "asin": "B0TEST0003",
+          "title": "Mystery Item"
+        }
+      ],
+      "expect": {
+        "rejected_asin": "B0TEST0003",
+        "first_asin": "B0TEST0001"
+      }
+    }
+  ],
+  "research": [
+    {
+      "id": "RES-001",
+      "query": "landed cost per unit for a mushroom powder pouch",
+      "corpus": [
+        {
+          "source_id": "buyer-note-harbor-2026-09",
+          "source": "buyer note",
+          "text": "The landed cost per unit for a mushroom powder pouch is 2.10 dollars at the current freight rate. Freight is charged per pouch by the forwarder. The landed cost per unit includes freight and port handling."
+        },
+        {
+          "source_id": "forwarder-quote-2026-10",
+          "source": "forwarder quote",
+          "text": "The landed cost per unit for a mushroom powder pouch is 2.45 dollars once duty and the port fee are counted. Duty applies to the declared value of the pouch. The landed cost per unit includes freight and port handling."
+        },
+        {
+          "source_id": "packaging-spec-lions-mane",
+          "source": "packaging spec",
+          "text": "The mushroom powder pouch is a matte stand-up pouch with a resealable zip. The pouch holds 170 g and stands 220 mm tall."
+        }
+      ],
+      "expect": {
+        "min_sources": 2,
+        "conflict_values": ["2.10", "2.45"]
+      }
+    }
+  ]
+}

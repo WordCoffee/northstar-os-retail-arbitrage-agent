@@ -1415,7 +1415,7 @@
       "route": "/design-studio",
       "impact": 0.95,
       "bar": 85.0,
-      "score": 89.7,
+      "score": 89.5,
       "meets_bar": false,
       "weakest": "correct",
       "gap": 0.0,
@@ -1429,8 +1429,8 @@
           "evidence": "166 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
         },
         "seller": {
-          "score": 98.0,
-          "evidence": "20 Seller-Tester outputs (generated/composite), mean 98.0, 20 passed; 40 replayed artefact(s) excluded as context (mean 22.1)"
+          "score": 96.2,
+          "evidence": "32 Seller-Tester outputs (generated/composite), mean 96.2, 32 passed; 40 replayed artefact(s) excluded as context (mean 22.1)"
         },
         "complete": {
           "score": 100.0,

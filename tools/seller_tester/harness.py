@@ -346,6 +346,7 @@ def run_pass(*, generator: Any, briefs: Any = None, limit: int = 20,
             placement_quad=placement_quad,
             product_box=product_box,
             silhouette_source=((generation or {}).get("cutout_matte") or {}).get("method"),
+            layout=(generation or {}).get("layout"),
         )
         rel = _relative(artefact)
         result_row = {
@@ -379,6 +380,15 @@ def run_pass(*, generator: Any, briefs: Any = None, limit: int = 20,
                 "kind": reference.get("kind"),
                 "path": reference.get("path"),
             }
+        # D-019: the stray-mark measurement and the question the judge was asked. Both are
+        # diagnostics — neither is in the weights, so no published score moves for them.
+        if isinstance(scored.get("stray_marks"), dict):
+            result_row["stray_marks"] = {
+                key: scored["stray_marks"].get(key)
+                for key in ("ok", "skipped", "detail", "mark_px", "frame", "marks")
+            }
+        if scored.get("judge_scope"):
+            result_row["judge_scope"] = scored["judge_scope"]
         reference_verdict = (scored.get("checks") or {}).get("reference_subject")
         if isinstance(reference_verdict, dict):
             result_row["reference_check"] = dict(reference_verdict)

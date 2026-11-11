@@ -511,6 +511,232 @@ def check_text_free(rgb: np.ndarray, spec: Dict[str, Any]) -> Dict[str, Any]:
                threshold=threshold, check="text_free")
 
 
+def _runs(row: np.ndarray) -> list[tuple[int, int]]:
+    """(start, end_exclusive) runs of True in one boolean row."""
+    padded = np.concatenate(([0], row.astype(np.int8), [0]))
+    edges = np.diff(padded)
+    starts = np.flatnonzero(edges == 1).tolist()
+    ends = np.flatnonzero(edges == -1).tolist()
+    return list(zip(starts, ends))
+
+
+def _components(mask: np.ndarray, *, with_map: bool = False
+                ) -> Any:
+    """4-connected components of a boolean mask, numpy only (no scipy).
+
+    Run-length rows are merged with a union-find, so the cost follows the ink
+    rather than the frame: a 2000 x 2000 page with a few strokes labels in
+    milliseconds. With `with_map=True` the per-pixel label map is returned too,
+    which is what lets a caller ask "does this mark touch the product?".
+    """
+    parent: list[int] = []
+
+    def find(a: int) -> int:
+        while parent[a] != a:
+            parent[a] = parent[parent[a]]
+            a = parent[a]
+        return a
+
+    def union(a: int, b: int) -> None:
+        root_a, root_b = find(a), find(b)
+        if root_a != root_b:
+            parent[root_b] = root_a
+
+    height = mask.shape[0]
+    previous: list[tuple[int, int, int]] = []
+    runs: list[tuple[int, int, int, int]] = []
+    index = 0
+    for y in range(height):
+        current: list[tuple[int, int, int]] = []
+        for start, end in _runs(mask[y]):
+            parent.append(index)
+            for p_start, p_end, p_index in previous:
+                if p_start < end and start < p_end:
+                    union(index, p_index)
+            current.append((start, end, index))
+            runs.append((y, start, end, index))
+            index += 1
+        previous = current
+
+    stats: Dict[int, Dict[str, Any]] = {}
+    label_map = np.zeros(mask.shape, dtype=np.int32) if with_map else None
+    for y, start, end, label in runs:
+        root = find(label)
+        entry = stats.setdefault(root, {"area": 0, "x0": start, "x1": end,
+                                        "y0": y, "y1": y})
+        entry["area"] += end - start
+        entry["x0"] = min(entry["x0"], start)
+        entry["x1"] = max(entry["x1"], end)
+        entry["y1"] = max(entry["y1"], y)
+        if label_map is not None:
+            label_map[y, start:end] = root + 1
+    components = [dict(value, id=key) for key, value in stats.items()]
+    if with_map:
+        return components, label_map
+    return components
+
+
+def _dilate(mask: np.ndarray, steps: int = 3) -> np.ndarray:
+    out = mask.copy()
+    for _ in range(max(0, int(steps))):
+        grown = out.copy()
+        grown[1:, :] |= out[:-1, :]
+        grown[:-1, :] |= out[1:, :]
+        grown[:, 1:] |= out[:, :-1]
+        grown[:, :-1] |= out[:, 1:]
+        out = grown
+    return out
+
+
+def check_stray_marks(rgb: np.ndarray, spec: Dict[str, Any], *,
+                      subject_mask: Optional[np.ndarray] = None,
+                      frame: Optional[Any] = None) -> Dict[str, Any]:
+    """Stray objects on or beside the product, measured — the D-019 instrument.
+
+    A stray is a *small, thin, detached* mark: a stick or wire, a dashed rule, a
+    floating ring, a ghosted duplicate. Three things are deliberately not strays:
+
+    * the product itself, which is why a silhouette is required — without one the
+      check is skipped rather than guessed;
+    * a large region, which is a scene or a shadow, not an object: a contact
+      shadow is measured by `check_matte_residue`, not here;
+    * the page furniture a layout stage drew on purpose. That is why `frame`
+      exists: a composed page is measured **inside its photo panel**, because the
+      rules, headings and callout dots live in the margin by construction
+      (`deterministic.infographic`). Asking "is this page free of marks" of a page
+      the harness itself typeset was the D-019 acceptance bug. The panel is inset
+      by `frame_inset` (10 px) so the panel's own border line and the callout dots
+      that sit on it are not read as marks.
+
+    Returns a verdict shaped like every other check. `skipped` is a real answer:
+    with no silhouette nothing can be attributed to the product.
+    """
+    if subject_mask is None:
+        return _skip("no product silhouette was recorded, so a mark cannot be "
+                     "attributed to the scene rather than the product")
+    spec = spec or {}
+    distance = float(spec.get("distance", 20))
+    min_area = int(spec.get("min_area", 80))
+    max_area = int(spec.get("max_area", 20000))
+    max_side_frac = float(spec.get("max_side_fraction", 0.25))
+    height, width = rgb.shape[:2]
+    if frame:
+        x0, y0, x1, y1 = (int(v) for v in frame)
+        inset = int(spec.get("frame_inset", 10))
+        x0, y0, x1, y1 = x0 + inset, y0 + inset, x1 - inset, y1 - inset
+        x0, y0 = max(0, x0), max(0, y0)
+        x1, y1 = min(width, x1), min(height, y1)
+    else:
+        x0, y0, x1, y1 = 0, 0, width, height
+    if x1 - x0 < 8 or y1 - y0 < 8:
+        return _skip(f"frame {frame!r} is too small to measure")
+    region = np.asarray(rgb[y0:y1, x0:x1], dtype=np.int16)
+    corners = [region[0:24, 0:24], region[0:24, -24:], region[-24:, 0:24], region[-24:, -24:]]
+    levels = [np.median(patch.reshape(-1, 3), axis=0) for patch in corners]
+    background = np.median(np.array(levels), axis=0)
+    spread = max(float(np.abs(level - background).max()) for level in levels)
+    max_spread = float(spec.get("max_corner_spread", 12))
+    if spread > max_spread:
+        # A scene with a horizon or a vignette has no single background to differ from, so
+        # a "mark" here could just as easily be the scene. Reported, never guessed.
+        return _skip(f"the background is not a field: corner levels span {spread:.0f} "
+                     f"levels of {max_spread:.0f}, so a mark cannot be attributed to the "
+                     f"picture rather than the scene")
+    ink = np.abs(region - background).max(axis=2) > distance
+    subject = np.asarray(subject_mask, dtype=bool)[y0:y1, x0:x1]
+    outside = ink & ~subject
+    side_limit = max_side_frac * min(x1 - x0, y1 - y0)
+    min_thickness = float(spec.get("min_thickness", 4.0))
+    rim_radius = int(spec.get("rim_radius", 3))
+    components, labels = _components(outside, with_map=True)
+    hugging = _dilate(subject, rim_radius)
+    # Three shape filters, each with a reason:
+    #  * a halo or a silhouette rim hugs the product edge, so most of its own pixels sit
+    #    inside the product's rim band — the silhouette and residue checks own that
+    #    property, and it is not an object a seller would point at;
+    #  * a mark 1-3 px thick is a hairline, not an object;
+    #  * a region larger than `max_area` or wider than the side cap is a scene area or a
+    #    shadow, not a mark.
+    marks = []
+    for component in components:
+        side = max(component["x1"] - component["x0"], component["y1"] - component["y0"])
+        thickness = component["area"] / float(max(1, side))
+        if not (min_area <= component["area"] <= max_area and side <= side_limit
+                and thickness >= min_thickness):
+            continue
+        own = labels == int(component["id"]) + 1
+        if float((own & hugging).sum()) >= 0.5 * component["area"]:
+            continue
+        marks.append({key: int(component[key])
+                      for key in ("area", "x0", "y0", "x1", "y1")})
+    marks.sort(key=lambda mark: mark["area"], reverse=True)
+    detail = (f"no stray object outside the product in "
+              f"{'the photo panel' if frame else 'the frame'}"
+              if not marks else
+              f"{len(marks)} stray mark(s), {sum(m['area'] for m in marks)} px, "
+              f"largest {marks[0]['area']} px at "
+              f"({marks[0]['x0']},{marks[0]['y0']})-({marks[0]['x1']},{marks[0]['y1']})")
+    return _ok(ok=not marks, check="stray_marks", marks=marks[:8], mark_px=sum(
+        mark["area"] for mark in marks), frame=[x0, y0, x1, y1],
+        background=[int(v) for v in background], detail=detail)
+
+
+#: The page furniture `deterministic.infographic` draws itself. A composed page is
+#: not a photograph: these marks are the layout, and asking a judge to call them
+#: strays was the D-019 acceptance bug (measured 2026-11-11).
+COMPOSED_PAGE_FURNITURE = ("the accent rule at the top of the page", "the subtitle rule",
+                           "the footer rule and footer text", "the callout chips",
+                           "their leader lines", "their anchor dots")
+
+
+def judge_constraint(brief: Dict[str, Any], layout: Optional[Dict[str, Any]] = None
+                     ) -> Dict[str, Any]:
+    """The question the vision judge is asked, and the scope of "stray".
+
+    Two populations, two questions:
+
+    * a **photograph** (no layout stage) must be free of marks on or beside the
+      product, including the background the model drew;
+    * a **composed page** (the harness typed the title, rules, callouts and footer)
+      is judged on the photograph inside its panel. Its own furniture is named as
+      exempt so a correct page is not failed for the layout that makes it correct.
+
+    `layout` is the generator's own record (`{"kind": "deterministic", "panel": …}`).
+    Anything else — absent, refused, errored — is judged as a photograph, which is
+    the stricter question and never the weaker one.
+    """
+    described = str(brief.get("judge_constraint") or "").strip()
+    if not described:
+        described = str(brief.get("prompt") or brief.get("product") or
+                        brief.get("product_description") or "").strip()
+    if not described:
+        described = (f"{brief.get('situation')} picture for a {brief.get('category')} "
+                     "that satisfies the brief's stated constraints")
+    record = layout or {}
+    composed = (str(record.get("kind") or "") == "deterministic"
+                and str(brief.get("situation") or "") in ("infographic", "packaging_mockup"))
+    if not composed:
+        return {
+            "constraint": (f"{described} The picture must be free of stray marks: a thin "
+                           "stick or wire, a dashed rule, a floating ring, or a duplicate "
+                           "of the product, on or beside the product."),
+            "scope": "photograph",
+            "furniture_exempt": [],
+            "brief_id": brief.get("id"),
+        }
+    return {
+        "constraint": (
+            f"{described} Judge the photograph inside the page's photo panel. A stray there "
+            "is a thin stick or wire, a dashed rule, a floating ring or a small detached "
+            "object on or beside the product. The page's own layout furniture is drawn by "
+            "the app and is NOT a stray: " + "; ".join(COMPOSED_PAGE_FURNITURE) + "."),
+        "scope": "composed_page",
+        "furniture_exempt": list(COMPOSED_PAGE_FURNITURE),
+        "panel": record.get("panel"),
+        "brief_id": brief.get("id"),
+    }
+
+
 def _run_checks(loaded: LoadedImage, brief: Dict[str, Any], *,
                 composite_route: bool = True,
                 product_box: Optional[Any] = None,
@@ -728,7 +954,8 @@ def score_image(image_bytes: bytes, brief: Dict[str, Any], *,
                 placement: Any = None,
                 placement_quad: Any = None,
                 product_box: Optional[Any] = None,
-                silhouette_source: Optional[str] = None) -> Dict[str, Any]:
+                silhouette_source: Optional[str] = None,
+                layout: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     """Score one image against one brief. Never raises on bad image data.
 
     `reference_check` is an optional callable taking the decoded RGB array and
@@ -806,27 +1033,31 @@ def score_image(image_bytes: bytes, brief: Dict[str, Any], *,
         # pale-pink Word Coffee gift boxes and is filed under `food_jar`, so the judge
         # correctly answered "not a food jar" about a correct picture (2026-11-11). The
         # brief's own words are the only honest description of what it wants.
-        described = str(brief.get("judge_constraint") or "").strip()
-        if not described:
-            product = str(brief.get("prompt") or brief.get("product") or
-                          brief.get("product_description") or "").strip()
-            if product:
-                described = product
-            else:
-                described = (f"{brief.get('situation')} picture for a {brief.get('category')} "
-                             "that satisfies the brief's stated constraints")
-        rubric = {
-            "brief_id": brief_id,
-            "category": brief.get("category"),
-            "situation": brief.get("situation"),
-            "constraint": described,
-        }
+        rubric = judge_constraint(brief, layout)
+        rubric.update({"category": brief.get("category"),
+                       "situation": brief.get("situation")})
         verdict = _normalise_judgement(judge(image_bytes, rubric))
         checks["vision"] = verdict
         if not verdict.get("skipped"):
             base["judged"] = True
         else:
             checks["vision"]["ok"] = True
+        base["judge_scope"] = rubric.get("scope")
+
+    # D-019: measured, never graded. "Stray marks" is a question about the mark on or
+    # beside the product, so it needs the product's silhouette and — on a page the
+    # harness composed — the photo panel, not the page. Recorded as a diagnostic so no
+    # published score moves for a check that was not part of the weights.
+    mask = _product_mask_from_cutout(cutout, product_box, loaded.rgb.shape[:2])
+    panel = (layout or {}).get("panel")
+    panel_frame = None
+    if isinstance(panel, (list, tuple)) and len(panel) == 4:
+        panel_frame = [int(panel[0]), int(panel[1]),
+                       int(panel[0]) + int(panel[2]), int(panel[1]) + int(panel[3])]
+    stray_spec = dict(((brief.get("constraints") or {}).get("stray_marks") or {}))
+    base["stray_marks"] = check_stray_marks(
+        loaded.rgb, stray_spec, subject_mask=mask,
+        frame=panel_frame if str((layout or {}).get("kind")) == "deterministic" else None)
 
     combined = combine_checks(checks, brief, composite_route=composite_route)
 

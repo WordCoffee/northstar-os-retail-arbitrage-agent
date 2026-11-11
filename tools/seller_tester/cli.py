@@ -361,6 +361,18 @@ def build_parser() -> argparse.ArgumentParser:
     px.add_argument("--out-dir", default=None)
     px.add_argument("--summary-out", default=None)
     px.add_argument("--gaps", default=None)
+
+    sv = sub.add_parser(
+        "services",
+        help="exercise the four non-image service paths (listing, ppc, golden goose, research)")
+    sv.add_argument("--only", default=None,
+                    help="comma list from listing,ppc,golden_goose,research (default: all four)")
+    sv.add_argument("--fixtures", default=None,
+                    help=f"fixture file (default {Path(__file__).resolve().parent / 'service_briefs.json'})")
+    sv.add_argument("--out", default=None,
+                    help="proof file (default state/seller/services_proof.json)")
+    sv.add_argument("--work-dir", default=None,
+                    help="per-path artefacts (default state/seller/services)")
     return parser
 
 
@@ -386,6 +398,31 @@ def _cmd_packaging(args: Any) -> int:
     return 0
 
 
+def _cmd_services(args: argparse.Namespace) -> int:
+    """Run the four non-image service paths and print what passed, check by check."""
+    from . import services  # noqa: PLC0415
+
+    summary = services.run_pass(
+        fixtures=args.fixtures, only=args.only,
+        out_path=args.out or services.DEFAULT_OUT,
+        work_dir=args.work_dir or services.DEFAULT_WORK_DIR)
+    for row in summary["results"]:
+        print(json.dumps({
+            "path": row.get("path"), "brief": row.get("brief_id"),
+            "status": row.get("status"), "score": row.get("score"),
+            "passed": row.get("passed"), "failed": row.get("failed_checks"),
+            "artefact": row.get("artefact"), "reason": row.get("reason"),
+        }, ensure_ascii=False))
+    head = {key: summary.get(key) for key in
+            ("generated_at", "only", "scored", "passed", "refused", "seconds", "network")}
+    head["by_path"] = {name: {"scored": row["scored"], "passed": row["passed"],
+                              "mean_score": row["mean_score"]}
+                       for name, row in summary["paths"].items() if row["measured"]}
+    print(json.dumps(head, ensure_ascii=False))
+    print(f"summary: {summary['summary_path']}")
+    return 0 if summary["refused"] == 0 else 1
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
@@ -402,6 +439,8 @@ def main(argv: list[str] | None = None) -> int:
             return _cmd_product(args)
         if args.command == "packaging":
             return _cmd_packaging(args)
+        if args.command == "services":
+            return _cmd_services(args)
         return _cmd_escalate(args)
     except GeneratorUnavailable as exc:
         print(f"generator unavailable: {exc}", file=sys.stderr)
