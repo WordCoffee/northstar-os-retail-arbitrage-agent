@@ -10,6 +10,39 @@ A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.m
 > and `reports/ty/handoff.md`, then continue from the first unfinished unit. No
 > questions, no reports between cycles. Idle means re-plan.
 
+## Position, 2026-11-11 cycle 14 — the background is measured on the whole frame, and eight published 100.0s do not survive it
+
+Unit report: `reports/ty/d020_matte_residue.md`. Tag `ty-dir-fix-matte-residue-check`.
+
+| # | job | result |
+|---|---|---|
+| 1 | `fix-matte-residue-check` (D-020, rank 1) — the two instruments that exist for "is the background flat" sample the four **corners** and an outer **ring**, so a shadow under the product passes both | **D-020 closed.** `scorers.check_matte_residue` measures the whole frame outside the product's silhouette; `background` 0.20 → 0.10 + `matte_residue` 0.10 (the denominator is unchanged, and a picture with no silhouette keeps the old single weight), critical where graded |
+
+**The measurement, on the published artefacts** (`reports/ty/d020_residue_audit.json`):
+the 12 full-generation outputs re-score as **8 checked, 8 failed, residue 10.2 – 25.6 % of
+the frame, mean 100.0 → 90.0**. PO-001 alone is 25.6 %. The control is a fresh drawn pass
+with the new wiring: 0.00 % residue, still 100.0 — the check does not fire on a clean
+picture. `ty/seller_scores.json` now carries that statement next to the 96.2 rather than a
+quietly rewritten mean.
+
+**Three provenance defects were fixed to make the check possible at all:** the harness
+loaded a cutout **only** on the composite route (0 of 20 `product_picture` artefacts ever
+reached the scorers), `generation.product_box` is null on that route, and the app's own
+manifest beside the picture carries the truth. All three are in `harness.py`.
+
+**New, and the reason the drawn plates are unmeasured:** **D-021** — the drawn plate draws
+its own base shadow, so the silhouette *includes* it and the residue check reads 0.00 % on
+a picture that visibly has a shadow. **D-022** — a full generation has no white-composite
+step, which is why its background is a grey pool. Both queued, ranks 1 and 2.
+
+**Tests:** 9 in `test_matte_residue.py` (written first), 95 in the seller/scorer group,
+15 + 1 skipped in the plate/picture group.
+
+**Next, in rank order:** `fix-drawn-plate-shadow` (D-021) → `fix-fullgen-white-composite`
+(D-022) → `sel-04-packaging` → `pack-02-apparel-flat-print` → `reference-depth` →
+`pack-03-boxart-forms` → `block3-workspaces` → `block4-seller-tests` →
+`block5-production-hardening` → `block7-verification` → D-019.
+
 ## Position, 2026-11-11 cycle 13 — the contact shadow is gone, and the colour cut was worse than it
 
 Unit report: `reports/ty/d017_plate_shadow_matte.md`. Tag `ty-dir-fix-plate-shadow-matte`.
