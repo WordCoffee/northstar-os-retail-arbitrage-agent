@@ -14,6 +14,7 @@ import { useAssetStore, useDecodedAssets } from '../../studio/engine/assets.js'
 import { useRoom } from '../../studio/engine/store.js'
 import { DEFAULT_BRAND_KITS } from '../../studio/engine/presets.js'
 import PpcHarvest from './ppc/PpcHarvest.jsx'
+import AmazonFiles from './design-studio/AmazonFiles.jsx'
 
 const TABS = [
   { id: 'campaigns', label: 'Campaigns', count: 8 },
@@ -340,6 +341,12 @@ export default function AdPilot() {
   const [selectedCampaign, setSelectedCampaign] = useState(null)
   const embedded = !location.pathname.startsWith('/adpilot')
   const [embeddedView, setEmbeddedView] = useState('campaigns')
+  // The primary action of a PPC tool is not "make a plan" — it is: take the report the
+  // seller exported, propose the row changes, and hand back a bulk file they can upload.
+  // That flow existed only under Design Studio → Ads → Amazon files, so AdPilot's own
+  // primary button was a toast. It now opens the real flow in place (`AmazonFiles` is the
+  // one implementation; nothing is reimplemented here).
+  const [showBulk, setShowBulk] = useState(false)
 
   const requested = embedded ? embeddedView : (new URLSearchParams(location.search).get('view') || '')
   const view = TABS.some(t => t.id === requested) ? requested : 'campaigns'
@@ -359,7 +366,14 @@ export default function AdPilot() {
       actions={<>
         <ModeToggle mode={mode} onChange={setMode} />
         <button className="btn btn-sm" onClick={() => selectView('planner')}>Create Campaign</button>
-        <button className="btn btn-sm btn-ghost" onClick={() => toast('Bulk actions operate on the local campaign records below — nothing is sent to an ad platform.', 'info')}>Bulk Actions</button>
+        <button
+          className={`btn btn-sm ${showBulk ? 'btn-primary' : ''}`}
+          data-testid="ap-bulk-action"
+          aria-expanded={showBulk}
+          onClick={() => { selectView('campaigns'); setShowBulk(v => !v) }}
+        >
+          {showBulk ? 'Hide bulk ads file' : 'Upload report → bulk ads file'}
+        </button>
       </>}
     >
       {evidence.phase === 'empty' && (
@@ -398,6 +412,21 @@ export default function AdPilot() {
 
       {view === 'campaigns' && (
         <div className="subview">
+          {showBulk && (
+            <div className="card" data-testid="ap-bulk-panel" style={{ marginBottom: 20 }}>
+              <div className="card-head">
+                <h3 className="card-title">The real PPC action: report in, bulk ads file out</h3>
+                <span className="pill pill-muted">file-only · nothing sent to Amazon</span>
+              </div>
+              <p style={{ fontSize: 13, marginBottom: 12 }}>
+                Upload the report you exported from the ads console. Northstar proposes the row changes,
+                refuses anything blocked or over your spend limit until you confirm again, writes a
+                <strong> new</strong> bulk file with the approved rows, and keeps every version with its
+                checksum. You upload that file to the ads console yourself.
+              </p>
+              <AmazonFiles />
+            </div>
+          )}
           <div className="card">
             <div className="card-head">
               <h3 className="card-title">Campaign Health</h3>

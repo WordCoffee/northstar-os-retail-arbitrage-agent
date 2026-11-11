@@ -486,6 +486,8 @@ class CompositeGenerator:
         """
         from . import deterministic  # noqa: PLC0415
 
+        from .stage_guard import StageRefused, declined  # noqa: PLC0415
+
         situation = str(brief.get("situation") or "")
         if self.layout != "deterministic" or situation not in deterministic.SITUATIONS:
             return placed
@@ -498,18 +500,23 @@ class CompositeGenerator:
             xywh = [left, top, max(1, right - left), max(1, bottom - top)]
             # The render lane gives a square; the brief may ask for 4:5. Extend first, so the
             # product box and the copy band are both in the canvas the brief asked for.
-            fitted = deterministic.fit_aspect(placed["bytes"], xywh,
-                                              deterministic.brief_aspect(brief))
+            fitted = declined("fit_aspect", deterministic.fit_aspect, placed["bytes"], xywh,
+                              deterministic.brief_aspect(brief))
             box = fitted["product_box"]
             record["aspect_fit"] = dict(fitted["added"])
             if situation == "infographic":
-                result = deterministic.infographic(fitted["bytes"], box, brief)
+                result = declined("infographic", deterministic.infographic,
+                                  fitted["bytes"], box, brief)
                 box = result.get("product_box", box)
             else:
-                result = deterministic.panel_warp(fitted["bytes"], box, brief)
-        except (ValueError, RuntimeError) as exc:
+                result = declined("panel_warp", deterministic.panel_warp,
+                                  fitted["bytes"], box, brief)
+        except StageRefused as exc:
+            # A typed refusal: the geometry genuinely cannot be laid out. Recorded, and the
+            # scene is kept. ValueError/RuntimeError no longer land here by type alone — the
+            # `declined()` calls above name the steps allowed to say "cannot".
             record["layout"] = {"kind": "refused", "situation": situation,
-                                "reason": f"{type(exc).__name__}: {exc}"}
+                                "reason": exc.reason or str(exc), "declined": True}
             return placed
         except Exception as exc:  # noqa: BLE001 - re-raised loud, never degraded
             from .stage_guard import StageFailed  # noqa: PLC0415
@@ -741,13 +748,15 @@ class CompositeGenerator:
         import product_composite as composite  # noqa: PLC0415
         import product_cutout as pc  # noqa: PLC0415
 
+        from .stage_guard import StageFailed, StageRefused, declined  # noqa: PLC0415
+
         try:
             plate = Image.open(BytesIO(scene["bytes"])).convert("RGB")
             array = np.asarray(plate)
-            cut = self._cut(array, method="grabcut")
+            cut = declined("cutout", self._cut, array, method="grabcut")
             if int(np.asarray(cut.alpha).sum()) == 0:
-                raise RuntimeError("the cutout is empty")
-            cut_png = pc.rgba_png_bytes(cut.rgb, cut.alpha)
+                raise StageRefused("the cutout is empty: the generated plate has no separable subject")
+            cut_png = declined("rgba_png_bytes", pc.rgba_png_bytes, cut.rgb, cut.alpha)
             # The canvas has to be the brief's size, not the lane's 768: using the raw scene for a
             # free background meant every prompt-only brief failed `dimensions` at 768x768 (12 of 12,
             # 2026-11-10). A free background is the scene resampled up; a uniform one is the flat
@@ -758,14 +767,16 @@ class CompositeGenerator:
                 record["background_resampled"] = {"from": "scene", "to": target_px}
             else:
                 background = white_canvas_png(target_px)
-            placed = composite.place_product(background, cut_png, scale=0.62, anchor=(0.5, 0.6))
+            placed = declined("place_product", composite.place_product, background, cut_png,
+                              scale=0.62, anchor=(0.5, 0.6))
             if str(brief.get("label_mode") or "") == "warp":
                 # The body was drawn without lettering; the label is composed and warped on here, so
                 # the copy is readable by construction rather than by luck.
                 from . import label_warp  # noqa: PLC0415
 
-                label_png = label_warp.compose_label(brief)
-                warped = label_warp.warp_label(placed["bytes"], placed["product_box"], label_png)
+                label_png = declined("compose_label", label_warp.compose_label, brief)
+                warped = declined("warp_label", label_warp.warp_label, placed["bytes"],
+                                  placed["product_box"], label_png)
                 placed = dict(placed)
                 placed["bytes"] = warped["bytes"]
                 record["label"] = {"mode": "warp", **warped["meta"]}
@@ -784,18 +795,18 @@ class CompositeGenerator:
             cut_target.write_bytes(cut_png)
             record["cutout_path"] = str(cut_target)
             return placed["bytes"], record
-        except (ValueError, RuntimeError) as exc:
-            # A stage that cannot run keeps the plate and says so: an empty cutout is a business
-            # outcome, not a bug.
-            record["cut_from_generation"] = {"method": "refused",
-                                             "reason": f"{type(exc).__name__}: {exc}"}
+        except StageRefused as exc:
+            # A typed refusal: the plate is kept and the run says why. An empty cutout is a
+            # business outcome, not a bug.
+            record["cut_from_generation"] = {"method": "refused", "declined": True,
+                                             "reason": exc.reason or str(exc)}
             return scene["bytes"], record
+        except StageFailed:
+            raise
         except Exception as exc:  # noqa: BLE001 - re-raised as loud, never swallowed
             # A programmer error is not a refused stage. Swallowing these made a missing `import
             # numpy` look like "the stage refused" for two scoring rounds, and the score silently
             # fell back to the raw plate (2026-11-10). stage_guard is the one place that decides.
-            from .stage_guard import StageFailed  # noqa: PLC0415
-
             record["cut_from_generation"] = {"method": "error",
                                              "error": f"{type(exc).__name__}: {exc}"}
             raise StageFailed(
