@@ -402,6 +402,35 @@ def _dump(doc: Dict[str, Any]) -> str:
     return json.dumps(doc, indent=2, ensure_ascii=False) + "\n"
 
 
+#: Top-level keys the generator does not own and must never drop.
+#: Measured 2026-11-11: block3 added a hand-authored `scene_workspaces` block to
+#: `ty/northstar_workspaces.json`, and a plain regeneration would have deleted it. A
+#: generated file that silently loses hand-authored sections is worse than a stale one.
+FOREIGN_KEYS_KEPT = True
+
+
+def expected_doc(path: Path, doc: Dict[str, Any]) -> Dict[str, Any]:
+    """The document as it should be on disk: generated keys, plus any foreign ones.
+
+    Comparison and writing both go through this, so `--check` and the unit test agree
+    with what a regeneration would actually produce.
+    """
+    if not FOREIGN_KEYS_KEPT or not path.is_file():
+        return doc
+    try:
+        existing = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return doc
+    if not isinstance(existing, dict):
+        return doc
+    merged = dict(doc)
+    for key, value in existing.items():
+        if key not in merged:
+            merged[key] = value
+    return merged
+
+
+
 def main(argv: List[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Generate Northstar artefacts from the service registry")
     parser.add_argument("--check", action="store_true", help="verify the files on disk instead of writing")
@@ -433,7 +462,7 @@ def main(argv: List[str] | None = None) -> int:
     if args.check:
         drifted = []
         for path, doc in docs.items():
-            if not path.is_file() or path.read_text(encoding="utf-8") != _dump(doc):
+            if not path.is_file() or path.read_text(encoding="utf-8") != _dump(expected_doc(path, doc)):
                 drifted.append(str(path.relative_to(ROOT)))
         if drifted:
             print(f"generated files are stale: {drifted}", file=sys.stderr)
@@ -442,7 +471,7 @@ def main(argv: List[str] | None = None) -> int:
         return 0
 
     for path, doc in docs.items():
-        path.write_text(_dump(doc), encoding="utf-8")
+        path.write_text(_dump(expected_doc(path, doc)), encoding="utf-8")
         print(f"wrote {path.relative_to(ROOT)}")
     tools = docs[TOOLS_OUT]
     print(

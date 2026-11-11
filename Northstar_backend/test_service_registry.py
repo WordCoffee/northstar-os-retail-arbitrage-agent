@@ -283,6 +283,41 @@ def test_generated_files_are_current(registry):
     stale = []
     for name, doc in expected.items():
         path = TY / name
-        if path.read_text(encoding="utf-8") != build._dump(doc):
+        # `expected_doc` merges the generated keys with any hand-authored block the file
+        # carries (block3 added `scene_workspaces`). Comparing against the bare document
+        # made a legitimate additive block look like drift, and a plain regeneration would
+        # have deleted it.
+        if path.read_text(encoding="utf-8") != build._dump(build.expected_doc(path, doc)):
             stale.append(name)
     assert stale == [], f"run python -m tools.registry.build (stale: {stale})"
+
+
+# --- generated files keep hand-authored blocks -------------------------------
+# block3 added a `scene_workspaces` block to ty/northstar_workspaces.json. A plain
+# regeneration would have deleted it, and the byte-comparison above would have called the
+# block "drift" forever. Both now go through `expected_doc`, which keeps keys the
+# generator does not own.
+
+
+def test_a_hand_authored_block_survives_a_regeneration(tmp_path):
+    path = tmp_path / "workspaces.json"
+    path.write_text(json.dumps({"schema": "v1", "workspaces": [],
+                                "scene_workspaces": {"design": {"route": "/design-studio"}}}),
+                    encoding="utf-8")
+    merged = build.expected_doc(path, {"schema": "v1", "workspaces": []})
+    assert merged["scene_workspaces"] == {"design": {"route": "/design-studio"}}
+    assert merged["workspaces"] == []
+
+
+def test_a_generated_key_is_never_taken_from_the_old_file(tmp_path):
+    path = tmp_path / "workspaces.json"
+    path.write_text(json.dumps({"schema": "v1", "count": 999}), encoding="utf-8")
+    merged = build.expected_doc(path, {"schema": "v1", "count": 3})
+    assert merged["count"] == 3, "a generated key must come from the code, not the file"
+
+
+def test_a_missing_or_corrupt_file_is_not_a_reason_to_fail(tmp_path):
+    assert build.expected_doc(tmp_path / "absent.json", {"a": 1}) == {"a": 1}
+    broken = tmp_path / "broken.json"
+    broken.write_text("{not json", encoding="utf-8")
+    assert build.expected_doc(broken, {"a": 1}) == {"a": 1}

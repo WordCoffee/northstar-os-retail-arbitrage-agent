@@ -34,21 +34,21 @@
           "effect": "read",
           "endpoint": "/api/sourcescout/summary",
           "method": "GET",
-          "source": "Northstar_backend/main.py:2310"
+          "source": "Northstar_backend/main.py:2336"
         },
         {
           "name": "read model posture",
           "effect": "read",
           "endpoint": "/api/v1/models",
           "method": "GET",
-          "source": "Northstar_backend/main.py:987"
+          "source": "Northstar_backend/main.py:1013"
         },
         {
           "name": "read credit balance",
           "effect": "read",
           "endpoint": "/api/v1/credits/me",
           "method": "GET",
-          "source": "Northstar_backend/main.py:2419"
+          "source": "Northstar_backend/main.py:2445"
         }
       ],
       "bojo_tool": {
@@ -86,9 +86,9 @@
         "vision": "live",
         "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: Operations Hub | controls (shell chrome included): Pin snapshot, Run batch, Matched Products, 470, Quantity PASS, 245",
         "backend": [
-          "Northstar_backend/main.py:2310",
-          "Northstar_backend/main.py:987",
-          "Northstar_backend/main.py:2419"
+          "Northstar_backend/main.py:1013",
+          "Northstar_backend/main.py:2336",
+          "Northstar_backend/main.py:2445"
         ],
         "declared_tools": [
           "hub_status"
@@ -136,14 +136,14 @@
           "effect": "read",
           "endpoint": "/api/v1/credits/me",
           "method": "GET",
-          "source": "Northstar_backend/main.py:2419"
+          "source": "Northstar_backend/main.py:2445"
         },
         {
           "name": "read model posture",
           "effect": "read",
           "endpoint": "/api/v1/models",
           "method": "GET",
-          "source": "Northstar_backend/main.py:987"
+          "source": "Northstar_backend/main.py:1013"
         }
       ],
       "bojo_tool": {
@@ -160,8 +160,8 @@
         "vision": "live",
         "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: The Ledger | controls (shell chrome included): Command Center, Design Studio, AdPilot, SocialPulse, Profitability Dashboard, Spreadsheet Lab",
         "backend": [
-          "Northstar_backend/main.py:2419",
-          "Northstar_backend/main.py:987"
+          "Northstar_backend/main.py:1013",
+          "Northstar_backend/main.py:2445"
         ],
         "declared_tools": [],
         "confidence": "high",
@@ -214,14 +214,14 @@
           "effect": "read",
           "endpoint": "/api/kirkland/scanner",
           "method": "GET",
-          "source": "Northstar_backend/main.py:1842"
+          "source": "Northstar_backend/main.py:1868"
         },
         {
           "name": "read cached matches",
           "effect": "read",
           "endpoint": "/api/sourcescout/matches",
           "method": "GET",
-          "source": "Northstar_backend/main.py:2247"
+          "source": "Northstar_backend/main.py:2273"
         }
       ],
       "bojo_tool": {
@@ -238,8 +238,8 @@
         "vision": "live",
         "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS Retail Arbitrage | controls (shell chrome included): Home, SourceScout, Goose, Profit, Tools, Scanning...",
         "backend": [
-          "Northstar_backend/main.py:1842",
-          "Northstar_backend/main.py:2247"
+          "Northstar_backend/main.py:1868",
+          "Northstar_backend/main.py:2273"
         ],
         "declared_tools": [
           "catalog_pull"
@@ -287,14 +287,14 @@
           "effect": "read",
           "endpoint": "/api/kirkland/scanner",
           "method": "GET",
-          "source": "Northstar_backend/main.py:1842"
+          "source": "Northstar_backend/main.py:1868"
         },
         {
           "name": "read cached matches",
           "effect": "read",
           "endpoint": "/api/sourcescout/matches",
           "method": "GET",
-          "source": "Northstar_backend/main.py:2247"
+          "source": "Northstar_backend/main.py:2273"
         }
       ],
       "bojo_tool": {
@@ -311,8 +311,8 @@
         "vision": "live",
         "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS Retail Arbitrage | controls (shell chrome included): Home, SourceScout, Goose, Profit, Tools, Scanning...",
         "backend": [
-          "Northstar_backend/main.py:1842",
-          "Northstar_backend/main.py:2247"
+          "Northstar_backend/main.py:1868",
+          "Northstar_backend/main.py:2273"
         ],
         "declared_tools": [
           "golden_goose_scan"
@@ -370,7 +370,7 @@
           "effect": "external",
           "endpoint": "/api/autothink/run",
           "method": "POST",
-          "source": "Northstar_backend/main.py:1540"
+          "source": "Northstar_backend/main.py:1566"
         }
       ],
       "bojo_tool": {
@@ -387,7 +387,7 @@
         "vision": "live",
         "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: OfferChisel | controls (shell chrome included): Generate Listing, Product name, e.g. Kirkland Signature Whole Bean Coffee 2.5l, SEO-first, Generate, Workspace, Operator",
         "backend": [
-          "Northstar_backend/main.py:1540"
+          "Northstar_backend/main.py:1566"
         ],
         "declared_tools": [
           "offer_recommendation"
@@ -451,7 +451,7 @@
           "effect": "external",
           "endpoint": "/api/autothink/run",
           "method": "POST",
-          "source": "Northstar_backend/main.py:1540"
+          "source": "Northstar_backend/main.py:1566"
         }
       ],
       "bojo_tool": {
@@ -474,7 +474,7 @@
         "vision": "live",
         "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: The Town Crier | controls (shell chrome included): Home, SourceScout, Goose, Profit, Tools, Ask Gemini",
         "backend": [
-          "Northstar_backend/main.py:1540"
+          "Northstar_backend/main.py:1566"
         ],
         "declared_tools": [],
         "confidence": "high",
@@ -620,21 +620,21 @@
           "effect": "read",
           "endpoint": "/api/autothink/models",
           "method": "GET",
-          "source": "Northstar_backend/main.py:1529"
+          "source": "Northstar_backend/main.py:1555"
         },
         {
           "name": "run prompt",
           "effect": "external",
           "endpoint": "/api/autothink/run",
           "method": "POST",
-          "source": "Northstar_backend/main.py:1540"
+          "source": "Northstar_backend/main.py:1566"
         },
         {
           "name": "read history",
           "effect": "read",
           "endpoint": "/api/autothink/history",
           "method": "GET",
-          "source": "Northstar_backend/main.py:1557"
+          "source": "Northstar_backend/main.py:1583"
         }
       ],
       "bojo_tool": {
@@ -662,9 +662,9 @@
         "vision": "live",
         "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: Northstar OS Retail Arbitrage | controls (shell chrome included): New session, Preview, esc interrupt, shift+tab, agents, ctrl+p",
         "backend": [
-          "Northstar_backend/main.py:1529",
-          "Northstar_backend/main.py:1540",
-          "Northstar_backend/main.py:1557"
+          "Northstar_backend/main.py:1555",
+          "Northstar_backend/main.py:1566",
+          "Northstar_backend/main.py:1583"
         ],
         "declared_tools": [],
         "confidence": "high",
@@ -704,7 +704,7 @@
           "effect": "read",
           "endpoint": "/api/kirkland/scanner",
           "method": "GET",
-          "source": "Northstar_backend/main.py:1842"
+          "source": "Northstar_backend/main.py:1868"
         }
       ],
       "bojo_tool": {
@@ -721,7 +721,7 @@
         "vision": "live",
         "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: OC | Resume Ty director prog | controls (shell chrome included): Home, Gallery, Tyrone, Desktop, Download, Documents",
         "backend": [
-          "Northstar_backend/main.py:1842"
+          "Northstar_backend/main.py:1868"
         ],
         "declared_tools": [],
         "confidence": "high",
@@ -767,7 +767,7 @@
           "effect": "read",
           "endpoint": "/api/kirkland/scanner",
           "method": "GET",
-          "source": "Northstar_backend/main.py:1842"
+          "source": "Northstar_backend/main.py:1868"
         }
       ],
       "bojo_tool": {
@@ -784,7 +784,7 @@
         "vision": "screenshot",
         "vision_note": "committed capture of this route; not described live | blocked: window did not take the foreground | shot: reports/ty/ux_audit_shots/rankledger.png | latest attempt blocked: neither the title nor the pixels changed",
         "backend": [
-          "Northstar_backend/main.py:1842"
+          "Northstar_backend/main.py:1868"
         ],
         "declared_tools": [],
         "confidence": "low",
@@ -816,7 +816,7 @@
           "effect": "read",
           "endpoint": "/api/kirkland/scanner",
           "method": "GET",
-          "source": "Northstar_backend/main.py:1842"
+          "source": "Northstar_backend/main.py:1868"
         }
       ],
       "bojo_tool": {
@@ -833,7 +833,7 @@
         "vision": "live",
         "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: OC | Resume Ty director prog | controls (shell chrome included): Home, Gallery, Tyrone, Desktop, Download, Documents",
         "backend": [
-          "Northstar_backend/main.py:1842"
+          "Northstar_backend/main.py:1868"
         ],
         "declared_tools": [],
         "confidence": "high",
@@ -1035,15 +1035,18 @@
         "vision": "live",
         "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: Northstar OS Retail Arbitrage | controls (shell chrome included): Home, Gallery, Tyrone, Desktop, Download, Documents",
         "backend": [
-          "Northstar_backend/foundation/api/router.py:755",
-          "Northstar_backend/foundation/api/router.py:650",
-          "Northstar_backend/foundation/api/router.py:1351",
-          "Northstar_backend/foundation/api/router.py:718",
+          "Northstar_backend/foundation/api/router.py:1240",
           "Northstar_backend/foundation/api/router.py:1331",
-          "Northstar_backend/foundation/api/router.py:845",
-          "Northstar_backend/foundation/api/router.py:995",
+          "Northstar_backend/foundation/api/router.py:1351",
           "Northstar_backend/foundation/api/router.py:1407",
-          "Northstar_backend/foundation/api/router.py:466"
+          "Northstar_backend/foundation/api/router.py:466",
+          "Northstar_backend/foundation/api/router.py:650",
+          "Northstar_backend/foundation/api/router.py:659",
+          "Northstar_backend/foundation/api/router.py:711",
+          "Northstar_backend/foundation/api/router.py:718",
+          "Northstar_backend/foundation/api/router.py:755",
+          "Northstar_backend/foundation/api/router.py:845",
+          "Northstar_backend/foundation/api/router.py:995"
         ],
         "declared_tools": [],
         "confidence": "high",
@@ -1199,15 +1202,18 @@
         "vision": "live",
         "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: OC | Autothink UI at 127.0.0.1 | controls (shell chrome included): Home, Gallery, Tyrone, Desktop, Download, Documents",
         "backend": [
+          "Northstar_backend/foundation/api/router.py:1037",
+          "Northstar_backend/foundation/api/router.py:1047",
+          "Northstar_backend/foundation/api/router.py:836",
+          "Northstar_backend/foundation/api/router.py:845",
           "Northstar_backend/foundation/api/router.py:855",
           "Northstar_backend/foundation/api/router.py:868",
+          "Northstar_backend/foundation/api/router.py:891",
           "Northstar_backend/foundation/api/router.py:904",
           "Northstar_backend/foundation/api/router.py:930",
           "Northstar_backend/foundation/api/router.py:944",
           "Northstar_backend/foundation/api/router.py:960",
-          "Northstar_backend/foundation/api/router.py:1037",
-          "Northstar_backend/foundation/api/router.py:1047",
-          "Northstar_backend/foundation/api/router.py:836"
+          "Northstar_backend/foundation/api/router.py:995"
         ],
         "declared_tools": [],
         "confidence": "high",
@@ -1355,8 +1361,10 @@
           "Northstar_backend/foundation/api/router.py:1116",
           "Northstar_backend/foundation/api/router.py:1126",
           "Northstar_backend/foundation/api/router.py:1180",
+          "Northstar_backend/foundation/api/router.py:1207",
           "Northstar_backend/foundation/api/router.py:1240",
-          "Northstar_backend/foundation/api/router.py:1207"
+          "Northstar_backend/foundation/api/router.py:1264",
+          "Northstar_backend/foundation/api/router.py:1310"
         ],
         "declared_tools": [],
         "confidence": "high",
@@ -1681,7 +1689,7 @@
           "effect": "read",
           "endpoint": "/api/design-studio/print/dielines/geometry",
           "method": "POST",
-          "source": "Northstar_backend/design_studio_print.py:729"
+          "source": "Northstar_backend/design_studio_print.py:751"
         },
         {
           "name": "list packaged deliverables",
@@ -1782,10 +1790,10 @@
         "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: Design Studio | controls (shell chrome included): Canvas, Projects, Listing Images, A+ / Brand Story, Storefront, Ads",
         "backend": [
           "Northstar_backend/design_studio_api.py:157",
-          "Northstar_backend/studio_upload_router.py:22",
           "Northstar_backend/design_studio_api.py:201",
-          "Northstar_backend/design_studio_print.py:729",
-          "Northstar_backend/studio_dashboard.py:112"
+          "Northstar_backend/design_studio_print.py:751",
+          "Northstar_backend/studio_dashboard.py:112",
+          "Northstar_backend/studio_upload_router.py:22"
         ],
         "declared_tools": [
           "generate_image",
@@ -2129,9 +2137,9 @@
         "vision": "live",
         "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: Keyword Tracker | controls (shell chrome included): Track New, Reports, Design Studio, Golden Goose Finder, Listing Guardian, Competitor Monitor",
         "backend": [
-          "Northstar_backend/noncreative_reads.py:336",
           "Northstar_backend/foundation/api/router.py:1078",
-          "Northstar_backend/foundation/api/router.py:1116"
+          "Northstar_backend/foundation/api/router.py:1116",
+          "Northstar_backend/noncreative_reads.py:336"
         ],
         "declared_tools": [
           "track_keywords"
@@ -2185,7 +2193,7 @@
           "effect": "read",
           "endpoint": "/api/sourcescout",
           "method": "GET",
-          "source": "Northstar_backend/main.py:2227"
+          "source": "Northstar_backend/main.py:2253"
         }
       ],
       "bojo_tool": {
@@ -2202,8 +2210,8 @@
         "vision": "live",
         "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: twitch.tv/bigviibin | controls (shell chrome included): Following, Browse, Search, Subscribe, Bits: 29% off, Gift a Sub",
         "backend": [
-          "Northstar_backend/noncreative_reads.py:261",
-          "Northstar_backend/main.py:2227"
+          "Northstar_backend/main.py:2253",
+          "Northstar_backend/noncreative_reads.py:261"
         ],
         "declared_tools": [
           "watch_competitor"
@@ -2262,7 +2270,7 @@
           "effect": "external",
           "endpoint": "/api/v1/reasoning/listing-proposal",
           "method": "POST",
-          "source": "Northstar_backend/main.py:1695"
+          "source": "Northstar_backend/main.py:1721"
         },
         {
           "name": "save listing record",
@@ -2304,9 +2312,9 @@
         "vision": "live",
         "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: ListingForge | controls (shell chrome included): Standard, Advanced, Create Listing, Templates, Editor, Templates",
         "backend": [
-          "Northstar_backend/main.py:1695",
+          "Northstar_backend/design_studio_api.py:1270",
           "Northstar_backend/design_studio_api.py:1293",
-          "Northstar_backend/design_studio_api.py:1270"
+          "Northstar_backend/main.py:1721"
         ],
         "declared_tools": [
           "compose_listing"
@@ -2384,7 +2392,7 @@
           "effect": "external",
           "endpoint": "/api/v1/reasoning/ad-copy-proposal",
           "method": "POST",
-          "source": "Northstar_backend/main.py:1711"
+          "source": "Northstar_backend/main.py:1737"
         },
         {
           "name": "save a campaign plan",
@@ -2428,7 +2436,8 @@
           "Northstar_backend/design_studio_api.py:1552",
           "Northstar_backend/design_studio_api.py:1569",
           "Northstar_backend/design_studio_api.py:843",
-          "Northstar_backend/main.py:1711"
+          "Northstar_backend/foundation/api/router.py:868",
+          "Northstar_backend/main.py:1737"
         ],
         "declared_tools": [
           "plan_campaign"
