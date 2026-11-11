@@ -62,9 +62,11 @@ quality.
 - **Proved:** the app's real panel renderer, face measurement, homography warp and OCR gate now run
   for a second brand and a second form, and the pouch path is bit-for-bit unchanged.
 - **Not proved:** the **plate** is synthetic. `studio_generation.engine_status()` reports
-  `armed: False` (`MEDIA_GEN_LIVE` is not 1) and ComfyUI is not reachable, so a drawn carton stands
-  in for the FLUX photograph. Everything after the plate is shipped code; the proof JSON says so in
-  its `plate.source` field. A FLUX plate remains owed.
+  `armed: False` — `reachable: False` at `http://127.0.0.1:8188`, i.e. **ComfyUI is not running**
+  (the `MEDIA_GEN_LIVE=1` flag *is* set in `.env`; the status text was wrong until this cycle fixed
+  `engine_status()` to load the repo `.env`, `Northstar_backend/studio_generation.py:_flag`). So a
+  drawn carton stands in for the FLUX photograph. Everything after the plate is shipped code; the
+  proof JSON says so in its `plate.source` field. A FLUX plate remains owed.
 - **New limit found, and it is a refusal not a bug:** a *very* pale carton on a pale sweep
   (238,214,214 on 232,230,226) falls below the chroma threshold and is refused
   (`plate_face_not_found: … less than 2% of the plate`). The brief's pink reads at 240,196,202. If

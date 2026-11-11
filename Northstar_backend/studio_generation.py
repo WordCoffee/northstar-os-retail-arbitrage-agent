@@ -160,12 +160,37 @@ _REFERENCE_SUFFIX = (", the product in the reference image, identical package, "
 # Text-safe mode appends its own suppression phrase in text_fidelity.sanitize_brief_for_render.
 
 
+def _flag(name: str, default: str = "") -> str:
+    """Read a non-secret feature flag, loading the repo-root `.env` if needed.
+
+    The API server's provider modules call `load_dotenv()` at import; a tool run
+    (`python -m tools.seller_tester …`, a test, this module used directly) does
+    not, so `MEDIA_GEN_LIVE=1` in `.env` used to read as *unarmed* outside the
+    server and the honest status was wrong in the other direction. Only the named
+    flag is read here, and no value is ever printed.
+    """
+    value = str(os.environ.get(name, "") or "").strip()
+    if value:
+        return value
+    try:
+        from pathlib import Path
+
+        from dotenv import load_dotenv
+
+        env_file = Path(__file__).resolve().parents[1] / ".env"
+        if env_file.is_file():
+            load_dotenv(env_file, override=False)
+    except Exception:  # noqa: BLE001 - a missing loader is not a crash
+        return value
+    return str(os.environ.get(name, "") or "").strip()
+
+
 def comfyui_url() -> str:
-    return (os.environ.get("COMFYUI_URL") or DEFAULT_COMFYUI_URL).rstrip("/")
+    return (_flag("COMFYUI_URL") or DEFAULT_COMFYUI_URL).rstrip("/")
 
 
 def media_live_armed() -> bool:
-    return str(os.environ.get("MEDIA_GEN_LIVE", "") or "").strip() == "1"
+    return _flag("MEDIA_GEN_LIVE") == "1"
 
 
 def _reachable(url: str, timeout: float = 3.0) -> bool:

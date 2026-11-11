@@ -75,8 +75,9 @@ type, and it needs its own path rather than a product picture pretending to be o
 
 **The number is not a quality claim.** It says the app's pipeline runs end to end and can be scored.
 The plate is drawn, so the app path is *easier* than the real one (no scene grain, no cutout edge).
-The FLUX lane (`MEDIA_GEN_LIVE`) is still unarmed, and a real plate remains owed — but the seam is
-now the *plate*, which is one argument in one adapter, not the whole picture path.
+The FLUX lane is armed by flag (`MEDIA_GEN_LIVE=1` in `.env`) but **ComfyUI is not running**
+(`reachable: False`), and a real plate remains owed — but the seam is now the *plate*, which is one
+argument in one adapter, not the whole picture path.
 
 ## Evidence
 

@@ -41,8 +41,9 @@ whole design is "pick one pouch".
 
 ## What is still true
 
-The plate is `synthetic_plate` (`MEDIA_GEN_LIVE` is not 1): three drawn boxes, not a photograph of
-three boxes. The measurement, the three panel warps and the OCR gate are the app's.
+The plate is `synthetic_plate` — `MEDIA_GEN_LIVE=1` is set but **ComfyUI is not running**
+(`engine_status(): reachable False`): three drawn boxes, not a photograph of three boxes. The
+measurement, the three panel warps and the OCR gate are the app's.
 
 ## After the stock fix, the judged pass moved — and that is itself a finding
 
