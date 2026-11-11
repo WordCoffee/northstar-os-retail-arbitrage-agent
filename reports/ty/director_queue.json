@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-11T03:28:52+00:00",
+  "updated_at": "2026-11-11T03:32:14+00:00",
   "cycle": 2,
   "unit_in_flight": "",
   "unit_order": [
@@ -1470,6 +1470,30 @@
       "rank": 1
     },
     {
+      "id": "sel-06b-second-brand",
+      "unit": "D12",
+      "title": "The app can render one brand: mogra_label_art.design_for raises 'unknown label design: word-coffee', so 6 of 12 prompt-only briefs are unreachable through product_picture.build",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "Northstar_backend/mogra_label_art.py",
+        "Northstar_backend/product_picture.py",
+        "Northstar_backend/test_*.py",
+        "reports/ty/"
+      ],
+      "branch": "ty/sel-06b-second-brand",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-11T03:31:33+00:00",
+      "updated_at": "2026-11-11T03:31:33+00:00",
+      "rank": 1
+    },
+    {
       "id": "ux-05-render-routes",
       "unit": "D12",
       "title": "26 of 29 service routes render the chat shell instead of their own page",
@@ -1532,7 +1556,7 @@
       "score_after": null,
       "evidence": "",
       "created_at": "2026-11-11T03:18:44+00:00",
-      "updated_at": "2026-11-11T03:20:46+00:00",
+      "updated_at": "2026-11-11T03:31:33+00:00",
       "rank": 2
     },
     {
@@ -1605,28 +1629,6 @@
       "rank": 4
     },
     {
-      "id": "sel-04-packaging",
-      "unit": "D12",
-      "title": "Packaging and mockups: dielines, front/back panels, scored",
-      "status": "queued",
-      "owner": "",
-      "write_paths": [
-        "ty/seller_briefs.json",
-        "tools/seller_tester"
-      ],
-      "branch": "ty/sel-04-packaging",
-      "worktree": "",
-      "rollback_tag": "rollback/pre-seller-quality-20261108",
-      "acceptance": [],
-      "tokens": 0,
-      "score_before": null,
-      "score_after": null,
-      "evidence": "",
-      "created_at": "2026-11-08T21:21:18+00:00",
-      "updated_at": "2026-11-11T03:20:46+00:00",
-      "rank": 4
-    },
-    {
       "id": "sel-refs-designs",
       "unit": "D12",
       "title": "Reference library depth: at least 4 more distinct product designs from public non-Amazon sources, licence+URL logged per item (21 rows are currently 2 designs)",
@@ -1670,6 +1672,28 @@
       "evidence": "[\"reports/ty/sel03_aplus.md\"]",
       "created_at": "2026-11-08T21:21:18+00:00",
       "updated_at": "2026-11-11T02:43:16+00:00",
+      "rank": 5
+    },
+    {
+      "id": "sel-04-packaging",
+      "unit": "D12",
+      "title": "Packaging and mockups: dielines, front/back panels, scored",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "ty/seller_briefs.json",
+        "tools/seller_tester"
+      ],
+      "branch": "ty/sel-04-packaging",
+      "worktree": "",
+      "rollback_tag": "rollback/pre-seller-quality-20261108",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-08T21:21:18+00:00",
+      "updated_at": "2026-11-11T03:31:33+00:00",
       "rank": 5
     },
     {
@@ -1810,8 +1834,8 @@
       "score_after": null,
       "evidence": "",
       "created_at": "2026-11-11T02:43:16+00:00",
-      "updated_at": "2026-11-11T03:20:46+00:00",
-      "rank": 5
+      "updated_at": "2026-11-11T03:31:33+00:00",
+      "rank": 6
     },
     {
       "id": "ux-06-shell",

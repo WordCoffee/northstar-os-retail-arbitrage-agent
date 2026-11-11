@@ -46,3 +46,19 @@ plate from the same ComfyUI lane the harness already owns. Nothing needs to be r
 - Do not average the two pipelines into one number.
 - Do not claim the app path is exercised until a run has produced an artefact through
   `product_picture.build` and the summary names it.
+
+## What was learned after the plan was written (2026-11-11, same session)
+
+`mogra_label_art.design_for('word-coffee')` raises **`ValueError: unknown label design 'word-coffee'`**.
+The app can render **one packaging form for one brand**: a supplement pouch with supplement facts,
+serving size, lot code and UPC (`mogra_label_art.MOGRA_LIONS_MANE`, lines 105-153). The Word Coffee
+briefs are a **gift box** — a different form, with no supplement panel at all.
+
+That splits the D-011 work in two, and only the first half is a harness change:
+
+- **sel-06 (harness)**: drive `product_picture.build` for the Mogra family — 6 of the 12 prompt-only
+  briefs — using the injectable `generator`. Publish the app-path number beside the harness number.
+- **sel-06b (product, rank 1)**: the app needs a **box panel** renderer (or a form-parameterised
+  panel builder) before a second brand can be sold at all. That is a product capability gap the
+  Seller-Tester cannot paper over: no harness change makes the app able to draw a Word Coffee box.
+
