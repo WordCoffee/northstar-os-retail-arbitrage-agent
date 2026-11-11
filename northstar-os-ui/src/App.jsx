@@ -81,7 +81,6 @@ const GalacticDeck = lazy(() => import('./pages/internal/GalacticDeck.jsx'))
 const HubRoom = lazyNamed(() => import('./pages/roomAdapters.jsx'), 'HubRoom')
 const LedgerRoom = lazyNamed(() => import('./pages/roomAdapters.jsx'), 'LedgerRoom')
 const ProspectorRoom = lazyNamed(() => import('./pages/roomAdapters.jsx'), 'ProspectorRoom')
-const LegacyGoldenGooseRoom = lazyNamed(() => import('./pages/roomAdapters.jsx'), 'LegacyGoldenGooseRoom')
 const OfferChiselRoom = lazyNamed(() => import('./pages/roomAdapters.jsx'), 'OfferChiselRoom')
 const TownCrierRoom = lazyNamed(() => import('./pages/roomAdapters.jsx'), 'TownCrierRoom')
 const AuctioneerRoom = lazyNamed(() => import('./pages/roomAdapters.jsx'), 'AuctioneerRoom')
@@ -228,7 +227,11 @@ function GuardedRoutes({ role, authenticated, loaded }) {
         <Route path="/hub" element={<HubRoom />} />
         <Route path="/ledger" element={<LedgerRoom />} />
         <Route path="/prospector" element={<ProspectorRoom />} />
-        <Route path="/goldengoose" element={<LegacyGoldenGooseRoom />} />
+        {/* The legacy /goldengoose id is an ALIAS of the real desk (/golden-goose),
+            not a second service: ty/services.json carried both ids with the same
+            label and tool, so the portfolio counted one surface twice. Redirected,
+            never 404'd — a seller's bookmark still lands on the product. */}
+        <Route path="/goldengoose" element={<Navigate to="/golden-goose" replace />} />
         <Route path="/offerchisel" element={<OfferChiselRoom />} />
         <Route path="/towncrier" element={<TownCrierRoom />} />
         <Route path="/auctioneer" element={<AuctioneerRoom />} />

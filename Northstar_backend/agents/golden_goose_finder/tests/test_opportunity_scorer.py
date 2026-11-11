@@ -457,3 +457,109 @@ def test_as_pct_normalization():
     assert _as_pct(125.0) == pytest.approx(125.0)  # already a percentage
     assert _as_pct(0.0) == 0.0
     assert _as_pct(-8.0) == pytest.approx(-8.0)
+
+
+# ---------------------------------------------------------------------------
+# GG-002: a seller-identity hard block is a block at EVERY tier, not just HIGH.
+#
+# The documented rule (category_config.seller_identity_blocked, amazon_matcher
+# lines 50-54) says a brand owner or "Sold by Amazon.com" is a HARD BLOCK. The
+# tier function only consulted the identity verdict on the way to HIGH, so a
+# blocked offer whose composite cleared 0.4 came back MEDIUM and was offered to
+# the seller as a buy. Measured 2026-11-11 on seller-tester fixture GG-002:
+# B0GG2002 (Amazon.com, composite 0.7257) and B0GG2003 (brand owner, 0.7257)
+# were both tiered MEDIUM while the reseller offer was HIGH.
+# ---------------------------------------------------------------------------
+
+
+def test_a_seller_identity_hard_block_is_never_a_buy_tier():
+    assert _assign_tier(0.9, True, True, seller_blocked=True) == TIER_REJECT
+    assert _assign_tier(0.9, True, True, seller_blocked=False) == TIER_HIGH
+    # The block outranks the score, whatever the composite.
+    for composite in (0.95, 0.75, 0.55, 0.41, 0.2):
+        assert _assign_tier(composite, True, False, seller_blocked=True) == TIER_REJECT
+
+
+def test_an_amazon_seller_offer_is_reject_not_medium(ec):
+    blocked = score_opportunity(ec(**{
+        "asin": "B0GG2002",
+        "individual.seller_name": "Amazon.com",
+        "individual.is_amazon_seller": True,
+        "individual.is_brand_seller": False,
+    }))
+    assert blocked.passes_seller_identity is False
+    assert blocked.tier == TIER_REJECT
+
+
+def test_a_brand_owner_offer_is_reject_not_medium(ec):
+    blocked = score_opportunity(ec(**{
+        "asin": "B0GG2003",
+        "individual.seller_name": "Harbor Brand Store",
+        "individual.is_amazon_seller": False,
+        "individual.is_brand_seller": True,
+    }))
+    assert blocked.passes_seller_identity is False
+    assert blocked.tier == TIER_REJECT
+
+
+def test_an_unverifiable_seller_is_not_tiered_as_a_buy(ec):
+    """No seller identity at all fails the filter closed; it cannot be a MEDIUM buy."""
+    blocked = score_opportunity(ec(**{
+        "individual.seller_name": None,
+        "individual.is_brand_seller": None,
+        "individual.is_amazon_seller": None,
+    }))
+    assert blocked.passes_seller_identity is False
+    assert blocked.tier == TIER_REJECT
+
+
+# ---------------------------------------------------------------------------
+# GG-003: an offer that fails a hard filter cannot rank first or be "best".
+#
+# Measured 2026-11-11 on seller-tester fixture GG-003: the 90 oz blender
+# (B0GG3001, composite 0.9349, size filter FAIL) was returned first and named
+# best_asin while B0GG3002 passed every filter at 0.74. A seller reading the
+# ranking buys the item they cannot ship.
+# ---------------------------------------------------------------------------
+
+
+def _ranked(asins):
+    return [s.asin for s in score_batch(asins)]
+
+
+def test_an_ineligible_offer_ranks_below_every_eligible_one(ec):
+    heavy = ec(**{"asin": "B0GG3001", "title": "KitchenAid Counter Blender 5 Speed",
+                  "individual.weight_oz": 90.0, "individual.fba_sellers": 0,
+                  "net_profit_per_unit": 30.0, "amazon_price": 129.99})
+    light = ec(**{"asin": "B0GG3002", "title": "Harbor Body Lotion 12 oz, pack of 2",
+                  "individual.weight_oz": 26.0, "individual.fba_sellers": 0,
+                  "net_profit_per_unit": 11.0, "amazon_price": 39.99})
+    heavy_scored = score_opportunity(heavy)
+    light_scored = score_opportunity(light)
+    assert heavy_scored.passes_size_filter is False
+    assert light_scored.passes_all_filters is True
+    # The bug is only meaningful when the ineligible row really does score higher.
+    assert heavy_scored.composite_score > light_scored.composite_score
+    assert _ranked([heavy, light]) == ["B0GG3002", "B0GG3001"]
+    assert _ranked([light, heavy]) == ["B0GG3002", "B0GG3001"]
+
+
+def test_best_opportunity_is_only_ever_an_eligible_row(ec):
+    heavy = ec(**{"asin": "B0GG3001", "title": "KitchenAid Counter Blender 5 Speed",
+                  "individual.weight_oz": 90.0, "individual.fba_sellers": 0,
+                  "net_profit_per_unit": 30.0, "amazon_price": 129.99})
+    light = ec(**{"asin": "B0GG3002", "title": "Harbor Body Lotion 12 oz, pack of 2",
+                  "individual.weight_oz": 26.0, "individual.fba_sellers": 0,
+                  "net_profit_per_unit": 11.0, "amazon_price": 39.99})
+    summary = get_scoring_summary(score_batch([heavy, light]))
+    assert summary["best_opportunity"].asin == "B0GG3002"
+    assert summary["best_eligible_only"] is True
+
+
+def test_with_no_eligible_row_there_is_no_best_opportunity(ec):
+    heavy = ec(**{"asin": "B0GG3001", "individual.weight_oz": 90.0,
+                  "individual.fba_sellers": 0})
+    summary = get_scoring_summary(score_batch([heavy]))
+    assert summary["best_opportunity"] is None
+    assert summary["best_eligible_only"] is True
+    assert "filter" in summary["best_reason"].lower()

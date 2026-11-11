@@ -13,12 +13,12 @@
       }
     }
   },
-  "at": "2026-11-11T17:38:34+00:00",
+  "at": "2026-11-11T19:35:56+00:00",
   "service_path": {
     "population": "service-path",
     "source": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\seller\\services_proof.json",
     "aliases": {
-      "golden-goose": "goldengoose"
+      "goldengoose": "golden-goose"
     },
     "attribution": {
       "listing": {
@@ -33,18 +33,36 @@
         "never_blended": "design-studio's published seller score comes from the image pass. These rows are a separate population and are reported, never averaged with it."
       },
       "golden_goose": {
-        "service": "goldengoose",
+        "service": "golden-goose",
         "aliases": [
-          "golden-goose"
+          "goldengoose"
         ],
         "population": "service-path",
-        "why": "the path calls bojo_tools.sourcing.golden_goose_scan, which is the golden_goose_scan tool. ty/services.json declares that same tool, and the same purpose text, for both 'goldengoose' and 'golden-goose', so the two ids are one product under two names rather than two services.",
-        "alias_note": "the alias is declared here, not inferred: it adds no brief and no sample, it reuses the one sample the registry's own duplicate id describes."
+        "why": "the path calls bojo_tools.sourcing.golden_goose_scan, which is the golden_goose_scan tool. ty/services.json now carries ONE Golden Goose: 'golden-goose' at /golden-goose. The legacy 'goldengoose' id is an alias of it (the route redirects), so the sample is owned by the real service and the alias adds no second sample.",
+        "alias_note": "the alias is declared here, not inferred: it adds no brief and no sample, it resolves the retired id to the one service that produces the artefact."
       },
       "research": {
         "service": null,
         "population": null,
         "why": "no service in ty/services.json declares a path that reaches research_graph.research: the module is exercised by its own test only, and nothing in the registry or the backend calls it. The pass is measured and reported, but attributing it to product-finder (or anything else) would be inventing an owner."
+      },
+      "offer_copy": {
+        "service": "offerchisel",
+        "population": "service-path",
+        "why": "the room asks the local engine for TITLE:/BULLETS:/KEYWORDS: and shows the answer; the copy is judged by specialists.listing_optimizer (audit_title, audit_bullet, keyword_coverage, backend_bytes), which is the app's own listing rubric, plus the claims lint. ty/services.json gives offerchisel exactly that product: a title, four bullets and back-end search terms.",
+        "recorded_answer": "the engine answer is a recorded fixture: a live generation is a gated model call. Every rule applied to it is the app's own deterministic code."
+      },
+      "caption": {
+        "service": "towncrier",
+        "population": "service-path",
+        "why": "the room writes ONE caption plus 3-4 hashtags for a brief and a platform (TownCrier.jsx:19 prompt, :22-30 parser). ty/services.json gives towncrier that purpose and the room declares write_content, the caption writer with the claim screen. The checks are the room's own limits (220 chars), its brand rule ('Word Coffee is NOT a beverage'), the claims lint and the hashtag shape.",
+        "recorded_answer": "the engine answer is a recorded fixture: a live generation is a gated model call. Every rule applied to it is the app's own or the room's own, stated in the brief."
+      },
+      "social_caption": {
+        "service": "socialpulse",
+        "population": "service-path",
+        "why": "this path is the app's own code end to end: social_pulse.generate_caption is called with the local model refused, so the documented template fallback runs. The caption, hashtags, CTA, platform spec and the app's own _score_caption are SocialPulse's output, not a fixture.",
+        "never_blended": "the caption checks describe the deterministic fallback path; a live model answer is a gated, paid action and is not measured here."
       }
     },
     "services": {
@@ -56,7 +74,7 @@
         "paths": [
           "listing"
         ],
-        "at": "2026-11-11T11:38:26"
+        "at": "2026-11-11T13:34:09"
       },
       "design-studio": {
         "population": "service-path",
@@ -66,17 +84,47 @@
         "paths": [
           "ppc"
         ],
-        "at": "2026-11-11T11:38:26"
+        "at": "2026-11-11T13:34:09"
       },
-      "goldengoose": {
+      "golden-goose": {
         "population": "service-path",
-        "mean": 95.6,
+        "mean": 100.0,
         "scored": 5,
-        "passed": 3,
+        "passed": 5,
         "paths": [
           "golden_goose"
         ],
-        "at": "2026-11-11T11:38:26"
+        "at": "2026-11-11T13:34:09"
+      },
+      "offerchisel": {
+        "population": "service-path",
+        "mean": 96.4,
+        "scored": 5,
+        "passed": 3,
+        "paths": [
+          "offer_copy"
+        ],
+        "at": "2026-11-11T13:34:09"
+      },
+      "towncrier": {
+        "population": "service-path",
+        "mean": 92.1,
+        "scored": 5,
+        "passed": 2,
+        "paths": [
+          "caption"
+        ],
+        "at": "2026-11-11T13:34:09"
+      },
+      "socialpulse": {
+        "population": "service-path",
+        "mean": 98.0,
+        "scored": 5,
+        "passed": 4,
+        "paths": [
+          "social_caption"
+        ],
+        "at": "2026-11-11T13:34:09"
       }
     },
     "paths": {
@@ -96,9 +144,9 @@
       },
       "golden_goose": {
         "scored": 5,
-        "passed": 3,
-        "service": "goldengoose",
-        "mean": 95.6,
+        "passed": 5,
+        "service": "golden-goose",
+        "mean": 100.0,
         "why_unattributed": null
       },
       "research": {
@@ -107,19 +155,40 @@
         "service": null,
         "mean": 100.0,
         "why_unattributed": "no service in ty/services.json declares a path that reaches research_graph.research: the module is exercised by its own test only, and nothing in the registry or the backend calls it. The pass is measured and reported, but attributing it to product-finder (or anything else) would be inventing an owner."
+      },
+      "offer_copy": {
+        "scored": 5,
+        "passed": 3,
+        "service": "offerchisel",
+        "mean": 96.4,
+        "why_unattributed": null
+      },
+      "caption": {
+        "scored": 5,
+        "passed": 2,
+        "service": "towncrier",
+        "mean": 92.1,
+        "why_unattributed": null
+      },
+      "social_caption": {
+        "scored": 5,
+        "passed": 4,
+        "service": "socialpulse",
+        "mean": 98.0,
+        "why_unattributed": null
       }
     },
     "unattributed": [
       "research"
     ],
     "refused": [],
-    "at": "2026-11-11T11:38:26",
+    "at": "2026-11-11T13:34:09",
     "command": "python -m tools.seller_tester services",
     "pass": {
       "population": "service-path",
-      "scored": 16,
-      "passed": 14,
-      "paths_measured": 4
+      "scored": 31,
+      "passed": 25,
+      "paths_measured": 7
     }
   },
   "pipeline": {
@@ -143,9 +212,9 @@
     },
     "service_path": {
       "population": "service-path",
-      "scored": 16,
-      "passed": 14,
-      "paths_measured": 4
+      "scored": 31,
+      "passed": 25,
+      "paths_measured": 7
     }
   },
   "ceiling": {

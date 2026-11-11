@@ -114,10 +114,8 @@
     {
       "name": "golden_goose_scan",
       "status": "wired",
-      "service": "goldengoose",
-      "also_used_by": [
-        "golden-goose"
-      ],
+      "service": "golden-goose",
+      "also_used_by": [],
       "reason": "chat_tools.TOOLS['golden_goose_scan'] scores candidates and returns tier, scores and the arithmetic behind each one."
     },
     {
@@ -221,10 +219,8 @@
     {
       "name": "plan_social",
       "status": "wired",
-      "service": "towncrier",
-      "also_used_by": [
-        "socialpulse"
-      ],
+      "service": "socialpulse",
+      "also_used_by": [],
       "reason": "chat_tools.TOOLS['plan_social'] plans social graphics at exact canvas sizes with copy slots."
     },
     {
@@ -255,7 +251,7 @@
       "status": "wired",
       "service": "product-finder",
       "also_used_by": [],
-      "reason": "reg-03 handler exists in bojo_tools and chat_tools.TOOLS carries a spec (2026-11-10)"
+      "reason": "chat_tools.TOOLS['scan_products'] -> bojo_tools.sourcing_extra: reads amazon_search.load_cached_candidates() first and asks for a live search only when the envelope is armed; GET /api/products/finder serves the same cache through UniversalProductFilter, so the tool and the route read one source."
     },
     {
       "name": "seo_check",

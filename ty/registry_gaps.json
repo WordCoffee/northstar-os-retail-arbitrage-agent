@@ -54,7 +54,7 @@
     },
     {
       "id": "foundation",
-      "label": "Operations Hub",
+      "label": "Foundation",
       "group": "Internal",
       "advanced_route": "/foundation",
       "reason": "Only a Refresh button that repeats the same twelve reads; no probe trigger, no approval decision, no export.",

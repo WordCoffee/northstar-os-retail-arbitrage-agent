@@ -53,8 +53,13 @@ def test_each_path_names_the_one_service_that_produces_it():
     attribution = svc.load_attribution()
     registry = json.loads((Path(svc.ROOT) / "ty" / "services.json").read_text(encoding="utf-8"))
     services = {row["id"]: row for row in registry["services"]}
-    #: The tool a path actually exercises, as declared in ty/services.json.
-    tool = {"listing": "compose_listing", "golden_goose": "golden_goose_scan"}
+    retired = registry.get("aliases") or {}
+    #: The declared tool a path actually exercises. Only the paths whose production
+    #: code IS that tool are listed: `offer_copy` is judged by listing_optimizer and
+    #: `social_caption` runs social_pulse.generate_caption, and neither is a Bojo
+    #: tool — their `why` says so rather than borrowing a tool they do not run.
+    tool = {"listing": "compose_listing", "golden_goose": "golden_goose_scan",
+            "caption": "write_content"}
     assert set(attribution) == set(svc.PATHS), "every path must be attributed or declared unowned"
     for name in svc.PATHS:
         entry = attribution[name]
@@ -67,9 +72,15 @@ def test_each_path_names_the_one_service_that_produces_it():
             assert tool[name] in (services[owner].get("tools") or []), (
                 f"{name} is attributed to {owner}, which does not declare {tool[name]}")
         for alias in entry.get("aliases") or []:
-            assert alias in services, f"{name} declares {alias} as an alias, not in the registry"
-            assert (services[alias].get("tools") or []) == (services[owner].get("tools") or []), (
-                f"{alias} does not declare the same tool as {owner}")
+            if alias in services:
+                assert (services[alias].get("tools") or []) == (services[owner].get("tools") or []), (
+                    f"{alias} does not declare the same tool as {owner}")
+                continue
+            # A retired id: it must be a DECLARED alias of the same service, and it
+            # must still route somewhere (a seller's bookmark is not a 404).
+            assert alias in retired, f"{name} declares {alias} as an alias, which nothing declares"
+            assert retired[alias]["of"] == owner, f"{alias} points at {retired[alias]['of']}"
+            assert retired[alias]["route"].startswith("/")
 
 
 

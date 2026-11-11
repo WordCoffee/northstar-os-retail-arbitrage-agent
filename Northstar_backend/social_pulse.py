@@ -80,6 +80,7 @@ def generate_caption(
     angle: str = "quality",
     voice: Optional[Dict] = None,
     model: Optional[str] = None,
+    generator: Optional[Any] = None,
 ) -> Dict[str, Any]:
     """Generate a social media caption for a product.
 
@@ -90,6 +91,12 @@ def generate_caption(
         angle: Content angle (quality, value, lifestyle, seasonal, gift)
         voice: Brand voice profile override
         model: LLM model to use; defaults to the local T-tier from model-suite
+        generator: Optional callable ``generator(prompt) -> str``. The default
+            (None) posts to the local Ollama engine; the seller-tester passes a
+            callable that refuses, so the documented template fallback below is
+            the path under test instead of a live model. This is the same
+            injection seam ``compose_listing(provider=...)`` uses, so a caller
+            can exercise the real limits, hashtags and CTA without a model.
 
     Returns:
         caption, hashtags, cta, platform_spec, score
@@ -104,21 +111,24 @@ def generate_caption(
     # Try LLM
     caption = ""
     try:
-        import httpx
-        # OLLAMA_HOST is a bind address on this box, not a URL — normalise it.
-        ollama_host = ollama_base_url()
-        resp = httpx.post(
-            f"{ollama_host}/api/generate",
-            json={
-                "model": model,
-                "prompt": prompt,
-                "stream": False,
-                "options": {"temperature": 0.8, "num_predict": 300},
-            },
-            timeout=30,
-        )
-        resp.raise_for_status()
-        caption = resp.json().get("response", "").strip()
+        if generator is not None:
+            caption = str(generator(prompt) or "").strip()
+        else:
+            import httpx
+            # OLLAMA_HOST is a bind address on this box, not a URL — normalise it.
+            ollama_host = ollama_base_url()
+            resp = httpx.post(
+                f"{ollama_host}/api/generate",
+                json={
+                    "model": model,
+                    "prompt": prompt,
+                    "stream": False,
+                    "options": {"temperature": 0.8, "num_predict": 300},
+                },
+                timeout=30,
+            )
+            resp.raise_for_status()
+            caption = resp.json().get("response", "").strip()
     except Exception as exc:  # noqa: BLE001 - template fallback is the designed path
         _log.debug("caption LLM unavailable (%s); using the template caption", type(exc).__name__)
 

@@ -42,8 +42,8 @@ def trim_to_alpha(im, *, threshold: int = 8):
     return im.crop(box) if box else im
 
 
-def drop_thin_runs(im, *, floor_frac: float = 0.12, run_frac: float = 0.04
-                   ) -> Tuple[Any, int]:
+def drop_thin_runs(im, *, floor_frac: float = 0.12, run_frac: float = 0.04,
+                   stick_frac: float = 0.04) -> Tuple[Any, int]:
     """Erase thin leading/trailing runs of alpha — a stick, a wire, a layout rule.
 
     Measured 2026-11-11 on PO-001: the cutout carried a 20 px-wide vertical stick
@@ -53,6 +53,16 @@ def drop_thin_runs(im, *, floor_frac: float = 0.12, run_frac: float = 0.04
     row width) and **at an end** of the silhouette (a bottle's neck is thin but it
     is followed by a body of similar width, and a run shorter than ``run_frac`` of
     the height is left alone).
+
+    ``stick_frac`` closes the second half of the defect, measured on PO-006 the
+    same day: that product is a **rotated** box, so its first rows are the top
+    corner — 6 px wide, then 11, 16 … climbing through the thin threshold. The
+    run cleared ``run_frac`` and 36 rows (588 px) of the box's own corner were
+    erased. A stick is not merely under the thin threshold; it is a small
+    fraction of the body (PO-001's 20 px stick is 3 % of 650). A perspective
+    corner climbs to the threshold itself, so its widest row is ~12 %. The run is
+    erased only when its own **widest** row is under ``stick_frac`` too. This is
+    strictly more conservative: it can keep product pixels, never erase more.
     """
     import numpy as np
 
@@ -73,7 +83,9 @@ def drop_thin_runs(im, *, floor_frac: float = 0.12, run_frac: float = 0.04
     if body.size < 8:
         return im, 0
     median = float(np.median(body))
-    thin = widths < max(8.0, floor_frac * median)
+    thin_limit = max(8.0, floor_frac * median)
+    stick_limit = max(8.0, stick_frac * median)
+    thin = widths < thin_limit
     min_run = max(4, int((y1 - y0) * run_frac))
     runs = []
     start = None
@@ -95,6 +107,8 @@ def drop_thin_runs(im, *, floor_frac: float = 0.12, run_frac: float = 0.04
         trailing = last == len(thin) - 1
         if not (leading or trailing):
             continue                  # an interior narrow band is part of the object
+        if int(widths[first:last + 1].max()) > stick_limit:
+            continue                  # a corner that widens to the body, not a stick
         cleaned[y0 + first:y0 + last + 1, :] = 0
         erased += last - first + 1
     if not erased:
@@ -112,9 +126,17 @@ def drop_detached_specks(im, *, threshold: int = 8, area_frac: float = 0.05,
     vertical stick above the pouch, a white ring beside it and a ghosted second
     tube — detached pieces of the plate that the matte kept. A speck is dropped
     only when it is both **small** (under ``area_frac`` of the largest component)
-    and **detached** (its box does not reach within ``gap_frac`` of the product's
+    and **detached** (no pixel of it lies within ``gap_frac`` of the product's
     height of the main body), so a three-unit bundle (three similar components)
     and a mug's handle (attached) both survive.
+
+    "Detached" is measured on **pixels**, not on bounding boxes. The box test was
+    a hole: PO-006's dashed drop-shadow rule lies inside the box's own bounding
+    box, so every dash was classified as "touching the body" (dx = dy = 0) while
+    the nearest product pixel was 38 px away. Six dashes survived into the
+    composite and the strict stray pass measured 4 marks / 2169 px on the page
+    (2026-11-11). The tolerance is unchanged — ``gap`` is still 2 % of the body's
+    height — it is only applied to the distance that actually means "attached".
     """
     import numpy as np
 
@@ -135,25 +157,22 @@ def drop_detached_specks(im, *, threshold: int = 8, area_frac: float = 0.05,
     order = sorted(range(1, count), key=lambda i: int(stats[i, cv2.CC_STAT_AREA]),
                    reverse=True)
     main = order[0]
-    mx, my, mw, mh = (int(stats[main, cv2.CC_STAT_LEFT]), int(stats[main, cv2.CC_STAT_TOP]),
-                      int(stats[main, cv2.CC_STAT_WIDTH]), int(stats[main, cv2.CC_STAT_HEIGHT]))
+    mh = int(stats[main, cv2.CC_STAT_HEIGHT])
     main_area = float(stats[main, cv2.CC_STAT_AREA])
     gap = max(2, int(mh * float(gap_frac)))
+    # Everything within `gap` pixels of the main body, measured on pixels.
+    main_mask = (labels == main).astype(np.uint8)
+    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2 * gap + 1, 2 * gap + 1))
+    attached = cv2.dilate(main_mask, kernel)
     dropped = 0
     keep = np.ones(int(count), dtype=bool)
     for index in order[1:]:
         area = float(stats[index, cv2.CC_STAT_AREA])
         if area >= area_frac * main_area:
             continue
-        x = int(stats[index, cv2.CC_STAT_LEFT])
-        y = int(stats[index, cv2.CC_STAT_TOP])
-        w = int(stats[index, cv2.CC_STAT_WIDTH])
-        h = int(stats[index, cv2.CC_STAT_HEIGHT])
-        # the distance between the two boxes, per axis, zero when they overlap
-        dx = max(0, max(mx - (x + w), x - (mx + mw)))
-        dy = max(0, max(my - (y + h), y - (my + mh)))
-        if dx <= gap and dy <= gap:
-            continue                     # touching the body: part of the product
+        own = labels == index
+        if int((attached[own] > 0).sum()) > 0:
+            continue                     # a pixel of it touches the body: part of the product
         keep[index] = False
         dropped += 1
     if not dropped:

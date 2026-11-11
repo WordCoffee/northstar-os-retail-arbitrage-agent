@@ -1,9 +1,9 @@
 {
   "schema": "northstar.northstar_workspaces.v1",
   "generated_from": "ty/service_registry.json",
-  "count": 29,
+  "count": 28,
   "layout_distribution": {
-    "feed": 9,
+    "feed": 8,
     "split": 8,
     "wizard": 5,
     "board": 6,
@@ -83,30 +83,6 @@
         "minimum ROI"
       ],
       "why": "Prospecting is filter-in and ranked-table-out, so one side holds the filter and the run control while the other holds the ranking it produced."
-    },
-    {
-      "service": "goldengoose",
-      "label": "Golden Goose",
-      "layout": "feed",
-      "primary_action": "raise the deal-score floor until the list is short enough to act on",
-      "primary_action_source": "local",
-      "empty_state": "No deal clears the floor at this score; name the floor that would return one.",
-      "data_shown": [
-        {
-          "name": "qualified deals with net, ROI and score",
-          "kind": "table",
-          "where": "Qualified Deals list"
-        },
-        {
-          "name": "qualified count",
-          "kind": "status",
-          "where": "Filters badge"
-        }
-      ],
-      "inputs_required": [
-        "minimum deal score"
-      ],
-      "why": "The room answers one question per item - is this deal worth a look - so the deals read as a ranked stream and a single score floor is the whole control surface."
     },
     {
       "service": "offerchisel",
@@ -324,7 +300,7 @@
     },
     {
       "service": "foundation",
-      "label": "Operations Hub",
+      "label": "Foundation",
       "layout": "feed",
       "primary_action": "read the failing subsystem and its evidence",
       "primary_action_source": "read providers",

@@ -15,6 +15,14 @@
 // the computed style AND the observable geometry.
 //
 // Scope: LOCALHOST ONLY (127.0.0.1:8101), per the AGENTS.md e2e exception.
+//
+// Route corrected 2026-11-11: this spec used to wait for `chat-input` on
+// /ui/design-studio, which renders no chat surface at all — the composer lives in
+// CreativeStudio (northstar-os-ui/src/pages/internal/CreativeStudio.jsx:733 renders
+// <CreativeChat /> in the Northstar shell), and CreativeChat mounts ChatSurface,
+// which owns `data-testid="chat-input"`. A spec that waits for an element the page
+// cannot render tests a product that does not exist; it is now pointed at the room
+// the composer is actually in and pins the route so it cannot drift back.
 // ═══════════════════════════════════════════════════════════════════════════
 
 import { test, expect } from '@playwright/test';
@@ -22,9 +30,11 @@ import { test, expect } from '@playwright/test';
 test('the chat composer holds a stable box across frames', async ({ page }) => {
   test.setTimeout(120000);
 
-  await page.goto('http://127.0.0.1:8101/ui/design-studio');
+  await page.goto('http://127.0.0.1:8101/ui/creative-studio');
   await page.getByTestId('chat-input').waitFor({ state: 'attached', timeout: 45000 });
   await page.waitForTimeout(2000);
+  expect(new URL(page.url()).pathname, 'the composer must be tested where it renders')
+    .toBe('/ui/creative-studio');
 
   // The gutter must be reserved on both shells, otherwise the oscillation
   // described above comes straight back.

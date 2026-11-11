@@ -1,7 +1,7 @@
 {
   "exported": "2026-11-07",
   "source": "northstar-os-ui/src/data/serviceRegistry.js",
-  "count": 29,
+  "count": 28,
   "services": [
     {
       "id": "hub",
@@ -44,20 +44,6 @@
       "source": "nav"
     },
     {
-      "id": "goldengoose",
-      "label": "Golden Goose",
-      "group": "Sourcing",
-      "kind": "workspace",
-      "route": "/goldengoose",
-      "scene": "goose",
-      "theme": "goose",
-      "tools": [
-        "golden_goose_scan"
-      ],
-      "entitlementKey": "studio.goldengoose",
-      "source": "nav"
-    },
-    {
       "id": "offerchisel",
       "label": "OfferChisel",
       "group": "Listings",
@@ -79,7 +65,9 @@
       "route": "/towncrier",
       "scene": "default",
       "theme": "neutral",
-      "tools": [],
+      "tools": [
+        "write_content"
+      ],
       "entitlementKey": "studio.towncrier",
       "source": "nav"
     },
@@ -157,7 +145,7 @@
     },
     {
       "id": "foundation",
-      "label": "Operations Hub",
+      "label": "Foundation",
       "group": "Internal",
       "kind": "workspace",
       "route": "/foundation",
@@ -389,5 +377,12 @@
       "entitlementKey": "studio.profitability",
       "source": "app-route"
     }
-  ]
+  ],
+  "aliases": {
+    "goldengoose": {
+      "of": "golden-goose",
+      "route": "/goldengoose",
+      "note": "Legacy room id. ty/services.json used to carry BOTH 'goldengoose' (/goldengoose) and 'golden-goose' (/golden-goose) with the same label and the same declared tool, so the portfolio counted one product surface twice. The legacy route now redirects to /golden-goose (northstar-os-ui/src/App.jsx) and the id is an alias, not a service."
+    }
+  }
 }

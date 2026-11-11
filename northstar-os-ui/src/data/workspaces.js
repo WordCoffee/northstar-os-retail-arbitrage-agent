@@ -329,9 +329,9 @@ export const WORKSPACE_SPECS = {
       "bojo_tool": {
         "id": "golden_goose_scan",
         "status": "wired",
-        "owner": "goldengoose",
+        "owner": "golden-goose",
         "source": "ty/bojo_tool_list.json",
-        "note": "chat_tools.TOOLS['golden_goose_scan'] scores candidates and returns the arithmetic; the tool's also_used_by names golden-goose."
+        "note": "chat_tools.TOOLS['golden_goose_scan'] scores candidates and returns the arithmetic; one room, one owner (the legacy 'goldengoose' id is an alias that redirects here)."
       },
       "gate": {
         "entitlement_key": "studio.golden-goose",

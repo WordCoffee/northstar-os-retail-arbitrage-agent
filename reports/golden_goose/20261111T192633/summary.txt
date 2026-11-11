@@ -1,0 +1,13 @@
+Golden Goose Finder Report
+========================================
+Generated: 2026-11-11T19:26:33.151156+00:00
+Report version: 1.0
+
+Summary: 3 evaluated | HIGH 0 | MEDIUM 0 | LOW 3 | REJECTED 0
+Avg profit/unit: $0.55 | Avg ROI: 1468.5%
+Top tags: bulk_goldmine x2, high_velocity x1, low_competition x1, trending_up x3
+
+--- Ranked opportunities (3) ---
+1. B00N2Y1THA | LOW | Nicorette Nicotine Lozenge 2mg Mint (20 Count) | $3.65 net/unit | ROI 1825.6% | ~1800/mo | 1 FBA
+2. B00GOHEWCU | LOW | Advil Liqui-Gels 200mg (100 Count) | $1.31 net/unit | ROI 2621.5% | ~3200/mo | None FBA
+3. B000P0T01K | LOW | KONG Classic Dog Toy (Medium) | $-3.31 net/unit | ROI -41.5% | ~None/mo | None FBA

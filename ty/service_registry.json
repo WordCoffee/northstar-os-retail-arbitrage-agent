@@ -2,7 +2,7 @@
   "schema": "northstar.service_registry.v1",
   "generated": "2026-11-08",
   "source": "ty/services.json + Northstar_backend route table + Ty's Vision walk",
-  "count": 29,
+  "count": 28,
   "services": [
     {
       "id": "hub",
@@ -257,79 +257,6 @@
       }
     },
     {
-      "id": "goldengoose",
-      "label": "Golden Goose",
-      "group": "Sourcing",
-      "advanced_route": "/goldengoose",
-      "purpose": "Filters the scanner's ranked deals by a minimum deal score and pins the ones worth a second look.",
-      "inputs": [
-        {
-          "name": "minimum deal score",
-          "kind": "setting",
-          "source": "GoldenGoose.jsx:82"
-        }
-      ],
-      "outputs": [
-        {
-          "name": "qualified deals with net, ROI and score",
-          "kind": "table",
-          "where": "Qualified Deals list"
-        },
-        {
-          "name": "qualified count",
-          "kind": "status",
-          "where": "Filters badge"
-        }
-      ],
-      "actions": [
-        {
-          "name": "read scanner",
-          "effect": "read",
-          "endpoint": "/api/kirkland/scanner",
-          "method": "GET",
-          "source": "Northstar_backend/main.py:1868"
-        },
-        {
-          "name": "read cached matches",
-          "effect": "read",
-          "endpoint": "/api/sourcescout/matches",
-          "method": "GET",
-          "source": "Northstar_backend/main.py:2273"
-        }
-      ],
-      "bojo_tool": {
-        "name": "golden_goose_scan",
-        "status": "wired",
-        "reason": "chat_tools.TOOLS['golden_goose_scan'] scores candidates through the Golden Goose filters and returns the arithmetic; the same handler serves /golden-goose."
-      },
-      "also_declares": [],
-      "has_controls": true,
-      "gap": null,
-      "controls_evidence": "northstar-os-ui/src/pages/GoldenGoose.jsx:82 min-score slider; :107-117 per-deal pin toggle.",
-      "evidence": {
-        "route": "/ui/goldengoose",
-        "vision": "live",
-        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS Retail Arbitrage | controls (shell chrome included): Home, SourceScout, Goose, Profit, Tools, Scanning...",
-        "backend": [
-          "Northstar_backend/main.py:1868",
-          "Northstar_backend/main.py:2273"
-        ],
-        "declared_tools": [
-          "golden_goose_scan"
-        ],
-        "confidence": "high",
-        "latest_attempt_blocked": "no Chrome window found",
-        "controls": [
-          "Home",
-          "SourceScout",
-          "Goose",
-          "Profit",
-          "Tools",
-          "Scanning..."
-        ]
-      }
-    },
-    {
       "id": "offerchisel",
       "label": "OfferChisel",
       "group": "Listings",
@@ -415,7 +342,7 @@
       "label": "The Town Crier",
       "group": "Social",
       "advanced_route": "/towncrier",
-      "purpose": "Writes one brand-voice caption plus hashtags for a brief and platform, and records a schedule reminder without publishing.",
+      "purpose": "Writes one brand-voice caption plus hashtags for a brief and platform, screened for prohibited claims, and records a schedule reminder without publishing.",
       "inputs": [
         {
           "name": "post brief",
@@ -455,17 +382,11 @@
         }
       ],
       "bojo_tool": {
-        "name": "plan_social",
+        "name": "write_content",
         "status": "wired",
-        "reason": "ty/services.json declares no tool; chat_tools.TOOLS['plan_social'] is the wired handler for social content (canvas sizes, copy slots)."
+        "reason": "chat_tools.TOOLS['write_content'] is the caption writer: three captions per surface, keyword coverage per variant, and a disease/treatment claim screen. It is the handler for this room's product. The entry used to claim 'plan_social', which is SocialPulse's layout planner and writes no caption."
       },
-      "also_declares": [
-        {
-          "name": "write_content",
-          "status": "wired",
-          "reason": "chat_tools.TOOLS['write_content'] writes social captions screened for prohibited claims."
-        }
-      ],
+      "also_declares": [],
       "has_controls": true,
       "gap": null,
       "controls_evidence": "northstar-os-ui/src/pages/TownCrier.jsx:62 brief textarea, :65 platform select, Generate; :40-43 Schedule only toasts 'publish gate closed'.",
@@ -476,7 +397,9 @@
         "backend": [
           "Northstar_backend/main.py:1566"
         ],
-        "declared_tools": [],
+        "declared_tools": [
+          "write_content"
+        ],
         "confidence": "high",
         "latest_attempt_blocked": "no Chrome window found",
         "controls": [
@@ -913,7 +836,7 @@
     },
     {
       "id": "foundation",
-      "label": "Operations Hub",
+      "label": "Foundation",
       "group": "Internal",
       "advanced_route": "/foundation",
       "purpose": "Reports foundation health in one page — providers, marketplaces, product count, approvals, identity conflicts, queue and schedule posture, imports and audit.",
@@ -1831,7 +1754,7 @@
       "label": "SourceScout",
       "group": "Sourcing",
       "advanced_route": "/product-finder",
-      "purpose": "Stages an ASIN for research and shows its identity, risk, market and economics gates; every field the page has not read is labelled UNKNOWN, and no catalog call is made from this page yet.",
+      "purpose": "Stages an ASIN for research and shows its identity, risk, market and economics gates; the room's candidate list is GET /api/products/finder, which merges the stocked warehouse rows with the same scanner cache its scan_products tool reads.",
       "inputs": [
         {
           "name": "ASIN",
@@ -1851,11 +1774,19 @@
           "where": "Coverage tab"
         }
       ],
-      "actions": [],
+      "actions": [
+        {
+          "name": "read scored candidates",
+          "effect": "read",
+          "endpoint": "/api/products/finder",
+          "method": "GET",
+          "source": "Northstar_backend/main.py:2901"
+        }
+      ],
       "bojo_tool": {
         "name": "scan_products",
         "status": "wired",
-        "reason": "reg-03 handler exists in bojo_tools and chat_tools.TOOLS carries a spec (2026-11-10)"
+        "reason": "chat_tools.TOOLS['scan_products'] -> bojo_tools.sourcing_extra: reads amazon_search.load_cached_candidates() first and asks for a live search only when the envelope is armed; GET /api/products/finder serves the same cache through UniversalProductFilter, so the tool and the route read one source."
       },
       "also_declares": [
         {
@@ -1872,7 +1803,7 @@
         "vision": "live",
         "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: twitch.tv/bigviibin | controls (shell chrome included): Following, Browse, Search, Subscribe, Bits: 29% off, Gift a Sub",
         "backend": [
-          "Northstar_backend/main.py:353"
+          "Northstar_backend/main.py:2901"
         ],
         "declared_tools": [
           "scan_products"

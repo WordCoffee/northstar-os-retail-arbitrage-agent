@@ -56,7 +56,15 @@ DEFAULT_FIXTURES = Path(__file__).resolve().parent / "service_briefs.json"
 DEFAULT_OUT = ROOT / "state" / "seller" / "services_proof.json"
 DEFAULT_WORK_DIR = ROOT / "state" / "seller" / "services"
 
-PATHS = ("listing", "ppc", "golden_goose", "research")
+from .copy import (  # noqa: E402 - the copy rooms' three paths
+    CopyRefused,
+    run_caption,
+    run_offer_copy,
+    run_social_caption,
+)
+
+PATHS = ("listing", "ppc", "golden_goose", "research",
+         "offer_copy", "caption", "social_caption")
 
 RECORDED_PROVIDER_NOTE = (
     "the model answer is a recorded fixture: a live reasoning call is a gated, paid "
@@ -458,15 +466,30 @@ def run_golden_goose(brief: Dict[str, Any], *, work_dir: Path) -> Dict[str, Any]
         _ok("results_returned", returned=len(rows)) if rows else
         _bad("results_returned", "no candidate survived selection"))
     rejected = expect.get("rejected_asin")
+    rejected_all = [str(a) for a in (expect.get("rejected_asins") or [])]
+    if rejected:
+        rejected_all.append(str(rejected))
     checks["reject_tier_dropped"] = (
-        _ok("reject_tier_dropped", rejected=rejected)
-        if rejected and rejected not in asins else
-        _bad("reject_tier_dropped", f"{rejected} is in the returned rows"))
+        _ok("reject_tier_dropped", rejected=rejected_all)
+        if rejected_all and not [a for a in rejected_all if a in asins] else
+        _bad("reject_tier_dropped",
+             f"{[a for a in rejected_all if a in asins] or rejected_all} is in the "
+             "returned rows"))
     scores = [float(row.get("composite_score") or 0.0) for row in rows]
-    checks["ranked_descending"] = (
-        _ok("ranked_descending", scores=scores)
-        if scores == sorted(scores, reverse=True) else
-        _bad("ranked_descending", f"order is {scores}"))
+    eligible = [bool((row.get("filters") or {}).get("all")) for row in rows]
+    # GG-003: eligibility outranks the score. Every eligible row must precede every
+    # ineligible one, and within each group composites must descend. The old check
+    # asserted a single descending list, which is exactly the ordering that put the
+    # 90 oz blender first.
+    ordered = all(
+        (eligible[i], scores[i]) >= (eligible[i + 1], scores[i + 1])
+        for i in range(len(rows) - 1)
+    )
+    checks["ranked_eligible_first_then_descending"] = (
+        _ok("ranked_eligible_first_then_descending", scores=scores, eligible=eligible)
+        if ordered else
+        _bad("ranked_eligible_first_then_descending",
+             f"order is {list(zip(scores, eligible))}"))
     first = expect.get("first_asin")
     checks["best_row_is_first"] = (
         _ok("best_row_is_first", asin=asins[0] if asins else None)
@@ -475,6 +498,17 @@ def run_golden_goose(brief: Dict[str, Any], *, work_dir: Path) -> Dict[str, Any]
         else _bad("best_row_is_first",
                   f"first row {asins[0] if asins else None}, best reported "
                   f"{data['summary'].get('best_asin')}"))
+    # GG-003: "best" may only ever name a row that passes every hard filter.
+    eligible_asins = [row.get("asin") for row in rows
+                      if (row.get("filters") or {}).get("all")]
+    reported_best = data["summary"].get("best_asin")
+    checks["best_is_eligible"] = (
+        _ok("best_is_eligible", best_asin=reported_best)
+        if (reported_best in eligible_asins if reported_best is not None
+            else not eligible_asins) else
+        _bad("best_is_eligible",
+             f"best_asin {reported_best} does not pass every filter "
+             f"(eligible: {eligible_asins})"))
     filters_ok = all(set(row.get("filters") or {}) >=
                      {"profit_floor", "demand_floor", "competition_ceiling",
                       "listing_health", "seller_identity", "size", "all"} for row in rows)
@@ -613,7 +647,9 @@ def run_research(brief: Dict[str, Any], *, work_dir: Path) -> Dict[str, Any]:
 # ── the pass ─────────────────────────────────────────────────────────────────
 
 RUNNERS = {"listing": run_listing, "ppc": run_ppc,
-           "golden_goose": run_golden_goose, "research": run_research}
+           "golden_goose": run_golden_goose, "research": run_research,
+           "offer_copy": run_offer_copy, "caption": run_caption,
+           "social_caption": run_social_caption}
 
 
 def parse_only(value: Optional[str]) -> List[str]:

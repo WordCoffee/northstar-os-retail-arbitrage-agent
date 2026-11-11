@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-11T18:02:03+00:00",
+  "at": "2026-11-11T19:35:56+00:00",
   "bar": 85.0,
   "weights": {
     "works": 0.23,
@@ -13,118 +13,6 @@
   "test_ids": 7465,
   "scan_findings": 1,
   "services": [
-    {
-      "id": "offerchisel",
-      "label": "OfferChisel",
-      "group": "Listings",
-      "kind": "workspace",
-      "route": "/offerchisel",
-      "impact": 0.9,
-      "bar": 85.0,
-      "score": 67.0,
-      "meets_bar": false,
-      "weakest": "seller",
-      "gap": 16.2,
-      "dimensions": {
-        "works": {
-          "score": 100.0,
-          "evidence": "114 test id(s) prove it"
-        },
-        "correct": {
-          "score": 60.0,
-          "evidence": "114 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
-        },
-        "seller": {
-          "score": 0.0,
-          "evidence": "no Seller-Tester output scored for this service"
-        },
-        "complete": {
-          "score": 100.0,
-          "evidence": "1/1 declared Bojo tools wired: offer_recommendation"
-        },
-        "usable": {
-          "score": 100.0,
-          "evidence": "no readiness finding names this service"
-        },
-        "measured": {
-          "score": 100.0,
-          "evidence": "route /offerchisel -> northstar-os-ui\\src\\pages\\roomAdapters.jsx; app p95 3.4 ms"
-        },
-        "contract": {
-          "score": 0.0,
-          "evidence": "fail: every action is an external paid-model call"
-        }
-      },
-      "scenarios": [
-        {
-          "text": "turn this product into a listing that will not be suppressed",
-          "tag": "backed"
-        },
-        {
-          "text": "rewrite the bullets for a different audience",
-          "tag": "backed"
-        },
-        {
-          "text": "fix the listing that lost its buy box",
-          "tag": "backed"
-        }
-      ],
-      "purpose": "turn a product into an offer: price, title, bullets, images"
-    },
-    {
-      "id": "towncrier",
-      "label": "The Town Crier",
-      "group": "Social",
-      "kind": "workspace",
-      "route": "/towncrier",
-      "impact": 0.45,
-      "bar": 85.0,
-      "score": 55.0,
-      "meets_bar": false,
-      "weakest": "seller",
-      "gap": 13.5,
-      "dimensions": {
-        "works": {
-          "score": 100.0,
-          "evidence": "28 test id(s) prove it"
-        },
-        "correct": {
-          "score": 60.0,
-          "evidence": "28 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
-        },
-        "seller": {
-          "score": 0.0,
-          "evidence": "no Seller-Tester output scored for this service"
-        },
-        "complete": {
-          "score": 0.0,
-          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
-        },
-        "usable": {
-          "score": 100.0,
-          "evidence": "no readiness finding names this service"
-        },
-        "measured": {
-          "score": 100.0,
-          "evidence": "route /towncrier -> northstar-os-ui\\src\\pages\\roomAdapters.jsx; app p95 3.4 ms"
-        },
-        "contract": {
-          "score": 0.0,
-          "evidence": "fail: every action is an external paid-model call"
-        }
-      },
-      "scenarios": [
-        {
-          "text": "post about a restock without sounding automated",
-          "tag": "backed"
-        },
-        {
-          "text": "keep the voice consistent across three posts",
-          "tag": "backed"
-        }
-      ],
-      "purpose": "seller-side social output that does not read like a robot"
-    },
     {
       "id": "adpilot",
       "label": "AdPilot",
@@ -182,60 +70,6 @@
         }
       ],
       "purpose": "campaign control: budget, bids, and the report behind them"
-    },
-    {
-      "id": "socialpulse",
-      "label": "SocialPulse",
-      "group": "Social",
-      "kind": "workspace",
-      "route": "/socialpulse",
-      "impact": 0.45,
-      "bar": 85.0,
-      "score": 67.0,
-      "meets_bar": false,
-      "weakest": "seller",
-      "gap": 8.1,
-      "dimensions": {
-        "works": {
-          "score": 100.0,
-          "evidence": "28 test id(s) prove it"
-        },
-        "correct": {
-          "score": 60.0,
-          "evidence": "28 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
-        },
-        "seller": {
-          "score": 0.0,
-          "evidence": "no Seller-Tester output scored for this service"
-        },
-        "complete": {
-          "score": 100.0,
-          "evidence": "1/1 declared Bojo tools wired: plan_social"
-        },
-        "usable": {
-          "score": 100.0,
-          "evidence": "no readiness finding names this service"
-        },
-        "measured": {
-          "score": 100.0,
-          "evidence": "route /socialpulse -> northstar-os-ui\\src\\pages\\internal\\SocialPulse.jsx; app p95 3.4 ms"
-        },
-        "contract": {
-          "score": 0.0,
-          "evidence": "no_primary_action: registry records no actions for this service"
-        }
-      },
-      "scenarios": [
-        {
-          "text": "post about a restock without sounding automated",
-          "tag": "backed"
-        },
-        {
-          "text": "keep the voice consistent across three posts",
-          "tag": "backed"
-        }
-      ],
-      "purpose": "schedule and judge social posts against a brand voice"
     },
     {
       "id": "product-finder",
@@ -354,6 +188,64 @@
       "purpose": "Listing Guardian: keep live listings compliant and correct"
     },
     {
+      "id": "offerchisel",
+      "label": "OfferChisel",
+      "group": "Listings",
+      "kind": "workspace",
+      "route": "/offerchisel",
+      "impact": 0.9,
+      "bar": 85.0,
+      "score": 79.5,
+      "meets_bar": false,
+      "weakest": "contract",
+      "gap": 5.0,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "114 test id(s) prove it"
+        },
+        "correct": {
+          "score": 60.0,
+          "evidence": "114 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+        },
+        "seller": {
+          "score": 96.4,
+          "evidence": "5 Seller-Tester service-path outputs (population: service-path; paths offer_copy), mean 96.4, 3 passed"
+        },
+        "complete": {
+          "score": 100.0,
+          "evidence": "1/1 declared Bojo tools wired: offer_recommendation"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 100.0,
+          "evidence": "route /offerchisel -> northstar-os-ui\\src\\pages\\roomAdapters.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 0.0,
+          "evidence": "fail: every action is an external paid-model call"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "turn this product into a listing that will not be suppressed",
+          "tag": "backed"
+        },
+        {
+          "text": "rewrite the bullets for a different audience",
+          "tag": "backed"
+        },
+        {
+          "text": "fix the listing that lost its buy box",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "turn a product into an offer: price, title, bullets, images"
+    },
+    {
       "id": "beta-support",
       "label": "Support",
       "group": "Private Beta",
@@ -407,6 +299,114 @@
         }
       ],
       "purpose": "support inside the beta without a human in the loop"
+    },
+    {
+      "id": "towncrier",
+      "label": "The Town Crier",
+      "group": "Social",
+      "kind": "workspace",
+      "route": "/towncrier",
+      "impact": 0.45,
+      "bar": 85.0,
+      "score": 79.0,
+      "meets_bar": false,
+      "weakest": "contract",
+      "gap": 2.7,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "28 test id(s) prove it"
+        },
+        "correct": {
+          "score": 60.0,
+          "evidence": "28 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+        },
+        "seller": {
+          "score": 92.1,
+          "evidence": "5 Seller-Tester service-path outputs (population: service-path; paths caption), mean 92.1, 2 passed"
+        },
+        "complete": {
+          "score": 100.0,
+          "evidence": "1/1 declared Bojo tools wired: write_content"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 100.0,
+          "evidence": "route /towncrier -> northstar-os-ui\\src\\pages\\roomAdapters.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 0.0,
+          "evidence": "fail: every action is an external paid-model call"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "post about a restock without sounding automated",
+          "tag": "backed"
+        },
+        {
+          "text": "keep the voice consistent across three posts",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "seller-side social output that does not read like a robot"
+    },
+    {
+      "id": "socialpulse",
+      "label": "SocialPulse",
+      "group": "Social",
+      "kind": "workspace",
+      "route": "/socialpulse",
+      "impact": 0.45,
+      "bar": 85.0,
+      "score": 79.7,
+      "meets_bar": false,
+      "weakest": "contract",
+      "gap": 2.4,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "28 test id(s) prove it"
+        },
+        "correct": {
+          "score": 60.0,
+          "evidence": "28 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+        },
+        "seller": {
+          "score": 98.0,
+          "evidence": "5 Seller-Tester service-path outputs (population: service-path; paths social_caption), mean 98.0, 4 passed"
+        },
+        "complete": {
+          "score": 100.0,
+          "evidence": "1/1 declared Bojo tools wired: plan_social"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 100.0,
+          "evidence": "route /socialpulse -> northstar-os-ui\\src\\pages\\internal\\SocialPulse.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 0.0,
+          "evidence": "no_primary_action: registry records no actions for this service"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "post about a restock without sounding automated",
+          "tag": "backed"
+        },
+        {
+          "text": "keep the voice consistent across three posts",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "schedule and judge social posts against a brand voice"
     },
     {
       "id": "hub",
@@ -576,64 +576,6 @@
         }
       ],
       "purpose": "find products worth selling, with demand and competition evidence"
-    },
-    {
-      "id": "goldengoose",
-      "label": "Golden Goose",
-      "group": "Sourcing",
-      "kind": "workspace",
-      "route": "/goldengoose",
-      "impact": 0.95,
-      "bar": 85.0,
-      "score": 89.4,
-      "meets_bar": false,
-      "weakest": "correct",
-      "gap": 0.0,
-      "dimensions": {
-        "works": {
-          "score": 100.0,
-          "evidence": "567 test id(s) prove it"
-        },
-        "correct": {
-          "score": 60.0,
-          "evidence": "567 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
-        },
-        "seller": {
-          "score": 95.6,
-          "evidence": "5 Seller-Tester service-path outputs (population: service-path; paths golden_goose), mean 95.6, 3 passed"
-        },
-        "complete": {
-          "score": 100.0,
-          "evidence": "1/1 declared Bojo tools wired: golden_goose_scan"
-        },
-        "usable": {
-          "score": 100.0,
-          "evidence": "no readiness finding names this service"
-        },
-        "measured": {
-          "score": 100.0,
-          "evidence": "route /goldengoose -> northstar-os-ui\\src\\pages\\roomAdapters.jsx; app p95 3.4 ms"
-        },
-        "contract": {
-          "score": 100.0,
-          "evidence": "GET /api/kirkland/scanner -> 200; 89 row(s) under 'products'"
-        }
-      },
-      "scenarios": [
-        {
-          "text": "find a product in a category I have never sold",
-          "tag": "backed"
-        },
-        {
-          "text": "compare landed cost across three suppliers",
-          "tag": "backed"
-        },
-        {
-          "text": "tell me the margin at my fee tier",
-          "tag": "backed"
-        }
-      ],
-      "purpose": "the high-margin finder: score an opportunity and say why"
     },
     {
       "id": "auctioneer",
@@ -1357,7 +1299,7 @@
       "route": "/golden-goose",
       "impact": 0.95,
       "bar": 85.0,
-      "score": 89.4,
+      "score": 90.0,
       "meets_bar": false,
       "weakest": "correct",
       "gap": 0.0,
@@ -1371,8 +1313,8 @@
           "evidence": "567 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
         },
         "seller": {
-          "score": 95.6,
-          "evidence": "5 Seller-Tester service-path outputs (population: service-path; paths golden_goose), mean 95.6, 3 passed; 'golden-goose' is the declared alias of 'goldengoose' (ty/services.json gives both ids the same declared tool and the same purpose)"
+          "score": 100.0,
+          "evidence": "5 Seller-Tester service-path outputs (population: service-path; paths golden_goose), mean 100.0, 5 passed"
         },
         "complete": {
           "score": 100.0,

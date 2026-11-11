@@ -512,8 +512,21 @@ def _assign_tier(
     composite: float,
     passes_profit_floor: bool,
     passes_all_filters: bool,
+    seller_blocked: bool = False,
 ) -> str:
-    """Tier assignment per the documented rules."""
+    """Tier assignment per the documented rules.
+
+    The seller-identity rule is a **hard block, not a HIGH-only filter**
+    (``category_config.seller_identity_blocked`` and ``amazon_matcher`` lines
+    50-54: an observed brand owner or "Sold by Amazon.com" is a hard block).
+    Gate only HIGH on it and the same offer comes back MEDIUM at composite
+    >= 0.4 and is offered to the seller as a buy — measured 2026-11-11 on
+    seller-tester fixture GG-002, where the Amazon.com offer and the brand
+    owner's offer both tiered MEDIUM at 0.7257. A blocked identity is REJECT
+    at every score.
+    """
+    if seller_blocked:
+        return TIER_REJECT
     if composite >= 0.6 and passes_all_filters:
         return TIER_HIGH
     if composite >= 0.4 and passes_profit_floor:
@@ -841,8 +854,11 @@ def score_opportunity(
         + WEIGHT_AD_FEASIBILITY * ad_score,
         4,
     )
-    tier = _assign_tier(composite, passes_profit, passes_all)
+    tier = _assign_tier(composite, passes_profit, passes_all,
+                        seller_blocked=not passes_seller)
     notes.append("Composite: %.4f -> %s" % (composite, tier))
+    if not passes_seller:
+        notes.append("Tier forced to REJECT: seller-identity hard block")
 
     # 6. Tags ------------------------------------------------------------------
     tags = _apply_tags(economics)
@@ -878,7 +894,14 @@ def score_batch(
     min_monthly_sales: int = DEFAULT_MIN_MONTHLY_SALES,
     include_rejected: bool = False,
 ) -> List[ScoredOpportunity]:
-    """Score a batch of opportunities, sorted by composite score descending.
+    """Score a batch of opportunities, eligible rows first, then by score.
+
+    Ranking is **eligibility first**: a row that fails any hard filter can never
+    outrank a row that passes every one, however high its composite. Measured
+    2026-11-11 on seller-tester fixture GG-003: the 90 oz blender (composite
+    0.9349, size filter FAIL) sorted above the 26 oz lotion that passed every
+    filter at 0.74, so the first row a seller read was the one they cannot ship.
+    Within each group the composite still sorts descending.
 
     REJECT-tier results are filtered out by default; pass include_rejected
     to keep them (e.g. so the report can populate its ``discarded`` list).
@@ -889,12 +912,18 @@ def score_batch(
     ]
     if not include_rejected:
         scored = [s for s in scored if s.tier != TIER_REJECT]
-    scored.sort(key=lambda s: s.composite_score, reverse=True)
+    scored.sort(key=lambda s: (not s.passes_all_filters, -s.composite_score))
     return scored
 
 
 def get_scoring_summary(scored: List[ScoredOpportunity]) -> Dict[str, Any]:
-    """Return summary statistics over a list of scored opportunities."""
+    """Return summary statistics over a list of scored opportunities.
+
+    ``best_opportunity`` is only ever a row that passes **every** hard filter:
+    naming an ineligible row "best" is the same defect as ranking it first
+    (GG-003). When nothing is eligible the answer is ``None`` with the reason,
+    never the least-bad ineligible row.
+    """
     profits = [s.economics.net_profit_per_unit for s in scored if _number(s.economics.net_profit_per_unit)]
     rois = [v for v in (_as_pct(s.economics.roi_per_unit) for s in scored) if v is not None]
 
@@ -903,7 +932,8 @@ def get_scoring_summary(scored: List[ScoredOpportunity]) -> Dict[str, Any]:
         for tag in s.opportunity_tags:
             top_tags[tag] = top_tags.get(tag, 0) + 1
 
-    best = max(scored, key=lambda s: s.composite_score, default=None)
+    eligible = [s for s in scored if s.passes_all_filters]
+    best = max(eligible, key=lambda s: s.composite_score, default=None)
 
     return {
         "total_evaluated": len(scored),
@@ -911,8 +941,12 @@ def get_scoring_summary(scored: List[ScoredOpportunity]) -> Dict[str, Any]:
         "medium": sum(1 for s in scored if s.tier == TIER_MEDIUM),
         "low": sum(1 for s in scored if s.tier == TIER_LOW),
         "rejected": sum(1 for s in scored if s.tier == TIER_REJECT),
+        "eligible": len(eligible),
         "avg_profit": round(sum(profits) / len(profits), 2) if profits else 0.0,
         "avg_roi": round(sum(rois) / len(rois), 2) if rois else 0.0,
         "best_opportunity": best,
+        "best_eligible_only": True,
+        "best_reason": (None if best is not None else
+                        "no row passes every hard filter, so there is no best buy"),
         "top_tags": top_tags,
     }

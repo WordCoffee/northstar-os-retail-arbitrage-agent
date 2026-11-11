@@ -50,3 +50,15 @@ boot **2026-11-11T09:39:35+00:00** via Get-CimInstance Win32_OperatingSystem Las
 
 verdict: task ran this boot yes; director alive **no**; resumed after boot yes; handoff continued yes
 
+## 2026-11-11T15:53:53+00:00 — reboot proof
+
+boot **2026-11-11T11:32:52+00:00** via Get-CimInstance Win32_OperatingSystem LastBootUpTime; uptime 4h 21m
+
+- task `NorthstarTyDirector`: state Running, last run 2026-11-11T15:53:44+00:00, result 267009 (running), missed runs 0
+- director pid 22824: **not alive** (pid file written 2026-11-11T10:34:00+00:00)
+- queue: 7 open / 87 jobs — {"blocked": 3, "merged": 55, "queued": 4, "released": 12, "reported": 13}
+- resumed after boot: **no** — 2026-11-11T09:45:10+00:00 started director pid=2952
+- handoff `C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\reports\ty\handoff.md` mtime 2026-11-11T11:04:25+00:00 (continued after boot: **no**)
+
+verdict: task ran this boot yes; director alive **no**; resumed after boot **no**; handoff continued **no**
+

@@ -81,9 +81,19 @@ def test_registry_covers_every_service(registry, services):
     assert len(ids) == len(set(ids)), "duplicate service ids in the registry"
     assert set(ids) == {service["id"] for service in services}
     assert registry["count"] == len(services)
-    # The walk covered today's 29 services. A later addition must be described too,
-    # so the registry may grow but never shrink below the set that was walked.
-    assert len(services) >= 29
+    # The walk covered today's services. A later addition must be described too, so the registry
+    # may grow but never shrink below the set that was walked.
+    #
+    # Floor lowered 29 -> 28 on 2026-11-11, with the reason: the catalogue carried the Golden Goose
+    # twice, as `goldengoose` and `golden-goose`, and the legacy alias was removed. That is a
+    # deduplication of identifiers, not the loss of a service — 28 distinct services is the same set
+    # the walk covered. The assertion below pins that reading so a real service cannot disappear
+    # under cover of "it was a duplicate".
+    assert len(services) >= 28
+    assert len({service.get("label") for service in services}) == len(services), (
+        "two services share a label: a duplicate id was probably renamed rather than removed")
+    assert len({service.get("route") for service in services}) == len(services), (
+        "two services share a route: one of them cannot be reached on its own")
 
 
 def test_every_entry_validates(registry, services):
@@ -158,6 +168,65 @@ def test_declared_tools_from_services_json_are_all_recorded(registry, services):
             if tool not in recorded:
                 missing.append(f"{service['id']}: {tool}")
     assert missing == []
+
+
+# -- the two registry fixes of 2026-11-11 ------------------------------------
+
+
+def test_product_finder_has_its_own_action_on_the_route_its_tool_reads(registry):
+    """fix-product-finder-wiring: declared scan_products, zero actions of its own.
+
+    `scan_products` reads ``amazon_search.load_cached_candidates()``; the route that
+    serves that same cache as a scored list is ``GET /api/products/finder``. The
+    entry must cite it, and the citation must resolve (``build --check`` proves the
+    line, this proves the intent).
+    """
+    entry = next(e for e in registry["services"] if e["id"] == "product-finder")
+    assert entry["actions"], "product-finder declares a tool but no action of its own"
+    action = entry["actions"][0]
+    assert (action["method"], action["endpoint"]) == ("GET", "/api/products/finder")
+    assert action["name"] == "read scored candidates"
+    assert action["source"] == "Northstar_backend/main.py:2901"
+    assert entry["bojo_tool"]["name"] == "scan_products"
+    assert "load_cached_candidates" in entry["bojo_tool"]["reason"]
+
+
+def test_towncrier_declares_the_tool_that_writes_its_product(registry, services):
+    """fix-product-finder-wiring (second half): towncrier declared no tool, and its
+    registry entry claimed SocialPulse's layout planner.
+
+    The caption writer is `write_content`; the layout planner is `plan_social` and
+    belongs to SocialPulse. Both statements are asserted so the duplicate cannot
+    come back.
+    """
+    by_id = {entry["id"]: entry for entry in registry["services"]}
+    social = {service["id"]: service for service in services}
+    town = by_id["towncrier"]
+    assert town["bojo_tool"]["name"] == "write_content"
+    assert town["bojo_tool"]["status"] == "wired"
+    assert social["towncrier"]["tools"] == ["write_content"]
+    assert "plan_social" not in [town["bojo_tool"]["name"]] + [
+        ref["name"] for ref in town["also_declares"]]
+    assert social["socialpulse"]["tools"] == ["plan_social"]
+
+
+def test_one_golden_goose_and_the_legacy_id_is_a_declared_alias(registry, services):
+    """retire-goldengoose-alias: two ids, one label, one tool, one product.
+
+    The portfolio counted Golden Goose twice. There is now exactly one service
+    entry, and the legacy id survives only as a declared alias that names the real
+    service and the legacy route — so a bookmark still lands somewhere.
+    """
+    ids = [entry["id"] for entry in registry["services"]]
+    service_ids = [service["id"] for service in services]
+    assert "golden-goose" in ids and "goldengoose" not in ids
+    assert service_ids.count("golden-goose") == 1 and "goldengoose" not in service_ids
+    assert registry["count"] == len(ids) == len(service_ids)
+    aliases = _load("services.json").get("aliases") or {}
+    assert aliases["goldengoose"]["of"] == "golden-goose"
+    assert aliases["goldengoose"]["route"] == "/goldengoose"
+    assert aliases["goldengoose"]["note"]
+
 
 
 def test_tool_list_agrees_with_chat_tools(tool_list):

@@ -14,16 +14,36 @@
       "never_blended": "design-studio's published seller score comes from the image pass. These rows are a separate population and are reported, never averaged with it."
     },
     "golden_goose": {
-      "service": "goldengoose",
-      "aliases": ["golden-goose"],
+      "service": "golden-goose",
+      "aliases": [
+        "goldengoose"
+      ],
       "population": "service-path",
-      "why": "the path calls bojo_tools.sourcing.golden_goose_scan, which is the golden_goose_scan tool. ty/services.json declares that same tool, and the same purpose text, for both 'goldengoose' and 'golden-goose', so the two ids are one product under two names rather than two services.",
-      "alias_note": "the alias is declared here, not inferred: it adds no brief and no sample, it reuses the one sample the registry's own duplicate id describes."
+      "why": "the path calls bojo_tools.sourcing.golden_goose_scan, which is the golden_goose_scan tool. ty/services.json now carries ONE Golden Goose: 'golden-goose' at /golden-goose. The legacy 'goldengoose' id is an alias of it (the route redirects), so the sample is owned by the real service and the alias adds no second sample.",
+      "alias_note": "the alias is declared here, not inferred: it adds no brief and no sample, it resolves the retired id to the one service that produces the artefact."
     },
     "research": {
       "service": null,
       "population": null,
       "why": "no service in ty/services.json declares a path that reaches research_graph.research: the module is exercised by its own test only, and nothing in the registry or the backend calls it. The pass is measured and reported, but attributing it to product-finder (or anything else) would be inventing an owner."
+    },
+    "offer_copy": {
+      "service": "offerchisel",
+      "population": "service-path",
+      "why": "the room asks the local engine for TITLE:/BULLETS:/KEYWORDS: and shows the answer; the copy is judged by specialists.listing_optimizer (audit_title, audit_bullet, keyword_coverage, backend_bytes), which is the app's own listing rubric, plus the claims lint. ty/services.json gives offerchisel exactly that product: a title, four bullets and back-end search terms.",
+      "recorded_answer": "the engine answer is a recorded fixture: a live generation is a gated model call. Every rule applied to it is the app's own deterministic code."
+    },
+    "caption": {
+      "service": "towncrier",
+      "population": "service-path",
+      "why": "the room writes ONE caption plus 3-4 hashtags for a brief and a platform (TownCrier.jsx:19 prompt, :22-30 parser). ty/services.json gives towncrier that purpose and the room declares write_content, the caption writer with the claim screen. The checks are the room's own limits (220 chars), its brand rule ('Word Coffee is NOT a beverage'), the claims lint and the hashtag shape.",
+      "recorded_answer": "the engine answer is a recorded fixture: a live generation is a gated model call. Every rule applied to it is the app's own or the room's own, stated in the brief."
+    },
+    "social_caption": {
+      "service": "socialpulse",
+      "population": "service-path",
+      "why": "this path is the app's own code end to end: social_pulse.generate_caption is called with the local model refused, so the documented template fallback runs. The caption, hashtags, CTA, platform spec and the app's own _score_caption are SocialPulse's output, not a fixture.",
+      "never_blended": "the caption checks describe the deterministic fallback path; a live model answer is a gated, paid action and is not measured here."
     }
   },
   "listing": [
@@ -43,8 +63,14 @@
         "ingredients": "dried lion's mane fruiting body",
         "packaging": "resealable stand-up pouch"
       },
-      "keywords": ["lions mane powder", "mushroom powder"],
-      "facts": ["170 g", "100 percent"],
+      "keywords": [
+        "lions mane powder",
+        "mushroom powder"
+      ],
+      "facts": [
+        "170 g",
+        "100 percent"
+      ],
       "recorded_proposal": {
         "title": "Mogra Organics Lions Mane Powder, 170 g, Single-Ingredient Fruiting Body Powder",
         "bullets": [
@@ -65,7 +91,10 @@
           "moved the net weight into the title so the pack size is visible in the search result",
           "replaced the vague description with the supplied attribute panel"
         ],
-        "missing_evidence": ["farming origin", "batch lab certificate"],
+        "missing_evidence": [
+          "farming origin",
+          "batch lab certificate"
+        ],
         "warnings": []
       }
     },
@@ -74,7 +103,10 @@
       "sku": "WC-FORMOM-12",
       "brand": "Word Coffee",
       "title": "Word Coffee For Mom gift box",
-      "bullets": ["Twelve cards", "Letterpress on cotton stock"],
+      "bullets": [
+        "Twelve cards",
+        "Letterpress on cotton stock"
+      ],
       "description": "A twelve-card gift box of Word Coffee greeting cards.",
       "attributes": {
         "count": "12 cards",
@@ -82,8 +114,13 @@
         "print": "letterpress",
         "box": "pale-pink rigid gift box"
       },
-      "keywords": ["greeting cards", "gift box"],
-      "facts": ["12 cards"],
+      "keywords": [
+        "greeting cards",
+        "gift box"
+      ],
+      "facts": [
+        "12 cards"
+      ],
       "recorded_proposal": {
         "title": "Word Coffee For Mom Greeting Card Gift Box, 12 Letterpress Cards on Cotton Stock",
         "bullets": [
@@ -104,7 +141,10 @@
           "each bullet now states a supplied fact rather than a mood",
           "description says what is in the box and how it is given"
         ],
-        "missing_evidence": ["envelope count", "card dimensions"],
+        "missing_evidence": [
+          "envelope count",
+          "card dimensions"
+        ],
         "warnings": []
       }
     },
@@ -124,9 +164,17 @@
         "serving_size": "200 mg",
         "ingredients": "magnesium glycinate"
       },
-      "keywords": ["magnesium powder", "magnesium glycinate"],
-      "facts": ["60 servings", "200 mg"],
-      "must_not_keep": ["best sleep supplement"],
+      "keywords": [
+        "magnesium powder",
+        "magnesium glycinate"
+      ],
+      "facts": [
+        "60 servings",
+        "200 mg"
+      ],
+      "must_not_keep": [
+        "best sleep supplement"
+      ],
       "recorded_proposal": {
         "title": "Mogra Organics Nightly Magnesium Glycinate Powder, 60 Servings, 200 mg per Serving",
         "bullets": [
@@ -147,7 +195,10 @@
           "moved the serving count and serving size into the title",
           "every bullet restates a supplied fact instead of a promise"
         ],
-        "missing_evidence": ["third-party assay", "cGMP certificate"],
+        "missing_evidence": [
+          "third-party assay",
+          "cGMP certificate"
+        ],
         "warnings": []
       }
     },
@@ -171,8 +222,15 @@
         "box": "kraft gift box with ribbon",
         "wax": "soy"
       },
-      "keywords": ["candle gift set", "soy candle"],
-      "facts": ["12 candles", "4 scents", "3 oz"],
+      "keywords": [
+        "candle gift set",
+        "soy candle"
+      ],
+      "facts": [
+        "12 candles",
+        "4 scents",
+        "3 oz"
+      ],
       "recorded_proposal": {
         "title": "Northlight Studio Hand-Poured Soy Candle Gift Set, 12 Candles in 4 Scents, 3 oz Each, Cotton Wicks, Reusable Kraft Gift Box with Ribbon, Ready to Give",
         "bullets": [
@@ -194,7 +252,11 @@
           "bullets split into count, scent split, wick, packaging and use, one fact each",
           "description restates the attribute panel instead of repeating the title"
         ],
-        "missing_evidence": ["burn time per tin", "fragrance ingredient list", "country of manufacture"],
+        "missing_evidence": [
+          "burn time per tin",
+          "fragrance ingredient list",
+          "country of manufacture"
+        ],
         "warnings": []
       }
     },
@@ -203,7 +265,10 @@
       "sku": "HARBO-OIL-6X8",
       "brand": "Harbor",
       "title": "Harbor Body Oil 8 oz",
-      "bullets": ["Single bottle", "Pressed oil for body and bath"],
+      "bullets": [
+        "Single bottle",
+        "Pressed oil for body and bath"
+      ],
       "description": "A single 8 oz bottle of Harbor body oil.",
       "attributes": {
         "pack": "6 pack",
@@ -211,8 +276,15 @@
         "total": "48 oz",
         "ingredients": "pressed seed oil blend"
       },
-      "keywords": ["body oil", "bath oil"],
-      "facts": ["6 pack", "8 oz", "48 oz"],
+      "keywords": [
+        "body oil",
+        "bath oil"
+      ],
+      "facts": [
+        "6 pack",
+        "8 oz",
+        "48 oz"
+      ],
       "recorded_proposal": {
         "title": "Harbor Body Oil, 6 Pack of 8 oz Bottles, 48 oz Total, Pressed Oil for Body and Bath",
         "bullets": [
@@ -233,7 +305,10 @@
           "total volume is stated because a buyer compares cases, not bottles",
           "attributes reduced to the three numbers the seller actually supplied"
         ],
-        "missing_evidence": ["full ingredient list", "expiry or best-by date"],
+        "missing_evidence": [
+          "full ingredient list",
+          "expiry or best-by date"
+        ],
         "warnings": []
       }
     },
@@ -242,10 +317,15 @@
       "sku": "KC-ENAMEL-01",
       "brand": "Kettle & Co",
       "title": "Kettle & Co Enamel Mug",
-      "bullets": ["Enamel on steel"],
+      "bullets": [
+        "Enamel on steel"
+      ],
       "description": "",
       "attributes": {},
-      "keywords": ["enamel mug", "camping mug"],
+      "keywords": [
+        "enamel mug",
+        "camping mug"
+      ],
       "facts": [],
       "recorded_proposal": {
         "title": "Kettle & Co Enamel Mug, Enamel on Steel, Camping Cup for Coffee and Tea",
@@ -279,18 +359,90 @@
       "filename": "bulk-20261111.xlsx",
       "sheet_title": "Sponsored Products Campaigns",
       "rows": [
-        ["Product", "Entity", "Operation", "Campaign ID", "Ad Group ID", "Keyword ID",
-         "Campaign Name", "Ad Group Name", "Keyword Text", "Match Type", "Bid", "State"],
-        ["Sponsored Products", "Campaign", "Update", "C100", "", "",
-         "Lions Mane Launch", "", "", "", "", "enabled"],
-        ["Sponsored Products", "Ad Group", "Update", "C100", "A200", "",
-         "Lions Mane Launch", "Exact", "", "", "", "enabled"],
-        ["Sponsored Products", "Keyword", "Update", "C100", "A200", "K300",
-         "Lions Mane Launch", "Exact", "lions mane powder", "exact", "0.75", "enabled"],
-        ["Sponsored Products", "Keyword", "Update", "C100", "A200", "K301",
-         "Lions Mane Launch", "Exact", "mushroom coffee", "phrase", "1.10", "enabled"],
-        ["Sponsored Products", "Keyword", "Update", "C100", "A200", "K302",
-         "Lions Mane Launch", "Exact", "cheap supplement", "broad", "0.40", "enabled"]
+        [
+          "Product",
+          "Entity",
+          "Operation",
+          "Campaign ID",
+          "Ad Group ID",
+          "Keyword ID",
+          "Campaign Name",
+          "Ad Group Name",
+          "Keyword Text",
+          "Match Type",
+          "Bid",
+          "State"
+        ],
+        [
+          "Sponsored Products",
+          "Campaign",
+          "Update",
+          "C100",
+          "",
+          "",
+          "Lions Mane Launch",
+          "",
+          "",
+          "",
+          "",
+          "enabled"
+        ],
+        [
+          "Sponsored Products",
+          "Ad Group",
+          "Update",
+          "C100",
+          "A200",
+          "",
+          "Lions Mane Launch",
+          "Exact",
+          "",
+          "",
+          "",
+          "enabled"
+        ],
+        [
+          "Sponsored Products",
+          "Keyword",
+          "Update",
+          "C100",
+          "A200",
+          "K300",
+          "Lions Mane Launch",
+          "Exact",
+          "lions mane powder",
+          "exact",
+          "0.75",
+          "enabled"
+        ],
+        [
+          "Sponsored Products",
+          "Keyword",
+          "Update",
+          "C100",
+          "A200",
+          "K301",
+          "Lions Mane Launch",
+          "Exact",
+          "mushroom coffee",
+          "phrase",
+          "1.10",
+          "enabled"
+        ],
+        [
+          "Sponsored Products",
+          "Keyword",
+          "Update",
+          "C100",
+          "A200",
+          "K302",
+          "Lions Mane Launch",
+          "Exact",
+          "cheap supplement",
+          "broad",
+          "0.40",
+          "enabled"
+        ]
       ],
       "expect": {
         "row_index": 3,
@@ -304,32 +456,188 @@
       "filename": "bulk-20261112-three-campaigns.xlsx",
       "sheet_title": "Sponsored Products Campaigns",
       "rows": [
-        ["Product", "Entity", "Operation", "Campaign ID", "Ad Group ID", "Keyword ID",
-         "Campaign Name", "Ad Group Name", "Keyword Text", "Match Type", "Bid", "State"],
-        ["Sponsored Products", "Campaign", "Update", "C200", "", "",
-         "Body Oil Core", "", "", "", "", "enabled"],
-        ["Sponsored Products", "Ad Group", "Update", "C200", "A210", "",
-         "Body Oil Core", "Exact", "", "", "", "enabled"],
-        ["Sponsored Products", "Keyword", "Update", "C200", "A210", "K400",
-         "Body Oil Core", "Exact", "body oil 8 oz", "exact", "1.25", "enabled"],
-        ["Sponsored Products", "Keyword", "Update", "C200", "A210", "K401",
-         "Body Oil Core", "Exact", "body oil", "phrase", "0.95", "enabled"],
-        ["Sponsored Products", "Campaign", "Update", "C201", "", "",
-         "Body Oil Discovery", "", "", "", "", "enabled"],
-        ["Sponsored Products", "Ad Group", "Update", "C201", "A220", "",
-         "Body Oil Discovery", "Research", "", "", "", "enabled"],
-        ["Sponsored Products", "Keyword", "Update", "C201", "A220", "K402",
-         "Body Oil Discovery", "Research", "harbor body oil", "exact", "1.85", "enabled"],
-        ["Sponsored Products", "Keyword", "Update", "C201", "A220", "K403",
-         "Body Oil Discovery", "Research", "body oil bulk", "broad", "0.70", "enabled"],
-        ["Sponsored Products", "Campaign", "Update", "C202", "", "",
-         "Bath Oil Long Tail", "", "", "", "", "enabled"],
-        ["Sponsored Products", "Ad Group", "Update", "C202", "A230", "",
-         "Bath Oil Long Tail", "Broad", "", "", "", "enabled"],
-        ["Sponsored Products", "Keyword", "Update", "C202", "A230", "K404",
-         "Bath Oil Long Tail", "Broad", "bath oil for dry skin", "broad", "0.45", "enabled"],
-        ["Sponsored Products", "Keyword", "Update", "C202", "A230", "K405",
-         "Bath Oil Long Tail", "Broad", "harbor bath oil", "exact", "1.10", "enabled"]
+        [
+          "Product",
+          "Entity",
+          "Operation",
+          "Campaign ID",
+          "Ad Group ID",
+          "Keyword ID",
+          "Campaign Name",
+          "Ad Group Name",
+          "Keyword Text",
+          "Match Type",
+          "Bid",
+          "State"
+        ],
+        [
+          "Sponsored Products",
+          "Campaign",
+          "Update",
+          "C200",
+          "",
+          "",
+          "Body Oil Core",
+          "",
+          "",
+          "",
+          "",
+          "enabled"
+        ],
+        [
+          "Sponsored Products",
+          "Ad Group",
+          "Update",
+          "C200",
+          "A210",
+          "",
+          "Body Oil Core",
+          "Exact",
+          "",
+          "",
+          "",
+          "enabled"
+        ],
+        [
+          "Sponsored Products",
+          "Keyword",
+          "Update",
+          "C200",
+          "A210",
+          "K400",
+          "Body Oil Core",
+          "Exact",
+          "body oil 8 oz",
+          "exact",
+          "1.25",
+          "enabled"
+        ],
+        [
+          "Sponsored Products",
+          "Keyword",
+          "Update",
+          "C200",
+          "A210",
+          "K401",
+          "Body Oil Core",
+          "Exact",
+          "body oil",
+          "phrase",
+          "0.95",
+          "enabled"
+        ],
+        [
+          "Sponsored Products",
+          "Campaign",
+          "Update",
+          "C201",
+          "",
+          "",
+          "Body Oil Discovery",
+          "",
+          "",
+          "",
+          "",
+          "enabled"
+        ],
+        [
+          "Sponsored Products",
+          "Ad Group",
+          "Update",
+          "C201",
+          "A220",
+          "",
+          "Body Oil Discovery",
+          "Research",
+          "",
+          "",
+          "",
+          "enabled"
+        ],
+        [
+          "Sponsored Products",
+          "Keyword",
+          "Update",
+          "C201",
+          "A220",
+          "K402",
+          "Body Oil Discovery",
+          "Research",
+          "harbor body oil",
+          "exact",
+          "1.85",
+          "enabled"
+        ],
+        [
+          "Sponsored Products",
+          "Keyword",
+          "Update",
+          "C201",
+          "A220",
+          "K403",
+          "Body Oil Discovery",
+          "Research",
+          "body oil bulk",
+          "broad",
+          "0.70",
+          "enabled"
+        ],
+        [
+          "Sponsored Products",
+          "Campaign",
+          "Update",
+          "C202",
+          "",
+          "",
+          "Bath Oil Long Tail",
+          "",
+          "",
+          "",
+          "",
+          "enabled"
+        ],
+        [
+          "Sponsored Products",
+          "Ad Group",
+          "Update",
+          "C202",
+          "A230",
+          "",
+          "Bath Oil Long Tail",
+          "Broad",
+          "",
+          "",
+          "",
+          "enabled"
+        ],
+        [
+          "Sponsored Products",
+          "Keyword",
+          "Update",
+          "C202",
+          "A230",
+          "K404",
+          "Bath Oil Long Tail",
+          "Broad",
+          "bath oil for dry skin",
+          "broad",
+          "0.45",
+          "enabled"
+        ],
+        [
+          "Sponsored Products",
+          "Keyword",
+          "Update",
+          "C202",
+          "A230",
+          "K405",
+          "Bath Oil Long Tail",
+          "Broad",
+          "harbor bath oil",
+          "exact",
+          "1.10",
+          "enabled"
+        ]
       ],
       "expect": {
         "row_index": 6,
@@ -343,22 +651,118 @@
       "filename": "bulk-20261113-paused-parent.xlsx",
       "sheet_title": "Sponsored Products Campaigns",
       "rows": [
-        ["Product", "Entity", "Operation", "Campaign ID", "Ad Group ID", "Keyword ID",
-         "Campaign Name", "Ad Group Name", "Keyword Text", "Match Type", "Bid", "State"],
-        ["Sponsored Products", "Campaign", "Update", "C300", "", "",
-         "Tea Sampler Winter", "", "", "", "", "paused"],
-        ["Sponsored Products", "Ad Group", "Update", "C300", "A310", "",
-         "Tea Sampler Winter", "Exact", "", "", "", "paused"],
-        ["Sponsored Products", "Keyword", "Update", "C300", "A310", "K500",
-         "Tea Sampler Winter", "Exact", "tea sampler", "exact", "0.50", "paused"],
-        ["Sponsored Products", "Ad Group", "Update", "C300", "A311", "",
-         "Tea Sampler Winter", "Gifting", "", "", "", "enabled"],
-        ["Sponsored Products", "Keyword", "Update", "C300", "A311", "K501",
-         "Tea Sampler Winter", "Gifting", "sampler box", "phrase", "0.60", "enabled"],
-        ["Sponsored Products", "Keyword", "Update", "C300", "A311", "K502",
-         "Tea Sampler Winter", "Gifting", "gift tea set", "exact", "0.55", "enabled"],
-        ["Sponsored Products", "Keyword", "Update", "C300", "A311", "K503",
-         "Tea Sampler Winter", "Gifting", "loose leaf tea", "broad", "0.40", "enabled"]
+        [
+          "Product",
+          "Entity",
+          "Operation",
+          "Campaign ID",
+          "Ad Group ID",
+          "Keyword ID",
+          "Campaign Name",
+          "Ad Group Name",
+          "Keyword Text",
+          "Match Type",
+          "Bid",
+          "State"
+        ],
+        [
+          "Sponsored Products",
+          "Campaign",
+          "Update",
+          "C300",
+          "",
+          "",
+          "Tea Sampler Winter",
+          "",
+          "",
+          "",
+          "",
+          "paused"
+        ],
+        [
+          "Sponsored Products",
+          "Ad Group",
+          "Update",
+          "C300",
+          "A310",
+          "",
+          "Tea Sampler Winter",
+          "Exact",
+          "",
+          "",
+          "",
+          "paused"
+        ],
+        [
+          "Sponsored Products",
+          "Keyword",
+          "Update",
+          "C300",
+          "A310",
+          "K500",
+          "Tea Sampler Winter",
+          "Exact",
+          "tea sampler",
+          "exact",
+          "0.50",
+          "paused"
+        ],
+        [
+          "Sponsored Products",
+          "Ad Group",
+          "Update",
+          "C300",
+          "A311",
+          "",
+          "Tea Sampler Winter",
+          "Gifting",
+          "",
+          "",
+          "",
+          "enabled"
+        ],
+        [
+          "Sponsored Products",
+          "Keyword",
+          "Update",
+          "C300",
+          "A311",
+          "K501",
+          "Tea Sampler Winter",
+          "Gifting",
+          "sampler box",
+          "phrase",
+          "0.60",
+          "enabled"
+        ],
+        [
+          "Sponsored Products",
+          "Keyword",
+          "Update",
+          "C300",
+          "A311",
+          "K502",
+          "Tea Sampler Winter",
+          "Gifting",
+          "gift tea set",
+          "exact",
+          "0.55",
+          "enabled"
+        ],
+        [
+          "Sponsored Products",
+          "Keyword",
+          "Update",
+          "C300",
+          "A311",
+          "K503",
+          "Tea Sampler Winter",
+          "Gifting",
+          "loose leaf tea",
+          "broad",
+          "0.40",
+          "enabled"
+        ]
       ],
       "expect": {
         "row_index": 5,
@@ -372,24 +776,132 @@
       "filename": "bulk-20261114-wide-adgroup.xlsx",
       "sheet_title": "Sponsored Products Campaigns",
       "rows": [
-        ["Product", "Entity", "Operation", "Campaign ID", "Ad Group ID", "Keyword ID",
-         "Campaign Name", "Ad Group Name", "Keyword Text", "Match Type", "Bid", "State"],
-        ["Sponsored Products", "Campaign", "Update", "C400", "", "",
-         "Candle Set Core", "", "", "", "", "enabled"],
-        ["Sponsored Products", "Ad Group", "Update", "C400", "A410", "",
-         "Candle Set Core", "All Keywords", "", "", "", "enabled"],
-        ["Sponsored Products", "Keyword", "Update", "C400", "A410", "K600",
-         "Candle Set Core", "All Keywords", "soy candle set", "exact", "1.40", "enabled"],
-        ["Sponsored Products", "Keyword", "Update", "C400", "A410", "K601",
-         "Candle Set Core", "All Keywords", "candle gift box", "exact", "1.65", "enabled"],
-        ["Sponsored Products", "Keyword", "Update", "C400", "A410", "K602",
-         "Candle Set Core", "All Keywords", "scented candle set", "phrase", "1.20", "enabled"],
-        ["Sponsored Products", "Keyword", "Update", "C400", "A410", "K603",
-         "Candle Set Core", "All Keywords", "soy candles 12 pack", "exact", "2.00", "enabled"],
-        ["Sponsored Products", "Keyword", "Update", "C400", "A410", "K604",
-         "Candle Set Core", "All Keywords", "hand poured candle", "broad", "0.85", "enabled"],
-        ["Sponsored Products", "Keyword", "Update", "C400", "A410", "K605",
-         "Candle Set Core", "All Keywords", "candle sampler", "broad", "0.65", "enabled"]
+        [
+          "Product",
+          "Entity",
+          "Operation",
+          "Campaign ID",
+          "Ad Group ID",
+          "Keyword ID",
+          "Campaign Name",
+          "Ad Group Name",
+          "Keyword Text",
+          "Match Type",
+          "Bid",
+          "State"
+        ],
+        [
+          "Sponsored Products",
+          "Campaign",
+          "Update",
+          "C400",
+          "",
+          "",
+          "Candle Set Core",
+          "",
+          "",
+          "",
+          "",
+          "enabled"
+        ],
+        [
+          "Sponsored Products",
+          "Ad Group",
+          "Update",
+          "C400",
+          "A410",
+          "",
+          "Candle Set Core",
+          "All Keywords",
+          "",
+          "",
+          "",
+          "enabled"
+        ],
+        [
+          "Sponsored Products",
+          "Keyword",
+          "Update",
+          "C400",
+          "A410",
+          "K600",
+          "Candle Set Core",
+          "All Keywords",
+          "soy candle set",
+          "exact",
+          "1.40",
+          "enabled"
+        ],
+        [
+          "Sponsored Products",
+          "Keyword",
+          "Update",
+          "C400",
+          "A410",
+          "K601",
+          "Candle Set Core",
+          "All Keywords",
+          "candle gift box",
+          "exact",
+          "1.65",
+          "enabled"
+        ],
+        [
+          "Sponsored Products",
+          "Keyword",
+          "Update",
+          "C400",
+          "A410",
+          "K602",
+          "Candle Set Core",
+          "All Keywords",
+          "scented candle set",
+          "phrase",
+          "1.20",
+          "enabled"
+        ],
+        [
+          "Sponsored Products",
+          "Keyword",
+          "Update",
+          "C400",
+          "A410",
+          "K603",
+          "Candle Set Core",
+          "All Keywords",
+          "soy candles 12 pack",
+          "exact",
+          "2.00",
+          "enabled"
+        ],
+        [
+          "Sponsored Products",
+          "Keyword",
+          "Update",
+          "C400",
+          "A410",
+          "K604",
+          "Candle Set Core",
+          "All Keywords",
+          "hand poured candle",
+          "broad",
+          "0.85",
+          "enabled"
+        ],
+        [
+          "Sponsored Products",
+          "Keyword",
+          "Update",
+          "C400",
+          "A410",
+          "K605",
+          "Candle Set Core",
+          "All Keywords",
+          "candle sampler",
+          "broad",
+          "0.65",
+          "enabled"
+        ]
       ],
       "expect": {
         "row_index": 5,
@@ -403,26 +915,146 @@
       "filename": "bulk-20261115-two-portfolios.xlsx",
       "sheet_title": "Sponsored Products Campaigns",
       "rows": [
-        ["Product", "Entity", "Operation", "Campaign ID", "Ad Group ID", "Keyword ID",
-         "Campaign Name", "Ad Group Name", "Keyword Text", "Match Type", "Bid", "State"],
-        ["Sponsored Products", "Campaign", "Update", "C500", "", "",
-         "Enamel Mug Core", "", "", "", "", "enabled"],
-        ["Sponsored Products", "Ad Group", "Update", "C500", "A510", "",
-         "Enamel Mug Core", "Exact", "", "", "", "enabled"],
-        ["Sponsored Products", "Keyword", "Update", "C500", "A510", "K700",
-         "Enamel Mug Core", "Exact", "enamel mug", "exact", "0.90", "enabled"],
-        ["Sponsored Products", "Keyword", "Update", "C500", "A510", "K701",
-         "Enamel Mug Core", "Exact", "camping mug", "phrase", "0.55", "enabled"],
-        ["Sponsored Products", "Campaign", "Update", "C501", "", "",
-         "Enamel Mug Long Tail", "", "", "", "", "enabled"],
-        ["Sponsored Products", "Ad Group", "Update", "C501", "A520", "",
-         "Enamel Mug Long Tail", "Broad", "", "", "", "enabled"],
-        ["Sponsored Products", "Keyword", "Update", "C501", "A520", "K702",
-         "Enamel Mug Long Tail", "Broad", "enamel coffee cup", "broad", "0.45", "enabled"],
-        ["Sponsored Products", "Keyword", "Update", "C501", "A520", "K703",
-         "Enamel Mug Long Tail", "Broad", "tin cup for camping", "broad", "0.35", "enabled"],
-        ["Sponsored Products", "Keyword", "Update", "C501", "A520", "K704",
-         "Enamel Mug Long Tail", "Broad", "steel mug 12 oz", "exact", "0.30", "enabled"]
+        [
+          "Product",
+          "Entity",
+          "Operation",
+          "Campaign ID",
+          "Ad Group ID",
+          "Keyword ID",
+          "Campaign Name",
+          "Ad Group Name",
+          "Keyword Text",
+          "Match Type",
+          "Bid",
+          "State"
+        ],
+        [
+          "Sponsored Products",
+          "Campaign",
+          "Update",
+          "C500",
+          "",
+          "",
+          "Enamel Mug Core",
+          "",
+          "",
+          "",
+          "",
+          "enabled"
+        ],
+        [
+          "Sponsored Products",
+          "Ad Group",
+          "Update",
+          "C500",
+          "A510",
+          "",
+          "Enamel Mug Core",
+          "Exact",
+          "",
+          "",
+          "",
+          "enabled"
+        ],
+        [
+          "Sponsored Products",
+          "Keyword",
+          "Update",
+          "C500",
+          "A510",
+          "K700",
+          "Enamel Mug Core",
+          "Exact",
+          "enamel mug",
+          "exact",
+          "0.90",
+          "enabled"
+        ],
+        [
+          "Sponsored Products",
+          "Keyword",
+          "Update",
+          "C500",
+          "A510",
+          "K701",
+          "Enamel Mug Core",
+          "Exact",
+          "camping mug",
+          "phrase",
+          "0.55",
+          "enabled"
+        ],
+        [
+          "Sponsored Products",
+          "Campaign",
+          "Update",
+          "C501",
+          "",
+          "",
+          "Enamel Mug Long Tail",
+          "",
+          "",
+          "",
+          "",
+          "enabled"
+        ],
+        [
+          "Sponsored Products",
+          "Ad Group",
+          "Update",
+          "C501",
+          "A520",
+          "",
+          "Enamel Mug Long Tail",
+          "Broad",
+          "",
+          "",
+          "",
+          "enabled"
+        ],
+        [
+          "Sponsored Products",
+          "Keyword",
+          "Update",
+          "C501",
+          "A520",
+          "K702",
+          "Enamel Mug Long Tail",
+          "Broad",
+          "enamel coffee cup",
+          "broad",
+          "0.45",
+          "enabled"
+        ],
+        [
+          "Sponsored Products",
+          "Keyword",
+          "Update",
+          "C501",
+          "A520",
+          "K703",
+          "Enamel Mug Long Tail",
+          "Broad",
+          "tin cup for camping",
+          "broad",
+          "0.35",
+          "enabled"
+        ],
+        [
+          "Sponsored Products",
+          "Keyword",
+          "Update",
+          "C501",
+          "A520",
+          "K704",
+          "Enamel Mug Long Tail",
+          "Broad",
+          "steel mug 12 oz",
+          "exact",
+          "0.30",
+          "enabled"
+        ]
       ],
       "expect": {
         "row_index": 8,
@@ -488,7 +1120,7 @@
       "id": "GG-002",
       "roi_floor": 10.0,
       "min_monthly_sales": 1000,
-      "note": "One product, four offers: the seller's own listing, Amazon itself, the brand owner, and a reseller who can actually win it. A seller cannot out-hold Amazon or the brand on price, so only the reseller offer is a buy.",
+      "note": "One product, four offers: the seller's own listing, Amazon itself, the brand owner, and a reseller who can actually win it. Both blocked identities are hard blocks, so they must be dropped rather than tiered MEDIUM; only the reseller offer is a buy.",
       "candidates": [
         {
           "asin": "B0GG2001",
@@ -565,6 +1197,10 @@
       ],
       "expect": {
         "rejected_asin": "B0GG2002",
+        "rejected_asins": [
+          "B0GG2002",
+          "B0GG2003"
+        ],
         "first_asin": "B0GG2001"
       }
     },
@@ -785,7 +1421,10 @@
       ],
       "expect": {
         "min_sources": 2,
-        "conflict_values": ["2.10", "2.45"]
+        "conflict_values": [
+          "2.10",
+          "2.45"
+        ]
       }
     },
     {
@@ -837,7 +1476,11 @@
       ],
       "expect": {
         "min_sources": 3,
-        "conflict_values": ["14", "21", "30"]
+        "conflict_values": [
+          "14",
+          "21",
+          "30"
+        ]
       }
     },
     {
@@ -863,7 +1506,10 @@
       ],
       "expect": {
         "min_sources": 2,
-        "conflict_values": ["1.5", "2.2"]
+        "conflict_values": [
+          "1.5",
+          "2.2"
+        ]
       }
     },
     {
@@ -889,8 +1535,288 @@
       ],
       "expect": {
         "min_sources": 2,
-        "conflict_values": ["0.42", "0.51"]
+        "conflict_values": [
+          "0.42",
+          "0.51"
+        ]
       }
+    }
+  ],
+  "offer_copy": [
+    {
+      "id": "OC-001",
+      "brand": "Word Coffee",
+      "product": "Word Coffee Daily Affirmation Cards",
+      "keywords": [
+        "affirmation cards",
+        "daily affirmation",
+        "gift for mom",
+        "mindfulness gift",
+        "inspirational cards",
+        "self care gift",
+        "53 cards",
+        "word coffee"
+      ],
+      "facts": [
+        "53 cards"
+      ],
+      "recorded_answer": "TITLE: Word Coffee Daily Affirmation Cards for Mom, 53 Cards with a Stand, Mindfulness Gift for Women\nBULLETS:\n- 53 CARDS: one prompt for every week of the year, printed on heavy matte stock\n- DAILY AFFIRMATION: pull one card in the morning and keep it where you can see it\n- GIFT FOR MOM: a small, useful present for a birthday, a move or a hard week\n- SELF CARE GIFT: a mindfulness gift that asks for five quiet minutes, not a subscription\nKEYWORDS: affirmation cards, daily affirmation, gift for mom, mindfulness gift, inspirational cards, self care gift, 53 cards, word coffee"
+    },
+    {
+      "id": "OC-002",
+      "brand": "Mogra Organics",
+      "product": "Mogra Organics Lion's Mane Powder 170 g",
+      "keywords": [
+        "lions mane powder",
+        "lion's mane mushroom",
+        "mushroom powder",
+        "fruiting body powder",
+        "170 g",
+        "mogra organics",
+        "single ingredient powder",
+        "coffee alternative"
+      ],
+      "facts": [
+        "170 g"
+      ],
+      "recorded_answer": "TITLE: Mogra Organics Lion's Mane Powder, 170 g, Single-Ingredient Fruiting Body\nBULLETS:\n- ONE INGREDIENT: dried lion's mane fruiting body, ground fine, 170 g in a resealable pouch\n- IMMUNE SUPPORT: a daily mushroom powder for a stronger season\n- EASY TO PORTION: a fine powder that stirs into coffee, tea or a smoothie\n- RESEALABLE POUCH: the stand-up pouch keeps the powder dry between uses\nKEYWORDS: lions mane powder, lion's mane mushroom, mushroom powder, fruiting body powder, 170 g, mogra organics, single ingredient powder, coffee alternative"
+    },
+    {
+      "id": "OC-003",
+      "brand": "Harbor",
+      "product": "Harbor Body Oil 8 oz",
+      "keywords": [
+        "body oil",
+        "harbor body oil",
+        "8 oz body oil",
+        "bath oil",
+        "lightweight body oil",
+        "after shower oil",
+        "unscented body oil",
+        "gift for her"
+      ],
+      "facts": [
+        "8 oz"
+      ],
+      "recorded_answer": "TITLE: Harbor Body Oil, 8 oz, Lightweight After-Shower Oil for Dry Skin\nBULLETS:\n- LIGHTWEIGHT: an 8 oz body oil that sinks in before you finish dressing\n- AFTER SHOWER: apply to damp skin so the oil holds the water in\n- UNSCENTED: no perfume, so it layers under whatever you already wear\n- GIFT FOR HER: a bath oil that fits a small bathroom shelf\nKEYWORDS: body oil, harbor body oil, 8 oz body oil, bath oil, lightweight body oil, after shower oil, unscented body oil, gift for her"
+    },
+    {
+      "id": "OC-004",
+      "brand": "Northlight Studio",
+      "product": "Northlight Tin Candle Set, pack of 6",
+      "keywords": [
+        "tin candle set",
+        "candle gift set",
+        "soy candle",
+        "travel candle",
+        "northlight studio",
+        "candle set of 6",
+        "housewarming gift",
+        "scented candle"
+      ],
+      "facts": [
+        "pack of 6"
+      ],
+      "recorded_answer": "TITLE: Northlight Studio Tin Candle Set, Pack of 6 Soy Travel Candles\nBULLETS:\n- SOY CANDLE: a clean-burning soy wax in a lidded tin\n- TRAVEL CANDLE: the tin fits a weekend bag and the lid keeps the wax clean\n- CANDLE SET OF 6: one for the kitchen, one for the bath, four to give away\n- HOUSEWARMING GIFT: a scented candle set that does not need wrapping\n- SCENTED CANDLE: a soft amber note, not a perfume counter\nKEYWORDS: tin candle set, candle gift set, soy candle, travel candle, northlight studio, candle set of 6, housewarming gift, scented candle"
+    },
+    {
+      "id": "OC-005",
+      "brand": "Kettle & Co",
+      "product": "Kettle & Co Enamel Mug 12 oz, pack of 4",
+      "keywords": [
+        "enamel mug",
+        "camping mug",
+        "enamel coffee mug",
+        "12 oz mug",
+        "kettle and co",
+        "mug set of 4",
+        "farmhouse mug",
+        "tin mug"
+      ],
+      "facts": [
+        "12 oz",
+        "pack of 4"
+      ],
+      "recorded_answer": "TITLE: Kettle & Co Enamel Mug Set, 12 oz, Pack of 4 Campfire Mugs\nBULLETS:\n- ENAMEL MUG: a speckled steel mug with a rolled rim that survives a campfire\n- 12 OZ MUG: enough coffee for a morning, small enough for one hand\n- CAMPING MUG: the handle takes a carabiner and the base sits flat on a stove\n- MUG SET OF 4: four mugs, so nobody drinks out of the same one twice\nKEYWORDS: enamel mug, camping mug, enamel coffee mug, 12 oz mug, kettle and co, mug set of 4, farmhouse mug, tin mug"
+    }
+  ],
+  "caption": [
+    {
+      "id": "TC-001",
+      "brand": "Word Coffee",
+      "platform": "Meta",
+      "platform_limit": 220,
+      "brief": "a calm morning-ritual shot for moms",
+      "forbidden_terms": [
+        "coffee bean",
+        "coffee beans",
+        "k-cup",
+        "k cups",
+        "drink",
+        "drinking",
+        "beverage"
+      ],
+      "facts": [],
+      "recorded_answer": "Five quiet minutes, one card, no phone. That is the whole morning ritual.\n#WordCoffee #MorningRitual #ForMom"
+    },
+    {
+      "id": "TC-002",
+      "brand": "Word Coffee",
+      "platform": "Instagram",
+      "platform_limit": 220,
+      "brief": "a restock announcement for the affirmation deck",
+      "forbidden_terms": [
+        "coffee bean",
+        "coffee beans",
+        "k-cup",
+        "k cups",
+        "drink",
+        "drinking",
+        "beverage"
+      ],
+      "facts": [
+        "53 cards"
+      ],
+      "recorded_answer": "Back on the shelf: 53 cards for the year ahead. Our coffee beans are roasted the same week we pack them.\n#WordCoffee #Restock #AffirmationCards"
+    },
+    {
+      "id": "TC-003",
+      "brand": "Word Coffee",
+      "platform": "TikTok",
+      "platform_limit": 150,
+      "brief": "a fifteen second unboxing of the gift box",
+      "forbidden_terms": [
+        "coffee bean",
+        "coffee beans",
+        "k-cup",
+        "k cups",
+        "drink",
+        "drinking",
+        "beverage"
+      ],
+      "facts": [],
+      "recorded_answer": "The box opens, the cards fan out, and the week gets a little quieter.\n#WordCoffee #Unboxing #ForMom #GiftIdeas #SmallBusiness"
+    },
+    {
+      "id": "TC-004",
+      "brand": "Mogra Organics",
+      "platform": "Meta",
+      "platform_limit": 220,
+      "brief": "an afternoon lion's mane latte for a slow Sunday",
+      "forbidden_terms": [],
+      "facts": [
+        "170 g"
+      ],
+      "recorded_answer": "A 170 g pouch of lion's mane that treats a tired afternoon as a problem to fix.\n#MograOrganics #LionsMane #SlowSunday"
+    },
+    {
+      "id": "TC-005",
+      "brand": "Harbor",
+      "platform": "Instagram",
+      "platform_limit": 220,
+      "brief": "a body oil bottle on a bathroom shelf, morning light",
+      "forbidden_terms": [],
+      "facts": [
+        "8 oz"
+      ],
+      "recorded_answer": "An 8 oz bottle, a shelf, and thirty seconds after the shower. That is the whole routine.\n#HarborBodyOil #AfterShower #BodyCare"
+    }
+  ],
+  "social_caption": [
+    {
+      "id": "SP-001",
+      "platform": "instagram",
+      "brand": "Harbor",
+      "angle": "quality",
+      "voice": {
+        "tone": "friendly",
+        "hashtags_per_post": 8
+      },
+      "product": {
+        "title": "Harbor Body Oil 8 oz",
+        "brand": "Harbor",
+        "category": "Beauty & Personal Care",
+        "price": 24.99
+      },
+      "facts": [
+        "8 oz"
+      ]
+    },
+    {
+      "id": "SP-002",
+      "platform": "facebook",
+      "brand": "Harbor",
+      "angle": "value",
+      "voice": {
+        "tone": "friendly",
+        "hashtags_per_post": 5
+      },
+      "product": {
+        "title": "Harbor Bath Salts 16 oz",
+        "brand": "Harbor",
+        "category": "Beauty & Personal Care",
+        "price": 14.99
+      },
+      "facts": [
+        "16 oz"
+      ]
+    },
+    {
+      "id": "SP-003",
+      "platform": "tiktok",
+      "brand": "Harbor",
+      "angle": "lifestyle",
+      "voice": {
+        "tone": "playful",
+        "hashtags_per_post": 5
+      },
+      "product": {
+        "title": "Harbor Body Oil 8 oz",
+        "brand": "Harbor",
+        "category": "Beauty & Personal Care",
+        "price": 24.99
+      },
+      "facts": [
+        "8 oz"
+      ]
+    },
+    {
+      "id": "SP-004",
+      "platform": "twitter",
+      "brand": "Harbor",
+      "angle": "gift",
+      "voice": {
+        "tone": "friendly",
+        "hashtags_per_post": 10
+      },
+      "product": {
+        "title": "Harbor Soap Bar, pack of 6",
+        "brand": "Harbor",
+        "category": "Beauty & Personal Care",
+        "price": 18.99
+      },
+      "facts": [
+        "pack of 6"
+      ]
+    },
+    {
+      "id": "SP-005",
+      "platform": "instagram",
+      "brand": "Northlight Studio",
+      "angle": "seasonal",
+      "voice": {
+        "tone": "friendly",
+        "hashtags_per_post": 8
+      },
+      "product": {
+        "title": "Northlight Tin Candle Set, pack of 6",
+        "brand": "Northlight Studio",
+        "category": "Home & Kitchen",
+        "price": 34.99
+      },
+      "facts": [
+        "pack of 6"
+      ]
     }
   ]
 }

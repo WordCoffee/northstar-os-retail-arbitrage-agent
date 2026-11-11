@@ -1,7 +1,7 @@
 {
-  "at": "2026-11-11T09:45:07+00:00",
+  "at": "2026-11-11T16:15:37+00:00",
   "brief": {
-    "cycle": 120,
+    "cycle": 125,
     "item": "F0-foundation-tempdb-leak",
     "title": "FoundationDB leaks one temp database per instance: 9,018 ns_foundation_*.db files in %TEMP%",
     "workstream": null,
@@ -21,9 +21,9 @@
       ]
     ],
     "next_action": "When path is None, register the created temp file for removal at interpreter exit and remove it in close(); never touch a caller-supplied path. Add two tests: the auto path is registered, a supplied path is untouched. Then quarantine the existing 9,018 files in one move (same volume) instead of deleting them.",
-    "rollback_tag": "autonomy-cycle-120",
-    "lease_token": "f75cf9d1fa1dcbab",
-    "tokens_today": 0,
+    "rollback_tag": "autonomy-cycle-125",
+    "lease_token": "125c2a9f6a52815f",
+    "tokens_today": 155921,
     "cycle_of_session": [],
     "cycles_per_session": 3
   },

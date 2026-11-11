@@ -12,7 +12,7 @@
     "tokens_used_today_estimate": 320000,
     "max_cycle_wall_clock_minutes": 180
   },
-  "cycle": 120,
+  "cycle": 125,
   "last_measured": "2026-11-05T21:30:59Z",
   "items": [
     {
@@ -1333,7 +1333,7 @@
       "id": "F0-foundation-tempdb-leak",
       "kind": "defect",
       "priority": 1150,
-      "status": "in_progress",
+      "status": "pending",
       "title": "FoundationDB leaks one temp database per instance: 9,018 ns_foundation_*.db files in %TEMP%",
       "next": "When path is None, register the created temp file for removal at interpreter exit and remove it in close(); never touch a caller-supplied path. Add two tests: the auto path is registered, a supplied path is untouched. Then quarantine the existing 9,018 files in one move (same volume) instead of deleting them.",
       "write_paths": [
@@ -1356,7 +1356,14 @@
       "tier": "code",
       "commit": null,
       "verification": null,
-      "updated_at": "2026-11-11T09:45:07+00:00"
+      "updated_at": "2026-11-11T16:15:37+00:00",
+      "last_cycle": 125,
+      "last_result": "reverted",
+      "attempts": 2,
+      "defer_until_cycle": 127,
+      "measurements": {
+        "dry_run": true
+      }
     },
     {
       "id": "sel-05-dieline",
@@ -1387,7 +1394,11 @@
       "commit": null,
       "verification": null,
       "created_at": "2026-11-09T21:37:44+00:00",
-      "updated_at": "2026-11-09T21:37:44+00:00"
+      "updated_at": "2026-11-11T16:11:59+00:00",
+      "last_cycle": 122,
+      "last_result": "reverted",
+      "attempts": 1,
+      "defer_until_cycle": 124
     },
     {
       "id": "sel-06-infographic-copy",
@@ -1587,7 +1598,11 @@
       "commit": null,
       "verification": null,
       "created_at": "2026-11-10T05:10:09+00:00",
-      "updated_at": "2026-11-10T05:10:09+00:00"
+      "updated_at": "2026-11-11T16:14:25+00:00",
+      "last_cycle": 123,
+      "last_result": "reverted",
+      "attempts": 1,
+      "defer_until_cycle": 125
     },
     {
       "id": "sec-01-rotate-and-purge",
@@ -1689,7 +1704,7 @@
     "measured_at": "2026-11-05T21:51:00Z"
   },
   "research": "reports/ty/research_20261105.md",
-  "updated_at": "2026-11-11T09:45:07+00:00",
+  "updated_at": "2026-11-11T16:15:37+00:00",
   "gate": "reports/ty/AUTOMATION_GATE.md",
   "ordering_note": "Order: T0 incidents, then the automation gate A9-A17, then these measured performance units. They are queued with numbers so that when the gate opens the fix is mechanical, not exploratory.",
   "gate_state": {

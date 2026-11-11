@@ -54,7 +54,13 @@ def _pct2(value: Optional[float]) -> Optional[float]:
 
 
 def _ranked(scored: List[ScoredOpportunity]) -> List[ScoredOpportunity]:
-    return sorted(scored, key=lambda o: o.composite_score, reverse=True)
+    """Eligible rows first, then composite — the same order ``score_batch`` uses.
+
+    GG-003: a row that fails a hard filter cannot outrank one that passes every
+    one, however high its composite, or the report's first line is an item the
+    seller cannot ship.
+    """
+    return sorted(scored, key=lambda o: (not o.passes_all_filters, -o.composite_score))
 
 
 def _sales_estimate(economics) -> Optional[int]:

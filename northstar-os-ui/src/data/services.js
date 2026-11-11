@@ -12,7 +12,9 @@ export const SERVICES = [
     icon: 'sourcing',
     items: [
       { id: 'prospector', label: 'Prospector', route: '/prospector', icon: 'prospector' },
-      { id: 'goldengoose', label: 'Golden Goose', route: '/goldengoose', icon: 'goose' }
+      // One Golden Goose, at the real desk. The legacy /goldengoose route redirects
+      // there (App.jsx); listing it again here counted the same product twice.
+      { id: 'golden-goose', label: 'Golden Goose', route: '/golden-goose', icon: 'goose' }
     ]
   },
   {
@@ -63,7 +65,7 @@ export const SERVICES = [
     group: 'Internal',
     icon: 'gauge',
     items: [
-      { id: 'foundation', label: 'Operations Hub', route: '/foundation', icon: 'gauge', perm: 'request_refresh' },
+      { id: 'foundation', label: 'Foundation', route: '/foundation', icon: 'gauge', perm: 'request_refresh' },
       { id: 'jobs', label: 'Jobs & Schedules', route: '/jobs', icon: 'jobs', perm: 'request_refresh' },
       { id: 'keywords', label: 'Keywords & SEO', route: '/keywords', icon: 'rank', perm: 'request_refresh' }
     ]
