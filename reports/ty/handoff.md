@@ -10,6 +10,28 @@ A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.m
 > and `reports/ty/handoff.md`, then continue from the first unfinished unit. No
 > questions, no reports between cycles. Idle means re-plan.
 
+## Position, 2026-11-11 cycle 20 — three thin reference categories deepened, and a claim corrected
+
+Unit report: `reports/ty/reference_depth.md`. Tag `ty-dir-reference-depth`.
+
+| # | job | result |
+|---|---|---|
+| 1 | `reference-depth` (rank 5) — `ceramic_mug` had 2 usable references, `food_jar` and `skincare_bottle` had 1 each; a category with one photo is one photo's opinion | **partly met, and said so.** 6 public references fetched through `reference_coverage.fetch` (Openverse, CC0/BY/BY-SA, licence + licence URL + source page on every row), **5 kept and 1 refused on visual review** — the CC0 "Body wash bottle clipart" is an illustration, not a photograph. `ceramic_mug` 2 → 3 and `food_jar` 1 → 3 in usable depth |
+
+**The acceptance is NOT met and the row count is not the measure.** The coverage tool counts
+an image only if it has no `reject` verdict; fourteen rows already carried rejections from the
+2026-11-09 review, so five categories hold three rows and only one or two usable pictures:
+`pet_product` 1, `toy` 2, `tool` 2, `small_appliance` 1, `electronics_accessories` 1. I wrote
+"below 3: []" from row counts first and corrected it in the report — the tool's table is the
+number to quote. Queued as `reference-review-backfill` (rank 5).
+
+**Tests:** 5 in `test_reference_coverage.py`; `python tools/reference_coverage.py` regenerates
+`reports/ty/reference_coverage.md` (56 of 56 briefs covered, 28 usable of 42 reviewed).
+
+**Next, in rank order:** `pack-02-apparel-flat-print` → `reference-review-backfill` →
+`pack-03-boxart-forms` → `block3-workspaces` → `block4-seller-tests` →
+`block5-production-hardening` → `block7-verification` → D-019.
+
 ## Position, 2026-11-11 cycle 19 — D-022 measured on a real lane, and its sibling defect fixed
 
 Reports: `reports/ty/d022_fullgen_white_composite.md` (measurement section),
