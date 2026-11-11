@@ -1046,7 +1046,8 @@ class CompositeGenerator:
 
                 label_png = declined("compose_label", label_warp.compose_label, brief)
                 warped = declined("warp_label", label_warp.warp_label, placed["bytes"],
-                                  placed["product_box"], label_png)
+                                  placed["product_box"], label_png,
+                                  mask_png=placed.get("product_mask"))
                 placed = dict(placed)
                 placed["bytes"] = warped["bytes"]
                 record["label"] = {"mode": "warp", **warped["meta"]}
@@ -1064,6 +1065,12 @@ class CompositeGenerator:
             cut_target = self.out_dir / f"{brief.get('id') or 'brief'}.cutout.png"
             cut_target.write_bytes(cut_png)
             record["cutout_path"] = str(cut_target)
+            if record.get("label", {}).get("layout") == "label_warp" and placed.get("product_mask"):
+                # the silhouette the label was clipped to, kept beside the artefact so
+                # "the panel is inside the pack" can be checked on the files, not asserted
+                mask_target = self.out_dir / f"{brief.get('id') or 'brief'}.mask.png"
+                mask_target.write_bytes(placed["product_mask"])
+                record["label"]["mask_path"] = str(mask_target)
             return placed["bytes"], record
         except StageRefused as exc:
             # A typed refusal: the plate is kept and the run says why. An empty cutout is a

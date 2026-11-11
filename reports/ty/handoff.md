@@ -10,6 +10,33 @@ A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.m
 > and `reports/ty/handoff.md`, then continue from the first unfinished unit. No
 > questions, no reports between cycles. Idle means re-plan.
 
+## Position, 2026-11-11 cycle 11 — the label sits on the pack, and the pack is whole
+
+Unit report: `reports/ty/label_conform.md`. Tag `ty-dir-fix-label-conform`.
+
+| # | job | result |
+|---|---|---|
+| 1 | `fix-label-conform` (rank 1) — the label was a flat rectangle drawn from the product's bounding box and pasted over a taper; nothing clipped it to the product; the cutout kept a 20 px stick, a ring and a ghost pack | **merged.** `face_quad` measures the quad on the silhouette's body band (rows ≥ 55 % of the widest row) and `warp_label(mask_png=)` clips every written pixel to the mask; `product_composite.drop_detached_specks` + `drop_thin_runs` clean the cutout (a bottle neck survives at 37 % of body width) |
+
+**Twelve prompt-only briefs, real renders, seeds pinned to the previous proof:
+12 scored, 12 passed, mean 100.0** (PO-012 was 80.0 — subject_fill 24.8 % against a
+25.0 % floor). Every label is inside the silhouette: **0 px outside on 12 of 12**,
+label width 55–92 % of the body, height 20–39 %. Cutout cleanup removes **266 thin
+rows** (PO-001 230, PO-006 36) and 0 in the other ten.
+
+**Local vision judge (`gemma3:4b`, loopback):** "one label panel **on** the product,
+not a card beside it" **12/12**; "free of stray marks" **10/12** — PO-006 and PO-007
+carry a stick, a dashed rule and a ring drawn into the **scene**, which is kept as the
+background for a free-background brief. **D-019** filed with that diagnosis.
+
+**Tests:** 12 in `test_seller_label_warp.py` (5 new), 97 in the composite / seller /
+stage groups. Contact sheet: `reports/ty/label_conform_contact.png`.
+
+**Next, in rank order:** `fix-shadow-and-white-fill` (D-017/D-018) → `fix-bundle-units`
+(D-012) → `reference-depth` → `block3-workspaces` → `block4-seller-tests` →
+`pack-02-apparel-flat-print` → `pack-03-boxart-forms` → `block5-production-hardening`
+→ `block7-verification` → `sel-04-packaging` → D-019.
+
 ## Position, 2026-11-11 cycle 10 — the label is scaled to the body that is in the plate
 
 Unit report: `reports/ty/d016_label_scale_plate.md`. Tag `ty-dir-fix-label-scale-plate`.

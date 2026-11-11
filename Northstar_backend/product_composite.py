@@ -42,6 +42,130 @@ def trim_to_alpha(im, *, threshold: int = 8):
     return im.crop(box) if box else im
 
 
+def drop_thin_runs(im, *, floor_frac: float = 0.12, run_frac: float = 0.04
+                   ) -> Tuple[Any, int]:
+    """Erase thin leading/trailing runs of alpha — a stick, a wire, a layout rule.
+
+    Measured 2026-11-11 on PO-001: the cutout carried a 20 px-wide vertical stick
+    from y=520 to y=960, attached to a body 650 px wide, so it survived the
+    detached-speck pass and stood in the picture as a line above the pouch. A run
+    is erased only when it is **thin** (under ``floor_frac`` of the body's median
+    row width) and **at an end** of the silhouette (a bottle's neck is thin but it
+    is followed by a body of similar width, and a run shorter than ``run_frac`` of
+    the height is left alone).
+    """
+    import numpy as np
+
+    from PIL import Image
+
+    alpha_img = im.getchannel("A")
+    alpha = np.asarray(alpha_img)
+    ys, _ = np.nonzero(alpha > 8)
+    if ys.size == 0:
+        return im, 0
+    y0, y1 = int(ys.min()), int(ys.max())
+    widths = np.zeros(y1 - y0 + 1, dtype=np.int32)
+    for offset, row in enumerate(range(y0, y1 + 1)):
+        hits = np.nonzero(alpha[row] > 8)[0]
+        if hits.size:
+            widths[offset] = int(hits[-1]) + 1 - int(hits[0])
+    body = widths[widths > 0]
+    if body.size < 8:
+        return im, 0
+    median = float(np.median(body))
+    thin = widths < max(8.0, floor_frac * median)
+    min_run = max(4, int((y1 - y0) * run_frac))
+    runs = []
+    start = None
+    for index, flag in enumerate(thin):
+        if flag and start is None:
+            start = index
+        elif not flag and start is not None:
+            runs.append((start, index - 1))
+            start = None
+    if start is not None:
+        runs.append((start, len(thin) - 1))
+    erased = 0
+    out = im.copy()
+    cleaned = alpha.copy()
+    for first, last in runs:
+        if last - first + 1 < min_run:
+            continue
+        leading = first == 0
+        trailing = last == len(thin) - 1
+        if not (leading or trailing):
+            continue                  # an interior narrow band is part of the object
+        cleaned[y0 + first:y0 + last + 1, :] = 0
+        erased += last - first + 1
+    if not erased:
+        return im, 0
+    out.putalpha(Image.fromarray(cleaned, "L"))
+    out = trim_to_alpha(out)
+    return out, erased
+
+
+def drop_detached_specks(im, *, threshold: int = 8, area_frac: float = 0.05,
+                         gap_frac: float = 0.02) -> Tuple[Any, int]:
+    """Erase small alpha components that float away from the product.
+
+    Measured 2026-11-11 on the prompt-only contact sheet: a cutout carried a
+    vertical stick above the pouch, a white ring beside it and a ghosted second
+    tube — detached pieces of the plate that the matte kept. A speck is dropped
+    only when it is both **small** (under ``area_frac`` of the largest component)
+    and **detached** (its box does not reach within ``gap_frac`` of the product's
+    height of the main body), so a three-unit bundle (three similar components)
+    and a mug's handle (attached) both survive.
+    """
+    import numpy as np
+
+    from PIL import Image
+
+    alpha_img = im.getchannel("A")
+    alpha = np.asarray(alpha_img)
+    binary = (alpha > threshold).astype(np.uint8)
+    if binary.sum() == 0:
+        return im, 0
+    try:
+        import cv2
+    except Exception:  # noqa: BLE001 - without cv2 there is no component pass
+        return im, 0
+    count, labels, stats, _ = cv2.connectedComponentsWithStats(binary, connectivity=8)
+    if count <= 2:
+        return im, 0
+    order = sorted(range(1, count), key=lambda i: int(stats[i, cv2.CC_STAT_AREA]),
+                   reverse=True)
+    main = order[0]
+    mx, my, mw, mh = (int(stats[main, cv2.CC_STAT_LEFT]), int(stats[main, cv2.CC_STAT_TOP]),
+                      int(stats[main, cv2.CC_STAT_WIDTH]), int(stats[main, cv2.CC_STAT_HEIGHT]))
+    main_area = float(stats[main, cv2.CC_STAT_AREA])
+    gap = max(2, int(mh * float(gap_frac)))
+    dropped = 0
+    keep = np.ones(int(count), dtype=bool)
+    for index in order[1:]:
+        area = float(stats[index, cv2.CC_STAT_AREA])
+        if area >= area_frac * main_area:
+            continue
+        x = int(stats[index, cv2.CC_STAT_LEFT])
+        y = int(stats[index, cv2.CC_STAT_TOP])
+        w = int(stats[index, cv2.CC_STAT_WIDTH])
+        h = int(stats[index, cv2.CC_STAT_HEIGHT])
+        # the distance between the two boxes, per axis, zero when they overlap
+        dx = max(0, max(mx - (x + w), x - (mx + mw)))
+        dy = max(0, max(my - (y + h), y - (my + mh)))
+        if dx <= gap and dy <= gap:
+            continue                     # touching the body: part of the product
+        keep[index] = False
+        dropped += 1
+    if not dropped:
+        return im, 0
+    out = im.copy()
+    alive = keep[labels]
+    cleaned = np.where(alive, alpha, 0).astype(np.uint8)
+    out.putalpha(Image.fromarray(cleaned, "L"))
+    return out, dropped
+
+
+
 def _contact_shadow(product_w: int, product_h: int, *, opacity: int = 96,
                     spread: float = 0.06, factor: float = 1.0):
     """A soft ellipse that sits *under the product's base*.
@@ -89,6 +213,8 @@ def place_product(scene_png: bytes, cutout_png: bytes, *,
 
     scene = _open_rgba(scene_png)
     product = trim_to_alpha(_open_rgba(cutout_png))
+    product, specks = drop_detached_specks(product)
+    product, thin_rows = drop_thin_runs(product)
     alpha = product.getchannel("A")
     if alpha.getextrema()[1] == 0:
         raise ValueError("the cutout has no visible pixels")
@@ -165,12 +291,24 @@ def place_product(scene_png: bytes, cutout_png: bytes, *,
         out.paste(dark, (sx, sy), dark)
     out.alpha_composite(product, (left, top))
 
+    # The placed silhouette, on the canvas: the label is conformed to the pack
+    # face and clipped to this, so no label pixel can land on the scene beside
+    # the product (measured 2026-11-11: 7 of 12 prompt-only artefacts had a white
+    # card floating beyond the pouch).
+    silhouette = Image.new("L", scene.size, 0)
+    silhouette.paste(product.getchannel("A"), (left, top))
+    mask_buf = io.BytesIO()
+    silhouette.save(mask_buf, format=PNG)
+
     buf = io.BytesIO()
     out.convert("RGB").save(buf, format=PNG)
     return {
         "bytes": buf.getvalue(),
         "width": sw, "height": sh,
         "product_box": [left, top, left + target_w, top + target_h],
+        "product_mask": mask_buf.getvalue(),
+        "dropped_specks": specks,
+        "dropped_thin_rows": thin_rows,
         "product_scale": round(target_h / float(sh), 4),
         "scale_clamped": abs((target_h / float(sh)) - wanted) > 0.01,
         "shadow": bool(shadow),

@@ -276,3 +276,18 @@ and keeps the vertical extent on the caller's firm cut; `brand_art` declares a
 `plate_subject` per cylinder design and `product_picture.plate_brief(face, form,
 design)` asks for that object. 4 new tests, 27 in the file, 79 and 75 in the
 related groups. `reports/ty/d016_label_scale_plate.md`.
+
+## D-019 — stray geometry survives in the free background (2026-11-11)
+
+**Measured:** after the cutout cleanup (`drop_detached_specks`, `drop_thin_runs`) and
+the label clip, the local vision judge (`gemma3:4b`, loopback) passes 10 of 12
+prompt-only artefacts on "no stray marks". The two that fail — PO-006 ("a thin
+stick/wire visible on the top right") and PO-007 ("a dashed rule line", "a floating
+ring") — are objects the model drew into the **scene**, which `_generate_cut_and_compose`
+keeps as the background for a free/scene brief. On a flat brief the background is a
+white canvas, so nothing survives there.
+
+**Not yet done:** a free background must be filled or inpainted around the placed
+product, or the scene rejected when it carries geometry outside the product's
+columns. Until then the honest count is 10 of 12 clean, and it is stated in
+`reports/ty/label_conform.md`.

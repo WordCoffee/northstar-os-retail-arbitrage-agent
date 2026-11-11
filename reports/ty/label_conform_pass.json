@@ -1,0 +1,3528 @@
+{
+  "generated_at": "2026-11-11T08:17:03+00:00",
+  "generator": "composite",
+  "judge_enabled": false,
+  "mode_filter": "prompt_only",
+  "catalog_briefs": 12,
+  "catalog_by_mode": {
+    "prompt_only": 12,
+    "stored_reference": 0,
+    "uploaded_reference": 0
+  },
+  "selected": 12,
+  "artefacts_available": null,
+  "scored": 12,
+  "not_scored": 0,
+  "not_scored_reason": null,
+  "passed": 12,
+  "failed": 0,
+  "pass_rate": 100.0,
+  "mean_score": 100.0,
+  "gaps_filed": 0,
+  "gaps_in_file": 0,
+  "gaps_path": "reports/ty/label_conform_gaps.json",
+  "mirror_path": null,
+  "escalations": [
+    {
+      "at": "2026-11-11T08:17:01+00:00",
+      "from_brief_id": "PO-001",
+      "from_difficulty": 1,
+      "source_mode": "prompt_only",
+      "action": "raise_tier",
+      "detail": "difficulty 1 -> 2 (prompt_only)",
+      "constraint": null,
+      "to_brief_id": "PO-001",
+      "to_difficulty": 2,
+      "score": 100.0,
+      "artefact_path": "renders/heldout_prompt_only10/PO-001.png"
+    },
+    {
+      "at": "2026-11-11T08:17:01+00:00",
+      "from_brief_id": "PO-002",
+      "from_difficulty": 1,
+      "source_mode": "prompt_only",
+      "action": "raise_tier",
+      "detail": "difficulty 1 -> 2 (prompt_only)",
+      "constraint": null,
+      "to_brief_id": "PO-002",
+      "to_difficulty": 2,
+      "score": 100.0,
+      "artefact_path": "renders/heldout_prompt_only10/PO-002.png"
+    },
+    {
+      "at": "2026-11-11T08:17:01+00:00",
+      "from_brief_id": "PO-003",
+      "from_difficulty": 1,
+      "source_mode": "prompt_only",
+      "action": "raise_tier",
+      "detail": "difficulty 1 -> 2 (prompt_only)",
+      "constraint": null,
+      "to_brief_id": "PO-003",
+      "to_difficulty": 2,
+      "score": 100.0,
+      "artefact_path": "renders/heldout_prompt_only10/PO-003.png"
+    },
+    {
+      "at": "2026-11-11T08:17:01+00:00",
+      "from_brief_id": "PO-004",
+      "from_difficulty": 1,
+      "source_mode": "prompt_only",
+      "action": "raise_tier",
+      "detail": "difficulty 1 -> 2 (prompt_only)",
+      "constraint": null,
+      "to_brief_id": "PO-004",
+      "to_difficulty": 2,
+      "score": 100.0,
+      "artefact_path": "renders/heldout_prompt_only10/PO-004.png"
+    },
+    {
+      "at": "2026-11-11T08:17:01+00:00",
+      "from_brief_id": "PO-005",
+      "from_difficulty": 1,
+      "source_mode": "prompt_only",
+      "action": "raise_tier",
+      "detail": "difficulty 1 -> 2 (prompt_only)",
+      "constraint": null,
+      "to_brief_id": "PO-005",
+      "to_difficulty": 2,
+      "score": 100.0,
+      "artefact_path": "renders/heldout_prompt_only10/PO-005.png"
+    },
+    {
+      "at": "2026-11-11T08:17:02+00:00",
+      "from_brief_id": "PO-006",
+      "from_difficulty": 1,
+      "source_mode": "prompt_only",
+      "action": "raise_tier",
+      "detail": "difficulty 1 -> 2 (prompt_only)",
+      "constraint": null,
+      "to_brief_id": "PO-006",
+      "to_difficulty": 2,
+      "score": 100.0,
+      "artefact_path": "renders/heldout_prompt_only10/PO-006.png"
+    },
+    {
+      "at": "2026-11-11T08:17:02+00:00",
+      "from_brief_id": "PO-007",
+      "from_difficulty": 1,
+      "source_mode": "prompt_only",
+      "action": "raise_tier",
+      "detail": "difficulty 1 -> 2 (prompt_only)",
+      "constraint": null,
+      "to_brief_id": "PO-007",
+      "to_difficulty": 2,
+      "score": 100.0,
+      "artefact_path": "renders/heldout_prompt_only10/PO-007.png"
+    },
+    {
+      "at": "2026-11-11T08:17:02+00:00",
+      "from_brief_id": "PO-008",
+      "from_difficulty": 1,
+      "source_mode": "prompt_only",
+      "action": "raise_tier",
+      "detail": "difficulty 1 -> 2 (prompt_only)",
+      "constraint": null,
+      "to_brief_id": "PO-008",
+      "to_difficulty": 2,
+      "score": 100.0,
+      "artefact_path": "renders/heldout_prompt_only10/PO-008.png"
+    },
+    {
+      "at": "2026-11-11T08:17:02+00:00",
+      "from_brief_id": "PO-009",
+      "from_difficulty": 2,
+      "source_mode": "prompt_only",
+      "action": "raise_tier",
+      "detail": "difficulty 2 -> 3 (prompt_only)",
+      "constraint": null,
+      "to_brief_id": "PO-009",
+      "to_difficulty": 3,
+      "score": 100.0,
+      "artefact_path": "renders/heldout_prompt_only10/PO-009.png"
+    },
+    {
+      "at": "2026-11-11T08:17:02+00:00",
+      "from_brief_id": "PO-010",
+      "from_difficulty": 2,
+      "source_mode": "prompt_only",
+      "action": "raise_tier",
+      "detail": "difficulty 2 -> 3 (prompt_only)",
+      "constraint": null,
+      "to_brief_id": "PO-010",
+      "to_difficulty": 3,
+      "score": 100.0,
+      "artefact_path": "renders/heldout_prompt_only10/PO-010.png"
+    },
+    {
+      "at": "2026-11-11T08:17:03+00:00",
+      "from_brief_id": "PO-011",
+      "from_difficulty": 2,
+      "source_mode": "prompt_only",
+      "action": "raise_tier",
+      "detail": "difficulty 2 -> 3 (prompt_only)",
+      "constraint": null,
+      "to_brief_id": "PO-011",
+      "to_difficulty": 3,
+      "score": 100.0,
+      "artefact_path": "renders/heldout_prompt_only10/PO-011.png"
+    },
+    {
+      "at": "2026-11-11T08:17:03+00:00",
+      "from_brief_id": "PO-012",
+      "from_difficulty": 2,
+      "source_mode": "prompt_only",
+      "action": "raise_tier",
+      "detail": "difficulty 2 -> 3 (prompt_only)",
+      "constraint": null,
+      "to_brief_id": "PO-012",
+      "to_difficulty": 3,
+      "score": 100.0,
+      "artefact_path": "renders/heldout_prompt_only10/PO-012.png"
+    }
+  ],
+  "results": [
+    {
+      "brief_id": "PO-001",
+      "category": "supplement_pouch",
+      "situation": "white_background_main",
+      "difficulty": 1,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "full_generation",
+      "population": "generated",
+      "artefact_path": "renders/heldout_prompt_only10/PO-001.png",
+      "width": 2000,
+      "height": 2000,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.020"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "corners [(255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255)] vs target (255, 255, 255) +-6; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "subject fill 32.9% vs 12.0-100.0% (distance > 20)"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "border mean 255.0 (>= 249), std 0.00 (<= 6.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "627782 bytes (0.157 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "margin ink 0.00% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "PO-001",
+        "route": "full_generation",
+        "fidelity": "tolerant",
+        "renderer": "comfy",
+        "method": null,
+        "scene": {
+          "source": "generated",
+          "prompt": "Product photograph of a plain matte forest-green stand-up pouch with a blank white circular panel on the front, no text, no lettering, no logo, on a seamless white studio background, product centred, no props. Photorealistic, unlabelled packaging, smooth matte film.",
+          "model": "sdxl",
+          "image_path": "C:\\Users\\T2Hol\\ComfyUI\\output\\ns-scene_00243_.png",
+          "seed": 2747063199,
+          "steps": 20,
+          "width": 768,
+          "height": 768,
+          "lane": {
+            "event": "lane",
+            "role": "scene:sdxl",
+            "needed_gb": 8.2,
+            "reserve_gb": 1.0,
+            "watchlist": [
+              "bojo:latest",
+              "qwen3-embedding:0.6b"
+            ],
+            "stopped": {
+              "ok": true,
+              "pid": 18332,
+              "stopped": true,
+              "seconds": 1.5
+            },
+            "gpu_before": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "ollama_ps_before": {
+              "ok": false,
+              "models": [],
+              "resident": [],
+              "reason": "URLError: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+            },
+            "resident_before": [],
+            "unloaded": [],
+            "ollama_ps_after_unload": {
+              "ok": false,
+              "models": [],
+              "resident": [],
+              "reason": "URLError: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+            },
+            "unload_verified": {},
+            "gpu_ready": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "budget": {
+              "ok": true,
+              "checked": true,
+              "free_gb": 15.63,
+              "needed_gb": 8.2,
+              "reserve_gb": 1.0,
+              "headroom_gb": 7.43,
+              "reason": "fits: 15.63 GB free - 8.2 GB needed = 7.43 GB >= 1.0 GB reserve"
+            },
+            "start": {
+              "ok": true,
+              "pid": 18332,
+              "reason": null
+            },
+            "ready": {
+              "ok": true,
+              "seconds": 16.6
+            },
+            "gpu_before_work": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 172,
+              "free_mb": 15832,
+              "util_pct": 0,
+              "free_gb": 15.46,
+              "used_gb": 0.17
+            },
+            "gpu_after_work": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 274,
+              "free_mb": 15730,
+              "util_pct": 0,
+              "free_gb": 15.36,
+              "used_gb": 0.27
+            },
+            "gpu_after": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "reloaded": [],
+            "reload_verified": {},
+            "ollama_ps_after": {
+              "ok": false,
+              "models": [],
+              "resident": [],
+              "reason": "URLError: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+            },
+            "gpu_after_reload": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "vram_before_gb": 15.63,
+            "vram_after_gb": 15.63,
+            "vram_freed_gb": 0.0,
+            "seconds": 38.3,
+            "work_ok": true
+          },
+          "lane_stopped": true,
+          "note": null
+        },
+        "cutout": null,
+        "product_box": [
+          312,
+          502,
+          1687,
+          1742
+        ],
+        "identity": null,
+        "background_path": "flat_canvas",
+        "flat_level": 255,
+        "label": {
+          "mode": "warp",
+          "layout": "label_warp",
+          "quad": [
+            [
+              684,
+              599
+            ],
+            [
+              1642,
+              599
+            ],
+            [
+              1625,
+              1077
+            ],
+            [
+              696,
+              1077
+            ]
+          ],
+          "conformed": true,
+          "panel_px": 452439,
+          "panel_px_outside_silhouette": 0,
+          "strength": 1.0,
+          "mask_path": "renders\\heldout_prompt_only10\\PO-001.mask.png"
+        },
+        "cut_from_generation": {
+          "method": "grabcut",
+          "subject_px": 31585860,
+          "note": "prompt-only runs generate -> cut -> compose -> layout; the product is the model's drawing, not the seller's pixels"
+        },
+        "cutout_path": "renders\\heldout_prompt_only10\\PO-001.cutout.png",
+        "bytes": 627782,
+        "seconds": 44.23,
+        "sidecar": "renders\\heldout_prompt_only10\\PO-001.json"
+      }
+    },
+    {
+      "brief_id": "PO-002",
+      "category": "food_jar",
+      "situation": "lifestyle",
+      "difficulty": 1,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "full_generation",
+      "population": "generated",
+      "artefact_path": "renders/heldout_prompt_only10/PO-002.png",
+      "width": 2000,
+      "height": 2000,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.030"
+        },
+        "background": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "background is free for this brief"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "product box 50.0% of the frame vs 15.0-85.0% (free background: the box is the measure, not the corner colour)"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "matte free for this brief"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "1843862 bytes (0.461 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "text allowed for this brief"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "PO-002",
+        "route": "full_generation",
+        "fidelity": "tolerant",
+        "renderer": "comfy",
+        "method": null,
+        "scene": {
+          "source": "generated",
+          "prompt": "Product photograph of a plain slim pale-pink and cream gift box with a blank front panel, no text, no lettering, no logo, on a light oak kitchen counter in morning light, shallow depth of field. Photorealistic, unlabelled packaging, matte card.",
+          "model": "sdxl",
+          "image_path": "C:\\Users\\T2Hol\\ComfyUI\\output\\ns-scene_00244_.png",
+          "seed": 3952987930,
+          "steps": 20,
+          "width": 768,
+          "height": 768,
+          "lane": {
+            "event": "lane",
+            "role": "scene:sdxl",
+            "needed_gb": 8.2,
+            "reserve_gb": 1.0,
+            "watchlist": [
+              "bojo:latest",
+              "qwen3-embedding:0.6b"
+            ],
+            "stopped": {
+              "ok": true,
+              "pid": 15908,
+              "stopped": true,
+              "seconds": 1.5
+            },
+            "gpu_before": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "ollama_ps_before": {
+              "ok": false,
+              "models": [],
+              "resident": [],
+              "reason": "URLError: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+            },
+            "resident_before": [],
+            "unloaded": [],
+            "ollama_ps_after_unload": {
+              "ok": false,
+              "models": [],
+              "resident": [],
+              "reason": "URLError: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+            },
+            "unload_verified": {},
+            "gpu_ready": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "budget": {
+              "ok": true,
+              "checked": true,
+              "free_gb": 15.63,
+              "needed_gb": 8.2,
+              "reserve_gb": 1.0,
+              "headroom_gb": 7.43,
+              "reason": "fits: 15.63 GB free - 8.2 GB needed = 7.43 GB >= 1.0 GB reserve"
+            },
+            "start": {
+              "ok": true,
+              "pid": 15908,
+              "reason": null
+            },
+            "ready": {
+              "ok": true,
+              "seconds": 16.1
+            },
+            "gpu_before_work": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 172,
+              "free_mb": 15832,
+              "util_pct": 0,
+              "free_gb": 15.46,
+              "used_gb": 0.17
+            },
+            "gpu_after_work": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 274,
+              "free_mb": 15730,
+              "util_pct": 0,
+              "free_gb": 15.36,
+              "used_gb": 0.27
+            },
+            "gpu_after": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "reloaded": [],
+            "reload_verified": {},
+            "ollama_ps_after": {
+              "ok": false,
+              "models": [],
+              "resident": [],
+              "reason": "URLError: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+            },
+            "gpu_after_reload": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "vram_before_gb": 15.63,
+            "vram_after_gb": 15.63,
+            "vram_freed_gb": 0.0,
+            "seconds": 40.3,
+            "work_ok": true
+          },
+          "lane_stopped": true,
+          "note": null
+        },
+        "cutout": null,
+        "product_box": [
+          194,
+          502,
+          1806,
+          1742
+        ],
+        "identity": null,
+        "background_resampled": {
+          "from": "scene",
+          "to": 2000
+        },
+        "label": {
+          "mode": "warp",
+          "layout": "label_warp",
+          "quad": [
+            [
+              245,
+              658
+            ],
+            [
+              1336,
+              658
+            ],
+            [
+              1585,
+              1041
+            ],
+            [
+              441,
+              1041
+            ]
+          ],
+          "conformed": true,
+          "panel_px": 429596,
+          "panel_px_outside_silhouette": 0,
+          "strength": 1.0,
+          "mask_path": "renders\\heldout_prompt_only10\\PO-002.mask.png"
+        },
+        "cut_from_generation": {
+          "method": "grabcut",
+          "subject_px": 46253954,
+          "note": "prompt-only runs generate -> cut -> compose -> layout; the product is the model's drawing, not the seller's pixels"
+        },
+        "cutout_path": "renders\\heldout_prompt_only10\\PO-002.cutout.png",
+        "bytes": 1843862,
+        "seconds": 49.52,
+        "sidecar": "renders\\heldout_prompt_only10\\PO-002.json"
+      }
+    },
+    {
+      "brief_id": "PO-003",
+      "category": "supplement_pouch",
+      "situation": "scale_reference",
+      "difficulty": 1,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "full_generation",
+      "population": "generated",
+      "artefact_path": "renders/heldout_prompt_only10/PO-003.png",
+      "width": 2000,
+      "height": 2000,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.020"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "corners [(255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255)] vs target (255, 255, 255) +-8; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "subject fill 32.8% vs 8.0-50.0% (distance > 20)"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "border mean 255.0 (>= 249), std 0.00 (<= 6.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "712591 bytes (0.178 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "margin ink 0.00% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "PO-003",
+        "route": "full_generation",
+        "fidelity": "tolerant",
+        "renderer": "comfy",
+        "method": null,
+        "scene": {
+          "source": "generated",
+          "prompt": "Product photograph of a plain matte forest-green stand-up pouch with a blank white circular panel on the front, no text, no lettering, no logo, standing beside a coffee cup for scale, white background. Photorealistic, unlabelled packaging, smooth matte film.",
+          "model": "sdxl",
+          "image_path": "C:\\Users\\T2Hol\\ComfyUI\\output\\ns-scene_00245_.png",
+          "seed": 3268127863,
+          "steps": 20,
+          "width": 768,
+          "height": 768,
+          "lane": {
+            "event": "lane",
+            "role": "scene:sdxl",
+            "needed_gb": 8.2,
+            "reserve_gb": 1.0,
+            "watchlist": [
+              "bojo:latest",
+              "qwen3-embedding:0.6b"
+            ],
+            "stopped": {
+              "ok": true,
+              "pid": 19888,
+              "stopped": true,
+              "seconds": 1.5
+            },
+            "gpu_before": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "ollama_ps_before": {
+              "ok": false,
+              "models": [],
+              "resident": [],
+              "reason": "URLError: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+            },
+            "resident_before": [],
+            "unloaded": [],
+            "ollama_ps_after_unload": {
+              "ok": false,
+              "models": [],
+              "resident": [],
+              "reason": "URLError: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+            },
+            "unload_verified": {},
+            "gpu_ready": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "budget": {
+              "ok": true,
+              "checked": true,
+              "free_gb": 15.63,
+              "needed_gb": 8.2,
+              "reserve_gb": 1.0,
+              "headroom_gb": 7.43,
+              "reason": "fits: 15.63 GB free - 8.2 GB needed = 7.43 GB >= 1.0 GB reserve"
+            },
+            "start": {
+              "ok": true,
+              "pid": 19888,
+              "reason": null
+            },
+            "ready": {
+              "ok": true,
+              "seconds": 15.1
+            },
+            "gpu_before_work": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 172,
+              "free_mb": 15832,
+              "util_pct": 0,
+              "free_gb": 15.46,
+              "used_gb": 0.17
+            },
+            "gpu_after_work": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 274,
+              "free_mb": 15730,
+              "util_pct": 0,
+              "free_gb": 15.36,
+              "used_gb": 0.27
+            },
+            "gpu_after": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "reloaded": [],
+            "reload_verified": {},
+            "ollama_ps_after": {
+              "ok": false,
+              "models": [],
+              "resident": [],
+              "reason": "URLError: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+            },
+            "gpu_after_reload": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "vram_before_gb": 15.63,
+            "vram_after_gb": 15.63,
+            "vram_freed_gb": 0.0,
+            "seconds": 36.8,
+            "work_ok": true
+          },
+          "lane_stopped": true,
+          "note": null
+        },
+        "cutout": null,
+        "product_box": [
+          214,
+          499,
+          1785,
+          1739
+        ],
+        "identity": null,
+        "background_path": "flat_canvas",
+        "flat_level": 255,
+        "label": {
+          "mode": "warp",
+          "layout": "label_warp",
+          "quad": [
+            [
+              742,
+              604
+            ],
+            [
+              1735,
+              604
+            ],
+            [
+              1704,
+              1078
+            ],
+            [
+              769,
+              1078
+            ]
+          ],
+          "conformed": true,
+          "panel_px": 458409,
+          "panel_px_outside_silhouette": 0,
+          "strength": 1.0,
+          "mask_path": "renders\\heldout_prompt_only10\\PO-003.mask.png"
+        },
+        "cut_from_generation": {
+          "method": "grabcut",
+          "subject_px": 44260119,
+          "note": "prompt-only runs generate -> cut -> compose -> layout; the product is the model's drawing, not the seller's pixels"
+        },
+        "cutout_path": "renders\\heldout_prompt_only10\\PO-003.cutout.png",
+        "bytes": 712591,
+        "seconds": 42.14,
+        "sidecar": "renders\\heldout_prompt_only10\\PO-003.json"
+      }
+    },
+    {
+      "brief_id": "PO-004",
+      "category": "food_jar",
+      "situation": "bundle_multipack",
+      "difficulty": 1,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "full_generation",
+      "population": "generated",
+      "artefact_path": "renders/heldout_prompt_only10/PO-004.png",
+      "width": 2000,
+      "height": 2000,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.020"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "corners [(255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255)] vs target (255, 255, 255) +-6; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "subject fill 31.3% vs 25.0-85.0% (distance > 20)"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "border mean 255.0 (>= 249), std 0.00 (<= 6.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "756851 bytes (0.189 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "margin ink 0.00% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "PO-004",
+        "route": "full_generation",
+        "fidelity": "tolerant",
+        "renderer": "comfy",
+        "method": null,
+        "scene": {
+          "source": "generated",
+          "prompt": "Product photograph of three identical plain slim pale-pink and cream gift boxes with blank front panels, arranged side by side on a white background, no text, no lettering, no logo. Photorealistic, unlabelled packaging, matte card.",
+          "model": "sdxl",
+          "image_path": "C:\\Users\\T2Hol\\ComfyUI\\output\\ns-scene_00246_.png",
+          "seed": 780685764,
+          "steps": 20,
+          "width": 768,
+          "height": 768,
+          "lane": {
+            "event": "lane",
+            "role": "scene:sdxl",
+            "needed_gb": 8.2,
+            "reserve_gb": 1.0,
+            "watchlist": [
+              "bojo:latest",
+              "qwen3-embedding:0.6b"
+            ],
+            "stopped": {
+              "ok": true,
+              "pid": 23360,
+              "stopped": true,
+              "seconds": 1.5
+            },
+            "gpu_before": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "ollama_ps_before": {
+              "ok": false,
+              "models": [],
+              "resident": [],
+              "reason": "URLError: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+            },
+            "resident_before": [],
+            "unloaded": [],
+            "ollama_ps_after_unload": {
+              "ok": false,
+              "models": [],
+              "resident": [],
+              "reason": "URLError: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+            },
+            "unload_verified": {},
+            "gpu_ready": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "budget": {
+              "ok": true,
+              "checked": true,
+              "free_gb": 15.63,
+              "needed_gb": 8.2,
+              "reserve_gb": 1.0,
+              "headroom_gb": 7.43,
+              "reason": "fits: 15.63 GB free - 8.2 GB needed = 7.43 GB >= 1.0 GB reserve"
+            },
+            "start": {
+              "ok": true,
+              "pid": 23360,
+              "reason": null
+            },
+            "ready": {
+              "ok": true,
+              "seconds": 15.6
+            },
+            "gpu_before_work": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 172,
+              "free_mb": 15832,
+              "util_pct": 0,
+              "free_gb": 15.46,
+              "used_gb": 0.17
+            },
+            "gpu_after_work": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 274,
+              "free_mb": 15730,
+              "util_pct": 0,
+              "free_gb": 15.36,
+              "used_gb": 0.27
+            },
+            "gpu_after": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "reloaded": [],
+            "reload_verified": {},
+            "ollama_ps_after": {
+              "ok": false,
+              "models": [],
+              "resident": [],
+              "reason": "URLError: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+            },
+            "gpu_after_reload": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "vram_before_gb": 15.63,
+            "vram_after_gb": 15.63,
+            "vram_freed_gb": 0.0,
+            "seconds": 39.2,
+            "work_ok": true
+          },
+          "lane_stopped": true,
+          "note": null
+        },
+        "cutout": null,
+        "product_box": [
+          295,
+          500,
+          1705,
+          1740
+        ],
+        "identity": null,
+        "background_path": "flat_canvas",
+        "flat_level": 255,
+        "label": {
+          "mode": "warp",
+          "layout": "label_warp",
+          "quad": [
+            [
+              330,
+              663
+            ],
+            [
+              1180,
+              663
+            ],
+            [
+              1656,
+              1105
+            ],
+            [
+              463,
+              1105
+            ]
+          ],
+          "conformed": true,
+          "panel_px": 443537,
+          "panel_px_outside_silhouette": 0,
+          "strength": 1.0,
+          "mask_path": "renders\\heldout_prompt_only10\\PO-004.mask.png"
+        },
+        "cut_from_generation": {
+          "method": "grabcut",
+          "subject_px": 66151600,
+          "note": "prompt-only runs generate -> cut -> compose -> layout; the product is the model's drawing, not the seller's pixels"
+        },
+        "cutout_path": "renders\\heldout_prompt_only10\\PO-004.cutout.png",
+        "bytes": 756851,
+        "seconds": 45.01,
+        "sidecar": "renders\\heldout_prompt_only10\\PO-004.json"
+      }
+    },
+    {
+      "brief_id": "PO-005",
+      "category": "supplement_pouch",
+      "situation": "background_swap",
+      "difficulty": 1,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "full_generation",
+      "population": "generated",
+      "artefact_path": "renders/heldout_prompt_only10/PO-005.png",
+      "width": 2000,
+      "height": 2000,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.010"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "corners [(245, 245, 245), (245, 245, 245), (245, 245, 245), (245, 245, 245)] vs target (245, 245, 245) +-4; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "subject fill 26.0% vs 15.0-65.0% (distance > 20)"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "border mean 245.0 (>= 240), std 0.00 (<= 5.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "580554 bytes (0.145 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "margin ink 0.00% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "PO-005",
+        "route": "full_generation",
+        "fidelity": "tolerant",
+        "renderer": "comfy",
+        "method": null,
+        "scene": {
+          "source": "generated",
+          "prompt": "Product photograph of a plain matte forest-green stand-up pouch with a blank white circular panel on the front, no text, no lettering, no logo, floating against a soft sage-green gradient, studio lighting. Photorealistic, unlabelled packaging, smooth matte film.",
+          "model": "sdxl",
+          "image_path": "C:\\Users\\T2Hol\\ComfyUI\\output\\ns-scene_00247_.png",
+          "seed": 4087290033,
+          "steps": 20,
+          "width": 768,
+          "height": 768,
+          "lane": {
+            "event": "lane",
+            "role": "scene:sdxl",
+            "needed_gb": 8.2,
+            "reserve_gb": 1.0,
+            "watchlist": [
+              "bojo:latest",
+              "qwen3-embedding:0.6b"
+            ],
+            "stopped": {
+              "ok": true,
+              "pid": 19384,
+              "stopped": true,
+              "seconds": 1.5
+            },
+            "gpu_before": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "ollama_ps_before": {
+              "ok": false,
+              "models": [],
+              "resident": [],
+              "reason": "URLError: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+            },
+            "resident_before": [],
+            "unloaded": [],
+            "ollama_ps_after_unload": {
+              "ok": false,
+              "models": [],
+              "resident": [],
+              "reason": "URLError: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+            },
+            "unload_verified": {},
+            "gpu_ready": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "budget": {
+              "ok": true,
+              "checked": true,
+              "free_gb": 15.63,
+              "needed_gb": 8.2,
+              "reserve_gb": 1.0,
+              "headroom_gb": 7.43,
+              "reason": "fits: 15.63 GB free - 8.2 GB needed = 7.43 GB >= 1.0 GB reserve"
+            },
+            "start": {
+              "ok": true,
+              "pid": 19384,
+              "reason": null
+            },
+            "ready": {
+              "ok": true,
+              "seconds": 16.6
+            },
+            "gpu_before_work": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 172,
+              "free_mb": 15832,
+              "util_pct": 0,
+              "free_gb": 15.46,
+              "used_gb": 0.17
+            },
+            "gpu_after_work": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 274,
+              "free_mb": 15730,
+              "util_pct": 2,
+              "free_gb": 15.36,
+              "used_gb": 0.27
+            },
+            "gpu_after": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "reloaded": [],
+            "reload_verified": {},
+            "ollama_ps_after": {
+              "ok": false,
+              "models": [],
+              "resident": [],
+              "reason": "URLError: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+            },
+            "gpu_after_reload": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "vram_before_gb": 15.63,
+            "vram_after_gb": 15.63,
+            "vram_freed_gb": 0.0,
+            "seconds": 36.8,
+            "work_ok": true
+          },
+          "lane_stopped": true,
+          "note": null
+        },
+        "cutout": null,
+        "product_box": [
+          462,
+          520,
+          1537,
+          1760
+        ],
+        "identity": null,
+        "background_path": "flat_canvas",
+        "flat_level": 245,
+        "label": {
+          "mode": "warp",
+          "layout": "label_warp",
+          "quad": [
+            [
+              762,
+              810
+            ],
+            [
+              1350,
+              810
+            ],
+            [
+              1493,
+              1177
+            ],
+            [
+              508,
+              1177
+            ]
+          ],
+          "conformed": true,
+          "panel_px": 283516,
+          "panel_px_outside_silhouette": 0,
+          "strength": 1.0,
+          "mask_path": "renders\\heldout_prompt_only10\\PO-005.mask.png"
+        },
+        "cut_from_generation": {
+          "method": "grabcut",
+          "subject_px": 25805016,
+          "note": "prompt-only runs generate -> cut -> compose -> layout; the product is the model's drawing, not the seller's pixels"
+        },
+        "cutout_path": "renders\\heldout_prompt_only10\\PO-005.cutout.png",
+        "bytes": 580554,
+        "seconds": 44.87,
+        "sidecar": "renders\\heldout_prompt_only10\\PO-005.json"
+      }
+    },
+    {
+      "brief_id": "PO-006",
+      "category": "food_jar",
+      "situation": "series_consistency",
+      "difficulty": 1,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "full_generation",
+      "population": "generated",
+      "artefact_path": "renders/heldout_prompt_only10/PO-006.png",
+      "width": 2000,
+      "height": 2000,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2000 vs min 2000x2000, max 8000x8000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.005"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "corners [(255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255)] vs target (255, 255, 255) +-4; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "subject fill 31.3% vs 20.0-50.0% (distance > 20)"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "border mean 255.0 (>= 251), std 0.00 (<= 4.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "747418 bytes (0.187 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "margin ink 0.03% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "PO-006",
+        "route": "full_generation",
+        "fidelity": "tolerant",
+        "renderer": "comfy",
+        "method": null,
+        "scene": {
+          "source": "generated",
+          "prompt": "Product photograph of a plain slim pale-pink and cream gift box with a blank front panel, no text, no lettering, no logo, in the same lighting and framing as the rest of the range, grey backdrop. Photorealistic, unlabelled packaging, matte card.",
+          "model": "sdxl",
+          "image_path": "C:\\Users\\T2Hol\\ComfyUI\\output\\ns-scene_00248_.png",
+          "seed": 576704194,
+          "steps": 20,
+          "width": 768,
+          "height": 768,
+          "lane": {
+            "event": "lane",
+            "role": "scene:sdxl",
+            "needed_gb": 8.2,
+            "reserve_gb": 1.0,
+            "watchlist": [
+              "bojo:latest",
+              "qwen3-embedding:0.6b"
+            ],
+            "stopped": {
+              "ok": true,
+              "pid": 10996,
+              "stopped": true,
+              "seconds": 1.5
+            },
+            "gpu_before": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "ollama_ps_before": {
+              "ok": false,
+              "models": [],
+              "resident": [],
+              "reason": "URLError: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+            },
+            "resident_before": [],
+            "unloaded": [],
+            "ollama_ps_after_unload": {
+              "ok": false,
+              "models": [],
+              "resident": [],
+              "reason": "URLError: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+            },
+            "unload_verified": {},
+            "gpu_ready": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "budget": {
+              "ok": true,
+              "checked": true,
+              "free_gb": 15.63,
+              "needed_gb": 8.2,
+              "reserve_gb": 1.0,
+              "headroom_gb": 7.43,
+              "reason": "fits: 15.63 GB free - 8.2 GB needed = 7.43 GB >= 1.0 GB reserve"
+            },
+            "start": {
+              "ok": true,
+              "pid": 10996,
+              "reason": null
+            },
+            "ready": {
+              "ok": true,
+              "seconds": 16.1
+            },
+            "gpu_before_work": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 172,
+              "free_mb": 15832,
+              "util_pct": 0,
+              "free_gb": 15.46,
+              "used_gb": 0.17
+            },
+            "gpu_after_work": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 274,
+              "free_mb": 15730,
+              "util_pct": 0,
+              "free_gb": 15.36,
+              "used_gb": 0.27
+            },
+            "gpu_after": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "reloaded": [],
+            "reload_verified": {},
+            "ollama_ps_after": {
+              "ok": false,
+              "models": [],
+              "resident": [],
+              "reason": "URLError: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+            },
+            "gpu_after_reload": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "vram_before_gb": 15.63,
+            "vram_after_gb": 15.63,
+            "vram_freed_gb": 0.0,
+            "seconds": 37.1,
+            "work_ok": true
+          },
+          "lane_stopped": true,
+          "note": null
+        },
+        "cutout": null,
+        "product_box": [
+          50,
+          641,
+          1950,
+          1758
+        ],
+        "identity": null,
+        "background_path": "flat_canvas",
+        "flat_level": 255,
+        "label": {
+          "mode": "warp",
+          "layout": "label_warp",
+          "quad": [
+            [
+              416,
+              912
+            ],
+            [
+              1679,
+              912
+            ],
+            [
+              1737,
+              1239
+            ],
+            [
+              116,
+              1239
+            ]
+          ],
+          "conformed": true,
+          "panel_px": 473500,
+          "panel_px_outside_silhouette": 0,
+          "strength": 1.0,
+          "mask_path": "renders\\heldout_prompt_only10\\PO-006.mask.png"
+        },
+        "cut_from_generation": {
+          "method": "grabcut",
+          "subject_px": 40064106,
+          "note": "prompt-only runs generate -> cut -> compose -> layout; the product is the model's drawing, not the seller's pixels"
+        },
+        "cutout_path": "renders\\heldout_prompt_only10\\PO-006.cutout.png",
+        "bytes": 747418,
+        "seconds": 42.74,
+        "sidecar": "renders\\heldout_prompt_only10\\PO-006.json"
+      }
+    },
+    {
+      "brief_id": "PO-007",
+      "category": "supplement_pouch",
+      "situation": "infographic",
+      "difficulty": 1,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "full_generation",
+      "population": "generated",
+      "artefact_path": "renders/heldout_prompt_only10/PO-007.png",
+      "width": 2000,
+      "height": 2500,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2500 vs min 1600x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 0.8000 vs 0.8000 +-0.020"
+        },
+        "background": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "background is free for this brief"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "product box 22.0% of the frame vs 10.0-80.0% (free background: the box is the measure, not the corner colour)"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "matte free for this brief"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "861255 bytes (0.172 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "margin ink 2.83% vs min 0.20% (text expected)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "PO-007",
+        "route": "full_generation",
+        "fidelity": "tolerant",
+        "renderer": "comfy",
+        "method": null,
+        "scene": {
+          "source": "generated",
+          "prompt": "Product photograph of a plain matte forest-green stand-up pouch with a blank white circular panel on the front, no text, no lettering, no logo, centred on a clean page with generous white margins, room for callouts. Photorealistic, unlabelled packaging, smooth matte film.",
+          "model": "sdxl",
+          "image_path": "C:\\Users\\T2Hol\\ComfyUI\\output\\ns-scene_00249_.png",
+          "seed": 3295950730,
+          "steps": 20,
+          "width": 768,
+          "height": 768,
+          "lane": {
+            "event": "lane",
+            "role": "scene:sdxl",
+            "needed_gb": 8.2,
+            "reserve_gb": 1.0,
+            "watchlist": [
+              "bojo:latest",
+              "qwen3-embedding:0.6b"
+            ],
+            "stopped": {
+              "ok": true,
+              "pid": 17040,
+              "stopped": true,
+              "seconds": 1.5
+            },
+            "gpu_before": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "ollama_ps_before": {
+              "ok": false,
+              "models": [],
+              "resident": [],
+              "reason": "URLError: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+            },
+            "resident_before": [],
+            "unloaded": [],
+            "ollama_ps_after_unload": {
+              "ok": false,
+              "models": [],
+              "resident": [],
+              "reason": "URLError: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+            },
+            "unload_verified": {},
+            "gpu_ready": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "budget": {
+              "ok": true,
+              "checked": true,
+              "free_gb": 15.63,
+              "needed_gb": 8.2,
+              "reserve_gb": 1.0,
+              "headroom_gb": 7.43,
+              "reason": "fits: 15.63 GB free - 8.2 GB needed = 7.43 GB >= 1.0 GB reserve"
+            },
+            "start": {
+              "ok": true,
+              "pid": 17040,
+              "reason": null
+            },
+            "ready": {
+              "ok": true,
+              "seconds": 15.1
+            },
+            "gpu_before_work": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 172,
+              "free_mb": 15832,
+              "util_pct": 0,
+              "free_gb": 15.46,
+              "used_gb": 0.17
+            },
+            "gpu_after_work": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 274,
+              "free_mb": 15730,
+              "util_pct": 2,
+              "free_gb": 15.36,
+              "used_gb": 0.27
+            },
+            "gpu_after": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "reloaded": [],
+            "reload_verified": {},
+            "ollama_ps_after": {
+              "ok": false,
+              "models": [],
+              "resident": [],
+              "reason": "URLError: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+            },
+            "gpu_after_reload": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "vram_before_gb": 15.63,
+            "vram_after_gb": 15.63,
+            "vram_freed_gb": 0.0,
+            "seconds": 35.9,
+            "work_ok": true
+          },
+          "lane_stopped": true,
+          "note": null
+        },
+        "cutout": null,
+        "product_box": [
+          366,
+          866,
+          1634,
+          1734
+        ],
+        "identity": null,
+        "background_resampled": {
+          "from": "scene",
+          "to": 2000
+        },
+        "label": {
+          "mode": "warp",
+          "layout": "label_warp",
+          "quad": [
+            [
+              462,
+              695
+            ],
+            [
+              1711,
+              695
+            ],
+            [
+              1840,
+              1127
+            ],
+            [
+              291,
+              1127
+            ]
+          ],
+          "conformed": true,
+          "panel_px": 575656,
+          "panel_px_outside_silhouette": 0,
+          "strength": 1.0,
+          "mask_path": "renders\\heldout_prompt_only10\\PO-007.mask.png"
+        },
+        "aspect_fit": {
+          "width": 0,
+          "height": 500,
+          "top": 330,
+          "left": 0
+        },
+        "layout": {
+          "kind": "deterministic",
+          "layout": "infographic",
+          "variant": "page",
+          "callouts": 3,
+          "seed": 208986844,
+          "title": "LIONS MANE",
+          "panel": [
+            300,
+            821,
+            1400,
+            958
+          ],
+          "copy_lines": 0,
+          "margin_ink": 0.05832,
+          "product_box": [
+            366,
+            866,
+            1268,
+            868
+          ],
+          "copy_source": "the brief's declared copy, typeset deterministically; structural labels only, no product claim is invented by a renderer"
+        },
+        "cut_from_generation": {
+          "method": "grabcut",
+          "subject_px": 36270158,
+          "note": "prompt-only runs generate -> cut -> compose -> layout; the product is the model's drawing, not the seller's pixels"
+        },
+        "cutout_path": "renders\\heldout_prompt_only10\\PO-007.cutout.png",
+        "bytes": 861255,
+        "seconds": 42.56,
+        "sidecar": "renders\\heldout_prompt_only10\\PO-007.json"
+      }
+    },
+    {
+      "brief_id": "PO-008",
+      "category": "food_jar",
+      "situation": "packaging_mockup",
+      "difficulty": 1,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "full_generation",
+      "population": "generated",
+      "artefact_path": "renders/heldout_prompt_only10/PO-008.png",
+      "width": 2500,
+      "height": 3125,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2500x3125 vs min 2000x2500, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 0.8000 vs 0.8000 +-0.030"
+        },
+        "background": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "background is free for this brief"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "product box 36.9% of the frame vs 15.0-80.0% (free background: the box is the measure, not the corner colour)"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "matte free for this brief"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "3097736 bytes (0.397 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "text allowed for this brief"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "PO-008",
+        "route": "full_generation",
+        "fidelity": "tolerant",
+        "renderer": "comfy",
+        "method": null,
+        "scene": {
+          "source": "generated",
+          "prompt": "Product photograph of a plain slim pale-pink and cream gift box with a blank front panel, no text, no lettering, no logo, on a matte studio surface under a soft key light, slight perspective. Photorealistic, unlabelled packaging, matte card.",
+          "model": "sdxl",
+          "image_path": "C:\\Users\\T2Hol\\ComfyUI\\output\\ns-scene_00250_.png",
+          "seed": 1287457229,
+          "steps": 20,
+          "width": 768,
+          "height": 768,
+          "lane": {
+            "event": "lane",
+            "role": "scene:sdxl",
+            "needed_gb": 8.2,
+            "reserve_gb": 1.0,
+            "watchlist": [
+              "bojo:latest",
+              "qwen3-embedding:0.6b"
+            ],
+            "stopped": {
+              "ok": true,
+              "pid": 12356,
+              "stopped": true,
+              "seconds": 1.5
+            },
+            "gpu_before": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "ollama_ps_before": {
+              "ok": false,
+              "models": [],
+              "resident": [],
+              "reason": "URLError: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+            },
+            "resident_before": [],
+            "unloaded": [],
+            "ollama_ps_after_unload": {
+              "ok": false,
+              "models": [],
+              "resident": [],
+              "reason": "URLError: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+            },
+            "unload_verified": {},
+            "gpu_ready": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "budget": {
+              "ok": true,
+              "checked": true,
+              "free_gb": 15.63,
+              "needed_gb": 8.2,
+              "reserve_gb": 1.0,
+              "headroom_gb": 7.43,
+              "reason": "fits: 15.63 GB free - 8.2 GB needed = 7.43 GB >= 1.0 GB reserve"
+            },
+            "start": {
+              "ok": true,
+              "pid": 12356,
+              "reason": null
+            },
+            "ready": {
+              "ok": true,
+              "seconds": 15.1
+            },
+            "gpu_before_work": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 172,
+              "free_mb": 15832,
+              "util_pct": 0,
+              "free_gb": 15.46,
+              "used_gb": 0.17
+            },
+            "gpu_after_work": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 274,
+              "free_mb": 15730,
+              "util_pct": 0,
+              "free_gb": 15.36,
+              "used_gb": 0.27
+            },
+            "gpu_after": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "reloaded": [],
+            "reload_verified": {},
+            "ollama_ps_after": {
+              "ok": false,
+              "models": [],
+              "resident": [],
+              "reason": "URLError: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+            },
+            "gpu_after_reload": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "vram_before_gb": 15.63,
+            "vram_after_gb": 15.63,
+            "vram_freed_gb": 0.0,
+            "seconds": 36.8,
+            "work_ok": true
+          },
+          "lane_stopped": true,
+          "note": null
+        },
+        "cutout": null,
+        "product_box": [
+          320,
+          1030,
+          2180,
+          2580
+        ],
+        "identity": null,
+        "background_resampled": {
+          "from": "scene",
+          "to": 2500
+        },
+        "label": {
+          "mode": "warp",
+          "layout": "label_warp",
+          "quad": [
+            [
+              934,
+              935
+            ],
+            [
+              2107,
+              935
+            ],
+            [
+              2104,
+              1421
+            ],
+            [
+              427,
+              1421
+            ]
+          ],
+          "conformed": true,
+          "panel_px": 693876,
+          "panel_px_outside_silhouette": 0,
+          "strength": 1.0,
+          "mask_path": "renders\\heldout_prompt_only10\\PO-008.mask.png"
+        },
+        "aspect_fit": {
+          "width": 0,
+          "height": 625,
+          "top": 412,
+          "left": 0
+        },
+        "layout": {
+          "kind": "deterministic",
+          "layout": "packaging_panel",
+          "skew": 0.06,
+          "quad": [
+            [
+              432,
+              1030
+            ],
+            [
+              2067,
+              1030
+            ],
+            [
+              2179,
+              2579
+            ],
+            [
+              320,
+              2579
+            ]
+          ],
+          "panel": [
+            1860,
+            1550
+          ],
+          "product_box": [
+            320,
+            1030,
+            1860,
+            1550
+          ],
+          "copy_source": "the seller's artwork, warped onto a panel quad"
+        },
+        "cut_from_generation": {
+          "method": "grabcut",
+          "subject_px": 55555907,
+          "note": "prompt-only runs generate -> cut -> compose -> layout; the product is the model's drawing, not the seller's pixels"
+        },
+        "product_quad": [
+          [
+            432,
+            1030
+          ],
+          [
+            2067,
+            1030
+          ],
+          [
+            2179,
+            2579
+          ],
+          [
+            320,
+            2579
+          ]
+        ],
+        "cutout_path": "renders\\heldout_prompt_only10\\PO-008.cutout.png",
+        "bytes": 3097736,
+        "seconds": 50.28,
+        "sidecar": "renders\\heldout_prompt_only10\\PO-008.json"
+      }
+    },
+    {
+      "brief_id": "PO-009",
+      "category": "supplement_pouch",
+      "situation": "white_background_main",
+      "difficulty": 2,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "full_generation",
+      "population": "generated",
+      "artefact_path": "renders/heldout_prompt_only10/PO-009.png",
+      "width": 2000,
+      "height": 2000,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.020"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "corners [(255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255)] vs target (255, 255, 255) +-6; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "subject fill 42.3% vs 12.0-100.0% (distance > 20)"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "border mean 255.0 (>= 249), std 0.00 (<= 6.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "710332 bytes (0.178 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "margin ink 0.00% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "PO-009",
+        "route": "full_generation",
+        "fidelity": "tolerant",
+        "renderer": "comfy",
+        "method": null,
+        "scene": {
+          "source": "generated",
+          "prompt": "Product photograph of a plain matte forest-green stand-up pouch with a blank white circular panel on the front, no text, no lettering, no logo, on a seamless white studio background, product centred, no props. Photorealistic, unlabelled packaging, smooth matte film.",
+          "model": "sdxl",
+          "image_path": "C:\\Users\\T2Hol\\ComfyUI\\output\\ns-scene_00251_.png",
+          "seed": 1534949894,
+          "steps": 20,
+          "width": 768,
+          "height": 768,
+          "lane": {
+            "event": "lane",
+            "role": "scene:sdxl",
+            "needed_gb": 8.2,
+            "reserve_gb": 1.0,
+            "watchlist": [
+              "bojo:latest",
+              "qwen3-embedding:0.6b"
+            ],
+            "stopped": {
+              "ok": true,
+              "pid": 13976,
+              "stopped": true,
+              "seconds": 1.5
+            },
+            "gpu_before": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "ollama_ps_before": {
+              "ok": false,
+              "models": [],
+              "resident": [],
+              "reason": "URLError: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+            },
+            "resident_before": [],
+            "unloaded": [],
+            "ollama_ps_after_unload": {
+              "ok": false,
+              "models": [],
+              "resident": [],
+              "reason": "URLError: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+            },
+            "unload_verified": {},
+            "gpu_ready": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "budget": {
+              "ok": true,
+              "checked": true,
+              "free_gb": 15.63,
+              "needed_gb": 8.2,
+              "reserve_gb": 1.0,
+              "headroom_gb": 7.43,
+              "reason": "fits: 15.63 GB free - 8.2 GB needed = 7.43 GB >= 1.0 GB reserve"
+            },
+            "start": {
+              "ok": true,
+              "pid": 13976,
+              "reason": null
+            },
+            "ready": {
+              "ok": true,
+              "seconds": 15.6
+            },
+            "gpu_before_work": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 172,
+              "free_mb": 15832,
+              "util_pct": 0,
+              "free_gb": 15.46,
+              "used_gb": 0.17
+            },
+            "gpu_after_work": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 274,
+              "free_mb": 15730,
+              "util_pct": 0,
+              "free_gb": 15.36,
+              "used_gb": 0.27
+            },
+            "gpu_after": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "reloaded": [],
+            "reload_verified": {},
+            "ollama_ps_after": {
+              "ok": false,
+              "models": [],
+              "resident": [],
+              "reason": "URLError: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+            },
+            "gpu_after_reload": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "vram_before_gb": 15.63,
+            "vram_after_gb": 15.63,
+            "vram_freed_gb": 0.0,
+            "seconds": 37.8,
+            "work_ok": true
+          },
+          "lane_stopped": true,
+          "note": null
+        },
+        "cutout": null,
+        "product_box": [
+          115,
+          513,
+          1885,
+          1753
+        ],
+        "identity": null,
+        "background_path": "flat_canvas",
+        "flat_level": 255,
+        "label": {
+          "mode": "warp",
+          "layout": "label_warp",
+          "quad": [
+            [
+              323,
+              685
+            ],
+            [
+              1750,
+              685
+            ],
+            [
+              1752,
+              1120
+            ],
+            [
+              316,
+              1120
+            ]
+          ],
+          "conformed": true,
+          "panel_px": 624827,
+          "panel_px_outside_silhouette": 0,
+          "strength": 1.0,
+          "mask_path": "renders\\heldout_prompt_only10\\PO-009.mask.png"
+        },
+        "cut_from_generation": {
+          "method": "grabcut",
+          "subject_px": 38364738,
+          "note": "prompt-only runs generate -> cut -> compose -> layout; the product is the model's drawing, not the seller's pixels"
+        },
+        "cutout_path": "renders\\heldout_prompt_only10\\PO-009.cutout.png",
+        "bytes": 710332,
+        "seconds": 43.15,
+        "sidecar": "renders\\heldout_prompt_only10\\PO-009.json"
+      }
+    },
+    {
+      "brief_id": "PO-010",
+      "category": "food_jar",
+      "situation": "lifestyle",
+      "difficulty": 2,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "full_generation",
+      "population": "generated",
+      "artefact_path": "renders/heldout_prompt_only10/PO-010.png",
+      "width": 2000,
+      "height": 2000,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.030"
+        },
+        "background": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "background is free for this brief"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "product box 35.0% of the frame vs 15.0-85.0% (free background: the box is the measure, not the corner colour)"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "matte free for this brief"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2104532 bytes (0.526 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "text allowed for this brief"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "PO-010",
+        "route": "full_generation",
+        "fidelity": "tolerant",
+        "renderer": "comfy",
+        "method": null,
+        "scene": {
+          "source": "generated",
+          "prompt": "Product photograph of a plain slim pale-pink and cream gift box with a blank front panel, no text, no lettering, no logo, on a light oak kitchen counter in morning light, shallow depth of field. Photorealistic, unlabelled packaging, matte card.",
+          "model": "sdxl",
+          "image_path": "C:\\Users\\T2Hol\\ComfyUI\\output\\ns-scene_00252_.png",
+          "seed": 3743276581,
+          "steps": 20,
+          "width": 768,
+          "height": 768,
+          "lane": {
+            "event": "lane",
+            "role": "scene:sdxl",
+            "needed_gb": 8.2,
+            "reserve_gb": 1.0,
+            "watchlist": [
+              "bojo:latest",
+              "qwen3-embedding:0.6b"
+            ],
+            "stopped": {
+              "ok": true,
+              "pid": 22052,
+              "stopped": true,
+              "seconds": 1.5
+            },
+            "gpu_before": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "ollama_ps_before": {
+              "ok": false,
+              "models": [],
+              "resident": [],
+              "reason": "URLError: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+            },
+            "resident_before": [],
+            "unloaded": [],
+            "ollama_ps_after_unload": {
+              "ok": false,
+              "models": [],
+              "resident": [],
+              "reason": "URLError: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+            },
+            "unload_verified": {},
+            "gpu_ready": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "budget": {
+              "ok": true,
+              "checked": true,
+              "free_gb": 15.63,
+              "needed_gb": 8.2,
+              "reserve_gb": 1.0,
+              "headroom_gb": 7.43,
+              "reason": "fits: 15.63 GB free - 8.2 GB needed = 7.43 GB >= 1.0 GB reserve"
+            },
+            "start": {
+              "ok": true,
+              "pid": 22052,
+              "reason": null
+            },
+            "ready": {
+              "ok": true,
+              "seconds": 15.1
+            },
+            "gpu_before_work": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 172,
+              "free_mb": 15832,
+              "util_pct": 0,
+              "free_gb": 15.46,
+              "used_gb": 0.17
+            },
+            "gpu_after_work": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 274,
+              "free_mb": 15730,
+              "util_pct": 0,
+              "free_gb": 15.36,
+              "used_gb": 0.27
+            },
+            "gpu_after": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "reloaded": [],
+            "reload_verified": {},
+            "ollama_ps_after": {
+              "ok": false,
+              "models": [],
+              "resident": [],
+              "reason": "URLError: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+            },
+            "gpu_after_reload": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "vram_before_gb": 15.63,
+            "vram_after_gb": 15.63,
+            "vram_freed_gb": 0.0,
+            "seconds": 37.8,
+            "work_ok": true
+          },
+          "lane_stopped": true,
+          "note": null
+        },
+        "cutout": null,
+        "product_box": [
+          435,
+          517,
+          1564,
+          1757
+        ],
+        "identity": null,
+        "background_resampled": {
+          "from": "scene",
+          "to": 2000
+        },
+        "label": {
+          "mode": "warp",
+          "layout": "label_warp",
+          "quad": [
+            [
+              472,
+              613
+            ],
+            [
+              1359,
+              613
+            ],
+            [
+              1346,
+              1093
+            ],
+            [
+              502,
+              1093
+            ]
+          ],
+          "conformed": true,
+          "panel_px": 342675,
+          "panel_px_outside_silhouette": 0,
+          "strength": 1.0,
+          "mask_path": "renders\\heldout_prompt_only10\\PO-010.mask.png"
+        },
+        "cut_from_generation": {
+          "method": "grabcut",
+          "subject_px": 68154348,
+          "note": "prompt-only runs generate -> cut -> compose -> layout; the product is the model's drawing, not the seller's pixels"
+        },
+        "cutout_path": "renders\\heldout_prompt_only10\\PO-010.cutout.png",
+        "bytes": 2104532,
+        "seconds": 49.6,
+        "sidecar": "renders\\heldout_prompt_only10\\PO-010.json"
+      }
+    },
+    {
+      "brief_id": "PO-011",
+      "category": "supplement_pouch",
+      "situation": "scale_reference",
+      "difficulty": 2,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "full_generation",
+      "population": "generated",
+      "artefact_path": "renders/heldout_prompt_only10/PO-011.png",
+      "width": 2000,
+      "height": 2000,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.020"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "corners [(255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255)] vs target (255, 255, 255) +-8; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "subject fill 30.2% vs 8.0-50.0% (distance > 20)"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "border mean 255.0 (>= 249), std 0.00 (<= 6.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "657651 bytes (0.164 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "margin ink 0.00% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "PO-011",
+        "route": "full_generation",
+        "fidelity": "tolerant",
+        "renderer": "comfy",
+        "method": null,
+        "scene": {
+          "source": "generated",
+          "prompt": "Product photograph of a plain matte forest-green stand-up pouch with a blank white circular panel on the front, no text, no lettering, no logo, standing beside a coffee cup for scale, white background. Photorealistic, unlabelled packaging, smooth matte film.",
+          "model": "sdxl",
+          "image_path": "C:\\Users\\T2Hol\\ComfyUI\\output\\ns-scene_00253_.png",
+          "seed": 3115601010,
+          "steps": 20,
+          "width": 768,
+          "height": 768,
+          "lane": {
+            "event": "lane",
+            "role": "scene:sdxl",
+            "needed_gb": 8.2,
+            "reserve_gb": 1.0,
+            "watchlist": [
+              "bojo:latest",
+              "qwen3-embedding:0.6b"
+            ],
+            "stopped": {
+              "ok": true,
+              "pid": 23520,
+              "stopped": true,
+              "seconds": 1.5
+            },
+            "gpu_before": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "ollama_ps_before": {
+              "ok": false,
+              "models": [],
+              "resident": [],
+              "reason": "URLError: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+            },
+            "resident_before": [],
+            "unloaded": [],
+            "ollama_ps_after_unload": {
+              "ok": false,
+              "models": [],
+              "resident": [],
+              "reason": "URLError: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+            },
+            "unload_verified": {},
+            "gpu_ready": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "budget": {
+              "ok": true,
+              "checked": true,
+              "free_gb": 15.63,
+              "needed_gb": 8.2,
+              "reserve_gb": 1.0,
+              "headroom_gb": 7.43,
+              "reason": "fits: 15.63 GB free - 8.2 GB needed = 7.43 GB >= 1.0 GB reserve"
+            },
+            "start": {
+              "ok": true,
+              "pid": 23520,
+              "reason": null
+            },
+            "ready": {
+              "ok": true,
+              "seconds": 15.6
+            },
+            "gpu_before_work": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 172,
+              "free_mb": 15832,
+              "util_pct": 0,
+              "free_gb": 15.46,
+              "used_gb": 0.17
+            },
+            "gpu_after_work": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 274,
+              "free_mb": 15730,
+              "util_pct": 1,
+              "free_gb": 15.36,
+              "used_gb": 0.27
+            },
+            "gpu_after": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "reloaded": [],
+            "reload_verified": {},
+            "ollama_ps_after": {
+              "ok": false,
+              "models": [],
+              "resident": [],
+              "reason": "URLError: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+            },
+            "gpu_after_reload": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "vram_before_gb": 15.63,
+            "vram_after_gb": 15.63,
+            "vram_freed_gb": 0.0,
+            "seconds": 36.3,
+            "work_ok": true
+          },
+          "lane_stopped": true,
+          "note": null
+        },
+        "cutout": null,
+        "product_box": [
+          201,
+          501,
+          1799,
+          1741
+        ],
+        "identity": null,
+        "background_path": "flat_canvas",
+        "flat_level": 255,
+        "label": {
+          "mode": "warp",
+          "layout": "label_warp",
+          "quad": [
+            [
+              580,
+              811
+            ],
+            [
+              1650,
+              811
+            ],
+            [
+              1615,
+              1167
+            ],
+            [
+              461,
+              1167
+            ]
+          ],
+          "conformed": true,
+          "panel_px": 396841,
+          "panel_px_outside_silhouette": 0,
+          "strength": 1.0,
+          "mask_path": "renders\\heldout_prompt_only10\\PO-011.mask.png"
+        },
+        "cut_from_generation": {
+          "method": "grabcut",
+          "subject_px": 45014672,
+          "note": "prompt-only runs generate -> cut -> compose -> layout; the product is the model's drawing, not the seller's pixels"
+        },
+        "cutout_path": "renders\\heldout_prompt_only10\\PO-011.cutout.png",
+        "bytes": 657651,
+        "seconds": 42.01,
+        "sidecar": "renders\\heldout_prompt_only10\\PO-011.json"
+      }
+    },
+    {
+      "brief_id": "PO-012",
+      "category": "food_jar",
+      "situation": "bundle_multipack",
+      "difficulty": 2,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "full_generation",
+      "population": "generated",
+      "artefact_path": "renders/heldout_prompt_only10/PO-012.png",
+      "width": 2000,
+      "height": 2000,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.020"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "corners [(255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255)] vs target (255, 255, 255) +-6; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "subject fill 34.3% vs 25.0-85.0% (distance > 20)"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "border mean 255.0 (>= 249), std 0.00 (<= 6.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "592255 bytes (0.148 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "margin ink 0.00% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "PO-012",
+        "route": "full_generation",
+        "fidelity": "tolerant",
+        "renderer": "comfy",
+        "method": null,
+        "scene": {
+          "source": "generated",
+          "prompt": "Product photograph of three identical plain slim pale-pink and cream gift boxes with blank front panels, arranged side by side on a white background, no text, no lettering, no logo. Photorealistic, unlabelled packaging, matte card.",
+          "model": "sdxl",
+          "image_path": "C:\\Users\\T2Hol\\ComfyUI\\output\\ns-scene_00254_.png",
+          "seed": 4271762454,
+          "steps": 20,
+          "width": 768,
+          "height": 768,
+          "lane": {
+            "event": "lane",
+            "role": "scene:sdxl",
+            "needed_gb": 8.2,
+            "reserve_gb": 1.0,
+            "watchlist": [
+              "bojo:latest",
+              "qwen3-embedding:0.6b"
+            ],
+            "stopped": {
+              "ok": true,
+              "pid": 13104,
+              "stopped": true,
+              "seconds": 1.5
+            },
+            "gpu_before": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "ollama_ps_before": {
+              "ok": false,
+              "models": [],
+              "resident": [],
+              "reason": "URLError: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+            },
+            "resident_before": [],
+            "unloaded": [],
+            "ollama_ps_after_unload": {
+              "ok": false,
+              "models": [],
+              "resident": [],
+              "reason": "URLError: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+            },
+            "unload_verified": {},
+            "gpu_ready": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "budget": {
+              "ok": true,
+              "checked": true,
+              "free_gb": 15.63,
+              "needed_gb": 8.2,
+              "reserve_gb": 1.0,
+              "headroom_gb": 7.43,
+              "reason": "fits: 15.63 GB free - 8.2 GB needed = 7.43 GB >= 1.0 GB reserve"
+            },
+            "start": {
+              "ok": true,
+              "pid": 13104,
+              "reason": null
+            },
+            "ready": {
+              "ok": true,
+              "seconds": 15.1
+            },
+            "gpu_before_work": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 172,
+              "free_mb": 15832,
+              "util_pct": 0,
+              "free_gb": 15.46,
+              "used_gb": 0.17
+            },
+            "gpu_after_work": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 274,
+              "free_mb": 15730,
+              "util_pct": 0,
+              "free_gb": 15.36,
+              "used_gb": 0.27
+            },
+            "gpu_after": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "reloaded": [],
+            "reload_verified": {},
+            "ollama_ps_after": {
+              "ok": false,
+              "models": [],
+              "resident": [],
+              "reason": "URLError: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+            },
+            "gpu_after_reload": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16003,
+              "util_pct": 0,
+              "free_gb": 15.63,
+              "used_gb": 0.0
+            },
+            "vram_before_gb": 15.63,
+            "vram_after_gb": 15.63,
+            "vram_freed_gb": 0.0,
+            "seconds": 36.8,
+            "work_ok": true
+          },
+          "lane_stopped": true,
+          "note": null
+        },
+        "cutout": null,
+        "product_box": [
+          261,
+          496,
+          1739,
+          1736
+        ],
+        "identity": null,
+        "background_path": "flat_canvas",
+        "flat_level": 255,
+        "label": {
+          "mode": "warp",
+          "layout": "label_warp",
+          "quad": [
+            [
+              317,
+              994
+            ],
+            [
+              1673,
+              994
+            ],
+            [
+              1533,
+              1241
+            ],
+            [
+              330,
+              1241
+            ]
+          ],
+          "conformed": true,
+          "panel_px": 314256,
+          "panel_px_outside_silhouette": 0,
+          "strength": 1.0,
+          "mask_path": "renders\\heldout_prompt_only10\\PO-012.mask.png"
+        },
+        "cut_from_generation": {
+          "method": "grabcut",
+          "subject_px": 41883819,
+          "note": "prompt-only runs generate -> cut -> compose -> layout; the product is the model's drawing, not the seller's pixels"
+        },
+        "cutout_path": "renders\\heldout_prompt_only10\\PO-012.cutout.png",
+        "bytes": 592255,
+        "seconds": 43.57,
+        "sidecar": "renders\\heldout_prompt_only10\\PO-012.json"
+      }
+    }
+  ],
+  "by_population": {
+    "generated": {
+      "scored": 12,
+      "passed": 12,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    }
+  },
+  "by_mode": {
+    "prompt_only": {
+      "scored": 12,
+      "passed": 12,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    },
+    "stored_reference": {
+      "scored": 0,
+      "passed": 0,
+      "failed": 0,
+      "pass_rate": 0.0,
+      "mean_score": 0.0
+    },
+    "uploaded_reference": {
+      "scored": 0,
+      "passed": 0,
+      "failed": 0,
+      "pass_rate": 0.0,
+      "mean_score": 0.0
+    }
+  },
+  "by_situation": {
+    "background_swap": {
+      "scored": 1,
+      "passed": 1,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    },
+    "bundle_multipack": {
+      "scored": 2,
+      "passed": 2,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    },
+    "infographic": {
+      "scored": 1,
+      "passed": 1,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    },
+    "lifestyle": {
+      "scored": 2,
+      "passed": 2,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    },
+    "packaging_mockup": {
+      "scored": 1,
+      "passed": 1,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    },
+    "scale_reference": {
+      "scored": 2,
+      "passed": 2,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    },
+    "series_consistency": {
+      "scored": 1,
+      "passed": 1,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    },
+    "white_background_main": {
+      "scored": 2,
+      "passed": 2,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    }
+  },
+  "by_category": {
+    "food_jar": {
+      "scored": 6,
+      "passed": 6,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    },
+    "supplement_pouch": {
+      "scored": 6,
+      "passed": 6,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    }
+  },
+  "rerender": {
+    "mode": "prompt_only",
+    "previous_proof": "state\\seller\\heldout_prompt_only_proof8.json",
+    "seeds_reused": 12,
+    "seeds_random": 0,
+    "scene_size": 768,
+    "steps": 20,
+    "model": "sdxl",
+    "why": "the render seeds come from the previous proof, so the picture changes only because the pipeline changed. The first run of this tool isolated the flat() branch and moved one brief (PO-005, 70.0 -> 90.0). The six rows that then sat at exactly 90.0 were not the branch: their border failed on a contact shadow clipped by the frame edge (bottom band luminance 243.5, std 7.19). place_product now reserves the shadow inside the frame margin."
+  }
+}

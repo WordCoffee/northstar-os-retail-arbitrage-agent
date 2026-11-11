@@ -1,0 +1,233 @@
+[
+  {
+    "brief": "PO-001",
+    "label_on_pack": {
+      "pass": true,
+      "available": true,
+      "confidence": 0.95,
+      "reasons": [
+        "The image shows a single printed label panel on the front of the product bag. The label is adhered to the product bag itself, not floating independently."
+      ]
+    },
+    "no_stray": {
+      "pass": true,
+      "available": true,
+      "confidence": 0.95,
+      "reasons": [
+        "The image shows a single product bag with no stray marks, thin sticks, wires, dashed rules, floating rings, or duplicate products present."
+      ]
+    }
+  },
+  {
+    "brief": "PO-002",
+    "label_on_pack": {
+      "pass": true,
+      "available": true,
+      "confidence": 0.95,
+      "reasons": [
+        "The image shows a box with a printed label panel on the front. The label panel is affixed to the box itself, not floating beside it as a separate card."
+      ]
+    },
+    "no_stray": {
+      "pass": true,
+      "available": true,
+      "confidence": 0.95,
+      "reasons": [
+        "The image is clear and shows a product shot of a box of 'Word Coffee' with accompanying cards. There are no stray marks, thin sticks, wires, dashed rules, floating rings, or duplicate products visible in the image."
+      ]
+    }
+  },
+  {
+    "brief": "PO-003",
+    "label_on_pack": {
+      "pass": true,
+      "available": true,
+      "confidence": 0.95,
+      "reasons": [
+        "The image clearly shows a printed label panel affixed to the front of the product packaging (the bag). The label is not floating independently but is directly attached to the bag itself."
+      ]
+    },
+    "no_stray": {
+      "pass": true,
+      "available": true,
+      "confidence": 0.95,
+      "reasons": [
+        "The image is clean and free of any stray marks, thin sticks, wires, dashed rules, floating rings, or duplicate products."
+      ]
+    }
+  },
+  {
+    "brief": "PO-004",
+    "label_on_pack": {
+      "pass": true,
+      "available": true,
+      "confidence": 0.95,
+      "reasons": [
+        "There is a printed label panel on the front of the product. The label panel is affixed to the product itself, not floating beside it as a flat card."
+      ]
+    },
+    "no_stray": {
+      "pass": true,
+      "available": true,
+      "confidence": 0.95,
+      "reasons": [
+        "The image is clear and shows the product boxes and a card. There are no stray marks, thin sticks, wires, dashed rules, floating rings, or duplicate products present."
+      ]
+    }
+  },
+  {
+    "brief": "PO-005",
+    "label_on_pack": {
+      "pass": true,
+      "available": true,
+      "confidence": 0.95,
+      "reasons": [
+        "The image shows a product with a printed label panel on the front of the box. The label panel is adhered to the box itself, not floating beside it as a separate card."
+      ]
+    },
+    "no_stray": {
+      "pass": true,
+      "available": true,
+      "confidence": 0.95,
+      "reasons": [
+        "The image is a clean product shot with no stray marks, thin sticks, wires, dashed rules, floating rings, or duplicate products present."
+      ]
+    }
+  },
+  {
+    "brief": "PO-006",
+    "label_on_pack": {
+      "pass": true,
+      "available": true,
+      "confidence": 0.95,
+      "reasons": [
+        "The image shows a box with a printed label panel on the front. The label panel is affixed to the box itself, not floating independently."
+      ]
+    },
+    "no_stray": {
+      "pass": false,
+      "available": true,
+      "confidence": 0.8,
+      "reasons": [
+        "There is a thin stick/wire visible on the top right of the box.",
+        "There is a faint watermark/graphic in the background that could be interpreted as a second duplicate product."
+      ]
+    }
+  },
+  {
+    "brief": "PO-007",
+    "label_on_pack": {
+      "pass": true,
+      "available": true,
+      "confidence": 0.95,
+      "reasons": [
+        "There is one printed label panel on the front of the product.",
+        "The label panel is sitting directly on the product itself (the powder box), not floating beside it as a separate card."
+      ]
+    },
+    "no_stray": {
+      "pass": false,
+      "available": true,
+      "confidence": 0.95,
+      "reasons": [
+        "There is a dashed rule line visible in the image.",
+        "There is a floating ring (likely a watermark) visible in the image."
+      ]
+    }
+  },
+  {
+    "brief": "PO-008",
+    "label_on_pack": {
+      "pass": true,
+      "available": true,
+      "confidence": 0.95,
+      "reasons": [
+        "The image shows a product with a single printed label panel on the front. The label panel is affixed to the product itself, not floating beside it as a separate card."
+      ]
+    },
+    "no_stray": {
+      "pass": true,
+      "available": true,
+      "confidence": 0.95,
+      "reasons": [
+        "The image is clear and free of any stray marks, thin sticks, wires, dashed rules, floating rings, or duplicate products."
+      ]
+    }
+  },
+  {
+    "brief": "PO-009",
+    "label_on_pack": {
+      "pass": true,
+      "available": true,
+      "confidence": 0.95,
+      "reasons": [
+        "The image shows a single printed label panel on the front of the product packaging. The label is adhered to the product itself, not floating beside it."
+      ]
+    },
+    "no_stray": {
+      "pass": true,
+      "available": true,
+      "confidence": 0.95,
+      "reasons": [
+        "The image shows a single bag of Lion's Mane Mushroom Powder. There are no stray marks, thin sticks, wires, dashed rules, floating rings, or duplicate products visible."
+      ]
+    }
+  },
+  {
+    "brief": "PO-010",
+    "label_on_pack": {
+      "pass": true,
+      "available": true,
+      "confidence": 0.95,
+      "reasons": [
+        "The image shows a printed label panel on the front of the product box. The label panel is adhered to the product box itself, not floating beside it as a separate card."
+      ]
+    },
+    "no_stray": {
+      "pass": true,
+      "available": true,
+      "confidence": 0.95,
+      "reasons": [
+        "The image is clear and free of any stray marks, thin sticks, wires, dashed rules, floating rings, or duplicate products."
+      ]
+    }
+  },
+  {
+    "brief": "PO-011",
+    "label_on_pack": {
+      "pass": true,
+      "available": true,
+      "confidence": 0.95,
+      "reasons": [
+        "The image shows a product with a single printed label panel on the front of the packaging. The label is adhered to the packaging itself, not floating independently."
+      ]
+    },
+    "no_stray": {
+      "pass": true,
+      "available": true,
+      "confidence": 0.95,
+      "reasons": [
+        "The image is clean and free of any stray marks, thin sticks, wires, dashed rules, floating rings, or duplicate products."
+      ]
+    }
+  },
+  {
+    "brief": "PO-012",
+    "label_on_pack": {
+      "pass": true,
+      "available": true,
+      "confidence": 0.95,
+      "reasons": [
+        "There is one printed label panel on the front of the product. The label panel is affixed to the product itself, not floating beside it."
+      ]
+    },
+    "no_stray": {
+      "pass": true,
+      "available": true,
+      "confidence": 0.95,
+      "reasons": [
+        "The image is clean and free of any stray marks, thin sticks, wires, dashed rules, floating rings, or duplicate products."
+      ]
+    }
+  }
+]
