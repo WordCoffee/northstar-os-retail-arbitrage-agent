@@ -446,7 +446,11 @@ with `shadow=not white_main`; the corner measurement stays as a second gate. Two
 white-main composite calls `place_product(shadow=False)`, a lifestyle composite calls it
 with `shadow=True`. 26 + 4 tests green. `reports/ty/d024_composite_shadow.md`.
 
-**Still owed:** the real-lane after-number for SR-001 (queued `d024-real-residue`); the
-before is measured, the after is proven by test and by the sibling route's
-25.647 % → 0.000 %.
+**Still owed:** nothing measured — the real-lane after-number landed the same cycle.
+
+**Measured, real lane** (`ty-dir-d024-real-residue`): `composite --limit 2` again after the
+fix → **SR-001 residue 11.473 % → 0.037 %** (458 901 px → 1 488 px) and its score **93.3
+(failed) → 100.0 (passed)**. PO-001 re-measured 0.000 % in the same run.
+`renders/d024/`, `reports/ty/d024_sample_pass.json`,
+`reports/ty/d022_residue_before_after.json`.
 

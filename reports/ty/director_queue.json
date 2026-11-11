@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-11T09:52:52+00:00",
+  "updated_at": "2026-11-11T09:55:54+00:00",
   "cycle": 3,
   "unit_in_flight": "",
   "unit_order": [
@@ -2055,7 +2055,7 @@
       "id": "d024-real-residue",
       "unit": "U",
       "title": "D-024 measurement retirement: re-render SR-001 in a lane and record its residue after shadow=not white_main",
-      "status": "queued",
+      "status": "merged",
       "owner": "",
       "write_paths": [
         "reports/ty/",
@@ -2068,9 +2068,9 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": "real lane: composite --limit 2 --renderer comfy --method birefnet --model sdxl -> SR-001 100.0 passed (was 93.3 failed); check_matte_residue SR-001 11.473% (458901 px, 458900 neutral) -> 0.037% (1488 px); PO-001 0.000% again; reports/ty/d024_sample_pass.json, reports/ty/d022_residue_before_after.json",
       "created_at": "2026-11-11T09:52:52+00:00",
-      "updated_at": "2026-11-11T09:52:52+00:00",
+      "updated_at": "2026-11-11T09:55:54+00:00",
       "rank": 2
     },
     {

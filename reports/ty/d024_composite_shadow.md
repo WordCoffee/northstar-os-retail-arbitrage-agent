@@ -32,6 +32,27 @@ the corners survive it".
 | `tools/seller_tester/generators.py` | `_composite` places with `shadow=not white_main`: a white-main composite never gets a contact shadow, a lifestyle composite always does. The corner measurement stays as a second gate, but it is no longer the only one. |
 | `Northstar_backend/test_seller_tester_composite.py` | two checks: a white-main composite calls `place_product` with `shadow=False`; a lifestyle composite calls it with `shadow=True` (a spy records the argument). |
 
+## Measured, real lane
+
+The GPU came free and the pass ran:
+
+```
+python -m tools.seller_tester composite --catalog ty/seller_briefs_heldout_modes.json \
+    --limit 2 --renderer comfy --method birefnet --model sdxl \
+    --out-dir renders/d024 --summary-out reports/ty/d024_sample_pass.json
+-> PO-001 100.0 passed; SR-001 100.0 passed (was 93.3, failed)
+```
+
+| artefact | residue | residue px | of which neutral |
+|---|---|---|---|
+| SR-001 **before** (`renders/d022/SR-001.png`) | **11.473 %** | 458 901 | 458 900 |
+| SR-001 **after** (`renders/d024/SR-001.png`) | **0.037 %** | 1 488 | 1 488 |
+
+The score moved with it: **93.3 (failed) → 100.0 (passed)**. The remaining 0.037 % is the
+product's own edge blend, under the 0.5 % limit and under the 5 × 5 dilation tolerance in
+the wrong direction only where the cutout is 1–2 px tight. Record:
+`reports/ty/d022_residue_before_after.json`.
+
 ## Tests
 
 ```
@@ -41,11 +62,7 @@ python -m pytest Northstar_backend/test_fullgen_white_composite.py -q   -> 4 pas
 
 ## Honest limits
 
-* **The after-number needs a lane.** The before is measured on a real artefact (11.473 %);
-  the after is proven by test on the argument and by the identical fix on the sibling route,
-  which measured **25.647 % → 0.000 %** on a real render. A real-lane re-render of SR-001 is
-  queued as `d024-real-residue` — the GPU lock was held by another lane
-  (`role: seller_composite`, pid 2144) at the moment this unit closed, and the standing rule
-  is one heavy lane at a time.
 * **A lifestyle picture keeps its shadow by design.** The guard's job is the flat canvas;
   removing the shadow everywhere would break the mockup pictures that need it.
+* **One brief, one seed.** SR-001 is the only composite white-main brief in the held-out
+  catalog, so the after-number is one real render, not a distribution.

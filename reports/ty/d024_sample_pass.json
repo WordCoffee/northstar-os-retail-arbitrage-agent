@@ -1,0 +1,648 @@
+{
+  "generated_at": "2026-11-11T09:55:24+00:00",
+  "generator": "composite",
+  "judge_enabled": false,
+  "mode_filter": null,
+  "catalog_briefs": 24,
+  "catalog_by_mode": {
+    "prompt_only": 12,
+    "stored_reference": 12,
+    "uploaded_reference": 0
+  },
+  "selected": 2,
+  "artefacts_available": null,
+  "scored": 2,
+  "not_scored": 0,
+  "not_scored_reason": null,
+  "passed": 2,
+  "failed": 0,
+  "pass_rate": 100.0,
+  "mean_score": 100.0,
+  "gaps_filed": 0,
+  "gaps_in_file": 0,
+  "gaps_path": "state/seller/d024_gaps.json",
+  "mirror_path": "state/seller/d024_gaps.json",
+  "escalations": [
+    {
+      "at": "2026-11-11T09:54:57+00:00",
+      "from_brief_id": "PO-001",
+      "from_difficulty": 1,
+      "source_mode": "prompt_only",
+      "action": "raise_tier",
+      "detail": "difficulty 1 -> 2 (prompt_only)",
+      "constraint": null,
+      "to_brief_id": "PO-001",
+      "to_difficulty": 2,
+      "score": 100.0,
+      "artefact_path": "renders/d024/PO-001.png"
+    },
+    {
+      "at": "2026-11-11T09:55:24+00:00",
+      "from_brief_id": "SR-001",
+      "from_difficulty": 1,
+      "source_mode": "stored_reference",
+      "action": "raise_tier",
+      "detail": "difficulty 1 -> 2 (stored_reference)",
+      "constraint": null,
+      "to_brief_id": "SR-001",
+      "to_difficulty": 2,
+      "score": 100.0,
+      "artefact_path": "renders/d024/SR-001.png"
+    }
+  ],
+  "results": [
+    {
+      "brief_id": "PO-001",
+      "category": "supplement_pouch",
+      "situation": "white_background_main",
+      "difficulty": 1,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "full_generation",
+      "population": "generated",
+      "artefact_path": "renders/d024/PO-001.png",
+      "width": 2000,
+      "height": 2000,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.020"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "corners [(255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255)] vs target (255, 255, 255) +-6; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "subject fill 15.0% vs 12.0-100.0% (distance > 20)"
+        },
+        "matte_residue": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "background residue 0.00% of the frame (0 px) outside the product's silhouette, 0 px of it neutral (shadow-shaped); limit 0.5% at value 255 ±6"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "border mean 255.0 (>= 249), std 0.00 (<= 6.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "478529 bytes (0.120 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "margin ink 0.00% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "PO-001",
+        "route": "full_generation",
+        "fidelity": "tolerant",
+        "renderer": "comfy",
+        "method": null,
+        "scene": {
+          "source": "generated",
+          "prompt": "Product photograph of a plain matte forest-green stand-up pouch with a blank white circular panel on the front, no text, no lettering, no logo, on a seamless white studio background, product centred, no props. Photorealistic, unlabelled packaging, smooth matte film.",
+          "model": "sdxl",
+          "image_path": "C:\\Users\\T2Hol\\ComfyUI\\output\\ns-scene_00261_.png",
+          "seed": 2865831174,
+          "steps": 20,
+          "width": 768,
+          "height": 768,
+          "lane": {
+            "event": "lane",
+            "role": "scene:sdxl",
+            "needed_gb": 8.2,
+            "reserve_gb": 1.0,
+            "watchlist": [
+              "bojo:latest",
+              "qwen3-embedding:0.6b"
+            ],
+            "stopped": {
+              "ok": true,
+              "pid": 3860,
+              "stopped": true,
+              "seconds": 1.5
+            },
+            "gpu_before": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 2038,
+              "free_mb": 13966,
+              "util_pct": 0,
+              "free_gb": 13.64,
+              "used_gb": 1.99
+            },
+            "ollama_ps_before": {
+              "ok": true,
+              "models": [
+                {
+                  "name": "qwen3-embedding:0.6b",
+                  "size_vram_gb": 1.6
+                }
+              ],
+              "resident": [
+                "qwen3-embedding:0.6b"
+              ]
+            },
+            "resident_before": [
+              "qwen3-embedding:0.6b"
+            ],
+            "unloaded": [
+              {
+                "tag": "qwen3-embedding:0.6b",
+                "api_ok": true,
+                "verified": true,
+                "reason": ""
+              }
+            ],
+            "ollama_ps_after_unload": {
+              "ok": true,
+              "models": [],
+              "resident": []
+            },
+            "unload_verified": {
+              "qwen3-embedding:0.6b": true
+            },
+            "gpu_ready": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 205,
+              "free_mb": 15799,
+              "util_pct": 0,
+              "free_gb": 15.43,
+              "used_gb": 0.2
+            },
+            "gpu_settle_samples": 3,
+            "budget": {
+              "ok": true,
+              "checked": true,
+              "free_gb": 15.43,
+              "needed_gb": 8.2,
+              "reserve_gb": 1.0,
+              "headroom_gb": 7.23,
+              "reason": "fits: 15.43 GB free - 8.2 GB needed = 7.23 GB >= 1.0 GB reserve"
+            },
+            "start": {
+              "ok": true,
+              "pid": 3860,
+              "reason": null
+            },
+            "ready": {
+              "ok": true,
+              "seconds": 12.6
+            },
+            "gpu_before_work": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 376,
+              "free_mb": 15628,
+              "util_pct": 0,
+              "free_gb": 15.26,
+              "used_gb": 0.37
+            },
+            "gpu_after_work": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 478,
+              "free_mb": 15526,
+              "util_pct": 0,
+              "free_gb": 15.16,
+              "used_gb": 0.47
+            },
+            "gpu_after": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 205,
+              "free_mb": 15799,
+              "util_pct": 0,
+              "free_gb": 15.43,
+              "used_gb": 0.2
+            },
+            "reloaded": [
+              {
+                "tag": "qwen3-embedding:0.6b",
+                "api_ok": true,
+                "verified": true,
+                "reason": ""
+              }
+            ],
+            "reload_verified": {
+              "qwen3-embedding:0.6b": true
+            },
+            "ollama_ps_after": {
+              "ok": true,
+              "models": [
+                {
+                  "name": "qwen3-embedding:0.6b",
+                  "size_vram_gb": 1.6
+                }
+              ],
+              "resident": [
+                "qwen3-embedding:0.6b"
+              ]
+            },
+            "gpu_after_reload": {
+              "ok": true,
+              "total_mb": 16303,
+              "used_mb": 2038,
+              "free_mb": 13966,
+              "util_pct": 7,
+              "free_gb": 13.64,
+              "used_gb": 1.99
+            },
+            "vram_before_gb": 13.64,
+            "vram_after_gb": 15.43,
+            "vram_freed_gb": 1.79,
+            "seconds": 35.1,
+            "work_ok": true
+          },
+          "lane_stopped": true,
+          "note": null
+        },
+        "cutout": null,
+        "product_box": [
+          614,
+          580,
+          1386,
+          1820
+        ],
+        "identity": null,
+        "background_path": "flat_canvas",
+        "flat_level": 255,
+        "label": {
+          "mode": "warp",
+          "layout": "label_warp",
+          "quad": [
+            [
+              648,
+              681
+            ],
+            [
+              1354,
+              681
+            ],
+            [
+              1313,
+              1158
+            ],
+            [
+              693,
+              1158
+            ]
+          ],
+          "conformed": true,
+          "panel_px": 317267,
+          "panel_px_outside_silhouette": 0,
+          "strength": 1.0,
+          "mask_path": "renders\\d024\\PO-001.mask.png"
+        },
+        "cut_from_generation": {
+          "method": "grabcut",
+          "subject_px": 48989077,
+          "note": "prompt-only runs generate -> cut -> compose -> layout; the product is the model's drawing, not the seller's pixels"
+        },
+        "cutout_path": "renders\\d024\\PO-001.cutout.png",
+        "bytes": 478529,
+        "seconds": 41.21,
+        "sidecar": "renders\\d024\\PO-001.json"
+      },
+      "text_embedding_similarity": null
+    },
+    {
+      "brief_id": "SR-001",
+      "category": "supplement_pouch",
+      "situation": "white_background_main",
+      "difficulty": 1,
+      "source_mode": "stored_reference",
+      "fidelity": "exact",
+      "route": "composite",
+      "population": "generated",
+      "artefact_path": "renders/d024/SR-001.png",
+      "width": 2000,
+      "height": 2000,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.020"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "corners [(255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255)] vs target (255, 255, 255) +-6; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "subject fill 38.2% vs 12.0-100.0% (distance > 20)"
+        },
+        "matte_residue": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "background residue 0.04% of the frame (1488 px) outside the product's silhouette, 1488 px of it neutral (shadow-shaped); limit 0.5% at value 255 ±6"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "border mean 255.0 (>= 249), std 0.00 (<= 6.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "1964159 bytes (0.491 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "margin ink 0.00% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "printed_text: pass — 8/9 key words present (0.89, min 0.60)"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "product region 1695x1212 at (152,394): structure 0.898 over 1703584 opaque pixels (mean-abs 0.956, trimmed)"
+        }
+      },
+      "reference": {
+        "kind": "stored_asset",
+        "path": "renders/references/mogra/mogra_pair_main.png"
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": false,
+        "cannot_verify": false,
+        "detail": "printed_text: pass — 8/9 key words present (0.89, min 0.60)",
+        "decided_by": "printed_text",
+        "text": {
+          "ok": true,
+          "cannot_verify": false,
+          "detail": "8/9 key words present (0.89, min 0.60)",
+          "matched": [
+            "mograorganics",
+            "hlealthyorganic",
+            "mogra",
+            "organics",
+            "healthyorganic",
+            "organic",
+            "shiitake",
+            "mushroompowder"
+          ],
+          "missing": [
+            "organislionsmane"
+          ],
+          "recall": 0.889,
+          "min_recall": 0.6,
+          "produced_text": "2023 2023 MOGRAORGANICS Healthy& Organic MOGRAORGANICS Healthy&Organic IS LION'SMANE ORGANIC SHIITAKE ROOM POWDER MUSHROOMPOWDER 6 oz (170 g) 8 oz (227 g)",
+          "reference_text": "EST 2023 EST 2023 MOGRAORGANICS Hlealthy&Organic MOGRA ORGANICS Healthy&Organic ORGANISLION'SMANE ORGANIC SHIITAKE MUSHROOMPOWDER MUSHROOMPOWDER 6 oz (170 g) 8 oz (227 g)",
+          "skipped": false,
+          "check": "reference_subject"
+        },
+        "meaning": {
+          "ok": true,
+          "cannot_verify": false,
+          "detail": "embedding agreement 0.939 (min 0.72)",
+          "similarity": 0.9393,
+          "min_similarity": 0.72,
+          "produced_desc": "The page displays two packages of organic mushroom powder. Organic Lion's Mane Mushroom Powder Organic Shiitake Mushroom Powder 6 oz (170 g) 8 oz (227 g) MOGRA ORGANICS Healthy & Organic 6 170 8 227 2023 2",
+          "reference_desc": "The page displays two packages of organic mushroom powder. ORGANIC LION'S MANE MUSHROOM POWDER ORGANIC SHIITAKE MUSHROOM POWDER 6 oz (170 g) 8 oz (227 g) MOGRA ORGANICS EST 2023 6 170 8 227 2023 2",
+          "skipped": false,
+          "check": "reference_subject"
+        },
+        "diagnostic": {
+          "colour_agreement": 0.6729,
+          "colour_gate": false,
+          "produced_aspect": 1.405,
+          "reference_aspect": 1.404
+        },
+        "reference_path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\references\\mogra\\mogra_pair_main.png",
+        "reference_kind": "stored_asset",
+        "description": {
+          "requested": true,
+          "produced": true,
+          "reference": true,
+          "produced_chars": 205,
+          "reference_chars": 196,
+          "produced_error": "",
+          "reference_error": "",
+          "produced_text": "The page displays two packages of organic mushroom powder. Organic Lion's Mane Mushroom Powder Organic Shiitake Mushroom Powder 6 oz (170 g) 8 oz (227 g) MOGRA ORGANICS Healthy & Organic 6 170 8 227 2023 2",
+          "reference_text": "The page displays two packages of organic mushroom powder. ORGANIC LION'S MANE MUSHROOM POWDER ORGANIC SHIITAKE MUSHROOM POWDER 6 oz (170 g) 8 oz (227 g) MOGRA ORGANICS EST 2023 6 170 8 227 2023 2"
+        }
+      },
+      "generation": {
+        "brief_id": "SR-001",
+        "route": "composite",
+        "fidelity": "exact",
+        "renderer": "comfy",
+        "method": "grabcut",
+        "scene": {
+          "source": "flat_white_canvas",
+          "prompt": null,
+          "prompt_used": "a seamless pure white studio sweep, one soft shadow area, even light, empty, no objects, no text, product photography",
+          "model": null,
+          "image_path": null,
+          "seed": null,
+          "steps": 0,
+          "width": null,
+          "height": null,
+          "lane": null,
+          "lane_stopped": false,
+          "note": "flat 255 canvas; the subject is the only ink, so the background check is exact rather than approximate"
+        },
+        "cutout": {
+          "coverage": 0.4559,
+          "edge_gradient_px": 7.54,
+          "boundary_roughness": 2.725,
+          "border_contact": 0.0,
+          "transition_px": 98370,
+          "perimeter_px": 13046,
+          "bbox": [
+            123,
+            373,
+            1879,
+            1625
+          ],
+          "subject_px": 1823448,
+          "reference_coverage": 0.4497,
+          "coverage_delta": 0.0061,
+          "seconds": 3.067
+        },
+        "product_box": [
+          152,
+          394,
+          1847,
+          1606
+        ],
+        "identity": 0.9956,
+        "reference_path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\references\\mogra\\mogra_pair_main.png",
+        "cutout_refused": {
+          "method": "birefnet",
+          "reason": "birefnet runs inside the ComfyUI lane; the white-main path starts no lane. grabcut (14/14 on the same eval, 5.08 px mean edge) was used instead."
+        },
+        "background_path": "flat_canvas",
+        "flat_level": 255,
+        "cutout_in_lane": false,
+        "fill_basis": "longest side 85 % of the canvas (cutout bbox 1756x1252)",
+        "white_canvas": {
+          "canvas": [
+            2000,
+            2000
+          ],
+          "corners": [
+            [
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              255
+            ]
+          ],
+          "level": 255,
+          "corners_exactly_255": true,
+          "corners_exact": true,
+          "subject_fill_pct": 38.19,
+          "height_fill_pct": 60.6,
+          "width_fill_pct": 84.75
+        },
+        "shadow": false,
+        "product_quad": null,
+        "product_scale": 0.606,
+        "identity_verdict": "identity_preserved",
+        "cutout_path": "renders\\d024\\SR-001.cutout.png",
+        "bytes": 1964159,
+        "seconds": 4.24,
+        "sidecar": "renders\\d024\\SR-001.json"
+      },
+      "text_embedding_similarity": 0.9082
+    }
+  ],
+  "by_population": {
+    "generated": {
+      "scored": 2,
+      "passed": 2,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    }
+  },
+  "by_mode": {
+    "prompt_only": {
+      "scored": 1,
+      "passed": 1,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    },
+    "stored_reference": {
+      "scored": 1,
+      "passed": 1,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    },
+    "uploaded_reference": {
+      "scored": 0,
+      "passed": 0,
+      "failed": 0,
+      "pass_rate": 0.0,
+      "mean_score": 0.0
+    }
+  },
+  "by_situation": {
+    "white_background_main": {
+      "scored": 2,
+      "passed": 2,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    }
+  },
+  "by_category": {
+    "supplement_pouch": {
+      "scored": 2,
+      "passed": 2,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    }
+  }
+}

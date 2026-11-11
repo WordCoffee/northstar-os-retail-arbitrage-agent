@@ -32,6 +32,16 @@
       "residue_px": 458901,
       "shadow_px": 458900,
       "ok": false
+    },
+    {
+      "brief": "SR-001",
+      "artefact": "renders/d024/SR-001.png",
+      "label": "after (D-024, real lane)",
+      "status": "measured",
+      "residue_pct": 0.037,
+      "residue_px": 1488,
+      "shadow_px": 1488,
+      "ok": true
     }
   ]
 }
