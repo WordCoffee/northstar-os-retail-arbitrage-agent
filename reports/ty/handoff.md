@@ -10,6 +10,36 @@ A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.m
 > and `reports/ty/handoff.md`, then continue from the first unfinished unit. No
 > questions, no reports between cycles. Idle means re-plan.
 
+## Position, 2026-11-11 cycle 13 — the contact shadow is gone, and the colour cut was worse than it
+
+Unit report: `reports/ty/d017_plate_shadow_matte.md`. Tag `ty-dir-fix-plate-shadow-matte`.
+
+| # | job | result |
+|---|---|---|
+| 1 | `fix-plate-shadow-matte` (D-017, rank 0) — a studio plate's contact shadow is opaque **and attached**, so the largest-blob pass could not drop it and the main image shipped with a grey smear under the product | **D-017 closed.** `product_cutout.matte_alpha` runs BiRefNet through the media lane and raises `MatteUnavailable` **by name** when the cold lane cannot supply one; `_place_on_flat(matte="birefnet" \| "auto" \| "none")` and `build(matte=)` route it; the face record and the manifest state which matte produced the picture and how many px it rejected |
+
+**Measured on a real plate, both instruments on the same image**
+(`renders/comfy_plate7/ST-002/_rejected/front_plate.png`, a white mug on a pale sweep),
+inside one lane: the matte returns the mug at **1162 × 1000 in 3.68 s**; the colour cut
+returns a **1934 × 1137 band across the frame** that keeps **53.2 %** of the product and
+leaves the handle in three fragments. The matte rejects **130 357 px** the colour cut had
+kept, of which **99.73 %** are dark and neutral — the shadow. Border contact 0.0.
+Contact sheet: `reports/ty/d017_contact.png`. Record: `reports/ty/d017_matte_measure.json`.
+
+**Honest limit, repeated from the report:** the published seller dimension does not move
+(96.2 over 32 drawn-plate outputs — drawn plates have a drawn shadow). And **the scorers
+cannot see this defect**: `check_background` samples the corners, `check_alpha_matte`
+samples an outer ring, so a shadow under the product passes both. Filed as **D-020** and
+ranked **1** for the next cycle.
+
+**Tests:** 8 in `test_plate_shadow_matte.py` (7 run cold, 1 needs `NS_PLATE_MATTE=1`),
+30 in the picture group, 66 in the package/composite/label group, 78 in the seller group.
+
+**Next, in rank order:** `fix-matte-residue-check` (D-020) → `sel-04-packaging` →
+`pack-02-apparel-flat-print` → `reference-depth` → `pack-03-boxart-forms` →
+`block3-workspaces` → `block4-seller-tests` → `block5-production-hardening` →
+`block7-verification` → D-019.
+
 ## Position, 2026-11-11 cycle 12 — the fill instrument can see white on white
 
 Unit report: `reports/ty/d018_fill_instrument.md`. Tag `ty-dir-d018-fill`.
