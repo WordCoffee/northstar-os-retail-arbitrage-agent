@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-11T11:02:48+00:00",
+  "updated_at": "2026-11-11T16:47:10+00:00",
   "cycle": 3,
   "unit_in_flight": "",
   "unit_order": [
@@ -1734,8 +1734,8 @@
       "id": "block3-workspaces",
       "unit": "U",
       "title": "Service workspaces: core six first (Design Studio, listings, PPC, Golden Goose, research, product pictures), then the rest on a default scene",
-      "status": "queued",
-      "owner": "",
+      "status": "claimed",
+      "owner": "lane-block3-workspaces",
       "write_paths": [
         "ty/northstar_workspaces.json",
         "northstar-os-ui/src/",
@@ -1752,7 +1752,7 @@
       "score_after": null,
       "evidence": "",
       "created_at": "2026-11-11T07:35:10+00:00",
-      "updated_at": "2026-11-11T07:35:10+00:00",
+      "updated_at": "2026-11-11T15:57:37+00:00",
       "rank": 6
     },
     {
@@ -1825,7 +1825,7 @@
       "id": "block4-seller-tests",
       "unit": "U",
       "title": "Seller-Tester beyond images: listing, PPC upload->bulk, Golden Goose scan, research query",
-      "status": "queued",
+      "status": "merged",
       "owner": "",
       "write_paths": [
         "tools/seller_tester/",
@@ -1841,9 +1841,9 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": "4 non-image paths scored: listing 2/2 100.0, ppc 1/1 100.0 (upload->bulk->download sha256 match), golden_goose 100.0, research 100.0; services run 5 scored/5 passed/0 refused, network none. D-019 split: PO-007 was an acceptance bug (population-scoped, panel-graded, diagnostic), PO-006 is an app bug left alone (4 detached dashes inside the silhouette, product_composite.py). scorecards drift corrected (design-studio 89.5, seller 96.2/32). 24 new tests + 8 e2e; 107 green. reports/ty/lane_block4.md; tag ty-dir-block4-seller-tests",
       "created_at": "2026-11-11T07:35:10+00:00",
-      "updated_at": "2026-11-11T07:35:10+00:00",
+      "updated_at": "2026-11-11T16:47:10+00:00",
       "rank": 7
     },
     {

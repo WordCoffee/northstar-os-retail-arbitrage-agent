@@ -49,6 +49,31 @@ no visible browser and Playwright headless on `127.0.0.1` only; no GPU work; no 
 verdict on the merged tree. If a lane leaves the tree red, its work waits — the tree on `main`
 stays green.
 
+## Position, 2026-11-11 cycle 26 — the seller-tester scores four non-image service paths
+
+Unit report: `reports/ty/lane_block4.md`. Tag `ty-dir-block4-seller-tests`. Lane B of four.
+
+| # | job | result |
+|---|---|---|
+| 1 | `block4-seller-tests` — the seller-tester could only judge pictures; a seller also lists, bids, hunts products and researches | **merged.** `python -m tools.seller_tester services --only listing,ppc,golden_goose,research` → **5 scored, 5 passed, 0 refused, network: none**. listing LST-001/002 100.0; ppc PPC-001 100.0 (upload → propose → approve → write v1 → write v2 → download with a matching sha256, original checksum untouched); golden_goose 100.0; research 100.0 (3 axes, corroboration, a 2.10-vs-2.45 conflict surfaced, no crawl claimed) |
+
+**D-019 split on evidence, not on taste:** PO-007's "strays" are the infographic renderer's own
+accent rule, subtitle rule and callout dot, so acceptance is now population-scoped and graded on
+the panel — diagnostic only, no score moved. **PO-006 stays an app bug**: four detached dashes
+inside the recorded silhouette, owned by `product_composite.drop_detached_specks` /
+`drop_thin_runs`. I looked at `renders/heldout_prompt_only10/PO-006.png` myself: the dashed
+streak runs diagonally below-left of the box and is clearly detached. Not hidden, not fixed
+here.
+
+**A real drift the lane found in `ty/scorecards.json`:** design-studio 89.7 → **89.5** and
+seller 98.0 over 20 → **96.2 over 32**, both replaced by the measured value.
+
+**Tests:** 24 new + 8 e2e pass; 107 green in the seller/residue group.
+
+**Next, in rank order:** `block5-production-hardening` (lane A, in flight) → `block3-workspaces`
+(lane C, in flight) → `block7-verification` (verifier agrees 8/8 on the pre-lane tree; re-run
+on the merged tree when A and C land).
+
 ## Position, 2026-11-11 cycle 25 — every pack carries its own illustration
 
 Unit report: `reports/ty/d027_design_motifs.md`. Tag `ty-dir-design-motifs`.

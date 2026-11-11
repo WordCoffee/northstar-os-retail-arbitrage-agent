@@ -48,3 +48,4 @@ One line per cycle: workstream, role, cycle, score before/after, tag, tokens.
 2026-11-11T10:22Z | director | cycle 21 | d025_matte_cutout | seller 100.0 (1 brief, real lane) | tag ty-dir-d025-fullgen-matte | tokens n/a (owner session)
 2026-11-11T10:55Z | director | cycle 24 | pack03_boxart + reference_backfill_blocked | boxart 2/2 at 100.0 | tag ty-dir-pack-03-boxart | tokens n/a (owner session)
 2026-11-11T11:02Z | director | cycle 25 | d027_design_motifs | boxart 2/2 at 100.0, motifs now per design | tag ty-dir-design-motifs | tokens n/a (owner session)
+2026-11-11T10:47Z | director | cycle 26 | block4_seller_tests | 4 non-image paths 5/5 at 100.0 | tag ty-dir-block4-seller-tests | tokens n/a (owner session)
