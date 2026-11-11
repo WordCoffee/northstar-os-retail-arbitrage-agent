@@ -173,13 +173,41 @@ def _background_colour(rgb: np.ndarray) -> np.ndarray:
 
 
 def check_subject_fill(rgb: np.ndarray, spec: Dict[str, Any],
-                       background_spec: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
-    """Estimate subject fill as the share of pixels that differ from the corners."""
+                       background_spec: Optional[Dict[str, Any]] = None,
+                       product_box: Optional[Any] = None) -> Dict[str, Any]:
+    """How much of the frame the product occupies.
+
+    Two instruments, chosen by the background the brief asked for:
+
+    * a **flat** background (uniform value / white matte) gives a real corner colour, so the
+      share of pixels that differ from it *is* the subject's area;
+    * a **free** background is a generated scene, and then the corner colour is not the
+      background at all — every pixel differs from it. Measured 2026-11-11: PO-002 and PO-010
+      reported "subject fill 94.3 % against 8-50 %" on a correct lifestyle picture, because the
+      instrument was measuring the scene, not the product. On that route the product's box is
+      the only honest measure of its share, and without a box the check is *skipped with a
+      reason*, never passed by default.
+    """
     if not spec:
         return _skip("no fill spec")
     low = float(spec.get("min", 0))
     high = float(spec.get("max", 100))
     distance = float(spec.get("distance", 20))
+    mode = str((background_spec or {}).get("mode") or "").lower()
+    if mode in ("free", "scene"):
+        box = [int(v) for v in product_box] if (
+            isinstance(product_box, (list, tuple)) and len(product_box) == 4) else None
+        if not box or box[2] <= box[0] or box[3] <= box[1]:
+            return _skip(
+                "a free (scene) background gives no corner colour to measure against, and no "
+                "product box was recorded: subject fill cannot be measured on this artefact")
+        pct = (box[2] - box[0]) * (box[3] - box[1]) / float(rgb.shape[0] * rgb.shape[1]) * 100.0
+        ok = low <= pct <= high
+        return _ok(ok=ok,
+                   detail=f"product box {pct:.1f}% of the frame vs {low:.1f}-{high:.1f}% "
+                          f"(free background: the box is the measure, not the corner colour)",
+                   fill_pct=round(pct, 2), min=low, max=high, instrument="product_box",
+                   check="subject_fill")
     bg = _background_colour(rgb)
     diff = np.abs(rgb.astype(np.int16) - bg.astype(np.int16)).max(axis=2)
     mask = diff > distance
@@ -188,7 +216,7 @@ def check_subject_fill(rgb: np.ndarray, spec: Dict[str, Any],
     return _ok(ok=ok,
                detail=f"subject fill {pct:.1f}% vs {low:.1f}-{high:.1f}% "
                       f"(distance > {distance:.0f})",
-               fill_pct=round(pct, 2), min=low, max=high,
+               fill_pct=round(pct, 2), min=low, max=high, instrument="corner_colour",
                background=tuple(int(v) for v in bg), check="subject_fill")
 
 
@@ -321,7 +349,8 @@ def check_text_free(rgb: np.ndarray, spec: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def _run_checks(loaded: LoadedImage, brief: Dict[str, Any], *,
-                composite_route: bool = True) -> Dict[str, Dict[str, Any]]:
+                composite_route: bool = True,
+                product_box: Optional[Any] = None) -> Dict[str, Dict[str, Any]]:
     """Every mechanical check for this brief.
 
     `composite_route` decides whether `alpha_matte` is *applicable*. A composite route cuts the
@@ -341,7 +370,8 @@ def _run_checks(loaded: LoadedImage, brief: Dict[str, Any], *,
         loaded.width, loaded.height, constraints.get("aspect") or {})
     checks["background"] = check_background(loaded.rgb, background_spec)
     checks["subject_fill"] = check_subject_fill(
-        loaded.rgb, constraints.get("fill_pct") or {}, background_spec)
+        loaded.rgb, constraints.get("fill_pct") or {}, background_spec,
+        product_box=product_box)
     matte_spec = constraints.get("matte") or {}
     if composite_route:
         checks["alpha_matte"] = check_alpha_matte(loaded, matte_spec)
@@ -514,7 +544,8 @@ def score_image(image_bytes: bytes, brief: Dict[str, Any], *,
                 composite_route: Optional[bool] = None,
                 cutout: Any = None,
                 placement: Any = None,
-                placement_quad: Any = None) -> Dict[str, Any]:
+                placement_quad: Any = None,
+                product_box: Optional[Any] = None) -> Dict[str, Any]:
     """Score one image against one brief. Never raises on bad image data.
 
     `reference_check` is an optional callable taking the decoded RGB array and
@@ -562,7 +593,8 @@ def score_image(image_bytes: bytes, brief: Dict[str, Any], *,
         base["failed_checks"] = list(DEFAULT_WEIGHTS)
         return base
 
-    checks = _run_checks(loaded, brief, composite_route=composite_route)
+    checks = _run_checks(loaded, brief, composite_route=composite_route,
+                         product_box=product_box)
     base.update({
         "width": loaded.width,
         "height": loaded.height,
@@ -585,13 +617,25 @@ def score_image(image_bytes: bytes, brief: Dict[str, Any], *,
 
 
     if judge is not None:
+        # The rubric must describe the brief's own product. It used to say "a {situation}
+        # picture for a {category}", and `category` is a taxonomy slot: PO-004 asks for three
+        # pale-pink Word Coffee gift boxes and is filed under `food_jar`, so the judge
+        # correctly answered "not a food jar" about a correct picture (2026-11-11). The
+        # brief's own words are the only honest description of what it wants.
+        described = str(brief.get("judge_constraint") or "").strip()
+        if not described:
+            product = str(brief.get("prompt") or brief.get("product") or
+                          brief.get("product_description") or "").strip()
+            if product:
+                described = product
+            else:
+                described = (f"{brief.get('situation')} picture for a {brief.get('category')} "
+                             "that satisfies the brief's stated constraints")
         rubric = {
             "brief_id": brief_id,
             "category": brief.get("category"),
             "situation": brief.get("situation"),
-            "constraint": brief.get("judge_constraint") or (
-                f"{brief.get('situation')} picture for a {brief.get('category')} "
-                "that satisfies the brief's stated constraints"),
+            "constraint": described,
         }
         verdict = _normalise_judgement(judge(image_bytes, rubric))
         checks["vision"] = verdict

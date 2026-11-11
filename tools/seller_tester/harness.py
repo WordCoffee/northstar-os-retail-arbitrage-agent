@@ -202,8 +202,12 @@ def run_pass(*, generator: Any, briefs: Any = None, limit: int = 20,
         if not recorded_route and getattr(generator, "name", "") == "composite":
             composite_route = True
         cutout = _load_cutout(artefact) if composite_route else None
-        placement = _placement_xywh((generation or {}).get("product_box")) \
-            if composite_route else None
+        # The product's box is recorded for every route (the generator always reports where it
+        # pasted). `subject_fill` needs it on a free background, where the corner colour is the
+        # scene rather than the background; the product-region check still uses it only for a
+        # composite.
+        product_box = (generation or {}).get("product_box") or None
+        placement = _placement_xywh(product_box) if composite_route else None
         placement_quad = (generation or {}).get("product_quad") if composite_route else None
         scored = score_image(
             data, brief, judge=active_judge,
@@ -215,6 +219,7 @@ def run_pass(*, generator: Any, briefs: Any = None, limit: int = 20,
             cutout=cutout,
             placement=placement,
             placement_quad=placement_quad,
+            product_box=product_box,
         )
         rel = _relative(artefact)
         result_row = {

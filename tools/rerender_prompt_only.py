@@ -79,6 +79,54 @@ class SeedPinnedComposite(CompositeGenerator):
         return super().generate(brief)
 
 
+class ReplayArtefacts:
+    """Score artefacts that already exist, without rendering anything.
+
+    A scorer fix changes a score, not a picture, so re-rendering twelve images to learn what the
+    new instrument says would spend fifteen minutes of GPU to answer a question about arithmetic.
+    Every row keeps the population `generated` because the record's route is carried over from the
+    sidecar: these are the pipeline's own pictures, re-measured.
+    """
+
+    name = "replay-generated"
+
+    def __init__(self, out_dir: str | Path) -> None:
+        self.out_dir = Path(out_dir)
+
+    def pair(self, briefs: Any, limit: Optional[int] = None) -> List[tuple]:
+        from seller_tester.generators import GeneratorUnavailable
+
+        rows = list(briefs)
+        if limit is not None:
+            rows = rows[: max(0, int(limit))]
+        pairs = []
+        for brief in rows:
+            path = self.out_dir / f"{brief.get('id') or 'brief'}.png"
+            if not path.is_file():
+                raise GeneratorUnavailable(
+                    f"no artefact for brief {brief.get('id')!r} under {self.out_dir}; nothing "
+                    "was re-scored and nothing was invented")
+            pairs.append((brief, path))
+        return pairs
+
+    def record_for(self, brief_id: str) -> Optional[Dict[str, Any]]:
+        side = self.out_dir / f"{brief_id}.json"
+        if not side.is_file():
+            return None
+        try:
+            meta = json.loads(side.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            return None
+        return {"route": meta.get("route"), "product_box": meta.get("product_box"),
+                "cutout_path": meta.get("cutout_path"),
+                "scene": {"source": meta.get("scene_source")}}
+
+    def route(self, brief: Dict[str, Any]) -> str:
+        from seller_tester.briefs import route_for_brief
+
+        return route_for_brief(brief)
+
+
 def _briefs_for(catalog: Dict[str, Any], mode: str) -> List[Dict[str, Any]]:
     return [b for b in (catalog.get("briefs") or [])
             if str(b.get("source_mode") or "") == mode]
@@ -100,6 +148,10 @@ def main(argv: Optional[List[str]] = None) -> int:
     parser.add_argument("--steps", type=int, default=20)
     parser.add_argument("--model", default="sdxl", choices=["sdxl", "flux3"])
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--rescore-only", action="store_true",
+                        help="score the artefacts already in --out-dir; no render, no GPU")
+    parser.add_argument("--judge", action="store_true",
+                        help="add the LOCAL vision judge (loopback only) as a second opinion")
     args = parser.parse_args(argv)
 
     catalog = load_catalog(Path(args.catalog))
@@ -115,6 +167,42 @@ def main(argv: Optional[List[str]] = None) -> int:
         pinned = sum(1 for row in plan if row["pinned"])
         print(json.dumps({"mode": args.mode, "briefs": len(plan), "seed_pinned": pinned,
                           "plan": plan}, indent=2))
+        return 0
+
+    judge_fn = None
+    if args.judge:
+        from seller_tester.judge import local_judge
+
+        judge_fn = local_judge
+
+    if args.rescore_only:
+        # A scorer fix changes the score, not the picture. Nothing is rendered and the GPU
+        # lane is not touched.
+        generator = ReplayArtefacts(args.out_dir)
+        summary = run_pass(generator=generator, briefs={"briefs": briefs}, limit=len(briefs),
+                           mode=args.mode, judge=judge_fn,
+                           gaps_path=Path(args.gaps), mirror_path=None,
+                           escalation_path=None)
+        summary["rerender"] = {
+            "mode": args.mode,
+            "rescore_only": True,
+            "judged": bool(args.judge),
+            "artefacts": str(args.out_dir),
+            "why": ("the scorer changed, not the picture: these are the artefacts already on "
+                    "disk, re-measured with the instrument the situation calls for"),
+        }
+        out = Path(args.summary_out)
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\n",
+                       encoding="utf-8")
+        for row in summary["results"]:
+            print(json.dumps({
+                "brief": row.get("brief_id"), "score": row.get("score"),
+                "passed": row.get("passed"),
+                "failed": row.get("failed_checks") or [],
+                "fill": ((row.get("checks") or {}).get("subject_fill") or {}).get("detail"),
+            }, ensure_ascii=False))
+        print(f"summary: {out}")
         return 0
 
     from seller_tester.scene_render import ComfySceneRenderer, lane_ready

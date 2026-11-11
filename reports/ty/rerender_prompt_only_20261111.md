@@ -64,7 +64,46 @@ frame in a lifestyle shot. The framing stage places at a fixed 0.62 scale regard
 a lifestyle brief wants the product at roughly a third of the frame with the scene readable. Filed
 as gap work, not fixed here.
 
-## What this does and does not move
+## The vision judge, and two more instruments that measured the wrong thing
+
+Mechanical checks alone said 12/12 at 100.0. That is the "rubric constant" smell in reverse, so the
+local judge was turned on (`gemma3:4b` through Ollama on loopback, ~15 s per picture, pixels never
+leave the machine). Two more instrument defects surfaced before the judge could be believed:
+
+1. **The judge rubric named the taxonomy slot, not the product.** It read "a lifestyle picture for a
+   `food_jar`", and PO-004/PO-010 ask for *three pale-pink Word Coffee gift boxes* — filed under
+   `food_jar` because that is the catalogue's slot. The judge correctly answered "not a food jar"
+   about a correct picture. The rubric now uses the brief's own words (`judge_constraint`, else
+   `prompt`), falling back to `situation + category` only when the brief names nothing.
+2. **`subject_fill` measured the corner colour on a scene background.** On a generated lifestyle
+   scene every pixel differs from the corner, so PO-002 reported "fill 94.3 % vs 8–50 %" on a
+   correct picture. A free background now uses the recorded **product box** as the measure
+   (`instrument: product_box`, PO-002 39.8 %), and with no box the check is *skipped with a reason*,
+   never passed. Flat backgrounds keep the corner-colour instrument. Five tests in
+   `Northstar_backend/test_subject_fill_instrument.py`.
+
+**Judged result (`state/seller/heldout_prompt_only_proof6_judged2.json`): 11 of 12 pass, mean 83.5.**
+
+| brief | score | judge's finding |
+|---|---|---|
+| PO-008 | **68.8 fail** | the box reads "AOW", not "Word Coffee"; "For Mom" and the tagline are missing |
+| PO-001 | 80.0 | pouch glossy not matte; label does not read MOGRA ORGANICS; no gold line art; no weight |
+| PO-003 | 80.0 | label reads "MOGGARA"; no line art; no weight |
+| PO-005 | 80.0 | glossy; label text not readable; weight missing |
+| PO-007 | 73.7 | line art green not gold; weight missing |
+| PO-009 | 80.0 | pouch black not forest green; text overlay |
+| PO-011 | 80.0 | white pouch not matte forest green; label text missing |
+| PO-012 | 80.0 | box shows "Mom / Nonna / I love you", not the Word Coffee branding |
+| PO-004 | 80.0 | brand name not visible; "For Mom" too small; tagline missing |
+| PO-002, PO-006, PO-010 | 100.0 | — |
+
+**This is the honest gap, and it is a text-fidelity gap.** The briefs describe exact label copy
+(brand, product, weight, line art) and let the diffusion model draw it; the model cannot spell. The
+repo already has the right tool — `tools/seller_tester/label_warp.py` composes the label
+deterministically and warps it onto the drawn body — but **no prompt-only brief sets
+`label_mode: warp`** (0 of 12), so no label is composed. Queued as the next seller unit: draw an
+unlettered body, compose the label from the brief, measure with the judge.
+
 
 - **Held-out by mode now:** prompt-only 12 scored / 10 passed / **93.9**; stored-reference 12 / 11 /
   91.8; uploaded-reference 21 / 16 / 90.0 — `state/seller/heldout_proof.json`, 45 scored, 37 passed.
