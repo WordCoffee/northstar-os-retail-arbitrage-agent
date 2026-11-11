@@ -39,13 +39,21 @@
         "-m",
         "tools.registry.build"
       ],
-      "exit": 0,
-      "ok": true,
+      "exit": 1,
+      "ok": false,
       "tail": [
-        "wrote ty\\bojo_tool_list.json",
-        "wrote ty\\northstar_workspaces.json",
-        "wrote ty\\registry_gaps.json",
-        "29 services \u00b7 44 tools (44 wired, 0 declared, 4 unclaimed) \u00b7 gaps 13 \u00b7 layouts {'feed': 9, 'split': 8, 'wizard': 5, 'board': 6, 'canvas': 1}"
+        "ERROR goldengoose: evidence.backend Northstar_backend/main.py:2247 is not a route decorator or the /ui mount",
+        "ERROR offerchisel: evidence.backend Northstar_backend/main.py:1540 is not a route decorator or the /ui mount",
+        "ERROR towncrier: evidence.backend Northstar_backend/main.py:1540 is not a route decorator or the /ui mount",
+        "ERROR autothink: evidence.backend Northstar_backend/main.py:1529 is not a route decorator or the /ui mount",
+        "ERROR autothink: evidence.backend Northstar_backend/main.py:1540 is not a route decorator or the /ui mount",
+        "ERROR autothink: evidence.backend Northstar_backend/main.py:1557 is not a route decorator or the /ui mount",
+        "ERROR thewatch: evidence.backend Northstar_backend/main.py:1842 is not a route decorator or the /ui mount",
+        "ERROR rankledger: evidence.backend Northstar_backend/main.py:1842 is not a route decorator or the /ui mount",
+        "ERROR rivalboard: evidence.backend Northstar_backend/main.py:1842 is not a route decorator or the /ui mount",
+        "ERROR competitor-monitor: evidence.backend Northstar_backend/main.py:2227 is not a route decorator or the /ui mount",
+        "ERROR listingforge: evidence.backend Northstar_backend/main.py:1695 is not a route decorator or the /ui mount",
+        "ERROR adpilot: evidence.backend Northstar_backend/main.py:1711 is not a route decorator or the /ui mount"
       ]
     },
     {
@@ -107,6 +115,6 @@
   "session": {
     "locked": false,
     "reason": "",
-    "foreground": "C:\\Windows\\system32\\cmd.exe"
+    "foreground": "ty - File Explorer"
   }
 }

@@ -84,7 +84,7 @@
       "evidence": {
         "route": "/ui/hub",
         "vision": "live",
-        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: Operations Hub | controls (shell chrome included): Pin snapshot, Run batch, 90%, 100%, 115%, 130%",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: Operations Hub | controls (shell chrome included): Pin snapshot, Run batch, Matched Products, 470, Quantity PASS, 245",
         "backend": [
           "Northstar_backend/main.py:2310",
           "Northstar_backend/main.py:987",
@@ -98,12 +98,16 @@
         "controls": [
           "Pin snapshot",
           "Run batch",
-          "90%",
-          "100%",
-          "115%",
-          "130%",
-          "Operator",
-          "D"
+          "Matched Products",
+          "470",
+          "Quantity PASS",
+          "245",
+          "52% pass rate",
+          "Needs Review",
+          "205",
+          "Compute Credits",
+          "5,000",
+          "foundation plan"
         ]
       }
     },
@@ -154,27 +158,23 @@
       "evidence": {
         "route": "/ui/ledger",
         "vision": "live",
-        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: OC | Ty director finish order | controls (shell chrome included): esc, Search, Build, auto, DeepSeek V4.1, Flash",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: The Ledger | controls (shell chrome included): Command Center, Design Studio, AdPilot, SocialPulse, Profitability Dashboard, Spreadsheet Lab",
         "backend": [
           "Northstar_backend/main.py:2419",
           "Northstar_backend/main.py:987"
         ],
         "declared_tools": [],
         "confidence": "high",
-        "latest_attempt_blocked": "no Chrome window attached",
+        "latest_attempt_blocked": "no Chrome window found",
         "controls": [
-          "esc",
-          "Search",
-          "Build",
-          "auto",
-          "DeepSeek V4.1",
-          "Flash",
-          "OpenCode",
-          "Go",
-          "high",
-          "1",
-          "767",
-          "11:38 AM"
+          "Command Center",
+          "Design Studio",
+          "AdPilot",
+          "SocialPulse",
+          "Profitability Dashboard",
+          "Spreadsheet Lab",
+          "Monitoring",
+          "Operator"
         ]
       }
     },
@@ -236,7 +236,7 @@
       "evidence": {
         "route": "/ui/prospector",
         "vision": "live",
-        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: Prospector | controls (shell chrome included): Scan Controls, Min ROI, Scanning..., Results (0), Loading live economics..., Pipeline Snapshot",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS Retail Arbitrage | controls (shell chrome included): Home, SourceScout, Goose, Profit, Tools, Scanning...",
         "backend": [
           "Northstar_backend/main.py:1842",
           "Northstar_backend/main.py:2247"
@@ -245,14 +245,14 @@
           "catalog_pull"
         ],
         "confidence": "high",
-        "latest_attempt_blocked": "no Chrome window attached",
+        "latest_attempt_blocked": "no Chrome window found",
         "controls": [
-          "Scan Controls",
-          "Min ROI",
-          "Scanning...",
-          "Results (0)",
-          "Loading live economics...",
-          "Pipeline Snapshot"
+          "Home",
+          "SourceScout",
+          "Goose",
+          "Profit",
+          "Tools",
+          "Scanning..."
         ]
       }
     },
@@ -309,7 +309,7 @@
       "evidence": {
         "route": "/ui/goldengoose",
         "vision": "live",
-        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: Golden Goose | controls (shell chrome included): Filters, Search the Northstar Index..., Operator, Ask Gemini, 115%, 130%",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS Retail Arbitrage | controls (shell chrome included): Home, SourceScout, Goose, Profit, Tools, Scanning...",
         "backend": [
           "Northstar_backend/main.py:1842",
           "Northstar_backend/main.py:2247"
@@ -318,14 +318,14 @@
           "golden_goose_scan"
         ],
         "confidence": "high",
-        "latest_attempt_blocked": "no Chrome window attached",
+        "latest_attempt_blocked": "no Chrome window found",
         "controls": [
-          "Filters",
-          "Search the Northstar Index...",
-          "Operator",
-          "Ask Gemini",
-          "115%",
-          "130%"
+          "Home",
+          "SourceScout",
+          "Goose",
+          "Profit",
+          "Tools",
+          "Scanning..."
         ]
       }
     },
@@ -385,7 +385,7 @@
       "evidence": {
         "route": "/ui/offerchisel",
         "vision": "live",
-        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: OfferChisel | controls (shell chrome included): Generate Listing, Search the Northstar Index..., Operator, Ask Gemini, Dynamic lock, lock on idle",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: OfferChisel | controls (shell chrome included): Generate Listing, Product name, e.g. Kirkland Signature Whole Bean Coffee 2.5l, SEO-first, Generate, Workspace, Operator",
         "backend": [
           "Northstar_backend/main.py:1540"
         ],
@@ -393,20 +393,20 @@
           "offer_recommendation"
         ],
         "confidence": "high",
-        "latest_attempt_blocked": "no Chrome window attached",
+        "latest_attempt_blocked": "no Chrome window found",
         "controls": [
           "Generate Listing",
-          "Search the Northstar Index...",
+          "Product name, e.g. Kirkland Signature Whole Bean Coffee 2.5l",
+          "SEO-first",
+          "Generate",
+          "Workspace",
           "Operator",
-          "Ask Gemini",
-          "Dynamic lock",
-          "lock on idle",
-          "Claude",
-          "Camera",
-          "Notepad",
-          "Perplexity",
-          "Managing power settings for GPU",
-          "Display settings"
+          "Design Studio",
+          "Listing Forge",
+          "AdPilot",
+          "SocialPulse",
+          "SourceScout",
+          "Golden Goose Finder"
         ]
       }
     },
@@ -472,20 +472,20 @@
       "evidence": {
         "route": "/ui/towncrier",
         "vision": "live",
-        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: The Town Crier | controls (shell chrome included): Search the Northstar Index..., Operator, Ask Gemini, 115%, 130%, Generate caption",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: The Town Crier | controls (shell chrome included): Home, SourceScout, Goose, Profit, Tools, Ask Gemini",
         "backend": [
           "Northstar_backend/main.py:1540"
         ],
         "declared_tools": [],
         "confidence": "high",
-        "latest_attempt_blocked": "no Chrome window attached",
+        "latest_attempt_blocked": "no Chrome window found",
         "controls": [
-          "Search the Northstar Index...",
-          "Operator",
-          "Ask Gemini",
-          "115%",
-          "130%",
-          "Generate caption"
+          "Home",
+          "SourceScout",
+          "Goose",
+          "Profit",
+          "Tools",
+          "Ask Gemini"
         ]
       }
     },
@@ -557,18 +557,18 @@
       "evidence": {
         "route": "/ui/auctioneer",
         "vision": "live",
-        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: The Auctioneer | controls (shell chrome included): Search the Northstar Index..., Operator, D, Compute (canonical), 115%, 130%",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: The Auctioneer | controls (shell chrome included): Search the Northstar Index, Operator, 90%, 100%, 115%, 130%",
         "backend": [
           "Northstar_backend/foundation/api/router.py:1461"
         ],
         "declared_tools": [],
         "confidence": "high",
-        "latest_attempt_blocked": "no Chrome window attached",
+        "latest_attempt_blocked": "no Chrome window found",
         "controls": [
-          "Search the Northstar Index...",
+          "Search the Northstar Index",
           "Operator",
-          "D",
-          "Compute (canonical)",
+          "90%",
+          "100%",
           "115%",
           "130%"
         ]
@@ -659,16 +659,24 @@
       "controls_evidence": "northstar-os-ui/src/pages/AutothinK.jsx:166 query input, :171 provider select, :185 tier select, :199 Run.",
       "evidence": {
         "route": "/ui/autothink",
-        "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | blocked: window did not take the foreground | shot: reports/ui_audit_20261016/autothink.png | latest attempt blocked: neither the title nor the pixels changed",
+        "vision": "live",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: Northstar OS Retail Arbitrage | controls (shell chrome included): New session, Preview, esc interrupt, shift+tab, agents, ctrl+p",
         "backend": [
           "Northstar_backend/main.py:1529",
           "Northstar_backend/main.py:1540",
           "Northstar_backend/main.py:1557"
         ],
         "declared_tools": [],
-        "confidence": "low",
-        "latest_attempt_blocked": "no Chrome window attached"
+        "confidence": "high",
+        "latest_attempt_blocked": "no Chrome window found",
+        "controls": [
+          "New session",
+          "Preview",
+          "esc interrupt",
+          "shift+tab",
+          "agents",
+          "ctrl+p"
+        ]
       }
     },
     {
@@ -711,20 +719,26 @@
       "evidence": {
         "route": "/ui/thewatch",
         "vision": "live",
-        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: The Watch | controls (shell chrome included): Operator, Ask Gemini, Search the Northstar Index..., DEV: AUTH DISABLED — local loopback only, Watchlist, Snapshot",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: OC | Resume Ty director prog | controls (shell chrome included): Home, Gallery, Tyrone, Desktop, Download, Documents",
         "backend": [
           "Northstar_backend/main.py:1842"
         ],
         "declared_tools": [],
         "confidence": "high",
-        "latest_attempt_blocked": "no Chrome window attached",
+        "latest_attempt_blocked": "no Chrome window found",
         "controls": [
-          "Operator",
-          "Ask Gemini",
-          "Search the Northstar Index...",
-          "DEV: AUTH DISABLED — local loopback only",
-          "Watchlist",
-          "Snapshot"
+          "Home",
+          "Gallery",
+          "Tyrone",
+          "Desktop",
+          "Download",
+          "Documents",
+          "Pictures",
+          "Music",
+          "Videos",
+          "Northstar",
+          "exports",
+          "reports"
         ]
       }
     },
@@ -774,7 +788,7 @@
         ],
         "declared_tools": [],
         "confidence": "low",
-        "latest_attempt_blocked": "no Chrome window attached"
+        "latest_attempt_blocked": "no Chrome window found"
       }
     },
     {
@@ -816,14 +830,28 @@
       "controls_evidence": "northstar-os-ui/src/pages/RivalBoard.jsx:10-27 — one read and a derived posture column; no control exists.",
       "evidence": {
         "route": "/ui/rivalboard",
-        "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | blocked: window did not take the foreground | shot: reports/ty/ux_audit_shots/rivalboard.png | latest attempt blocked: neither the title nor the pixels changed",
+        "vision": "live",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: OC | Resume Ty director prog | controls (shell chrome included): Home, Gallery, Tyrone, Desktop, Download, Documents",
         "backend": [
           "Northstar_backend/main.py:1842"
         ],
         "declared_tools": [],
-        "confidence": "low",
-        "latest_attempt_blocked": "no Chrome window attached"
+        "confidence": "high",
+        "latest_attempt_blocked": "no Chrome window found",
+        "controls": [
+          "Home",
+          "Gallery",
+          "Tyrone",
+          "Desktop",
+          "Download",
+          "Documents",
+          "Pictures",
+          "Music",
+          "Videos",
+          "Northstar",
+          "exports",
+          "reports"
+        ]
       }
     },
     {
@@ -880,7 +908,7 @@
         ],
         "declared_tools": [],
         "confidence": "medium",
-        "latest_attempt_blocked": "no Chrome window attached"
+        "latest_attempt_blocked": "no Chrome window found"
       }
     },
     {
@@ -1005,7 +1033,7 @@
       "evidence": {
         "route": "/ui/foundation",
         "vision": "live",
-        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS — Retail Arbitrage Suite - Google Chrome",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: Northstar OS Retail Arbitrage | controls (shell chrome included): Home, Gallery, Tyrone, Desktop, Download, Documents",
         "backend": [
           "Northstar_backend/foundation/api/router.py:755",
           "Northstar_backend/foundation/api/router.py:650",
@@ -1018,17 +1046,21 @@
           "Northstar_backend/foundation/api/router.py:466"
         ],
         "declared_tools": [],
-        "confidence": "medium",
-        "latest_attempt_blocked": "no Chrome window attached",
+        "confidence": "high",
+        "latest_attempt_blocked": "no Chrome window found",
         "controls": [
-          "Back",
-          "Forward",
-          "Reload",
-          "Menu",
-          "Grid",
-          "Search",
-          "Settings",
-          "Add"
+          "Home",
+          "Gallery",
+          "Tyrone",
+          "Desktop",
+          "Download",
+          "Documents",
+          "Music",
+          "Videos",
+          "Northstar",
+          "exports",
+          "reports",
+          "mogra_list"
         ]
       }
     },
@@ -1165,7 +1197,7 @@
       "evidence": {
         "route": "/ui/jobs",
         "vision": "live",
-        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS — Retail Arbitrage Suite - Google Chrome",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: OC | Autothink UI at 127.0.0.1 | controls (shell chrome included): Home, Gallery, Tyrone, Desktop, Download, Documents",
         "backend": [
           "Northstar_backend/foundation/api/router.py:855",
           "Northstar_backend/foundation/api/router.py:868",
@@ -1178,21 +1210,21 @@
           "Northstar_backend/foundation/api/router.py:836"
         ],
         "declared_tools": [],
-        "confidence": "medium",
-        "latest_attempt_blocked": "no Chrome window attached",
+        "confidence": "high",
+        "latest_attempt_blocked": "no Chrome window found",
         "controls": [
-          "Refresh",
-          "Queued",
-          "0",
-          "eligible for claim",
-          "Leased",
-          "0",
-          "claimed by a worker",
-          "Running",
-          "0",
-          "executing locally",
-          "Retry wait",
-          "0"
+          "Home",
+          "Gallery",
+          "Tyrone",
+          "Desktop",
+          "Download",
+          "Documents",
+          "Pictures",
+          "Music",
+          "Videos",
+          "Northstar",
+          "exports",
+          "reports"
         ]
       }
     },
@@ -1316,8 +1348,8 @@
       "controls_evidence": "northstar-os-ui/src/foundation/pages/Keywords.jsx:92 search input, :95 Search, :169 Submit import, :105/:176 detail links.",
       "evidence": {
         "route": "/ui/keywords",
-        "vision": "backend",
-        "vision_note": "no live page, no committed capture, no rendered audit row for this route | blocked: window did not take the foreground | latest attempt blocked: neither the title nor the pixels changed",
+        "vision": "live",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: OC | Autothink UI at 127.0.0.1 | controls (shell chrome included): Home, Gallery, Tyrone, Desktop, Download, Documents",
         "backend": [
           "Northstar_backend/foundation/api/router.py:1078",
           "Northstar_backend/foundation/api/router.py:1116",
@@ -1327,8 +1359,22 @@
           "Northstar_backend/foundation/api/router.py:1207"
         ],
         "declared_tools": [],
-        "confidence": "none",
-        "latest_attempt_blocked": "no Chrome window attached"
+        "confidence": "high",
+        "latest_attempt_blocked": "no Chrome window found",
+        "controls": [
+          "Home",
+          "Gallery",
+          "Tyrone",
+          "Desktop",
+          "Download",
+          "Documents",
+          "Pictures",
+          "Music",
+          "Videos",
+          "Northstar",
+          "exports",
+          "reports"
+        ]
       }
     },
     {
@@ -1364,7 +1410,7 @@
         ],
         "declared_tools": [],
         "confidence": "medium",
-        "latest_attempt_blocked": "no Chrome window attached",
+        "latest_attempt_blocked": "no Chrome window found",
         "controls": [
           "Search the Northstar Index...",
           "Operator",
@@ -1401,14 +1447,28 @@
       "controls_evidence": "northstar-os-ui/src/pages/public/BetaLanding.jsx:53-65 renders section#support only when the hash is #support; the section contains two paragraphs and no control.",
       "evidence": {
         "route": "/ui/beta#support",
-        "vision": "backend",
-        "vision_note": "no live page, no committed capture, no rendered audit row for this route | blocked: window did not take the foreground | latest attempt blocked: neither the title nor the pixels changed",
+        "vision": "live",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: OC | Autothink UI at 127.0.0.1 | controls (shell chrome included): Home, Gallery, Tyrone, Desktop, Downloads, Documents",
         "backend": [
           "Northstar_backend/main.py:353"
         ],
         "declared_tools": [],
-        "confidence": "none",
-        "latest_attempt_blocked": "no Chrome window attached"
+        "confidence": "high",
+        "latest_attempt_blocked": "no Chrome window found",
+        "controls": [
+          "Home",
+          "Gallery",
+          "Tyrone",
+          "Desktop",
+          "Downloads",
+          "Documents",
+          "Pictures",
+          "Music",
+          "Videos",
+          "Northstar",
+          "exports",
+          "reports"
+        ]
       }
     },
     {
@@ -1456,14 +1516,27 @@
       "controls_evidence": "northstar-os-ui/src/foundation/pages/BetaSignup.jsx:32 email input, :35 invite-code input, :37 submit.",
       "evidence": {
         "route": "/ui/beta-signup",
-        "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | blocked: window did not take the foreground | shot: reports/ty/ux_audit_shots/beta-signup.png | latest attempt blocked: neither the title nor the pixels changed",
+        "vision": "live",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: Google | controls (shell chrome included): Ask Google, AI Mode, Do more with AI Mode, Create images, Twitch, Gmail",
         "backend": [
           "Northstar_backend/foundation/api/router.py:1756"
         ],
         "declared_tools": [],
-        "confidence": "low",
-        "latest_attempt_blocked": "no Chrome window attached"
+        "confidence": "high",
+        "latest_attempt_blocked": "no Chrome window found",
+        "controls": [
+          "Ask Google",
+          "AI Mode",
+          "Do more with AI Mode",
+          "Create images",
+          "Twitch",
+          "Gmail",
+          "NorthstarOS",
+          "Home",
+          "Go",
+          "Amazon Careers",
+          "Show more"
+        ]
       }
     },
     {
@@ -1517,15 +1590,23 @@
       "controls_evidence": "northstar-os-ui/src/pages/admin/Overview.jsx:105 'Open' navigates to the org page, :152 'Export Report' and 'Audit Log' navigate; the page has no input or select.",
       "evidence": {
         "route": "/ui/beta-ops",
-        "vision": "backend",
-        "vision_note": "no live page, no committed capture, no rendered audit row for this route | blocked: window did not take the foreground | latest attempt blocked: neither the title nor the pixels changed",
+        "vision": "live",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: BIGVIIBIN - Twitch | controls (shell chrome included): Gift a Sub, Subscribe, LIVE, Clip, Now Playing:, Dolly Babe",
         "backend": [
           "Northstar_backend/foundation/api/router.py:2025",
           "Northstar_backend/noncreative_reads.py:402"
         ],
         "declared_tools": [],
-        "confidence": "none",
-        "latest_attempt_blocked": "no Chrome window attached"
+        "confidence": "high",
+        "latest_attempt_blocked": "no Chrome window found",
+        "controls": [
+          "Gift a Sub",
+          "Subscribe",
+          "LIVE",
+          "Clip",
+          "Now Playing:",
+          "Dolly Babe"
+        ]
       }
     },
     {
@@ -1698,7 +1779,7 @@
       "evidence": {
         "route": "/ui/design-studio",
         "vision": "live",
-        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS — Retail Arbitrage Suite - Google Chrome",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: Design Studio | controls (shell chrome included): Canvas, Projects, Listing Images, A+ / Brand Story, Storefront, Ads",
         "backend": [
           "Northstar_backend/design_studio_api.py:157",
           "Northstar_backend/studio_upload_router.py:22",
@@ -1711,21 +1792,21 @@
           "list_templates",
           "build_dieline"
         ],
-        "confidence": "medium",
-        "latest_attempt_blocked": "no Chrome window attached",
+        "confidence": "high",
+        "latest_attempt_blocked": "no Chrome window found",
         "controls": [
           "Canvas",
           "Projects",
           "Listing Images",
-          "A+ Brand Story",
+          "A+ / Brand Story",
           "Storefront",
           "Ads",
           "Video & UGC Clips",
           "Social",
           "Packaging & Mockups",
-          "Dielines & Print",
+          "DieLines & Print",
           "Asset Dashboard",
-          "Text"
+          "Home"
         ]
       }
     },
@@ -1773,24 +1854,28 @@
       "evidence": {
         "route": "/ui/product-finder",
         "vision": "live",
-        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS — Retail Arbitrage Suite - Google Chrome",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: twitch.tv/bigviibin | controls (shell chrome included): Following, Browse, Search, Subscribe, Bits: 29% off, Gift a Sub",
         "backend": [
           "Northstar_backend/main.py:353"
         ],
         "declared_tools": [
           "scan_products"
         ],
-        "confidence": "medium",
-        "latest_attempt_blocked": "no Chrome window attached",
+        "confidence": "high",
+        "latest_attempt_blocked": "no Chrome window found",
         "controls": [
-          "New Lookup",
-          "Lookup",
-          "Product Set",
-          "Saved Sets",
-          "Coverage",
-          "Start researching",
-          "Open in Product Set",
-          "Send to Commerce Ops"
+          "Following",
+          "Browse",
+          "Search",
+          "Subscribe",
+          "Bits: 29% off",
+          "Gift a Sub",
+          "Clip",
+          "ClipBotPartner",
+          "Safe4Rez",
+          "1.34",
+          "34",
+          "2:38:33"
         ]
       }
     },
@@ -1875,8 +1960,8 @@
       "controls_evidence": "northstar-os-ui/src/pages/GoldenGoose.jsx:49 item input, :53 readiness select, :58-59 flags, :67 gate selects, :74 Evaluate.",
       "evidence": {
         "route": "/ui/golden-goose",
-        "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | blocked: window did not take the foreground | shot: reports/ui_audit_20261016/golden-goose.png | latest attempt blocked: neither the title nor the pixels changed",
+        "vision": "live",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: twitch.tv/bigviibin | controls (shell chrome included): Following, Browse, Search, Subscribe, Bits: 29% off, Gift a Sub",
         "backend": [
           "Northstar_backend/foundation/api/router.py:401",
           "Northstar_backend/foundation/api/router.py:414",
@@ -1886,8 +1971,22 @@
         "declared_tools": [
           "golden_goose_scan"
         ],
-        "confidence": "low",
-        "latest_attempt_blocked": "no Chrome window attached"
+        "confidence": "high",
+        "latest_attempt_blocked": "no Chrome window found",
+        "controls": [
+          "Following",
+          "Browse",
+          "Search",
+          "Subscribe",
+          "Bits: 29% off",
+          "Gift a Sub",
+          "Show More",
+          "LIVE",
+          "chill",
+          "goodvibes",
+          "scarygame",
+          "Send a message"
+        ]
       }
     },
     {
@@ -1955,7 +2054,7 @@
           "optimize_listing"
         ],
         "confidence": "high",
-        "latest_attempt_blocked": "no Chrome window attached",
+        "latest_attempt_blocked": "no Chrome window found",
         "controls": [
           "New Rule",
           "History",
@@ -2027,8 +2126,8 @@
       "controls_evidence": "northstar-os-ui/src/pages/internal/KeywordTracker.jsx:59 'Track New' and :60 'Reports' only toast; :83 'Verify' calls a toast helper (:verified). No input or write exists.",
       "evidence": {
         "route": "/ui/keyword-tracker",
-        "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | blocked: window did not take the foreground | shot: reports/ui_audit_20261016/keyword-tracker.png | latest attempt blocked: neither the title nor the pixels changed",
+        "vision": "live",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: Keyword Tracker | controls (shell chrome included): Track New, Reports, Design Studio, Golden Goose Finder, Listing Guardian, Competitor Monitor",
         "backend": [
           "Northstar_backend/noncreative_reads.py:336",
           "Northstar_backend/foundation/api/router.py:1078",
@@ -2037,8 +2136,21 @@
         "declared_tools": [
           "track_keywords"
         ],
-        "confidence": "low",
-        "latest_attempt_blocked": "no Chrome window attached"
+        "confidence": "high",
+        "latest_attempt_blocked": "no Chrome window found",
+        "controls": [
+          "Track New",
+          "Reports",
+          "Design Studio",
+          "Golden Goose Finder",
+          "Listing Guardian",
+          "Competitor Monitor",
+          "Profitability Dashboard",
+          "Spreadsheet Lab",
+          "Monitoring",
+          "Operator",
+          "100%"
+        ]
       }
     },
     {
@@ -2088,7 +2200,7 @@
       "evidence": {
         "route": "/ui/competitor-monitor",
         "vision": "live",
-        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: Competitor Monitor | controls (shell chrome included): Add Competitor, Market Report, Search the Northstar Index..., Operator, Ask Gemini, DEV: AUTH DISABLED — local loopback only",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: twitch.tv/bigviibin | controls (shell chrome included): Following, Browse, Search, Subscribe, Bits: 29% off, Gift a Sub",
         "backend": [
           "Northstar_backend/noncreative_reads.py:261",
           "Northstar_backend/main.py:2227"
@@ -2097,14 +2209,15 @@
           "watch_competitor"
         ],
         "confidence": "high",
-        "latest_attempt_blocked": "no Chrome window attached",
+        "latest_attempt_blocked": "no Chrome window found",
         "controls": [
-          "Add Competitor",
-          "Market Report",
-          "Search the Northstar Index...",
-          "Operator",
-          "Ask Gemini",
-          "DEV: AUTH DISABLED — local loopback only"
+          "Following",
+          "Browse",
+          "Search",
+          "Subscribe",
+          "Bits: 29% off",
+          "Gift a Sub",
+          "Send a message"
         ]
       }
     },
@@ -2189,7 +2302,7 @@
       "evidence": {
         "route": "/ui/listingforge",
         "vision": "live",
-        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS — Retail Arbitrage Suite - Google Chrome",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: ListingForge | controls (shell chrome included): Standard, Advanced, Create Listing, Templates, Editor, Templates",
         "backend": [
           "Northstar_backend/main.py:1695",
           "Northstar_backend/design_studio_api.py:1293",
@@ -2198,8 +2311,20 @@
         "declared_tools": [
           "compose_listing"
         ],
-        "confidence": "medium",
-        "latest_attempt_blocked": "no Chrome window attached"
+        "confidence": "high",
+        "latest_attempt_blocked": "no Chrome window found",
+        "controls": [
+          "Standard",
+          "Advanced",
+          "Create Listing",
+          "Templates",
+          "Editor",
+          "Templates",
+          "Assets",
+          "Revision Log",
+          "Edit",
+          "Edit"
+        ]
       }
     },
     {
@@ -2298,7 +2423,7 @@
       "evidence": {
         "route": "/ui/adpilot",
         "vision": "live",
-        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS — Retail Arbitrage Suite - Google Chrome",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: AdPilot | controls (shell chrome included): Standard, Advanced, Create Campaign, Upload report – bulk ads file, Campaign Detail, Search Terms",
         "backend": [
           "Northstar_backend/design_studio_api.py:1552",
           "Northstar_backend/design_studio_api.py:1569",
@@ -2308,8 +2433,22 @@
         "declared_tools": [
           "plan_campaign"
         ],
-        "confidence": "medium",
-        "latest_attempt_blocked": "no Chrome window attached"
+        "confidence": "high",
+        "latest_attempt_blocked": "no Chrome window found",
+        "controls": [
+          "Standard",
+          "Advanced",
+          "Create Campaign",
+          "Upload report – bulk ads file",
+          "Campaign Detail",
+          "Search Terms",
+          "Harvest",
+          "Planner",
+          "Creatives",
+          "Placements",
+          "Rules",
+          "Import a bulksheet"
+        ]
       }
     },
     {
@@ -2373,7 +2512,7 @@
           "plan_social"
         ],
         "confidence": "low",
-        "latest_attempt_blocked": "no Chrome window attached"
+        "latest_attempt_blocked": "no Chrome window found"
       }
     },
     {
@@ -2460,7 +2599,7 @@
           "margin_report"
         ],
         "confidence": "low",
-        "latest_attempt_blocked": "no Chrome window attached"
+        "latest_attempt_blocked": "no Chrome window found"
       }
     }
   ]

@@ -1,10 +1,10 @@
 {
-  "at": "2026-11-11T07:11:40+00:00",
+  "at": "2026-11-11T09:31:36+00:00",
   "services": [
     {
       "service": "design-studio",
       "url": "http://127.0.0.1:8101/ui/design-studio",
-      "at": "2026-11-11T07:11:40+00:00",
+      "at": "2026-11-11T09:31:36+00:00",
       "ok": false,
       "blocked": true,
       "reason": "no live Vision session: the desktop must be unlocked and Chrome attached before this can drive anything"
@@ -12,7 +12,7 @@
     {
       "service": "listings",
       "url": "http://127.0.0.1:8101/ui/listings",
-      "at": "2026-11-11T07:11:40+00:00",
+      "at": "2026-11-11T09:31:36+00:00",
       "ok": false,
       "blocked": true,
       "reason": "no live Vision session: the desktop must be unlocked and Chrome attached before this can drive anything"
@@ -20,7 +20,7 @@
     {
       "service": "socialpulse",
       "url": "http://127.0.0.1:8101/ui/socialpulse",
-      "at": "2026-11-11T07:11:40+00:00",
+      "at": "2026-11-11T09:31:36+00:00",
       "ok": false,
       "blocked": true,
       "reason": "no live Vision session: the desktop must be unlocked and Chrome attached before this can drive anything"
@@ -28,7 +28,7 @@
     {
       "service": "competitor-monitor",
       "url": "http://127.0.0.1:8101/ui/competitor-monitor",
-      "at": "2026-11-11T07:11:40+00:00",
+      "at": "2026-11-11T09:31:36+00:00",
       "ok": false,
       "blocked": true,
       "reason": "no live Vision session: the desktop must be unlocked and Chrome attached before this can drive anything"
