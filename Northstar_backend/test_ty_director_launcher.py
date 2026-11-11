@@ -248,6 +248,58 @@ def test_the_launcher_never_stacks_two_directors(root, monkeypatch):
     assert payload["director_pid"] == 99
 
 
+# ------------------------------------- D-011: a live lease this process did not start
+def _held_lease(pid: int = 424242) -> None:
+    D.PID_FILE.write_text(json.dumps({
+        "pid": pid, "started_at": "2026-11-11T07:00:00+00:00", "cmd": []}),
+        encoding="utf-8")
+
+
+def test_a_live_lease_from_another_session_is_reported_not_replaced(root, monkeypatch):
+    """D-011: the takeover race ran two directors for one block.
+
+    `find_director` recognises a live lease, so the heartbeat reports it rather
+    than starting anything; `start_director` is the second gate for a caller that
+    skips the heartbeat (the takeover path).
+    """
+    _held_lease()
+    monkeypatch.setattr(D, "_pid_alive", lambda pid: int(pid) == 424242)
+    monkeypatch.setattr(D, "_children_of", lambda pid: set())
+    monkeypatch.setattr(D, "DIRECTOR_MARKER", "")
+    monkeypatch.setattr(D, "_processes", lambda: [])
+    monkeypatch.setattr(D, "start_director",
+                        lambda: pytest.fail("a leased director must never start"))
+
+    payload = D.tick(start=True)
+
+    assert payload["state"] == "running"
+    assert payload["director_pid"] == 424242
+
+
+def test_start_director_refuses_a_lease_it_did_not_start(root, monkeypatch):
+    _held_lease(pid=515151)
+    monkeypatch.setattr(D, "_pid_alive", lambda pid: int(pid) == 515151)
+    monkeypatch.setattr(D, "_children_of", lambda pid: set())
+    monkeypatch.setattr(D, "DIRECTOR_CMD", json.dumps(["cmd", "/c", "exit", "0"]))
+
+    assert D.start_director() is None
+    assert json.loads(D.PID_FILE.read_text(encoding="utf-8"))["pid"] == 515151
+
+
+def test_a_dead_lease_does_not_block_the_next_start(root, monkeypatch):
+    _held_lease(pid=616161)
+    monkeypatch.setattr(D, "_pid_alive", lambda pid: False)
+    monkeypatch.setattr(D, "_children_of", lambda pid: set())
+    monkeypatch.setattr(D, "DIRECTOR_CMD", json.dumps(["cmd", "/c", "exit", "0"]))
+    monkeypatch.setattr(D, "DIRECTOR_MARKER", "")
+    monkeypatch.setattr(D, "_processes", lambda: [])
+
+    pid = D.start_director()
+
+    assert pid and pid != 616161
+    assert json.loads(D.PID_FILE.read_text(encoding="utf-8"))["pid"] == pid
+
+
 # ------------------------------------------------------- item 2: post-reboot proof
 def _write_proof(epoch: float) -> None:
     D.REBOOT_PROOF.parent.mkdir(parents=True, exist_ok=True)

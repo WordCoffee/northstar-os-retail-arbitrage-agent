@@ -395,7 +395,35 @@ def crash_note(reason: str) -> None:
         pass
 
 
+def _lease_holder() -> Optional[int]:
+    """The pid the lease file names, if that process is alive and is not this one.
+
+    D-011 (2026-11-11): a takeover has a one-heartbeat race. Stopping one director
+    and writing the lease a tick later left a window in which the launcher started a
+    second one, and two directors ran for a whole block. A live lease that this
+    process did not start is now a refusal, not a start.
+    """
+    record = _read(PID_FILE, {})
+    pid = int(record.get("pid") or 0)
+    if not pid or not _pid_alive(pid) or pid == os.getpid():
+        return None
+    return pid
+
+
+def _children_of(pid: int) -> set:
+    """The direct children of this process, from the process table."""
+    try:
+        return {int(row.get("ProcessId") or 0) for row in _processes()
+                if int(row.get("ParentProcessId") or 0) == int(pid)}
+    except (TypeError, ValueError):
+        return set()
+
+
 def start_director() -> Optional[int]:
+    holder = _lease_holder()
+    if holder and holder not in _children_of(os.getpid()):
+        log(f"refusing to start a second director: the lease names pid {holder}")
+        return None
     cmd: List[str]
     if DIRECTOR_CMD:
         try:

@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-11T07:27:48+00:00",
+  "updated_at": "2026-11-11T07:34:21+00:00",
   "cycle": 3,
   "unit_in_flight": "",
   "unit_order": [
@@ -1444,6 +1444,28 @@
       "evidence": "8 prompt-only briefs wired to the app path (both brands), 24 refused by name for six missing packaging forms; catalog pass 8/8 mean 97.5; published seller sample 12 -> 20 outputs at 98.0; reports/ty/sel08_prompt_only_coverage.md",
       "created_at": "2026-11-11T05:05:10+00:00",
       "updated_at": "2026-11-11T05:05:23+00:00",
+      "rank": 0
+    },
+    {
+      "id": "fix-lease-guard",
+      "unit": "D2",
+      "title": "D-011: start_director refuses a live lease it did not start, so a takeover cannot run two directors",
+      "status": "merged",
+      "owner": "director",
+      "write_paths": [
+        "scripts/ty_director.py",
+        "Northstar_backend/test_ty_director_launcher.py"
+      ],
+      "branch": "ty/fix-lease-guard",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "start_director: a live lease pid that is not this process and not its child is a refusal, logged by name; 3 new tests (live lease reported not replaced, start_director refuses, dead lease does not block); 28 passed in test_ty_director_launcher.py",
+      "created_at": "2026-11-11T07:34:16+00:00",
+      "updated_at": "2026-11-11T07:34:21+00:00",
       "rank": 0
     },
     {
