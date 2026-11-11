@@ -11,8 +11,33 @@
 // The close control is a sibling of the tab, not a button nested inside it:
 // interactive elements inside a tab are invalid ARIA, and a nested button
 // also swallows the click that should activate the tab.
+//
+// It is also DECORATIVE for assistive tech (`aria-hidden`, `tabIndex=-1`).
+// A tablist may own nothing but tabs, so a real, announced close button living
+// inside the strip is an `aria-required-children` violation (impact: critical),
+// measured by axe-core on every page with two or more open workspaces:
+//
+//   aria-required-children  .wst-list
+//   "Element has children which are not allowed: button[aria-label]"
+//
+// The pointer affordance stays exactly where it was visually; the keyboard path
+// (Delete on a focused tab, handled below) is the announced one, and the
+// tablist's `aria-describedby` says so. See tests/e2e/a11y/tabbar_a11y.spec.ts.
 
 import { useRef } from 'react'
+
+// Visually hidden but announced (same pattern as ShellLayout's SR_ONLY).
+const SR_ONLY = {
+  position: 'absolute',
+  width: 1,
+  height: 1,
+  padding: 0,
+  margin: -1,
+  overflow: 'hidden',
+  clip: 'rect(0,0,0,0)',
+  whiteSpace: 'nowrap',
+  border: 0,
+}
 
 function tabButtons(listEl) {
   if (!listEl) return []
@@ -64,6 +89,7 @@ export default function TabBar({ tabs = [], activeId = null, onActivate, onClose
         role="tablist"
         aria-label="Open workspaces"
         aria-orientation="horizontal"
+        aria-describedby="wst-keys-sr"
         className="wst-list"
         onKeyDown={onKeyDown}
       >
@@ -98,8 +124,9 @@ export default function TabBar({ tabs = [], activeId = null, onActivate, onClose
                 type="button"
                 className="wst-tab-close"
                 data-testid={`tab-close-${tab.id}`}
-                aria-label={`Close ${tab.label} tab`}
-                title={`Close ${tab.label}`}
+                aria-hidden="true"
+                tabIndex={-1}
+                title={`Close ${tab.label} (or press Delete on the tab)`}
                 onClick={(event) => {
                   event.stopPropagation()
                   onClose(tab.id)
@@ -112,6 +139,11 @@ export default function TabBar({ tabs = [], activeId = null, onActivate, onClose
         })}
       </div>
       <span className="wst-hint" aria-hidden="true">← → to switch · Delete to close</span>
+      {/* The announced keyboard path, because the × above is pointer-only. */}
+      <span id="wst-keys-sr" className="sr-only" style={SR_ONLY}>
+        Use the left and right arrow keys to switch workspace tabs; press Delete
+        to close the focused tab.
+      </span>
     </div>
   )
 }

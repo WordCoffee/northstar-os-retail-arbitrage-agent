@@ -337,9 +337,28 @@ test('ux: scene readability', async ({ page }, testInfo) => {
   // The gate: no sampled text may fall below AA on its own panel.
   expect(failing, `text below 4.5:1: ${JSON.stringify(failing.slice(0, 4))}`).toHaveLength(0)
 
-  // Layout integrity, measured on the same page: the empty state must fit the
-  // stream (it was cut off by 28px) and no status chip may be clipped by its
-  // own row (the last theme name used to be sliced).
+  // Layout integrity, measured on the same page.
+  //
+  // The home stream has TWO legitimate resting states, and each has its own
+  // rule. The previous version of this gate asserted only the second one and
+  // never checked which state was actually on screen:
+  //
+  //   * a resumed transcript — the surface resumes the most recent session for
+  //     the focus and opens a non-empty log on its newest turn
+  //     (`ChatSurface.jsx` — "Resume the last session", then the auto-pin
+  //     effect), so the stream MUST be pinned to the bottom;
+  //   * the empty state — nothing is pinned when there is nothing to read
+  //     (`ChatSurface.jsx` — "never when there is nothing to read"), so the
+  //     greeting MUST sit at the top, unscrolled.
+  //
+  // On an account that has a session this measured a resumed transcript and
+  // reported "the empty state must not be scrolled away" (scrollTop 612) for a
+  // page that has no empty state; on a slow session fetch it passed by
+  // measuring the empty state before the transcript arrived. That is a stale
+  // assertion, not a shell regression: the resume path and the empty-state
+  // guard are both deliberate and both still work. Both rules are measured
+  // below, and the empty-state half is reached through the product's own
+  // "New chat" control so that half always runs.
   const layout = await page.evaluate(() => {
     const stream = document.querySelector('[data-testid="chat-stream"]') as HTMLElement | null
     const h3 = document.querySelector('.chat-empty h3') as HTMLElement | null
@@ -352,9 +371,15 @@ test('ux: scene readability', async ({ page }, testInfo) => {
     const sr = stream?.getBoundingClientRect()
     const hr = h3?.getBoundingClientRect()
     return {
+      messages: document.querySelectorAll('.chat-msg').length,
       stream_height: stream?.clientHeight ?? null,
       stream_scroll_height: stream?.scrollHeight ?? null,
       stream_scroll_top: stream?.scrollTop ?? null,
+      // A chat log opens on its newest turn; the tolerance covers fractional
+      // layout heights (scrollTop + clientHeight can land 1px short).
+      pinned_to_bottom: stream
+        ? stream.scrollHeight - (stream.scrollTop + stream.clientHeight) <= 2
+        : null,
       // The real defect was the greeting being scrolled out of view, not the
       // cards being taller than a phone screen (scrolling is fine there).
       greeting_visible: !!(sr && hr && hr.top >= sr.top - 1 && hr.bottom <= sr.bottom + 1),
@@ -362,7 +387,13 @@ test('ux: scene readability', async ({ page }, testInfo) => {
       clipped,
     }
   })
-  fs.writeFileSync(path.join(EVIDENCE, `ux_layout_${project}.json`), JSON.stringify(layout, null, 2))
+  const resumedTranscript = layout.messages > 0
+  if (resumedTranscript) {
+    expect(layout.pinned_to_bottom, `a resumed transcript must open on its newest turn: ${JSON.stringify(layout)}`).toBe(true)
+  } else {
+    expect(layout.stream_scroll_top, 'the empty state must not be scrolled away on load').toBe(0)
+    expect(layout.greeting_visible, 'the greeting heading must be inside the stream viewport').toBe(true)
+  }
   // Font loading: the serif must actually be available, not silently falling
   // back. WebKit refused the font stylesheet for months while nobody noticed.
   const fonts = await page.evaluate(async () => {
@@ -382,11 +413,45 @@ test('ux: scene readability', async ({ page }, testInfo) => {
     const h1 = document.querySelector('h1, h2')
     return { checked: state, headingFamily: h1 ? getComputedStyle(h1).fontFamily : null }
   })
+
+  // Reach the empty state through the product's own control (the session rail
+  // is collapsed on a phone, so open it first), then measure the greeting.
+  const emptyHeading = page.locator('.chat-empty h3').first()
+  let clickedNewChat = false
+  if (!(await emptyHeading.isVisible().catch(() => false))) {
+    const newChat = page.getByTestId('chat-new')
+    if (!(await newChat.isVisible().catch(() => false))) {
+      await page.getByRole('button', { name: 'Show sessions' }).click()
+    }
+    await newChat.click()
+    clickedNewChat = true
+    await expect(emptyHeading, 'New chat must show the empty state').toBeVisible({ timeout: 15000 })
+    await page.waitForTimeout(250)
+  }
+  const emptyLayout = await page.evaluate(() => {
+    const stream = document.querySelector('[data-testid="chat-stream"]') as HTMLElement | null
+    const h3 = document.querySelector('.chat-empty h3') as HTMLElement | null
+    const sr = stream?.getBoundingClientRect()
+    const hr = h3?.getBoundingClientRect()
+    return {
+      empty_state: !!h3,
+      stream_height: stream?.clientHeight ?? null,
+      stream_scroll_height: stream?.scrollHeight ?? null,
+      stream_scroll_top: stream?.scrollTop ?? null,
+      greeting_visible: !!(sr && hr && hr.top >= sr.top - 1 && hr.bottom <= sr.bottom + 1),
+    }
+  })
+  fs.writeFileSync(
+    path.join(EVIDENCE, `ux_layout_${project}.json`),
+    JSON.stringify({ project, resumed_transcript: resumedTranscript, clicked_new_chat: clickedNewChat, on_load: layout, after_new_chat: emptyLayout }, null, 2),
+  )
   fs.writeFileSync(path.join(EVIDENCE, `ux_fonts_${project}.json`), JSON.stringify(fonts, null, 2))
   expect(fonts.checked['Libre Baskerville'], `serif not loaded: ${JSON.stringify(fonts)}`).toBe(true)
   expect(layout.clipped, `clipped status chips: ${JSON.stringify(layout.clipped)}`).toHaveLength(0)
-  expect(layout.stream_scroll_top, 'the empty state must not be scrolled away on load').toBe(0)
-  expect(layout.greeting_visible, 'the greeting heading must be inside the stream viewport').toBe(true)
+  // The empty state is what the greeting gate describes, and it always runs.
+  expect(emptyLayout.empty_state, `the empty state must be reachable from the product's own New chat: ${JSON.stringify(emptyLayout)}`).toBe(true)
+  expect(emptyLayout.stream_scroll_top, 'the empty state must not be scrolled away').toBe(0)
+  expect(emptyLayout.greeting_visible, 'the greeting heading must be inside the stream viewport').toBe(true)
   // A message area smaller than a couple of lines is not a message area.
-  expect(layout.stream_height ?? 0, 'the chat stream must have usable height').toBeGreaterThanOrEqual(200)
+  expect(emptyLayout.stream_height ?? 0, 'the chat stream must have usable height').toBeGreaterThanOrEqual(200)
 })

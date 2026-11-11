@@ -501,9 +501,19 @@ export default function ChatSurface({
   // Auto-pin the stream only while the reader is at the bottom, and never when
   // there is nothing to read: pinning an empty state scrolled its greeting out
   // of view (measured 2026-11-06: the 43px heading sat above the fold on load).
+  //
+  // An empty stream is also actively returned to the top. Closing a long
+  // transcript clamps the old scroll offset to the new maximum instead of
+  // zeroing it, so the greeting landed 72px above the fold on a phone after
+  // "New chat" (measured 2026-11-11 by tests/e2e/ux_scorecard.spec.ts).
   useEffect(() => {
     const el = scrollRef.current
-    if (!el || !pinned || messages.length === 0) return
+    if (!el) return
+    if (messages.length === 0) {
+      if (el.scrollTop !== 0) el.scrollTop = 0
+      return
+    }
+    if (!pinned) return
     el.scrollTop = el.scrollHeight
   }, [messages, streaming, pinned])
 

@@ -96,7 +96,9 @@
   margin-left: auto;
   white-space: nowrap;
   font-size: 10.5px;
-  color: var(--ink-faint);
+  /* --ink-faint on --paper-warm measured 4.34:1 at 10.5px (axe color-contrast,
+     impact: serious, tabs.css .wst-hint). --ink-mid is 5.9:1 on the same panel. */
+  color: var(--ink-mid);
 }
 
 /* Panels stack in the outlet. Only the selected one is laid out; the rest stay
