@@ -10,6 +10,30 @@ A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.m
 > and `reports/ty/handoff.md`, then continue from the first unfinished unit. No
 > questions, no reports between cycles. Idle means re-plan.
 
+## Position, 2026-11-11 cycle 6 — the sample is 20 outputs, and six product categories have no form
+
+Reports: `reports/ty/sel_refs_designs.md`, `reports/ty/sel08_prompt_only_coverage.md`, and the
+`sel-06`/`sel-07` corrections below.
+
+| # | job | result |
+|---|---|---|
+| 1 | `sel-refs-designs` — the rubric had no source | merged. `tools/reference_scout.py`: Openverse, `cc0`/`by`/`by-sa` only, a landing URL to verify at, ≥700 px, a packaging word in the row's own text, and the file must open or it is deleted. **17 kept / 51 refused** over 7 packaging families, every row with creator, licence + version, licence URL and source page. 8 tests |
+| 2 | `sel-08-prompt-only-coverage` — the seller sample was stuck at 12 | merged. 8 prompt-only briefs wired to the app path (**8/8, mean 97.5**); **24 refused** with one true reason: *"declares no product_line"* — ceramic mug, apparel, skincare bottle, small appliance, pet product, tool. A catalog pass now records a refusal and continues instead of dying on it |
+| 3 | the media flag | fixed. `MEDIA_GEN_LIVE=1` **is** set in `.env`; `engine_status()` said "unarmed" in every tool run because only the API loads dotenv. It now loads the repo `.env` and reports the truth: **gate on, ComfyUI unreachable — start ComfyUI.** Four reports were corrected; 4 tests |
+| 4 | `units` through the API | merged. `ProductPictureIn.units` 1–6, passed to `build`; 22 tests in `test_package_forms` |
+
+**Published seller dimension: 20 outputs, mean 98.0, 20 passed** (judged + mechanical held-out + the
+catalog pass, deduped by brief). design-studio **89.7**, 4 services at bar.
+
+**Next unit is named, and it is not a brief edit:** the app prints `stand_up_pouch` and `gift_box`, and
+the catalog asks for **eight** product categories. A rigid-cylinder form (jar/bottle/tube, via
+`mockup_compositor.warp_cylinder`) is the smallest real addition; apparel flat-print and appliance
+box-art follow. 24 of 32 prompt-only briefs are waiting on that, not on more testing.
+
+**One command that changes the next number:** start ComfyUI, then
+`python -m tools.seller_tester product --renderer comfy --skip-unavailable`. Every plate stops being
+drawn.
+
 ## Position, 2026-11-11 cycle 5 — bundles measure as bundles
 
 Report: `reports/ty/sel07_bundle_units.md`.
