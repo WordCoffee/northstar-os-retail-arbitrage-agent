@@ -10,6 +10,55 @@ A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.m
 > and `reports/ty/handoff.md`, then continue from the first unfinished unit. No
 > questions, no reports between cycles. Idle means re-plan.
 
+## Owner instruction, 2026-11-11 03:48 local — no browser pages
+
+The owner, verbatim: *"stop the broswer from ope8101/ui/beta-ops"* / *"please stop opening
+multiple different northstar os pages back to back"*. Chrome history shows the behaviour:
+Profile 1 at 09:14–09:16 and Profile 4 at 09:38 walked `/ui/keywords → /ui/beta →
+/ui/beta#support → /ui/beta-signup → /ui/design-studio` six seconds apart. Chrome Connect is
+ruled out — its journal's last entry is 2026-11-05.
+
+What was done: `state/vision/PAUSE` written (blocks every vision-control action by name),
+the `tys_launcher` lane and its agent stopped, and the competing director sessions
+interrupted through the server API (`POST /api/session/<id>/interrupt`) rather than by
+killing processes. **No lane may navigate, click, type or walk pages until the owner lifts
+it.** Delete `state/vision/PAUSE` only on the owner's word — never to make a check pass.
+
+## Position, 2026-11-11 cycle 21 — a generated plate's cast shadow is cut by a matte, not by colour
+
+Unit report: `reports/ty/d025_fullgen_matte_cutout.md`. Tag `ty-dir-d025-fullgen-matte`.
+
+| # | job | result |
+|---|---|---|
+| 1 | `fix-fullgen-matte-cutout` (D-025, rank 1) — D-022's re-render left PO-001 at seed 2747063199 on **14.760 %** residue: the *plate's* own cast shadow, attached and opaque, survived a grabcut that cuts by colour | **D-025 closed.** `CompositeGenerator._matte_cut()` asks BiRefNet for the product's matte inside the media lane (`comfy_lane.lane(needed_gb=3.0, role="scene:matte")`); grabcut is now only a **named** fallback (`record["cutout_matte"] = {requested, method, reason}`), never the silent default |
+
+**Ground truth on a synthetic plate with a known ellipse: matte keeps 3 band px, grabcut
+keeps 768** — and the grabcut artefact reads 0.00 % on the residue check, which is D-026
+proven rather than assumed (the control test asserts it).
+
+**Real lane, the same pinned seed: 100.0, residue 0.00 %, `cutout_matte.method=birefnet`,
+the smear gone, the label copy intact.** The honest limit: the two artefacts differ in
+framing, so that pair is visual + score, not per-pixel truth; the synthetic plate is the
+instrument with truth.
+
+**Also fixed, and it was hiding results:** `scorers._product_mask_from_cutout` returned
+`None` for the cutout's PNG **bytes**, so the residue check was *skipped* (and reported
+`ok`) whenever a caller passed bytes. It decodes them now.
+
+**Two things this session had to repair first:** four autonomous lanes were alive on one
+queue (the launcher's director, the tys launcher and its agent, an orphaned
+`rerender_prompt_only.py` plus a second ComfyUI on the same port). One director now holds
+the lease (`state/director/director.pid` → the opencode service serving this session), the
+others were interrupted through the server API, and the duplicate GPU lane was stopped.
+
+**Tests:** 4 in `test_fullgen_matte_cutout.py` (written before the code) + 1 lane-gated;
+43 in the residue / fullgen-white / composite group.
+
+**Next, in rank order:** `fix-fullgen-silhouette` (D-026) → `pack-02-apparel-flat-print`
+(its plate form, brand art and briefs are already in the tree, uncommitted) →
+`reference-depth` → `pack-03-boxart-forms` → `block3-workspaces` → `block4-seller-tests` →
+`block5-production-hardening` → `block7-verification` → D-019.
+
 ## Position, 2026-11-11 cycle 20 — three thin reference categories deepened, and a claim corrected
 
 Unit report: `reports/ty/reference_depth.md`. Tag `ty-dir-reference-depth`.
