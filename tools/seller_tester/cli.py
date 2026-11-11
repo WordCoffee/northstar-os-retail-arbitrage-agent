@@ -14,6 +14,7 @@ import argparse
 import json
 import sys
 from pathlib import Path
+from typing import Any
 
 from .briefs import (
     DEFAULT_CATALOG_PATH,
@@ -351,7 +352,38 @@ def build_parser() -> argparse.ArgumentParser:
     pr.add_argument("--gaps", default=str(
         Path(__file__).resolve().parents[2] / "state" / "seller" / "product_gaps.json"),
         help="gap file for this run (kept out of the shared ty/seller_gaps.json)")
+
+    px = sub.add_parser(
+        "packaging",
+        help="build and score packaging dielines with the app's own print engine (sel-04)")
+    px.add_argument("--catalog", default=None, help="default ty/seller_briefs_packaging.json")
+    px.add_argument("--limit", type=int, default=None)
+    px.add_argument("--out-dir", default=None)
+    px.add_argument("--summary-out", default=None)
+    px.add_argument("--gaps", default=None)
     return parser
+
+
+def _cmd_packaging(args: Any) -> int:
+    """Build every packaging brief through the app's print engine and print the verdict."""
+    from . import packaging  # noqa: PLC0415
+
+    summary = packaging.run_pass(
+        catalog=args.catalog or packaging.DEFAULT_PACKAGING_CATALOG,
+        limit=args.limit,
+        out_dir=args.out_dir or packaging.DEFAULT_OUT,
+        summary_path=args.summary_out or packaging.DEFAULT_SUMMARY,
+        gaps_path=args.gaps or packaging.DEFAULT_GAPS,
+    )
+    for row in summary["results"]:
+        print(json.dumps({"brief": row.get("brief_id"), "status": row.get("status"),
+                          "score": row.get("score"), "failed": row.get("failed_checks"),
+                          "reason": row.get("reason")}))
+    print(json.dumps({key: summary.get(key) for key in
+                      ("generator", "selected", "scored", "passed", "failed", "refused",
+                       "pass_rate", "mean_score", "gaps")}))
+    print("summary:", str(args.summary_out or packaging.DEFAULT_SUMMARY))
+    return 0
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -368,6 +400,8 @@ def main(argv: list[str] | None = None) -> int:
             return _cmd_aplus(args)
         if args.command == "product":
             return _cmd_product(args)
+        if args.command == "packaging":
+            return _cmd_packaging(args)
         return _cmd_escalate(args)
     except GeneratorUnavailable as exc:
         print(f"generator unavailable: {exc}", file=sys.stderr)

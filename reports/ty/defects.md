@@ -399,3 +399,26 @@ residue with `check_matte_residue`, and the same composition with the shadow on 
 same check (the control). 4 + 91 tests green.
 `reports/ty/d022_fullgen_white_composite.md`.
 
+
+
+## D-023 â€” the app's own readiness gate blocks every carton dieline (open 2026-11-11)
+
+Found by `sel-04-packaging`, the first packaging pass. `package_readiness.REQUIRED_LAYERS`
+is `("trim", "fold", "safe")` and `assess_dieline` blocks a build that lacks any of them.
+`build_carton` (`rsc_box`, `tuck_end`, `sleeve`) never emits a **safe** layer: measured on
+all six shipped carton/sleeve briefs, the SVG layers are
+`['bleed', 'fold', 'info', 'trim']` â€” no `safe` â€” while both `doypack` briefs carry
+`['bleed', 'fold', 'info', 'marks', 'safe', 'trim']`. So **the app's own retail-readiness
+check refuses every folding carton and sleeve it prints**, with its own words: *"dieline is
+missing its 'safe' layer"*.
+
+Consequence, measured: `python -m tools.seller_tester packaging` â†’ 8 briefs, **2 pass
+(doypack), 6 fail** `layers` + `readiness`, mean **78.6**, 6 gaps filed
+(`reports/ty/packaging_pass.json`, `state/seller/packaging_gaps.json`).
+
+**Not yet done:** `build_carton` must emit the safe-margin inset (the doypack's `safe_mm`
+path already exists), and then the six briefs should pass their own gate. Queued as
+`fix-carton-safe-layer`. Until then this is a real 6/8 failure of the packaging lane, not a
+brief problem: the same briefs pass `sheet`, `panels`, `bleed`, `pdf`, `safe` (skipped with
+the reason) — only the missing layer fails them.
+

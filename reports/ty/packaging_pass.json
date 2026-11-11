@@ -1,0 +1,819 @@
+{
+  "generated_at": "2026-11-11T03:43:15",
+  "generator": "design_studio_print.build_from_template + render_svg + render_pdf",
+  "selected": 8,
+  "scored": 8,
+  "passed": 2,
+  "failed": 6,
+  "refused": 0,
+  "pass_rate": 25.0,
+  "mean_score": 78.6,
+  "results": [
+    {
+      "brief_id": "PK-001",
+      "template": "doypack",
+      "score": 100.0,
+      "passed": true,
+      "failed_checks": [],
+      "checks": {
+        "sheet": {
+          "ok": true,
+          "check": "sheet",
+          "width_mm": 158.0,
+          "height_mm": 506.0,
+          "detail": "SVG sheet 158x506 mm vs the build's 158x506 mm"
+        },
+        "panels": {
+          "ok": true,
+          "check": "panels",
+          "shape": "named",
+          "missing": [],
+          "panels": {
+            "front": [
+              9.0,
+              11.0,
+              140.0,
+              220.0
+            ],
+            "back": [
+              9.0,
+              283.0,
+              140.0,
+              220.0
+            ],
+            "gusset": [
+              9.0,
+              237.0,
+              140.0,
+              40.0
+            ]
+          },
+          "detail": "panels ['back', 'front', 'gusset'] present"
+        },
+        "bleed": {
+          "ok": true,
+          "check": "bleed",
+          "bleed_mm": 3.0,
+          "needed_mm": 3.0,
+          "detail": "bleed 3 mm vs the brief's 3 mm"
+        },
+        "safe": {
+          "ok": true,
+          "check": "safe",
+          "safe_mm": 5.0,
+          "needed_mm": 5.0,
+          "detail": "safe margin 5 mm vs the brief's 5 mm"
+        },
+        "layers": {
+          "ok": true,
+          "check": "layers",
+          "layers": [
+            "bleed",
+            "fold",
+            "info",
+            "marks",
+            "safe",
+            "trim"
+          ],
+          "missing": [],
+          "detail": "layers ['bleed', 'fold', 'info', 'marks', 'safe', 'trim']"
+        },
+        "pdf": {
+          "ok": true,
+          "check": "pdf",
+          "page_pt": [
+            447.9,
+            1434.3
+          ],
+          "expected_pt": [
+            447.9,
+            1434.3
+          ],
+          "detail": "page 447.9x1434.3 pt vs the sheet's 447.9x1434.3 pt"
+        },
+        "readiness": {
+          "ok": true,
+          "check": "readiness",
+          "assessed": true,
+          "blockers": [],
+          "warnings": [
+            "proportion: gusset 40mm is far below the published 70mm for a 100g pouch (ladder row 120x180+70) - measure a competitor pouch and confirm before plates",
+            "dieline confidence: planning dieline - not a die"
+          ],
+          "detail": "retail-ready dieline"
+        }
+      },
+      "status": "scored",
+      "artefact": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\packaging\\PK-001.svg",
+      "pdf": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\packaging\\PK-001.pdf",
+      "seconds": 0.04,
+      "width_mm": 158.0,
+      "height_mm": 506.0,
+      "layers": [
+        "bleed",
+        "fold",
+        "info",
+        "marks",
+        "safe",
+        "trim"
+      ]
+    },
+    {
+      "brief_id": "PK-002",
+      "template": "tuck_end",
+      "score": 71.4,
+      "passed": false,
+      "failed_checks": [
+        "layers",
+        "readiness"
+      ],
+      "checks": {
+        "sheet": {
+          "ok": true,
+          "check": "sheet",
+          "width_mm": 201.0,
+          "height_mm": 198.0,
+          "detail": "SVG sheet 201x198 mm vs the build's 201x198 mm"
+        },
+        "panels": {
+          "ok": true,
+          "check": "panels",
+          "shape": "widths",
+          "widths": [
+            45.0,
+            45.0,
+            45.0,
+            45.0,
+            15.0
+          ],
+          "count": 5,
+          "needed": 4,
+          "span_mm": 195.0,
+          "sheet_mm": 201.0,
+          "span_ok": true,
+          "detail": "5 faces + glue spanning 195 mm of the 201 mm sheet"
+        },
+        "bleed": {
+          "ok": true,
+          "check": "bleed",
+          "bleed_mm": 3.0,
+          "needed_mm": 3.0,
+          "detail": "bleed 3 mm vs the brief's 3 mm"
+        },
+        "safe": {
+          "ok": true,
+          "check": "safe",
+          "skipped": true,
+          "detail": "this template declares no safe-margin field; trim/fold geometry is the engine's own gate for it"
+        },
+        "layers": {
+          "ok": false,
+          "check": "layers",
+          "layers": [
+            "bleed",
+            "fold",
+            "info",
+            "trim"
+          ],
+          "missing": [
+            "safe"
+          ],
+          "detail": "missing layers: ['safe']"
+        },
+        "pdf": {
+          "ok": true,
+          "check": "pdf",
+          "page_pt": [
+            569.8,
+            561.3
+          ],
+          "expected_pt": [
+            569.8,
+            561.3
+          ],
+          "detail": "page 569.8x561.3 pt vs the sheet's 569.8x561.3 pt"
+        },
+        "readiness": {
+          "ok": false,
+          "check": "readiness",
+          "assessed": true,
+          "blockers": [
+            "dieline is missing its 'safe' layer"
+          ],
+          "warnings": [],
+          "detail": "dieline is missing its 'safe' layer"
+        }
+      },
+      "status": "scored",
+      "artefact": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\packaging\\PK-002.svg",
+      "pdf": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\packaging\\PK-002.pdf",
+      "seconds": 0.0,
+      "width_mm": 201.0,
+      "height_mm": 198.0,
+      "layers": [
+        "bleed",
+        "fold",
+        "info",
+        "trim"
+      ]
+    },
+    {
+      "brief_id": "PK-003",
+      "template": "rsc_box",
+      "score": 71.4,
+      "passed": false,
+      "failed_checks": [
+        "layers",
+        "readiness"
+      ],
+      "checks": {
+        "sheet": {
+          "ok": true,
+          "check": "sheet",
+          "width_mm": 421.0,
+          "height_mm": 146.0,
+          "detail": "SVG sheet 421x146 mm vs the build's 421x146 mm"
+        },
+        "panels": {
+          "ok": true,
+          "check": "panels",
+          "shape": "widths",
+          "widths": [
+            120.0,
+            80.0,
+            120.0,
+            80.0,
+            15.0
+          ],
+          "count": 5,
+          "needed": 4,
+          "span_mm": 415.0,
+          "sheet_mm": 421.0,
+          "span_ok": true,
+          "detail": "5 faces + glue spanning 415 mm of the 421 mm sheet"
+        },
+        "bleed": {
+          "ok": true,
+          "check": "bleed",
+          "bleed_mm": 3.0,
+          "needed_mm": 3.0,
+          "detail": "bleed 3 mm vs the brief's 3 mm"
+        },
+        "safe": {
+          "ok": true,
+          "check": "safe",
+          "skipped": true,
+          "detail": "this template declares no safe-margin field; trim/fold geometry is the engine's own gate for it"
+        },
+        "layers": {
+          "ok": false,
+          "check": "layers",
+          "layers": [
+            "bleed",
+            "fold",
+            "info",
+            "trim"
+          ],
+          "missing": [
+            "safe"
+          ],
+          "detail": "missing layers: ['safe']"
+        },
+        "pdf": {
+          "ok": true,
+          "check": "pdf",
+          "page_pt": [
+            1193.4,
+            413.9
+          ],
+          "expected_pt": [
+            1193.4,
+            413.9
+          ],
+          "detail": "page 1193.4x413.9 pt vs the sheet's 1193.4x413.9 pt"
+        },
+        "readiness": {
+          "ok": false,
+          "check": "readiness",
+          "assessed": true,
+          "blockers": [
+            "dieline is missing its 'safe' layer"
+          ],
+          "warnings": [],
+          "detail": "dieline is missing its 'safe' layer"
+        }
+      },
+      "status": "scored",
+      "artefact": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\packaging\\PK-003.svg",
+      "pdf": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\packaging\\PK-003.pdf",
+      "seconds": 0.0,
+      "width_mm": 421.0,
+      "height_mm": 146.0,
+      "layers": [
+        "bleed",
+        "fold",
+        "info",
+        "trim"
+      ]
+    },
+    {
+      "brief_id": "PK-004",
+      "template": "sleeve",
+      "score": 71.4,
+      "passed": false,
+      "failed_checks": [
+        "layers",
+        "readiness"
+      ],
+      "checks": {
+        "sheet": {
+          "ok": true,
+          "check": "sheet",
+          "width_mm": 321.0,
+          "height_mm": 166.0,
+          "detail": "SVG sheet 321x166 mm vs the build's 321x166 mm"
+        },
+        "panels": {
+          "ok": true,
+          "check": "panels",
+          "shape": "widths",
+          "widths": [
+            75.0,
+            75.0,
+            75.0,
+            75.0,
+            15.0
+          ],
+          "count": 5,
+          "needed": 4,
+          "span_mm": 315.0,
+          "sheet_mm": 321.0,
+          "span_ok": true,
+          "detail": "5 faces + glue spanning 315 mm of the 321 mm sheet"
+        },
+        "bleed": {
+          "ok": true,
+          "check": "bleed",
+          "bleed_mm": 3.0,
+          "needed_mm": 3.0,
+          "detail": "bleed 3 mm vs the brief's 3 mm"
+        },
+        "safe": {
+          "ok": true,
+          "check": "safe",
+          "skipped": true,
+          "detail": "this template declares no safe-margin field; trim/fold geometry is the engine's own gate for it"
+        },
+        "layers": {
+          "ok": false,
+          "check": "layers",
+          "layers": [
+            "bleed",
+            "fold",
+            "info",
+            "trim"
+          ],
+          "missing": [
+            "safe"
+          ],
+          "detail": "missing layers: ['safe']"
+        },
+        "pdf": {
+          "ok": true,
+          "check": "pdf",
+          "page_pt": [
+            909.9,
+            470.6
+          ],
+          "expected_pt": [
+            909.9,
+            470.6
+          ],
+          "detail": "page 909.9x470.6 pt vs the sheet's 909.9x470.6 pt"
+        },
+        "readiness": {
+          "ok": false,
+          "check": "readiness",
+          "assessed": true,
+          "blockers": [
+            "dieline is missing its 'safe' layer"
+          ],
+          "warnings": [],
+          "detail": "dieline is missing its 'safe' layer"
+        }
+      },
+      "status": "scored",
+      "artefact": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\packaging\\PK-004.svg",
+      "pdf": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\packaging\\PK-004.pdf",
+      "seconds": 0.0,
+      "width_mm": 321.0,
+      "height_mm": 166.0,
+      "layers": [
+        "bleed",
+        "fold",
+        "info",
+        "trim"
+      ]
+    },
+    {
+      "brief_id": "PK-005",
+      "template": "doypack",
+      "score": 100.0,
+      "passed": true,
+      "failed_checks": [],
+      "checks": {
+        "sheet": {
+          "ok": true,
+          "check": "sheet",
+          "width_mm": 108.0,
+          "height_mm": 351.0,
+          "detail": "SVG sheet 108x351 mm vs the build's 108x351 mm"
+        },
+        "panels": {
+          "ok": true,
+          "check": "panels",
+          "shape": "named",
+          "missing": [],
+          "panels": {
+            "front": [
+              9.0,
+              11.0,
+              90.0,
+              150.0
+            ],
+            "back": [
+              9.0,
+              198.0,
+              90.0,
+              150.0
+            ]
+          },
+          "detail": "panels ['back', 'front'] present"
+        },
+        "bleed": {
+          "ok": true,
+          "check": "bleed",
+          "bleed_mm": 3.0,
+          "needed_mm": 3.0,
+          "detail": "bleed 3 mm vs the brief's 3 mm"
+        },
+        "safe": {
+          "ok": true,
+          "check": "safe",
+          "safe_mm": 4.0,
+          "needed_mm": 4.0,
+          "detail": "safe margin 4 mm vs the brief's 4 mm"
+        },
+        "layers": {
+          "ok": true,
+          "check": "layers",
+          "layers": [
+            "bleed",
+            "fold",
+            "info",
+            "marks",
+            "safe",
+            "trim"
+          ],
+          "missing": [],
+          "detail": "layers ['bleed', 'fold', 'info', 'marks', 'safe', 'trim']"
+        },
+        "pdf": {
+          "ok": true,
+          "check": "pdf",
+          "page_pt": [
+            306.1,
+            995.0
+          ],
+          "expected_pt": [
+            306.1,
+            995.0
+          ],
+          "detail": "page 306.1x995.0 pt vs the sheet's 306.1x995.0 pt"
+        },
+        "readiness": {
+          "ok": true,
+          "check": "readiness",
+          "assessed": true,
+          "blockers": [],
+          "warnings": [
+            "proportion: gusset 25mm is far below the published 60mm for a 50g pouch (ladder row 100x150+60) - measure a competitor pouch and confirm before plates",
+            "dieline confidence: planning dieline - not a die"
+          ],
+          "detail": "retail-ready dieline"
+        }
+      },
+      "status": "scored",
+      "artefact": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\packaging\\PK-005.svg",
+      "pdf": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\packaging\\PK-005.pdf",
+      "seconds": 0.0,
+      "width_mm": 108.0,
+      "height_mm": 351.0,
+      "layers": [
+        "bleed",
+        "fold",
+        "info",
+        "marks",
+        "safe",
+        "trim"
+      ]
+    },
+    {
+      "brief_id": "PK-006",
+      "template": "tuck_end",
+      "score": 71.4,
+      "passed": false,
+      "failed_checks": [
+        "layers",
+        "readiness"
+      ],
+      "checks": {
+        "sheet": {
+          "ok": true,
+          "check": "sheet",
+          "width_mm": 261.0,
+          "height_mm": 163.0,
+          "detail": "SVG sheet 261x163 mm vs the build's 261x163 mm"
+        },
+        "panels": {
+          "ok": true,
+          "check": "panels",
+          "shape": "widths",
+          "widths": [
+            60.0,
+            60.0,
+            60.0,
+            60.0,
+            15.0
+          ],
+          "count": 5,
+          "needed": 4,
+          "span_mm": 255.0,
+          "sheet_mm": 261.0,
+          "span_ok": true,
+          "detail": "5 faces + glue spanning 255 mm of the 261 mm sheet"
+        },
+        "bleed": {
+          "ok": true,
+          "check": "bleed",
+          "bleed_mm": 3.0,
+          "needed_mm": 3.0,
+          "detail": "bleed 3 mm vs the brief's 3 mm"
+        },
+        "safe": {
+          "ok": true,
+          "check": "safe",
+          "skipped": true,
+          "detail": "this template declares no safe-margin field; trim/fold geometry is the engine's own gate for it"
+        },
+        "layers": {
+          "ok": false,
+          "check": "layers",
+          "layers": [
+            "bleed",
+            "fold",
+            "info",
+            "trim"
+          ],
+          "missing": [
+            "safe"
+          ],
+          "detail": "missing layers: ['safe']"
+        },
+        "pdf": {
+          "ok": true,
+          "check": "pdf",
+          "page_pt": [
+            739.8,
+            462.0
+          ],
+          "expected_pt": [
+            739.8,
+            462.0
+          ],
+          "detail": "page 739.8x462.0 pt vs the sheet's 739.8x462.0 pt"
+        },
+        "readiness": {
+          "ok": false,
+          "check": "readiness",
+          "assessed": true,
+          "blockers": [
+            "dieline is missing its 'safe' layer"
+          ],
+          "warnings": [],
+          "detail": "dieline is missing its 'safe' layer"
+        }
+      },
+      "status": "scored",
+      "artefact": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\packaging\\PK-006.svg",
+      "pdf": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\packaging\\PK-006.pdf",
+      "seconds": 0.0,
+      "width_mm": 261.0,
+      "height_mm": 163.0,
+      "layers": [
+        "bleed",
+        "fold",
+        "info",
+        "trim"
+      ]
+    },
+    {
+      "brief_id": "PK-007",
+      "template": "rsc_box",
+      "score": 71.4,
+      "passed": false,
+      "failed_checks": [
+        "layers",
+        "readiness"
+      ],
+      "checks": {
+        "sheet": {
+          "ok": true,
+          "check": "sheet",
+          "width_mm": 541.0,
+          "height_mm": 126.0,
+          "detail": "SVG sheet 541x126 mm vs the build's 541x126 mm"
+        },
+        "panels": {
+          "ok": true,
+          "check": "panels",
+          "shape": "widths",
+          "widths": [
+            200.0,
+            60.0,
+            200.0,
+            60.0,
+            15.0
+          ],
+          "count": 5,
+          "needed": 4,
+          "span_mm": 535.0,
+          "sheet_mm": 541.0,
+          "span_ok": true,
+          "detail": "5 faces + glue spanning 535 mm of the 541 mm sheet"
+        },
+        "bleed": {
+          "ok": true,
+          "check": "bleed",
+          "bleed_mm": 3.0,
+          "needed_mm": 3.0,
+          "detail": "bleed 3 mm vs the brief's 3 mm"
+        },
+        "safe": {
+          "ok": true,
+          "check": "safe",
+          "skipped": true,
+          "detail": "this template declares no safe-margin field; trim/fold geometry is the engine's own gate for it"
+        },
+        "layers": {
+          "ok": false,
+          "check": "layers",
+          "layers": [
+            "bleed",
+            "fold",
+            "info",
+            "trim"
+          ],
+          "missing": [
+            "safe"
+          ],
+          "detail": "missing layers: ['safe']"
+        },
+        "pdf": {
+          "ok": true,
+          "check": "pdf",
+          "page_pt": [
+            1533.5,
+            357.2
+          ],
+          "expected_pt": [
+            1533.5,
+            357.2
+          ],
+          "detail": "page 1533.5x357.2 pt vs the sheet's 1533.5x357.2 pt"
+        },
+        "readiness": {
+          "ok": false,
+          "check": "readiness",
+          "assessed": true,
+          "blockers": [
+            "dieline is missing its 'safe' layer"
+          ],
+          "warnings": [],
+          "detail": "dieline is missing its 'safe' layer"
+        }
+      },
+      "status": "scored",
+      "artefact": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\packaging\\PK-007.svg",
+      "pdf": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\packaging\\PK-007.pdf",
+      "seconds": 0.0,
+      "width_mm": 541.0,
+      "height_mm": 126.0,
+      "layers": [
+        "bleed",
+        "fold",
+        "info",
+        "trim"
+      ]
+    },
+    {
+      "brief_id": "PK-008",
+      "template": "sleeve",
+      "score": 71.4,
+      "passed": false,
+      "failed_checks": [
+        "layers",
+        "readiness"
+      ],
+      "checks": {
+        "sheet": {
+          "ok": true,
+          "check": "sheet",
+          "width_mm": 381.0,
+          "height_mm": 206.0,
+          "detail": "SVG sheet 381x206 mm vs the build's 381x206 mm"
+        },
+        "panels": {
+          "ok": true,
+          "check": "panels",
+          "shape": "widths",
+          "widths": [
+            90.0,
+            90.0,
+            90.0,
+            90.0,
+            15.0
+          ],
+          "count": 5,
+          "needed": 4,
+          "span_mm": 375.0,
+          "sheet_mm": 381.0,
+          "span_ok": true,
+          "detail": "5 faces + glue spanning 375 mm of the 381 mm sheet"
+        },
+        "bleed": {
+          "ok": true,
+          "check": "bleed",
+          "bleed_mm": 3.0,
+          "needed_mm": 3.0,
+          "detail": "bleed 3 mm vs the brief's 3 mm"
+        },
+        "safe": {
+          "ok": true,
+          "check": "safe",
+          "skipped": true,
+          "detail": "this template declares no safe-margin field; trim/fold geometry is the engine's own gate for it"
+        },
+        "layers": {
+          "ok": false,
+          "check": "layers",
+          "layers": [
+            "bleed",
+            "fold",
+            "info",
+            "trim"
+          ],
+          "missing": [
+            "safe"
+          ],
+          "detail": "missing layers: ['safe']"
+        },
+        "pdf": {
+          "ok": true,
+          "check": "pdf",
+          "page_pt": [
+            1080.0,
+            583.9
+          ],
+          "expected_pt": [
+            1080.0,
+            583.9
+          ],
+          "detail": "page 1080.0x583.9 pt vs the sheet's 1080.0x583.9 pt"
+        },
+        "readiness": {
+          "ok": false,
+          "check": "readiness",
+          "assessed": true,
+          "blockers": [
+            "dieline is missing its 'safe' layer"
+          ],
+          "warnings": [],
+          "detail": "dieline is missing its 'safe' layer"
+        }
+      },
+      "status": "scored",
+      "artefact": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\packaging\\PK-008.svg",
+      "pdf": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\packaging\\PK-008.pdf",
+      "seconds": 0.0,
+      "width_mm": 381.0,
+      "height_mm": 206.0,
+      "layers": [
+        "bleed",
+        "fold",
+        "info",
+        "trim"
+      ]
+    }
+  ]
+}

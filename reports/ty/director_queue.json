@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-11T09:37:20+00:00",
+  "updated_at": "2026-11-11T09:44:05+00:00",
   "cycle": 3,
   "unit_in_flight": "",
   "unit_order": [
@@ -1890,6 +1890,30 @@
       "rank": 1
     },
     {
+      "id": "fix-carton-safe-layer",
+      "unit": "U",
+      "title": "D-023: build_carton emits no safe layer, so the app's own readiness gate blocks every carton and sleeve dieline",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "Northstar_backend/design_studio_print.py",
+        "Northstar_backend/dieline_geometry.py",
+        "Northstar_backend/test_*.py",
+        "tools/seller_tester/packaging.py"
+      ],
+      "branch": "ty/fix-carton-safe-layer",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-11T09:44:00+00:00",
+      "updated_at": "2026-11-11T09:44:04+00:00",
+      "rank": 1
+    },
+    {
       "id": "ux-05-render-routes",
       "unit": "D12",
       "title": "26 of 29 service routes render the chat shell instead of their own page",
@@ -2196,7 +2220,7 @@
       "id": "sel-04-packaging",
       "unit": "D12",
       "title": "Packaging and mockups: dielines, front/back panels, scored",
-      "status": "queued",
+      "status": "merged",
       "owner": "",
       "write_paths": [
         "ty/seller_briefs.json",
@@ -2209,9 +2233,9 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": "sel-04 closed as a real lane: 8 packaging briefs over 4 templates, build through design_studio_print (geometry gate) + render_svg + render_pdf, 7 mechanical checks (sheet, panels incl. carton face-span identity, bleed, safe, layers, PDF page, app readiness) and a gap file; measured 8 scored / 2 passed / 6 failed / mean 78.6, the 6 failures are D-023 (build_carton emits no safe layer and the app's own readiness gate blocks every carton); CLI 'python -m tools.seller_tester packaging'; 9 tests; reports/ty/sel04_packaging.md",
       "created_at": "2026-11-08T21:21:18+00:00",
-      "updated_at": "2026-11-11T05:11:53+00:00",
+      "updated_at": "2026-11-11T09:44:00+00:00",
       "rank": 5
     },
     {
