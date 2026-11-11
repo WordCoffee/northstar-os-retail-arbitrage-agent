@@ -79,3 +79,18 @@ python -m pytest Northstar_backend/test_matte_residue.py \
   Northstar_backend/test_seller_tester_composite.py -q
 -> 39 passed in 8.04s   (exit 0)
 ```
+
+## Correction, 2026-11-11 (independent verifier)
+
+The run table above cites `reports/ty/d022_real_pass.json` for the **3-brief**
+fresh-seed run. That file now holds a **12-brief** run at different seeds, because
+the next session re-ran the full catalog to the same summary path. The 3-brief
+numbers are therefore no longer reproducible from the file this report points at.
+
+This is the director's editing error, recorded rather than smoothed: an evidence
+file another report cites must not be overwritten in place. The 12-brief pass is
+its own unit (`reports/ty/d022_real_pass.json`, 12 selected / 12 scored / 12 passed,
+mean 100.0) and the pinned-seed run it belongs beside is
+`reports/ty/d022_pinned_pass.json`.
+
+*Correction appended by the director after `reports/ty/verify_20261111.md`.*

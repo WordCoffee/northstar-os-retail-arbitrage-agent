@@ -1,47 +1,57 @@
 {
-  "at": "2026-11-11",
-  "check": "check_matte_residue",
-  "limit_pct": 0.5,
-  "rows": [
-    {
-      "brief": "PO-001",
-      "artefact": "renders/heldout_prompt_only10/PO-001.png",
-      "label": "before (old artefact)",
-      "status": "measured",
-      "residue_pct": 25.647,
-      "residue_px": 1025874,
-      "shadow_px": 1022424,
-      "ok": false
-    },
-    {
-      "brief": "PO-001",
-      "artefact": "renders/d022/PO-001.png",
-      "label": "after (D-022, real lane)",
-      "status": "measured",
-      "residue_pct": 0.0,
-      "residue_px": 0,
-      "shadow_px": 0,
-      "ok": true
-    },
-    {
-      "brief": "SR-001",
-      "artefact": "renders/d022/SR-001.png",
-      "label": "composite white-main, before D-024",
-      "status": "measured",
-      "residue_pct": 11.473,
-      "residue_px": 458901,
-      "shadow_px": 458900,
-      "ok": false
-    },
-    {
-      "brief": "SR-001",
-      "artefact": "renders/d024/SR-001.png",
-      "label": "after (D-024, real lane)",
-      "status": "measured",
-      "residue_pct": 0.037,
-      "residue_px": 1488,
-      "shadow_px": 1488,
-      "ok": true
-    }
-  ]
+ "at": "2026-11-11",
+ "check": "check_matte_residue",
+ "limit_pct": 0.5,
+ "rows": [
+  {
+   "brief": "PO-001",
+   "artefact": "renders/heldout_prompt_only10/PO-001.png",
+   "label": "before (old artefact)",
+   "status": "measured",
+   "residue_pct": 25.647,
+   "residue_px": 1025874,
+   "shadow_px": 1022424,
+   "ok": false
+  },
+  {
+   "brief": "PO-001",
+   "artefact": "renders/d022/PO-001.png",
+   "label": "after (D-022, real lane)",
+   "status": "measured",
+   "residue_pct": 0.0,
+   "residue_px": 0,
+   "shadow_px": 0,
+   "ok": true
+  },
+  {
+   "brief": "SR-001",
+   "artefact": "renders/d022/SR-001.png",
+   "label": "composite white-main, before D-024",
+   "status": "measured",
+   "residue_pct": 11.473,
+   "residue_px": 458901,
+   "shadow_px": 458900,
+   "ok": false
+  },
+  {
+   "brief": "SR-001",
+   "artefact": "renders/d024/SR-001.png",
+   "label": "after (D-024, real lane)",
+   "status": "measured",
+   "residue_pct": 0.037,
+   "residue_px": 1488,
+   "shadow_px": 1488,
+   "ok": true
+  }
+ ],
+ "_corrections": [
+  {
+   "at": "2026-11-11",
+   "by": "independent verifier (reports/ty/verify_20261111.md)",
+   "row": "SR-001 after (D-024, real lane)",
+   "as_recorded": "0.037 %",
+   "re_measured": "0.145 %",
+   "note": "the artefact renders/d024/SR-001.png measures 0.145 % with the same instrument, and reports/ty/d024_real_pass.json records 0.14 %; the 0.037 % came from an earlier render of the same brief and does not describe this artefact. Both values pass the 0.5 % limit."
+  }
+ ]
 }

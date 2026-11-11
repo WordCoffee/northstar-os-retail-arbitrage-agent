@@ -1,0 +1,71 @@
+{
+ "at": "2026-11-11",
+ "why": "renders/ is gitignored by the owner's policy; the pictures cannot be committed, their identity can",
+ "artefacts": [
+  {
+   "path": "renders/heldout_prompt_only10/PO-001.png",
+   "bytes": 627782,
+   "sha256": "507f002974c0dca72e6e98268f55ad087161069cc8e4d1f33db6d005eb0b1e1f"
+  },
+  {
+   "path": "renders/d022_pinned/PO-001.png",
+   "bytes": 583441,
+   "sha256": "b365af9c7b679667e3bf0ec610226def2842c8eca843f37f8ace0421eab4fcd2"
+  },
+  {
+   "path": "renders/d022/SR-001.png",
+   "bytes": 2002875,
+   "sha256": "1d7b0d74892da05472de7fd8a9c6108241df9fab83f9dff8c8f5f8b726cdd101"
+  },
+  {
+   "path": "renders/d024/SR-001.png",
+   "bytes": 1804150,
+   "sha256": "a3dfed027741cca9fbe35e1499b3256f923bb849cb036e8cf7a86bc391f917af"
+  },
+  {
+   "path": "renders/d025/PO-001.png",
+   "bytes": 571410,
+   "sha256": "d0a3c00ded76046e3ba02d9e6f4aa8acadff03e0609c2a33297066d0a7d24785"
+  },
+  {
+   "path": "renders/heldout_prompt_only11/PO-001.png",
+   "bytes": 1667766,
+   "sha256": "e04b084d8d607847f71af54bcf6409a92d13a8d9542a172a5970ce178084b25a"
+  },
+  {
+   "path": "renders/heldout_prompt_only11/PO-012.png",
+   "bytes": 1392629,
+   "sha256": "bd261378fb12705fc82888d6613a2ddddb544ecb81bb3ffa762e81776805e1aa"
+  },
+  {
+   "path": "renders/d025/ST-017/product_front.png",
+   "bytes": 272344,
+   "sha256": "e82e97b399dfc947713a352ebaf3defc1cf570e8c2b15d2d955270eb9a7f4a23"
+  },
+  {
+   "path": "renders/d025/ST-046/product_front.png",
+   "bytes": 265049,
+   "sha256": "cf4ea4a63361286212fa66adf17ca2287dee13cad7c54d5568270e53f4965c9e"
+  },
+  {
+   "path": "renders/pack03/ST-012/product_front.png",
+   "bytes": 573176,
+   "sha256": "6aac1b7b19a16a090b6e0d882f871e8f731482cc24b7f9179174a2546e9518c8"
+  },
+  {
+   "path": "renders/pack03/ST-028/product_front.png",
+   "bytes": 630121,
+   "sha256": "15d9b79515058e19e0ed5c25bba425fd57e7e97149a9561ba7563bdfa023a1fc"
+  },
+  {
+   "path": "renders/d027/ST-012/product_front.png",
+   "bytes": 568695,
+   "sha256": "9eb76a07736c308a36ededc8e746170d6677648e8df6bb256285369db3bf58fd"
+  },
+  {
+   "path": "renders/d027/ST-028/product_front.png",
+   "bytes": 624236,
+   "sha256": "782a96c3268160aa518724a76c6ccc7ec5cb98a8f711ee45b7ac2e356e24fc39"
+  }
+ ]
+}

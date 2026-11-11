@@ -67,3 +67,22 @@ python -m pytest Northstar_backend/test_matte_residue.py \
   Northstar_backend/test_seller_tester_composite.py -q
 -> 39 passed in 8.04s   (exit 0)
 ```
+
+## Correction, 2026-11-11 (independent verifier)
+
+The before/after table above states **10.49 % -> 0.48 %**. Re-measured on the same
+artefacts in a separate session, with the repo's own instrument
+(`scorers.check_matte_residue` plus `_product_mask_from_cutout`, the path
+`tools/seller_tester/scorers.py:537-545` uses):
+
+| artefact | report says | artefact measures |
+|---|---|---|
+| `renders/d022/SR-001.png` | 10.49 % (419 583 px) | **11.473 %** (458 901 px) |
+| `renders/d024/SR-001.png` | 0.48 % (19 282 px) | **0.145 %** |
+
+The verdict does not change — before fails the 0.5 % limit, after passes — but the
+numbers above do not reproduce, and this report's own data file
+(`reports/ty/d024_real_pass.json`) already recorded 0.14 %. The 0.48 % and the
+10.49 % are therefore wrong as written; the pass/fail reading stands.
+
+*Correction appended by the director after `reports/ty/verify_20261111.md`.*
