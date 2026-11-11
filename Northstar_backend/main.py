@@ -987,6 +987,29 @@ def health():
     return {"status": "ok", "service": "northstar-backend", "version": "1.0.0"}
 
 
+@app.get("/readyz", include_in_schema=False)
+@app.get("/health/readyz", include_in_schema=False)
+def readyz():
+    """Readiness probe (P1-05 parity with the worker and the scheduler).
+
+    Liveness only says the process is up. This reports the posture invariants a
+    deploy can get wrong - rate-limit posture, log redaction wiring, a writable
+    data directory, the UI build, Foundation store reachability and the live
+    posture - and answers 503 when any critical check fails, so an orchestrator
+    drains the instance instead of routing traffic into errors.
+
+    Reachable directly on the API (`/readyz`) and through Caddy's `/health*`
+    proxy rule (`/health/readyz`).
+    """
+    from production_health import readiness_snapshot
+
+    snapshot = readiness_snapshot()
+    return JSONResponse(
+        status_code=200 if snapshot["status"] == "ready" else 503,
+        content=snapshot,
+    )
+
+
 @app.get("/api/v1/models")
 async def list_models():
     """Phase H/H2 — unified dual-engine Brain catalog (local + cloud + tiers).

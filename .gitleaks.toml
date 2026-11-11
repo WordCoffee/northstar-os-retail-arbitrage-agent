@@ -62,3 +62,9 @@ paths = ['''Northstar_backend[\\/]test_chrome_uia\.py$''']
 [[allowlists]]
 description = "FP: Northstar_backend/test_vision_computer.py:74 writes a fake secret file into a tmp_path so the vision pipeline can be tested for refusing and redacting it; the value exists to be refused"
 paths = ['''Northstar_backend[\\/]test_vision_computer\.py$''']
+
+[[allowlists]]
+description = "FP: Northstar_backend/production_assert.py:806-829 are fake credentials constructed on purpose so the redaction filter can be proved to redact them (a key-shaped literal, a bearer token and a JWT). They must look like real credentials or the check proves nothing; they authenticate to nothing and are asserted to be ABSENT from the log output."
+paths = ['''Northstar_backend[\\/]production_assert\.py$''']
+regexTarget = "line"
+regexes = ['''sk-live-[0-9a-f]+''', '''Bearer [0-9a-f]+''', '''eyJhbGciOiJIUzI1NiJ9\.[A-Za-z0-9_\-]+\.[A-Za-z0-9_\-]+''']

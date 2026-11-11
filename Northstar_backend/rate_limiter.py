@@ -174,7 +174,8 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
 
         # Skip rate limiting for health checks and static/frontend files
         path = request.url.path
-        if path in ("/health", "/health/detailed") or path.startswith(("/static", "/ui")):
+        if path in ("/health", "/health/detailed", "/health/readyz", "/readyz") or \
+                path.startswith(("/static", "/ui")):
             return await call_next(request)
 
         client_id = self._get_client_id(request)
