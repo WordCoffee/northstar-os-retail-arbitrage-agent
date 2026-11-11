@@ -19,7 +19,8 @@ from pydantic import BaseModel, Field
 
 from design_studio_api import studio_account
 
-import mogra_label_art as art
+import brand_art as art
+import mogra_label_art as mg
 import product_picture as pp
 
 router = APIRouter(prefix="/api/design-studio/product-picture",
@@ -66,17 +67,30 @@ def _reference_bytes(asset_id: str, acct: str) -> bytes:
 
 @router.get("/designs")
 def designs(acct: str = Depends(studio_account)):
-    base = art.MOGRA_LIONS_MANE
+    """Every design the app can actually print, with the form and its briefs."""
+    entries = []
+    for design_id in art.known():
+        design = art.design_for(design_id)
+        form = art.form_of(design)
+        w_mm, h_mm = art.face_mm(design, "front")
+        briefs = pp.FORM_PLATE_BRIEFS[form]
+        entries.append({
+            "id": design_id,
+            "brand": design["brand"],
+            "product": design["product"],
+            "form": form,
+            "format": art.FORM_NAMES[form],
+            "face_mm": [round(w_mm, 2), round(h_mm, 2)],
+            "net_weight": design["net_weight"],
+            "panel_px": ([mg.BASE_SIZE[0], mg.BASE_SIZE[1]] if form == art.POUCH
+                         else [int(round(w_mm * 300 / 25.4)),
+                               int(round(h_mm * 300 / 25.4))]),
+            "faces": list(briefs),
+            "plate_briefs": dict(briefs),
+            "status": design.get("status"),
+        })
     return {
-        "designs": [{
-            "id": "mogra-lions-mane",
-            "brand": base["brand"],
-            "product": base["product"],
-            "net_weight": base["net_weight"],
-            "panel_px": list(art.BASE_SIZE),
-            "faces": list(pp.PLATE_BRIEFS),
-            "plate_briefs": dict(pp.PLATE_BRIEFS),
-        }],
+        "designs": entries,
         "gate": ("A picture is written only when mockup_quality.assert_legible reads "
                  "the wordmark and the net weight and the type is sharp."),
         "account": acct,
@@ -91,22 +105,24 @@ def create_product_picture(body: ProductPictureIn, acct: str = Depends(studio_ac
         raise HTTPException(status_code=422, detail=str(exc))
     if body.design:
         design = {**design, **body.design}
+    form = art.form_of(design)
+    briefs = pp.FORM_PLATE_BRIEFS.get(form) or pp.PLATE_BRIEFS
     faces = [str(f).strip().lower() for f in body.faces]
     if not faces:
         raise HTTPException(status_code=422, detail="faces must name at least one face")
-    unknown = [f for f in faces if f not in pp.PLATE_BRIEFS]
+    unknown = [f for f in faces if f not in briefs]
     if unknown:
         raise HTTPException(status_code=422,
-                            detail=f"unknown face(s) {unknown}; known: {list(pp.PLATE_BRIEFS)}")
+                            detail=f"unknown face(s) {unknown}; known: {list(briefs)}")
 
     reference = None
     if body.references:
         wanted = {str(face).lower(): str(aid) for face, aid in body.references.items() if aid}
-        unknown_refs = [face for face in wanted if face not in pp.PLATE_BRIEFS]
+        unknown_refs = [face for face in wanted if face not in briefs]
         if unknown_refs:
             raise HTTPException(status_code=422, detail={
                 "code": "unknown_reference_face", "faces": unknown_refs,
-                "known": list(pp.PLATE_BRIEFS)})
+                "known": list(briefs)})
         reference = {face: _reference_bytes(aid, acct) for face, aid in wanted.items()}
     elif body.reference_asset_id:
         reference = _reference_bytes(body.reference_asset_id, acct)

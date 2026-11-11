@@ -1,0 +1,170 @@
+{
+  "job": "sel-06b-second-brand",
+  "design": {
+    "id": "word-coffee",
+    "brand": "WORD COFFEE",
+    "product": "FOR MOM",
+    "form": "gift_box",
+    "format": "folding carton (gift box), front and back panels",
+    "theme": "blush",
+    "face_mm": [
+      100.0,
+      200.0
+    ],
+    "net_weight": "120 g (4.2 oz)",
+    "status": "DRAFT - copy, ingredients and UPC must be verified before print",
+    "claims": {
+      "organic_seal": false,
+      "fda": false,
+      "note": "no certification is claimed that the brand has not got"
+    }
+  },
+  "plate": {
+    "source": "synthetic (FLUX 3 lane unarmed: MEDIA_GEN_LIVE is not 1)",
+    "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\heldout_box_form\\panels\\plate.png"
+  },
+  "build_ok": true,
+  "form": "gift_box",
+  "faces": [
+    {
+      "face": "front",
+      "stage": "done",
+      "gate_ok": true,
+      "reason": "",
+      "brief": "a photograph of one blank unprinted slim folding gift box standing upright on a pale seamless studio sweep, its front face square to the camera, matte card stock, a gentle contact shadow, soft diffused key light from the upper left, photoreal commercial product photography, sharp focus on the box",
+      "quad": [
+        [
+          355.7,
+          351.0
+        ],
+        [
+          674.3,
+          351.0
+        ],
+        [
+          679.7,
+          1189.0
+        ],
+        [
+          350.3,
+          1189.0
+        ]
+      ],
+      "words": [
+        "WORDCOFFEE",
+        "For Mom",
+        "12 COFFEE SACHETS",
+        "Enpowering Moms, One Message ata Tine",
+        "NET WT. 120 G (4.2 OZ)",
+        "IND",
+        "COFFEE . MEDIUM ROAST \u00b7 10O% ARA",
+        "CRAFT - VERIFY BEFORE PRINT"
+      ],
+      "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\heldout_box_form\\picture\\product_front.png",
+      "bytes": 221153
+    },
+    {
+      "face": "back",
+      "stage": "done",
+      "gate_ok": true,
+      "reason": "",
+      "brief": "a photograph of one blank unprinted slim folding gift box standing upright on a pale seamless studio sweep, turned around so its back face is square to the camera, matte card stock, a gentle contact shadow, soft diffused key light from the upper left, photoreal commercial product photography, sharp focus on the box",
+      "quad": [
+        [
+          355.7,
+          351.0
+        ],
+        [
+          674.3,
+          351.0
+        ],
+        [
+          679.7,
+          1189.0
+        ],
+        [
+          350.3,
+          1189.0
+        ]
+      ],
+      "words": [
+        "WORDCOFFEE",
+        "NETWT.120G(4.20Z)",
+        "WHAT'SINSIDE",
+        "Twelve single-serve sachets of mediun-ro",
+        "printed with a message for her.",
+        "INGREDIENTS",
+        "Ground roasted coffee (1C0% arabica).",
+        "ROAST",
+        "Medium roast, grounc for fiter and pour-",
+        "HOW TO BREW",
+        "1. Empty one sachet into a cup.",
+        "2. Pcur 250 ml of water just oif the boi",
+        "3. Steep 3 minutes, stir, and serve.",
+        "word Coffee pairs a gcos cup with someth",
+        "mde to be given, rot just opened.",
+        "12 SACHETS - 10 G EACH",
+        "LOT WC-0000",
+        "BEST BY 00/0000",
+        "CRAFT",
+        "VERIFY INGREDIENTS AND UPC BEFORE PRIN"
+      ],
+      "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\heldout_box_form\\picture\\product_back.png",
+      "bytes": 227366
+    }
+  ],
+  "judge": {
+    "front": {
+      "pass": true,
+      "score": 95.0,
+      "reasons": [
+        "The image shows a pale-pink and cream gift box.",
+        "The words 'WORD COFFEE' are clearly visible.",
+        "The words 'For Mom' are present in large lilac script.",
+        "The line 'Empowering Moms, One Message at a Time' is visible.",
+        "The net weight (120 g (4.2 oz)) is readable."
+      ],
+      "available": true,
+      "model": "gemma3:4b"
+    },
+    "back": {
+      "pass": true,
+      "score": 95.0,
+      "reasons": [
+        "The image shows a packaging design for 'Word Coffee'.",
+        "The words 'WORD COFFEE' are clearly visible on the packaging.",
+        "The words 'For Mom' are visible in large lilac script.",
+        "The phrase 'Empowering Moms, One Message at a Time' is visible.",
+        "The net weight is visible as 'NET WT. 12 oz (34.3 oz)'."
+      ],
+      "available": true,
+      "model": "gemma3:4b"
+    },
+    "panel_front": {
+      "pass": true,
+      "score": 95.0,
+      "reasons": [
+        "The image shows a pale-pink and cream gift box.",
+        "The words 'WORD COFFEE' are clearly visible at the top.",
+        "The words 'For Mom' are present in large lilac script.",
+        "The line 'Empowering Moms, One Message at a Time' is visible.",
+        "The net weight '120 G (4.2 OZ)' is readable."
+      ],
+      "available": true,
+      "model": "gemma3:4b"
+    },
+    "panel_back": {
+      "pass": true,
+      "score": 95.0,
+      "reasons": [
+        "The image shows a pale-pink and cream gift box.",
+        "The words 'WORD COFFEE' are visible.",
+        "The words 'For Mom' are visible in large lilac script.",
+        "The text 'Empowering Moms, One Message at a Time' is visible.",
+        "The net weight '120 G (4.2 OZ)' is readable."
+      ],
+      "available": true,
+      "model": "gemma3:4b"
+    }
+  }
+}

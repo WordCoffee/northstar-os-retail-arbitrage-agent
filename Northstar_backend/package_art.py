@@ -12,10 +12,12 @@ an organic seal appears only when the caller sets ``organic_certified``.
 from __future__ import annotations
 
 import hashlib
+import math
 import re
+from pathlib import Path
 from typing import Any, Dict, Optional
 
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 
 import package_designs as pd
 
@@ -35,6 +37,12 @@ THEMES: Dict[str, Dict[str, Any]] = {
              "muted": (74, 88, 66)},
     "slate": {"ground": pd.SLATE3, "ink": pd.PARCHMENT, "accent": pd.GOLD_A,
               "muted": (200, 205, 208)},
+    # A pale-pink carton with a cream panel and a lilac accent: the Word Coffee
+    # gift-box family. Ink is a deep plum so the type stays legible on the pale
+    # ground at print size.
+    "blush": {"ground": (243, 226, 226), "ink": (58, 40, 62),
+              "accent": (150, 116, 178), "muted": (122, 96, 118),
+              "band": (250, 244, 236)},
 }
 
 
@@ -229,4 +237,267 @@ def render_front(spec: Dict[str, Any], *, logo: Optional[Image.Image] = None,
     return pd.apply_paper(img, seed=_seed(spec))
 
 
-__all__ = ["THEMES", "themes", "render_front"]
+# ── the folding-carton form ──────────────────────────────────────────────────
+#
+# A gift box is not a stand-up pouch: there is no weld, no gusset, and no
+# Supplement Facts panel. It needs its own composition — a script line where a
+# pouch puts a product name, a tagline, and a cream band carrying the net weight.
+# The two renderers below are the box form; `render_front` stays the bag form and
+# is not modified, so the shipped Mogra artwork cannot change by accident.
+
+_SCRIPT_FONTS = (
+    Path(r"C:\Windows\Fonts\segoesc.ttf"),
+    Path(r"C:\Windows\Fonts\PALSCRI.TTF"),
+)
+
+
+def _script_font(size_mm: float):
+    """A script face for the display line; the repo's italic serif if absent."""
+    px = max(10, pd.P(size_mm))
+    for path in _SCRIPT_FONTS:
+        if path.is_file():
+            try:
+                return ImageFont.truetype(str(path), px)
+            except Exception:  # noqa: BLE001 - a missing face is not a failure
+                continue
+    return pd.F("CormorantGaramond-Italic.ttf", size_mm)
+
+
+def _wrap_lines(d: ImageDraw.ImageDraw, text: str, font, max_w_mm: float) -> list:
+    limit = pd.P(max_w_mm)
+    lines: list = []
+    current = ""
+    for word in str(text or "").split():
+        trial = f"{current} {word}".strip()
+        if d.textlength(trial, font=font) <= limit or not current:
+            current = trial
+        else:
+            lines.append(current)
+            current = word
+    if current:
+        lines.append(current)
+    return lines
+
+
+def _fit_script(d: ImageDraw.ImageDraw, text: str, *, size_mm: float,
+                max_w_mm: float) -> object:
+    """Shrink a script line until it fits the safe area, never below 9 mm."""
+    size = size_mm
+    while size > 9.0:
+        font = _script_font(size)
+        if d.textlength(text, font=font) <= pd.P(max_w_mm):
+            return font
+        size -= 0.8
+    return _script_font(9.0)
+
+
+def _bean(d: ImageDraw.ImageDraw, cx_mm: float, cy_mm: float, w_mm: float,
+          h_mm: float, color, width_mm: float = 0.45) -> None:
+    """A drawn coffee bean: an oval with the centre crease. Original geometry."""
+    x0, y0 = pd.P(cx_mm - w_mm / 2), pd.P(cy_mm - h_mm / 2)
+    x1, y1 = pd.P(cx_mm + w_mm / 2), pd.P(cy_mm + h_mm / 2)
+    w = max(2, pd.P(width_mm))
+    d.ellipse([x0, y0, x1, y1], outline=tuple(color), width=w)
+    # crease: a shallow S through the long axis, drawn as short segments
+    steps = 18
+    pts = []
+    for i in range(steps + 1):
+        t = i / steps
+        yy = y0 + (y1 - y0) * t
+        xx = pd.P(cx_mm) + int(pd.P(w_mm) * 0.20 * math.sin(t * math.pi))
+        pts.append((xx, yy))
+    d.line(pts, fill=tuple(color), width=w)
+
+
+def render_front_box(spec: Dict[str, Any], *, logo: Optional[Image.Image] = None,
+                     width_mm: float = 100.0, height_mm: float = 200.0) -> Image.Image:
+    """Front of a folding carton: brand, script line, tagline, weight band."""
+    W, H = float(width_mm), float(height_mm)
+    theme = _theme(spec)
+    ink, accent, muted = theme["ink"], theme["accent"], theme["muted"]
+    band = theme.get("band", (250, 244, 236))
+
+    img = Image.new("RGB", (pd.P(W), pd.P(H)), theme["ground"])
+    d = ImageDraw.Draw(img)
+
+    inset = max(4.0, min(8.0, W * 0.06))
+    pd.frame(d, W, H, accent, inset_mm=inset, width_mm=0.55,
+             inset2_mm=inset + max(0.8, W * 0.012))
+    safe_w = W - 2 * inset - 6
+
+    brand = str(spec.get("brand") or spec.get("company") or "NORTHSTAR").strip()
+    if logo is not None:
+        _paste_logo(img, logo, W, H * 0.085,
+                    max_w=min(42.0, W * 0.62), max_h=min(16.0, H * 0.07))
+    else:
+        pd.ctext(d, W / 2, H * 0.085, brand.upper(),
+                 pd.F("Inter.ttf", max(2.6, W * 0.048), [14, 700]), ink,
+                 tracking_mm=max(1.2, W * 0.024))
+    pd.rule(d, W / 2 - W * 0.22, H * 0.125, W / 2 + W * 0.22, accent, 0.35)
+
+    script_line = str(spec.get("script_line") or "").strip()
+    if script_line:
+        f_script = _fit_script(d, script_line, size_mm=H * 0.115, max_w_mm=safe_w)
+        pd.ctext(d, W / 2, H * 0.245, script_line, f_script, accent)
+
+    title = str(spec.get("title") or "").strip()
+    y = H * 0.335
+    if title and not script_line:
+        f_title = pd.fit_size("PlayfairDisplay.ttf", max(3.6, H * 0.058), [700],
+                              title.upper(), safe_w)
+        pd.ctext(d, W / 2, y, title.upper(), f_title, ink)
+        y += H * 0.055
+    subtitle = str(spec.get("subtitle") or "").strip()
+    if subtitle:
+        pd.ctext(d, W / 2, y, subtitle.upper(),
+                 pd.F("Inter.ttf", max(2.0, H * 0.019), [14, 650]), ink,
+                 tracking_mm=max(0.6, W * 0.012))
+        y += H * 0.040
+
+    tagline = str(spec.get("tagline") or "").strip()
+    if tagline:
+        f_tag = pd.F("CormorantGaramond-Italic.ttf", max(2.4, H * 0.024))
+        lines = _wrap_lines(d, tagline, f_tag, safe_w - 6)
+        ty = y + H * 0.012
+        for line in lines[:3]:
+            pd.ctext(d, W / 2, ty, line, f_tag, muted)
+            ty += H * 0.032
+
+    # motif: three beans in a row, contained by the safe width
+    if str(spec.get("motif") or "bean") == "bean":
+        span = min(34.0, safe_w * 0.55)
+        for i in (-1, 0, 1):
+            _bean(d, W / 2 + i * span / 2.4, H * 0.615,
+                  w_mm=max(7.0, W * 0.085), h_mm=max(11.0, W * 0.13),
+                  color=accent, width_mm=0.4)
+
+    # cream band: the legal weight line, high contrast, one string
+    band_top, band_bottom = H * 0.735, H * 0.865
+    d.rectangle([pd.P(inset + 1.5), pd.P(band_top), pd.P(W - inset - 1.5), pd.P(band_bottom)],
+                fill=tuple(band))
+    weight_line = str(spec.get("net_weight_line") or spec.get("weight") or "").strip()
+    band_ink = (58, 40, 62) if sum(band) / 3 > 120 else ink
+    if weight_line:
+        pd.ctext(d, W / 2, band_top + (band_bottom - band_top) * 0.42,
+                 weight_line.upper(),
+                 pd.F("Inter.ttf", max(2.6, H * 0.026), [14, 700]), band_ink,
+                 tracking_mm=max(0.8, W * 0.012))
+    descriptor = str(spec.get("descriptor") or "").strip()
+    if descriptor:
+        pd.ctext(d, W / 2, band_top + (band_bottom - band_top) * 0.78,
+                 descriptor.upper(),
+                 pd.F("Inter.ttf", max(1.7, H * 0.014), [14, 500]), band_ink,
+                 tracking_mm=max(0.5, W * 0.010))
+
+    draft = str(spec.get("draft_note") or "").strip()
+    if draft:
+        pd.ctext(d, W / 2, H * 0.945, draft.upper(),
+                 pd.F("Inter.ttf", max(1.6, H * 0.0115)), muted, tracking_mm=0.8)
+
+    return pd.apply_paper(img, seed=_seed(spec))
+
+
+def render_back_box(spec: Dict[str, Any], *, logo: Optional[Image.Image] = None,
+                    width_mm: float = 100.0, height_mm: float = 200.0) -> Image.Image:
+    """Back of a folding carton: what is inside, ingredients, brew, codes, UPC.
+
+    No Supplement Facts block: this form is not a dietary supplement, and a
+    printed supplement panel on a coffee box would be a false label.
+    """
+    W, H = float(width_mm), float(height_mm)
+    theme = _theme(spec)
+    ink, accent, muted = theme["ink"], theme["accent"], theme["muted"]
+
+    img = Image.new("RGB", (pd.P(W), pd.P(H)), theme["ground"])
+    d = ImageDraw.Draw(img)
+
+    inset = max(4.0, min(8.0, W * 0.06))
+    pd.frame(d, W, H, accent, inset_mm=inset, width_mm=0.55)
+    tx = inset + 4
+    right = W - inset - 4
+    col_w = right - tx
+
+    brand = str(spec.get("brand") or spec.get("company") or "NORTHSTAR").strip()
+    pd.ctext(d, W / 2, H * 0.065, brand.upper(),
+             pd.F("Inter.ttf", max(2.6, W * 0.045), [14, 700]), ink,
+             tracking_mm=max(1.2, W * 0.022))
+    pd.rule(d, tx, H * 0.095, right, accent, 0.4)
+
+    # The net weight is part of the legal panel, and it appears on the back too,
+    # so a rear product picture can be checked for it (the same reason the pouch
+    # back carries it).
+    weight_line = str(spec.get("net_weight_line") or spec.get("weight") or "").strip()
+    if weight_line:
+        pd.ctext(d, W / 2, H * 0.111, weight_line.upper(),
+                 pd.F("Inter.ttf", max(2.2, H * 0.016), [14, 700]), ink,
+                 tracking_mm=max(0.5, W * 0.008))
+
+    f_head = pd.F("Inter.ttf", max(2.2, H * 0.0155), [14, 700])
+    f_body = pd.F("Inter.ttf", max(2.0, H * 0.0135), [14, 400])
+    f_small = pd.F("Inter.ttf", max(1.7, H * 0.0115), [14, 400])
+
+    y = H * 0.132
+    pd.ltext(d, tx, y, "WHAT'S INSIDE", f_head, accent)
+    y += H * 0.022
+    for line in _wrap_lines(d, str(spec.get("inside") or spec.get("tagline") or ""),
+                            f_body, col_w):
+        pd.ltext(d, tx, y, line, f_body, ink)
+        y += H * 0.019
+
+    y += H * 0.012
+    pd.ltext(d, tx, y, "INGREDIENTS", f_head, accent)
+    y += H * 0.022
+    for line in _wrap_lines(d, str(spec.get("ingredients") or ""), f_body, col_w):
+        pd.ltext(d, tx, y, line, f_body, ink)
+        y += H * 0.019
+
+    y += H * 0.012
+    pd.ltext(d, tx, y, "ROAST", f_head, accent)
+    y += H * 0.022
+    pd.ltext(d, tx, y, str(spec.get("roast") or ""), f_body, ink)
+    y += H * 0.021
+
+    y += H * 0.014
+    pd.ltext(d, tx, y, "HOW TO BREW", f_head, accent)
+    y += H * 0.022
+    for step in (spec.get("brew") or []):
+        for line in _wrap_lines(d, str(step), f_body, col_w):
+            pd.ltext(d, tx, y, line, f_body, ink)
+            y += H * 0.019
+        y += H * 0.004
+
+    y += H * 0.010
+    pd.rule(d, tx, y, right, accent, 0.28)
+    y += H * 0.014
+    for line in _wrap_lines(d, str(spec.get("about") or ""), f_small, col_w):
+        pd.ltext(d, tx, y, line, f_small, muted)
+        y += H * 0.017
+
+    # codes: lot + best-by on the left, a drawn UPC on the right
+    sv = str(spec.get("servings") or "").strip()
+    if sv:
+        pd.ltext(d, tx, H * 0.845, sv.upper(), f_small, ink)
+
+    box_top = H * 0.862
+    d.rectangle([pd.P(tx), pd.P(box_top), pd.P(tx + col_w * 0.42), pd.P(box_top + H * 0.045)],
+                outline=tuple(muted), width=2)
+    pd.ltext(d, tx + 1.6, box_top + H * 0.013, str(spec.get("lot_code") or ""), f_small, ink)
+    pd.ltext(d, tx + 1.6, box_top + H * 0.030, str(spec.get("best_by") or ""), f_small, ink)
+
+    digits = re.sub(r"\D", "", str(spec.get("barcode_digits") or ""))
+    if len(digits) >= 11:
+        digits = (digits + "000000000000")[:12]
+        uw = col_w * 0.52
+        pd.draw_upc(d, right - uw, box_top + H * 0.004, uw, H * 0.038, digits)
+
+    rep = str(spec.get("company") or "").strip()
+    if rep:
+        pd.ctext(d, W / 2, H * 0.925, rep.upper(), f_small, muted, tracking_mm=0.6)
+    draft = str(spec.get("back_draft_note") or spec.get("draft_note") or "").strip()
+    if draft:
+        pd.ctext(d, W / 2, H * 0.952, draft.upper(), f_small, muted, tracking_mm=0.6)
+
+    return pd.apply_paper(img, seed=_seed(spec) + 1)
+
+
+__all__ = ["THEMES", "themes", "render_front", "render_front_box", "render_back_box"]

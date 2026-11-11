@@ -33,7 +33,7 @@ from PIL import Image
 
 import mockup_compositor as mc
 import mockup_quality as mq
-import mogra_label_art as art
+import brand_art as art
 import text_fidelity as tf
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -52,6 +52,33 @@ PLATE_BRIEFS: Dict[str, str] = {
         "to the camera, soft diffused key light from the upper left, a gentle "
         "contact shadow, subtle paper grain, photoreal commercial product "
         "photography, sharp focus on the pouch"),
+}
+
+#: The folding-carton form. A gift box is not a pouch: the plate must be a box,
+#: or the measured face and the warp would print a box design onto a bag.
+BOX_PLATE_BRIEFS: Dict[str, str] = {
+    "front": (
+        "a photograph of one blank unprinted slim folding gift box standing upright "
+        "on a pale seamless studio sweep, its front face square to the camera, matte "
+        "card stock, a gentle contact shadow, soft diffused key light from the upper "
+        "left, photoreal commercial product photography, sharp focus on the box"),
+    "back": (
+        "a photograph of one blank unprinted slim folding gift box standing upright "
+        "on a pale seamless studio sweep, turned around so its back face is square "
+        "to the camera, matte card stock, a gentle contact shadow, soft diffused key "
+        "light from the upper left, photoreal commercial product photography, sharp "
+        "focus on the box"),
+}
+
+#: Print-area insets per form. The pouch insets skip the top weld and the base
+#: gusset; a folding carton has neither, so its panel runs near the trim.
+FORM_PLATE_BRIEFS: Dict[str, Dict[str, str]] = {
+    art.POUCH: PLATE_BRIEFS,
+    art.GIFT_BOX: BOX_PLATE_BRIEFS,
+}
+FORM_INSETS: Dict[str, Dict[str, float]] = {
+    art.POUCH: {"inset_x": 0.075, "inset_top": 0.20, "inset_bottom": 0.10},
+    art.GIFT_BOX: {"inset_x": 0.055, "inset_top": 0.055, "inset_bottom": 0.055},
 }
 
 #: The print should follow the pouch surface, not sit on it as a sticker. Measured
@@ -88,10 +115,13 @@ def resolve_out_dir(out_dir: Optional[str], *, base: Optional[str] = None) -> Pa
     return target
 
 
-def plate_brief(face: str) -> str:
-    if face not in PLATE_BRIEFS:
+def plate_brief(face: str, form: str = art.POUCH) -> str:
+    briefs = FORM_PLATE_BRIEFS.get(form)
+    if briefs is None:
+        raise ValueError(f"unknown form {form!r}; known: {', '.join(FORM_PLATE_BRIEFS)}")
+    if face not in briefs:
         raise ValueError(f"unknown face {face!r}; known: front, back")
-    return PLATE_BRIEFS[face]
+    return briefs[face]
 
 
 def _guarded_plate(brief: str, *, width: int, height: int, tier: str,
@@ -141,16 +171,19 @@ def _guarded_plate(brief: str, *, width: int, height: int, tier: str,
 
 
 def compose_face(plate: Image.Image, design: Dict[str, Any], face: str, *,
-                 shading: float = 0.45, feather: Optional[float] = 2.2
-                 ) -> Dict[str, Any]:
+                 shading: float = 0.45, feather: Optional[float] = 2.2,
+                 form: Optional[str] = None) -> Dict[str, Any]:
     """Measure the face, warp the declared panel onto it, OCR the result.
 
     Returns ``{image, quad, panel, legibility, gate_ok, reason}``. A photograph
     with no measurable package raises ``ValueError('plate_face_not_found: …')``;
     a picture whose copy cannot be read returns ``gate_ok=False`` with the
-    reason instead of passing silently.
+    reason instead of passing silently. The print-area insets come from the
+    design's form, so a carton face is not inset like a pouch weld.
     """
-    quad = mc.find_panel_quad(plate)
+    form = form or art.form_of(design)
+    insets = FORM_INSETS.get(form, FORM_INSETS[art.POUCH])
+    quad = mc.find_panel_quad(plate, **insets)
     panel = (art.front_panel(design) if face == "front" else art.back_panel(design))
 
     maps = None
@@ -204,7 +237,8 @@ def build(design: Optional[Dict[str, Any]] = None, *,
     is the real FLUX 3 text-safe lane. The function never claims a pass it did
     not measure: every face carries its own OCR report and refusal reason.
     """
-    dsn = design or art.MOGRA_LIONS_MANE
+    dsn = design or art.design_for("mogra-lions-mane")
+    form = art.form_of(dsn)
     out = resolve_out_dir(out_dir, base=out_root)
     out.mkdir(parents=True, exist_ok=True)
     rejected = out / "_rejected"
@@ -214,10 +248,10 @@ def build(design: Optional[Dict[str, Any]] = None, *,
     records: list = []
     ok = True
     for offset, face in enumerate(faces):
-        if face not in PLATE_BRIEFS:
+        if face not in ("front", "back"):
             raise ValueError(f"unknown face {face!r}; known: front, back")
         face_seed = None if base_seed is None else base_seed + offset
-        brief = plate_brief(face)
+        brief = plate_brief(face, form)
         plate_record: Dict[str, Any] = {}
         try:
             if generator is not None:
@@ -280,7 +314,7 @@ def build(design: Optional[Dict[str, Any]] = None, *,
             continue
 
         try:
-            composed = compose_face(plate, dsn, face, shading=shading)
+            composed = compose_face(plate, dsn, face, shading=shading, form=form)
         except ValueError as exc:
             record.update({"ok": False, "stage": "compose", "reason": str(exc)})
             plate.save(rejected / f"{face}_plate.png")
@@ -314,7 +348,7 @@ def build(design: Optional[Dict[str, Any]] = None, *,
         "created_at": _now(),
         "ok": bool(ok and all(r.get("ok") for r in records) and len(records) == len(faces)),
         "product": {"brand": dsn["brand"], "product": dsn["product"],
-                    "net_weight": dsn["net_weight"]},
+                    "form": form, "net_weight": dsn["net_weight"]},
         "out_dir": str(out),
         "faces": records,
         "engine": {"lane": "flux3-comfyui", "armed": _engine_armed(),
@@ -344,4 +378,5 @@ def _engine_armed() -> Optional[bool]:
 
 
 __all__ = ["build", "compose_face", "plate_brief", "resolve_out_dir",
-           "PLATE_BRIEFS", "RENDERS"]
+           "PLATE_BRIEFS", "BOX_PLATE_BRIEFS", "FORM_PLATE_BRIEFS", "FORM_INSETS",
+           "RENDERS"]
