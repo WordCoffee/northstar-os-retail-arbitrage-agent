@@ -79,8 +79,9 @@ CATEGORIES: Dict[str, Dict[str, Any]] = {
         "terms": ("cable", "charger", "usb", "accessory", "headphone", "adapter", "electronic"),
     },
     "food_jar": {
-        "queries": ["glass food jar product", "honey jar product photography"],
-        "terms": ("jar", "honey", "jam", "preserve", "food"),
+        "queries": ["glass food jar product", "honey jar product photography",
+                    "jam jar label", "spice jar product"],
+        "terms": ("jar", "honey", "jam", "preserve", "food", "spice"),
     },
     "tool": {
         "queries": ["hand tool product", "screwdriver product photography"],

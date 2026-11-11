@@ -11,7 +11,7 @@
   "uncovered": [],
   "images": {
     "brand_asset": 8,
-    "public_licensed": 29,
+    "public_licensed": 34,
     "synthetic_excluded": 185
   },
   "categories_covered": [
@@ -27,17 +27,17 @@
   "rejected_by_review": 14,
   "reviewed_depth": {
     "apparel": 3,
-    "ceramic_mug": 2,
+    "ceramic_mug": 3,
     "pet_product": 1,
-    "skincare_bottle": 2,
+    "skincare_bottle": 4,
     "toy": 2,
-    "food_jar": 1,
+    "food_jar": 3,
     "tool": 2,
     "small_appliance": 1,
     "electronics_accessories": 1,
     "supplement_pouch": 8
   },
-  "usable_images": 23,
+  "usable_images": 28,
   "assigned": [
     {
       "brief": "ST-001",
@@ -99,7 +99,7 @@
       "brief": "ST-008",
       "category": "food_jar",
       "split": "tuning",
-      "reference": "renders/references/categories/food_jar/9b4968c4-005c-4586-a4c2-85171c98e646.jpg",
+      "reference": "renders/references/categories/food_jar/533eda70-3611-4bc8-a0be-472990cc2928.jpg",
       "source_type": "public_licensed",
       "licence": "by"
     },
@@ -107,9 +107,9 @@
       "brief": "ST-009",
       "category": "ceramic_mug",
       "split": "held_out",
-      "reference": "renders/references/categories/ceramic_mug/3c2448d4-f084-44b7-a615-629805ff4b7e.jpg",
+      "reference": "renders/references/categories/ceramic_mug/e1ecd851-07ae-4011-b7e6-036f3170d6f9.jpeg",
       "source_type": "public_licensed",
-      "licence": "by"
+      "licence": "cc0"
     },
     {
       "brief": "ST-010",
@@ -179,9 +179,9 @@
       "brief": "ST-018",
       "category": "skincare_bottle",
       "split": "held_out",
-      "reference": "renders/references/categories/skincare_bottle/22d6a4b4-59f1-4771-9e02-1ac49c794afb.jpg",
+      "reference": "renders/references/categories/skincare_bottle/70ae0e92-9d8f-4e84-8a36-a215e79658ae.jpg",
       "source_type": "public_licensed",
-      "licence": "by"
+      "licence": "cc0"
     },
     {
       "brief": "ST-019",
@@ -235,9 +235,9 @@
       "brief": "ST-025",
       "category": "skincare_bottle",
       "split": "held_out",
-      "reference": "renders/references/categories/skincare_bottle/22d6a4b4-59f1-4771-9e02-1ac49c794afb.jpg",
+      "reference": "renders/references/categories/skincare_bottle/70ae0e92-9d8f-4e84-8a36-a215e79658ae.jpg",
       "source_type": "public_licensed",
-      "licence": "by"
+      "licence": "cc0"
     },
     {
       "brief": "ST-026",
@@ -267,7 +267,7 @@
       "brief": "ST-029",
       "category": "food_jar",
       "split": "held_out",
-      "reference": "renders/references/categories/food_jar/9b4968c4-005c-4586-a4c2-85171c98e646.jpg",
+      "reference": "renders/references/categories/food_jar/399efc02-d719-4cc2-8e98-d06e6fe9a767.jpg",
       "source_type": "public_licensed",
       "licence": "by"
     },
@@ -395,9 +395,9 @@
       "brief": "ST-045",
       "category": "ceramic_mug",
       "split": "held_out",
-      "reference": "renders/references/categories/ceramic_mug/47af6dc3-22d3-4732-9d3d-36351fe0835d.png",
+      "reference": "renders/references/categories/ceramic_mug/e1ecd851-07ae-4011-b7e6-036f3170d6f9.jpeg",
       "source_type": "public_licensed",
-      "licence": "by"
+      "licence": "cc0"
     },
     {
       "brief": "ST-046",
@@ -411,9 +411,9 @@
       "brief": "ST-047",
       "category": "skincare_bottle",
       "split": "tuning",
-      "reference": "renders/references/categories/skincare_bottle/22d6a4b4-59f1-4771-9e02-1ac49c794afb.jpg",
+      "reference": "renders/references/categories/skincare_bottle/a9292161-366e-4c7d-bdb3-282b29e2e5b5.jpg",
       "source_type": "public_licensed",
-      "licence": "by"
+      "licence": "cc0"
     },
     {
       "brief": "ST-048",
@@ -467,9 +467,9 @@
       "brief": "ST-054",
       "category": "ceramic_mug",
       "split": "held_out",
-      "reference": "renders/references/categories/ceramic_mug/3c2448d4-f084-44b7-a615-629805ff4b7e.jpg",
+      "reference": "renders/references/categories/ceramic_mug/e1ecd851-07ae-4011-b7e6-036f3170d6f9.jpeg",
       "source_type": "public_licensed",
-      "licence": "by"
+      "licence": "cc0"
     },
     {
       "brief": "ST-055",

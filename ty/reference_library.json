@@ -86,7 +86,7 @@
       "id": "3c2448d4-f084-44b7-a615-629805ff4b7e",
       "query": "ceramic mug product",
       "title": "0501Ga4. Souvenir mug 'Novokhopersk'",
-      "creator": "Александрова Галина",
+      "creator": "\u0410\u043b\u0435\u043a\u0441\u0430\u043d\u0434\u0440\u043e\u0432\u0430 \u0413\u0430\u043b\u0438\u043d\u0430",
       "licence": "by",
       "licence_version": "4.0",
       "licence_url": "https://creativecommons.org/licenses/by/4.0/",
@@ -245,7 +245,7 @@
       "source_type": "public_licensed",
       "id": "a7e728bb-b06d-47f7-9d8c-81710186ab23",
       "query": "usb cable product",
-      "title": "“Daily $AAPL UX FAIL WTF” #Mac #annoyance / SML.20130128.IP3.SQ",
+      "title": "\u201cDaily $AAPL UX FAIL WTF\u201d #Mac #annoyance / SML.20130128.IP3.SQ",
       "creator": "See-ming Lee (SML)",
       "licence": "by",
       "licence_version": "2.0",
@@ -667,6 +667,126 @@
       "licence_url": null,
       "source_url": null,
       "usage": "owner's own product photograph; usable as a seller reference"
+    },
+    {
+      "category": "ceramic_mug",
+      "source_type": "public_licensed",
+      "id": "e1ecd851-07ae-4011-b7e6-036f3170d6f9",
+      "query": "ceramic mug product",
+      "title": "Four yellow ceramic cups are stacked on a metal counter in a cafe, with shelves of coffee products and mugs blurred in t",
+      "creator": "Manjil Aryal",
+      "licence": "cc0",
+      "licence_version": "1.0",
+      "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source_url": "https://wordpress.org/photos/photo/72469c699f/",
+      "image_url": "https://pd.w.org/2026/03/72469c699f44cedd2.25991979-1536x2048.jpeg",
+      "file": "renders/references/categories/ceramic_mug/e1ecd851-07ae-4011-b7e6-036f3170d6f9.jpeg",
+      "sha256": "c02fd9b68225d0b2",
+      "pixels": [
+        1536,
+        2048
+      ],
+      "usage": "rubric reference only; never a product asset",
+      "added_by": "reference-depth (cycle 20)",
+      "reviewed": true,
+      "review_kind": "context",
+      "review_reason": "four ceramic cups on a shop shelf: ceramic recognisable, but a retail shelf rather than a product photograph, so it is context not a model shot"
+    },
+    {
+      "category": "skincare_bottle",
+      "source_type": "public_licensed",
+      "id": "a9292161-366e-4c7d-bdb3-282b29e2e5b5",
+      "query": "skincare bottle product",
+      "title": "Back side beard oil bottle",
+      "creator": "",
+      "licence": "cc0",
+      "licence_version": "1.0",
+      "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source_url": "https://www.rawpixel.com/image/11524368/back-side-beard-oil-bottle",
+      "image_url": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTA0L2JzMjI2LWltYWdlLmpwZw.jpg",
+      "file": "renders/references/categories/skincare_bottle/a9292161-366e-4c7d-bdb3-282b29e2e5b5.jpg",
+      "sha256": "76f1d981c48ecec2",
+      "pixels": [
+        1024,
+        683
+      ],
+      "usage": "rubric reference only; never a product asset",
+      "added_by": "reference-depth (cycle 20)",
+      "reviewed": true,
+      "review_kind": "product_photo",
+      "review_reason": "amber dropper bottle on white, centred: a real product shot"
+    },
+    {
+      "category": "skincare_bottle",
+      "source_type": "public_licensed",
+      "id": "70ae0e92-9d8f-4e84-8a36-a215e79658ae",
+      "query": "skincare bottle product",
+      "title": "Open container activated charcoal facemask",
+      "creator": "",
+      "licence": "cc0",
+      "licence_version": "1.0",
+      "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source_url": "https://www.rawpixel.com/image/11524180/open-container-activated-charcoal-facemask",
+      "image_url": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTA0L2JzODk2LWltYWdlLmpwZw.jpg",
+      "file": "renders/references/categories/skincare_bottle/70ae0e92-9d8f-4e84-8a36-a215e79658ae.jpg",
+      "sha256": "112dd1c0cc77214c",
+      "pixels": [
+        1024,
+        683
+      ],
+      "usage": "rubric reference only; never a product asset",
+      "added_by": "reference-depth (cycle 20)",
+      "reviewed": true,
+      "review_kind": "product_photo",
+      "review_reason": "open cosmetic jar on white: skincare packaging, real photograph"
+    },
+    {
+      "category": "food_jar",
+      "source_type": "public_licensed",
+      "id": "533eda70-3611-4bc8-a0be-472990cc2928",
+      "query": "jam jar label",
+      "title": "Feijoa Jelly",
+      "creator": "jamjar",
+      "licence": "by",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by/2.0/",
+      "source_url": "https://www.flickr.com/photos/21475518@N00/7230185740",
+      "image_url": "https://live.staticflickr.com/8023/7230185740_edefd3c3b4_b.jpg",
+      "file": "renders/references/categories/food_jar/533eda70-3611-4bc8-a0be-472990cc2928.jpg",
+      "sha256": "118673b2f7b1a0c8",
+      "pixels": [
+        1024,
+        1024
+      ],
+      "usage": "rubric reference only; never a product asset",
+      "added_by": "reference-depth (cycle 20)",
+      "reviewed": true,
+      "review_kind": "context",
+      "review_reason": "jelly jars with printed labels: a label-jar reference, a collage rather than one product photograph"
+    },
+    {
+      "category": "food_jar",
+      "source_type": "public_licensed",
+      "id": "399efc02-d719-4cc2-8e98-d06e6fe9a767",
+      "query": "jam jar label",
+      "title": "Ingredients label of spread",
+      "creator": "piropiro3",
+      "licence": "by",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by/2.0/",
+      "source_url": "https://www.flickr.com/photos/65630793@N05/26176446582",
+      "image_url": "https://live.staticflickr.com/1482/26176446582_554ca7f8a1_b.jpg",
+      "file": "renders/references/categories/food_jar/399efc02-d719-4cc2-8e98-d06e6fe9a767.jpg",
+      "sha256": "72b2f1e90dab9f54",
+      "pixels": [
+        1024,
+        1024
+      ],
+      "usage": "rubric reference only; never a product asset",
+      "added_by": "reference-depth (cycle 20)",
+      "reviewed": true,
+      "review_kind": "product_photo",
+      "review_reason": "two labelled jars on a cloth with readable front and back labels: a real jar-label reference"
     }
   ],
   "refused": [
@@ -1459,6 +1579,13 @@
       "query": "usb cable product",
       "id": "f5633283-5900-486a-957a-24abf23aa246",
       "reason": "small 500x203"
+    },
+    {
+      "category": "skincare_bottle",
+      "title": "Body wash bottle clipart, beauty",
+      "file": "renders/references/categories/skincare_bottle/26e7cfb3-caf0-4597-ba7e-0c9e7242fd86.jpg",
+      "reason": "a flat illustration, not a photograph: it would teach the rubric a drawing instead of a product",
+      "decided_by": "director visual review"
     }
   ],
   "at": "2026-11-11",
@@ -1470,5 +1597,6 @@
     ],
     "usage": "rubric references only; never product assets; Amazon never contacted",
     "synthetic": "tagged and excluded from every pass-rate claim"
-  }
+  },
+  "updated_at": "2026-11-11"
 }

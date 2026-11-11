@@ -1,0 +1,58 @@
+{
+  "thin_categories": [
+    "ceramic_mug",
+    "skincare_bottle",
+    "food_jar"
+  ],
+  "per_category": {
+    "ceramic_mug": {
+      "fetched": 2,
+      "added": 0
+    },
+    "skincare_bottle": {
+      "fetched": 4,
+      "added": 0
+    },
+    "food_jar": {
+      "fetched": 3,
+      "added": 2
+    }
+  },
+  "added": 2,
+  "refused": 74,
+  "counts_after": {
+    "apparel": 3,
+    "ceramic_mug": 3,
+    "pet_product": 3,
+    "skincare_bottle": 4,
+    "toy": 3,
+    "home": 7,
+    "electronics_accessories": 3,
+    "food_jar": 3,
+    "tool": 3,
+    "small_appliance": 3,
+    "supplement_pouch": 8
+  },
+  "added_rows": [
+    {
+      "category": "food_jar",
+      "title": "Feijoa Jelly",
+      "creator": "jamjar",
+      "licence": "by",
+      "licence_url": "https://creativecommons.org/licenses/by/2.0/",
+      "source_url": "https://www.flickr.com/photos/21475518@N00/7230185740",
+      "sha256": "118673b2f7b1a0c8",
+      "file": "renders/references/categories/food_jar/533eda70-3611-4bc8-a0be-472990cc2928.jpg"
+    },
+    {
+      "category": "food_jar",
+      "title": "Ingredients label of spread",
+      "creator": "piropiro3",
+      "licence": "by",
+      "licence_url": "https://creativecommons.org/licenses/by/2.0/",
+      "source_url": "https://www.flickr.com/photos/65630793@N05/26176446582",
+      "sha256": "72b2f1e90dab9f54",
+      "file": "renders/references/categories/food_jar/399efc02-d719-4cc2-8e98-d06e6fe9a767.jpg"
+    }
+  ]
+}

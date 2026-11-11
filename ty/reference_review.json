@@ -234,6 +234,76 @@
       "title": "Hanging On",
       "category": "toy",
       "reclassify_to": null
+    },
+    "c02fd9b68225d0b2": {
+      "index": null,
+      "verdict": "keep",
+      "kind": null,
+      "reason": null,
+      "title": "Four yellow ceramic cups are stacked on a metal counter in a cafe, with shelves of coffee products and mugs blurred in t",
+      "category": "ceramic_mug",
+      "reclassify_to": null,
+      "sheet": "reports/ty/reference_depth_contact.png"
+    },
+    "76f1d981c48ecec2": {
+      "index": null,
+      "verdict": "keep",
+      "kind": "product_photo",
+      "reason": "amber dropper bottle on white, centred: a real product shot",
+      "title": "Back side beard oil bottle",
+      "category": "skincare_bottle",
+      "reclassify_to": null,
+      "sheet": "reports/ty/reference_depth_contact.png"
+    },
+    "112dd1c0cc77214c": {
+      "index": null,
+      "verdict": "keep",
+      "kind": "product_photo",
+      "reason": "open cosmetic jar on white: skincare packaging, real photograph",
+      "title": "Open container activated charcoal facemask",
+      "category": "skincare_bottle",
+      "reclassify_to": null,
+      "sheet": "reports/ty/reference_depth_contact.png"
+    },
+    "118673b2f7b1a0c8": {
+      "index": null,
+      "verdict": "keep",
+      "kind": "context",
+      "reason": "jelly jars with printed labels: a label-jar reference, a collage rather than one product photograph",
+      "title": "Feijoa Jelly",
+      "category": "food_jar",
+      "reclassify_to": null,
+      "sheet": "reports/ty/reference_depth_contact.png"
+    },
+    "72b2f1e90dab9f54": {
+      "index": null,
+      "verdict": "keep",
+      "kind": "product_photo",
+      "reason": "two labelled jars on a cloth with readable front and back labels: a real jar-label reference",
+      "title": "Ingredients label of spread",
+      "category": "food_jar",
+      "reclassify_to": null,
+      "sheet": "reports/ty/reference_depth_contact.png"
+    },
+    "": {
+      "index": null,
+      "verdict": "refuse",
+      "kind": null,
+      "reason": "small 1024x680",
+      "title": null,
+      "category": null,
+      "reclassify_to": null,
+      "sheet": "reports/ty/reference_depth_contact.png"
+    },
+    "26e7cfb3-caf0-45": {
+      "index": null,
+      "verdict": "refuse",
+      "kind": null,
+      "reason": "a flat illustration, not a photograph: it would teach the rubric a drawing instead of a product",
+      "title": "Body wash bottle clipart, beauty",
+      "category": "skincare_bottle",
+      "reclassify_to": null,
+      "sheet": "reports/ty/reference_depth_contact.png"
     }
   }
 }
