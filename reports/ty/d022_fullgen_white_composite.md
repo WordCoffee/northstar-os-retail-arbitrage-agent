@@ -47,15 +47,39 @@ The four checks:
 4. the control: the same composition with `shadow=True` **fails** the same check, so the
    measurement has teeth rather than always agreeing.
 
+## The real measurement (the claim is retired)
+
+The first attempt was refused on the memory budget — `budget: refused: 8.48 GB free - 8.2 GB
+needed = 0.28 GB < 1.0 GB reserve` — while `qwen2.5vl:7b` was resident for another lane and
+its lease was **extended** mid-attempt (03:36 → 03:42), i.e. in use and not mine to unload.
+The lane came free and the pass ran:
+
+```
+python -m tools.seller_tester composite --catalog ty/seller_briefs_heldout_modes.json \
+    --limit 2 --renderer comfy --method birefnet --model sdxl \
+    --out-dir renders/d022 --summary-out reports/ty/d022_sample_pass.json
+-> PO-001 (full_generation) 100.0 passed; SR-001 (composite) 93.3
+```
+
+Measured on the artefacts with `check_matte_residue`, each against its own recorded
+silhouette (`reports/ty/d022_residue_before_after.json`):
+
+| artefact | residue | of which neutral (shadow-shaped) |
+|---|---|---|
+| PO-001 **before** (`renders/heldout_prompt_only10/PO-001.png`, published 100.0) | **25.647 %** (1 025 874 px) | 1 022 424 px |
+| PO-001 **after** (`renders/d022/PO-001.png`, real SDXL lane, same code) | **0.000 %** (0 px) | 0 px |
+
+A real render, at the model's own seed, on the app's own path. **D-022 is measured, not
+asserted.**
+
+The same pass found the sibling defect on the **composite** route: SR-001 (a white-main
+brief with a real seller photo) read **11.473 %** residue, 458 900 of it neutral — the
+composite path had the same `place_product` default. Filed **D-024**, fixed in
+`generators._composite` (`shadow=not white_main`) with two checks; the real-lane
+re-measurement of SR-001 is queued as `d024-real-residue`.
+
 ## Honest limits
 
-* **No real re-render yet.** The lane refused the sample pass on the memory budget, quoting
-  its own numbers: `budget: refused: 8.48 GB free - 8.2 GB needed = 0.28 GB < 1.0 GB
-  reserve`. `qwen2.5vl:7b` (5.7 GB VRAM) was resident for another lane, and its lease was
-  *extended* while the pass was attempted (03:36 → 03:42), i.e. it is in use — not idle, so
-  it is not mine to unload. The fix is proven by test on a real composition of a real plate
-  through the same code path; a two-brief lane pass at the model's own seeds is the number
-  that retires D-022, and it is queued as `d022-real-rerender` rather than claimed.
 * **The 8 published artefacts are still the old pictures.** They were rendered with the
   shadow; re-scoring them cannot improve them. Their numbers stand as the "before".
 * **This does not make the model better.** A generated plate can still carry its own cast

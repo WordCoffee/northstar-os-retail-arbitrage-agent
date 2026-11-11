@@ -912,8 +912,12 @@ class CompositeGenerator:
                 record["fill_cap"] = {"situation": situation_now, "scale": scale,
                                       "why": "a page mockup must leave margin around the panel"}
         cut_png = pc.rgba_png_bytes(cut.rgb, cut.alpha)
+        # D-024 (measured 2026-11-11): a white-main composite keeps the contact shadow,
+        # because the guard below measures the four *corners* and a shadow sits under the
+        # product — SR-001 read 11.5 % background residue with exact corners. A main image
+        # has no shadow at all, so it is placed without one from the start.
         placed = composite.place_product(scene["bytes"], cut_png, scale=scale,
-                                         anchor=anchor)
+                                         anchor=anchor, shadow=not white_main)
         # Two situations cannot be satisfied by a generated render: an infographic needs machine-
         # readable copy in the margin, and a packaging mockup needs the seller's own artwork on a
         # panel. Both are laid out deterministically *after* the product is placed, so the product

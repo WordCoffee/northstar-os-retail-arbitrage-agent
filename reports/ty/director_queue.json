@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-11T09:47:53+00:00",
+  "updated_at": "2026-11-11T09:52:52+00:00",
   "cycle": 3,
   "unit_in_flight": "",
   "unit_order": [
@@ -1492,6 +1492,28 @@
       "rank": 0
     },
     {
+      "id": "fix-composite-white-shadow",
+      "unit": "U",
+      "title": "D-024: the composite route keeps the contact shadow its corner guard cannot see (SR-001 11.473% residue)",
+      "status": "merged",
+      "owner": "",
+      "write_paths": [
+        "tools/seller_tester/generators.py",
+        "Northstar_backend/test_*.py"
+      ],
+      "branch": "ty/fix-composite-white-shadow",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "D-024 closed: generators._composite places with shadow=not white_main, the corner measurement kept as a second gate; two checks (white-main composite shadow=False, lifestyle composite shadow=True); before measured on a real artefact SR-001 11.473% residue (458900/458901 px neutral); 26+4 tests; reports/ty/d024_composite_shadow.md",
+      "created_at": "2026-11-11T09:52:46+00:00",
+      "updated_at": "2026-11-11T09:52:52+00:00",
+      "rank": 0
+    },
+    {
       "id": "sel-01c-cutout-provenance",
       "unit": "D12",
       "title": "Composite provenance: save the cutout and placement beside every composite so the product-region check can verify it",
@@ -2030,6 +2052,28 @@
       "rank": 2
     },
     {
+      "id": "d024-real-residue",
+      "unit": "U",
+      "title": "D-024 measurement retirement: re-render SR-001 in a lane and record its residue after shadow=not white_main",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "reports/ty/",
+        "renders/"
+      ],
+      "branch": "ty/d024-real-residue",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-11T09:52:52+00:00",
+      "updated_at": "2026-11-11T09:52:52+00:00",
+      "rank": 2
+    },
+    {
       "id": "reg-01-service-registry",
       "unit": "R",
       "title": "Service registry as the single source of truth: walk every advanced-view route (Vision + backend), record purpose/inputs/outputs/actions/Bojo tool, and generate the Bojo tool list and the default Northstar workspaces from it",
@@ -2103,7 +2147,7 @@
       "id": "d022-real-rerender",
       "unit": "U",
       "title": "D-022 measurement retirement: two full-generation briefs through a real lane at the model's seeds, residue before vs after",
-      "status": "queued",
+      "status": "merged",
       "owner": "",
       "write_paths": [
         "reports/ty/",
@@ -2116,9 +2160,9 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": "real lane run: composite --limit 2 --renderer comfy --method birefnet --model sdxl -> PO-001 (full_generation) 100.0 passed; check_matte_residue on the artefacts: PO-001 before (heldout_prompt_only10) 25.647% residue (1025874 px, 1022424 neutral) -> after (renders/d022) 0.000% (0 px); reports/ty/d022_residue_before_after.json",
       "created_at": "2026-11-11T09:37:20+00:00",
-      "updated_at": "2026-11-11T09:37:20+00:00",
+      "updated_at": "2026-11-11T09:52:46+00:00",
       "rank": 3
     },
     {

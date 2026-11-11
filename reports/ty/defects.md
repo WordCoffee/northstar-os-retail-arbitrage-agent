@@ -432,3 +432,21 @@ passed, mean 78.6 → 100.0**, safe margins readable per artefact (5 mm doypacks
 cartons). 13 checks written first, 80 + 45 related green.
 `reports/ty/d023_carton_safe_layer.md`.
 
+
+
+## D-024 — the composite route kept the contact shadow its guard could not see (closed 2026-11-11)
+
+Found by the D-022 lane pass on the same run: **SR-001** (white-main brief, real seller
+photo, composite route) measured **11.473 %** background residue, **458 900 of 458 901 px
+neutral** — the shadow. The route's white-main guard measured the four **corners**, and a
+contact shadow sits under the product, so the corners stayed exact and the shadow shipped.
+
+**Closed 2026-11-11** (`ty-dir-fix-composite-white-shadow`). `generators._composite` places
+with `shadow=not white_main`; the corner measurement stays as a second gate. Two checks: a
+white-main composite calls `place_product(shadow=False)`, a lifestyle composite calls it
+with `shadow=True`. 26 + 4 tests green. `reports/ty/d024_composite_shadow.md`.
+
+**Still owed:** the real-lane after-number for SR-001 (queued `d024-real-residue`); the
+before is measured, the after is proven by test and by the sibling route's
+25.647 % → 0.000 %.
+

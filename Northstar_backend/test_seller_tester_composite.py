@@ -517,3 +517,54 @@ def test_flat_means_a_flat_field_not_a_generated_one():
     assert flat(uniform) is True
     assert flat(white) is True
     assert flat(free) is False
+
+
+# ---------------------------------------------------------------- D-024
+def _spy_on_place_product(monkeypatch, calls: list) -> None:
+    import product_composite
+
+    original = product_composite.place_product
+
+    def spy(scene, product, **kwargs):
+        calls.append(dict(kwargs))
+        return original(scene, product, **kwargs)
+
+    monkeypatch.setattr(product_composite, "place_product", spy)
+
+
+def test_a_white_main_composite_is_placed_without_a_contact_shadow(repo: Path,
+                                                                  monkeypatch):
+    """D-024: the corner guard cannot see a shadow, so it must not be placed at all."""
+    _product_png(repo / "renders" / "references" / "product.png")
+    brief = _brief("renders/references/product.png")
+    brief["situation"] = "white_background_main"
+    brief["constraints"]["background"] = {"mode": "uniform", "value": 255, "tolerance": 6}
+    brief["constraints"]["matte"] = {"mode": "white_matte", "value": 255, "tolerance": 6,
+                                     "max_border_std": 6}
+    calls: list = []
+    _spy_on_place_product(monkeypatch, calls)
+    generator = CompositeGenerator(
+        renderer=lambda b, m="scene", inside_lane=None: {
+            "bytes": _scene_bytes(), "source": "generated", "prompt": "scene",
+            "image_path": None, "lane": {"stopped": {"ok": True}}},
+        out_dir=repo / "out", repo_root=repo,
+        cutout_fn=lambda rgb: _alpha_from_box(rgb, box=(200, 160, 400, 520)))
+    generator.generate(brief)
+    assert calls, "place_product was never called"
+    assert calls[0].get("shadow") is False, calls[0]
+
+
+def test_a_lifestyle_composite_keeps_its_contact_shadow(repo: Path, monkeypatch):
+    _product_png(repo / "renders" / "references" / "product.png")
+    brief = _brief("renders/references/product.png")      # lifestyle, free background
+    calls: list = []
+    _spy_on_place_product(monkeypatch, calls)
+    generator = CompositeGenerator(
+        renderer=lambda b, m="scene", inside_lane=None: {
+            "bytes": _scene_bytes(), "source": "generated", "prompt": "scene",
+            "image_path": None, "lane": {"stopped": {"ok": True}}},
+        out_dir=repo / "out", repo_root=repo,
+        cutout_fn=lambda rgb: _alpha_from_box(rgb, box=(200, 160, 400, 520)))
+    generator.generate(brief)
+    assert calls and calls[0].get("shadow") is True, calls[0]
+
