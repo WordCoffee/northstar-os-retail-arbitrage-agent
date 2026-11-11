@@ -39,6 +39,9 @@ BRIEFS = ROOT / "ty" / "seller_briefs.json"
 OUT = ROOT / "ty" / "seller_scores.json"
 SUMMARY = ROOT / "state" / "seller" / "last_run.json"
 COMPOSITE = ROOT / "state" / "seller" / "composite_proof.json"
+#: The pass that renders through the app's own `product_picture.build` (D-011).
+PRODUCT = ROOT / "state" / "seller" / "product_proof.json"
+PRODUCT_JUDGED = ROOT / "state" / "seller" / "product_proof_judged.json"
 MIN_SCORED = 5
 
 POPULATIONS = ("generated", "replay")
@@ -91,21 +94,49 @@ def population_of(row: Dict[str, Any], generator: Optional[str] = None) -> str:
     return "generated"
 
 
-def _sources(summary: Any = None, composite: Any = None) -> List[Tuple[Dict[str, Any], str]]:
-    """The passes to aggregate: an injected summary, or the two on disk."""
+def _sources(summary: Any = None, composite: Any = None,
+             product: Any = None) -> List[Tuple[Dict[str, Any], str]]:
+    """The passes to aggregate: an injected summary, or the passes on disk.
+
+    The **app-path pass wins** when it exists: it is the only one whose pictures
+    came out of `product_picture.build`. The harness composite pass is then left
+    out entirely, because two generated means over the same briefs are not two
+    populations — they are two pipelines, and blending them hides which one a
+    seller would receive. Without an app pass the old behaviour stands: the replay
+    summary plus the composite proof.
+    """
+    app_pass = product if isinstance(product, dict) and product.get("results") else None
+    if app_pass is None and product is None and summary is None:
+        app_pass = _app_pass()
+    if app_pass is not None:
+        out: List[Tuple[Dict[str, Any], str]] = [
+            (app_pass, str(app_pass.get("generator") or "product_pipeline"))]
+        replay_rows = summary if isinstance(summary, dict) else _read(SUMMARY)
+        if isinstance(replay_rows, dict) and replay_rows is not app_pass:
+            out.append((replay_rows, str(replay_rows.get("generator") or "")))
+        return out
     if summary is not None:
         out = [(summary, str(summary.get("generator") or ""))] if isinstance(summary, dict) else []
         if isinstance(composite, dict):
             out.append((composite, str(composite.get("generator") or "composite")))
         return out
     out = []
-    primary = _read(SUMMARY)
+    primary = composite if isinstance(composite, dict) else _read(COMPOSITE)
     if isinstance(primary, dict):
         out.append((primary, str(primary.get("generator") or "")))
-    extra = composite if composite is not None else _read(COMPOSITE)
-    if isinstance(extra, dict) and extra is not primary:
-        out.append((extra, str(extra.get("generator") or "composite")))
+    replay = _read(SUMMARY)
+    if isinstance(replay, dict) and replay is not primary:
+        out.append((replay, str(replay.get("generator") or "")))
     return out
+
+
+def _app_pass() -> Optional[Dict[str, Any]]:
+    """The product-picture pass on disk, preferring the judged one when present."""
+    for path in (PRODUCT_JUDGED, PRODUCT):
+        data = _read(path)
+        if isinstance(data, dict) and data.get("results"):
+            return data
+    return None
 
 
 def _rows(data: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -126,15 +157,16 @@ def _summarise(bucket: Dict[str, Any]) -> Dict[str, Any]:
 
 def build(*, summary: Optional[Dict[str, Any]] = None,
           composite: Optional[Dict[str, Any]] = None,
-          briefs: Any = None) -> Dict[str, Any]:
+          briefs: Any = None,
+          product: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     """Aggregate passes into a published generated mean plus replay context.
 
-    `summary` is the replay pass (`state/seller/last_run.json`) unless injected. The
-    composite proof is read alongside it. Each row is classified by `population_of`, and
-    only `generated` rows feed `services[*].mean`. `services[*].replay` carries the other
-    population so the record shows both.
+    `product` is the app-path pass (`python -m tools.seller_tester product`); when it
+    exists it is the published population. `summary` is the replay pass, kept as
+    context. `composite` is the old harness pipeline and is used only when there is
+    no app-path pass at all.
     """
-    sources = _sources(summary, composite)
+    sources = _sources(summary, composite, product)
     if not sources:
         return {"services": {}, "reason": "no seller-tester pass on disk", "at": _now()}
     mapping = brief_services(briefs)
@@ -187,18 +219,7 @@ def build(*, summary: Optional[Dict[str, Any]] = None,
     return {
         "services": services,
         "at": _now(),
-        "pipeline": {
-            "rendered_by": "tools/seller_tester (CompositeGenerator: product_composite.place_product "
-                           "+ label_warp)",
-            "product_renders_with": "Northstar_backend/product_picture.py::build "
-                                    "(mockup_compositor + mogra_label_art)",
-            "same_pipeline": False,
-            "why_it_matters": (
-                "D-011 (2026-11-11): a count of product_picture|mockup_compositor|mogra_label_art "
-                "across tools/seller_tester/*.py is 0, so these scores measure the harness pipeline, "
-                "not the one the app sells. Do not read them as a product quality claim until "
-                "sel-06-exercise-product-pipeline lands."),
-        },
+        "pipeline": _pipeline_block(product, injected=summary is not None),
         "pass": {
             "population": "generated",
             "scored": made_total,
@@ -212,6 +233,44 @@ def build(*, summary: Optional[Dict[str, Any]] = None,
             },
         },
         "ceiling": ceiling(briefs=briefs, generated_scored=made_total),
+    }
+
+
+def _pipeline_block(product: Optional[Dict[str, Any]] = None, *,
+                    injected: bool = False) -> Dict[str, Any]:
+    """Which pipeline the published mean describes, stated instead of assumed."""
+    if product is not None:
+        app_pass = product if product.get("results") else None
+    elif injected:
+        app_pass = None
+    else:
+        app_pass = _app_pass()
+    if app_pass:
+        return {
+            "rendered_by": ("tools/seller_tester ProductPipelineGenerator -> "
+                            "product_picture.build"),
+            "product_renders_with": ("Northstar_backend/product_picture.py::build "
+                                     "(brand_art + mockup_compositor + "
+                                     "mockup_quality.assert_legible)"),
+            "same_pipeline": True,
+            "plate_source": app_pass.get("plate_source"),
+            "judged": bool(app_pass.get("judge_enabled")),
+            "at": app_pass.get("generated_at"),
+            "why_it_matters": (
+                "sel-06 (2026-11-11): the pass renders through the same "
+                "product_picture.build the API calls, so the number describes the "
+                "product. The plate is named above: when it is 'drawn' the picture's "
+                "photograph is a stand-in and only the artwork, warp and gate are real."),
+        }
+    return {
+        "rendered_by": "tools/seller_tester (CompositeGenerator: product_composite.place_product "
+                       "+ label_warp)",
+        "product_renders_with": "Northstar_backend/product_picture.py::build "
+                                "(brand_art + mockup_compositor)",
+        "same_pipeline": False,
+        "why_it_matters": (
+            "No app-path pass is on disk. These scores measure the harness pipeline, not "
+            "the one the app sells; run `python -m tools.seller_tester product` first."),
     }
 
 

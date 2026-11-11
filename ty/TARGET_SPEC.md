@@ -1,24 +1,23 @@
 # Target spec — what production-ready means, per service
 
-Derived 2026-11-09T07:59:52+00:00 from `state/director/services.json`, 7186 measured test ids and 1 readiness findings. **Scores are measured, never asserted**: a dimension with no artefact scores 0 and says why.
+Derived 2026-11-11T04:29:48+00:00 from `state/director/services.json`, 7465 measured test ids and 1 readiness findings. **Scores are measured, never asserted**: a dimension with no artefact scores 0 and says why.
 
 Bar: **85 on every dimension** (not an average). A service is at the bar only when its weakest dimension clears it. Impact weight is what a paying seller needs first; gap = impact x (bar - score).
 
 | service | score | weakest | at bar | gap | impact |
 |---|---|---|---|---|---|
-| AdPilot (`adpilot`) | 55.0 | seller | no | 21.0 | 0.7 |
-| SourceScout (`product-finder`) | 65.0 | seller | no | 18.0 | 0.9 |
-| ListingForge (`listingforge`) | 65.0 | seller | no | 17.0 | 0.85 |
 | OfferChisel (`offerchisel`) | 67.0 | seller | no | 16.2 | 0.9 |
 | The Town Crier (`towncrier`) | 55.0 | seller | no | 13.5 | 0.45 |
+| AdPilot (`adpilot`) | 67.0 | seller | no | 12.6 | 0.7 |
 | Support (`beta-support`) | 63.2 | complete | no | 10.9 | 0.5 |
 | Onboarding & Plan (`beta`) | 74.7 | complete | no | 9.3 | 0.9 |
 | Invite entry (`beta-signup`) | 74.7 | complete | no | 8.2 | 0.8 |
 | SocialPulse (`socialpulse`) | 67.0 | seller | no | 8.1 | 0.45 |
 | Golden Goose (`goldengoose`) | 77.0 | seller | no | 7.6 | 0.95 |
 | Golden Goose (`golden-goose`) | 77.0 | seller | no | 7.6 | 0.95 |
+| SourceScout (`product-finder`) | 77.0 | seller | no | 7.2 | 0.9 |
 | Listing Guardian (`listings`) | 77.0 | seller | no | 7.2 | 0.9 |
-| Competitor Monitor (`competitor-monitor`) | 74.7 | complete | no | 5.1 | 0.5 |
+| ListingForge (`listingforge`) | 77.0 | seller | no | 6.8 | 0.85 |
 | Tester Dashboard (`beta-ops`) | 74.7 | complete | no | 4.1 | 0.4 |
 | Operations Hub (`hub`) | 100.0 | works | yes | 0.0 | 0.85 |
 | The Ledger (`ledger`) | 86.2 | complete | no | 0.0 | 0.8 |
@@ -32,81 +31,16 @@ Bar: **85 on every dimension** (not an average). A service is at the bar only wh
 | Operations Hub (`foundation`) | 86.2 | complete | no | 0.0 | 0.7 |
 | Jobs & Schedules (`jobs`) | 86.2 | complete | no | 0.0 | 0.4 |
 | Keywords & SEO (`keywords`) | 86.2 | complete | no | 0.0 | 0.6 |
-| Design Studio (`design-studio`) | 85.2 | correct | no | 0.0 | 0.95 |
-| Keyword Tracker (`keyword-tracker`) | 86.2 | complete | no | 0.0 | 0.6 |
-| Profitability (`profitability`) | 86.2 | complete | no | 0.0 | 0.75 |
+| Design Studio (`design-studio`) | 89.3 | correct | no | 0.0 | 0.95 |
+| Keyword Tracker (`keyword-tracker`) | 100.0 | works | yes | 0.0 | 0.6 |
+| Competitor Monitor (`competitor-monitor`) | 88.5 | contract | no | 0.0 | 0.5 |
+| Profitability (`profitability`) | 100.0 | works | yes | 0.0 | 0.75 |
 
-At the bar today: **2 of 29**.
+At the bar today: **4 of 29**.
 
 Repo-wide findings (not charged to any service):
 
 - dead-module at `northstar-os-ui/src/lib/serviceGate.js`
-
-## AdPilot (`adpilot`)
-
-campaign control: budget, bids, and the report behind them.
-
-- route `/adpilot`, group Advertising, kind workspace
-- **score 55.0 / bar 85** (impact 0.7, gap 21.0)
-
-| dimension | score | weight | evidence |
-|---|---|---|---|
-| works | 100.0 | 0.23 | 13 test id(s) prove it |
-| correct | 60.0 | 0.25 | 13 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
-| seller | 0.0 | 0.13 | no Seller-Tester output scored for this service |
-| complete | 0.0 | 0.12 | 0/1 declared Bojo tools wired: plan_campaign |
-| usable | 100.0 | 0.07 | no readiness finding names this service |
-| measured | 100.0 | 0.1 | route /adpilot -> northstar-os-ui\src\pages\internal\AdPilot.jsx; app p95 3.4 ms |
-| contract | 0.0 | 0.1 | empty_payload: payload has no measured rows or fields (keys: uploads,note) |
-
-Seller scenarios:
-- `backed` — hold ROAS while doubling spend on the winner
-- `backed` — cut the keywords that only cost money
-- `backed` — show me what the campaign did last week
-
-## SourceScout (`product-finder`)
-
-SourceScout: match a product idea to suppliers and landed cost.
-
-- route `/product-finder`, group Sourcing, kind workspace
-- **score 65.0 / bar 85** (impact 0.9, gap 18.0)
-
-| dimension | score | weight | evidence |
-|---|---|---|---|
-| works | 100.0 | 0.23 | 21 test id(s) prove it |
-| correct | 60.0 | 0.25 | 21 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
-| seller | 0.0 | 0.13 | no Seller-Tester output scored for this service |
-| complete | 0.0 | 0.12 | 0/1 declared Bojo tools wired: scan_products |
-| usable | 100.0 | 0.07 | no readiness finding names this service |
-| measured | 100.0 | 0.1 | route /product-finder -> northstar-os-ui\src\pages\internal\ProductFinder.jsx; app p95 3.4 ms |
-| contract | 100.0 | 0.1 | GET /api/products/finder -> 200; 89 row(s) under 'evaluated' |
-
-Seller scenarios:
-- `backed` — find a product in a category I have never sold
-- `backed` — compare landed cost across three suppliers
-- `backed` — tell me the margin at my fee tier
-
-## ListingForge (`listingforge`)
-
-create and version listings with the copy that converts.
-
-- route `/listingforge`, group Listings, kind workspace
-- **score 65.0 / bar 85** (impact 0.85, gap 17.0)
-
-| dimension | score | weight | evidence |
-|---|---|---|---|
-| works | 100.0 | 0.23 | 35 test id(s) prove it |
-| correct | 60.0 | 0.25 | 35 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
-| seller | 0.0 | 0.13 | no Seller-Tester output scored for this service |
-| complete | 0.0 | 0.12 | 0/1 declared Bojo tools wired: compose_listing |
-| usable | 100.0 | 0.07 | no readiness finding names this service |
-| measured | 100.0 | 0.1 | route /listingforge -> northstar-os-ui\src\pages\internal\ListingForge.jsx; app p95 3.4 ms |
-| contract | 100.0 | 0.1 | POST /api/design-studio/listing-records -> 200; 6 measured field(s) (id,record); read back adad0461-16cd-4966-a146-69d94d9f9097 via /api/design-studio/listing-records |
-
-Seller scenarios:
-- `backed` — turn this product into a listing that will not be suppressed
-- `backed` — rewrite the bullets for a different audience
-- `backed` — fix the listing that lost its buy box
 
 ## OfferChisel (`offerchisel`)
 
@@ -150,6 +84,28 @@ seller-side social output that does not read like a robot.
 Seller scenarios:
 - `backed` — post about a restock without sounding automated
 - `backed` — keep the voice consistent across three posts
+
+## AdPilot (`adpilot`)
+
+campaign control: budget, bids, and the report behind them.
+
+- route `/adpilot`, group Advertising, kind workspace
+- **score 67.0 / bar 85** (impact 0.7, gap 12.6)
+
+| dimension | score | weight | evidence |
+|---|---|---|---|
+| works | 100.0 | 0.23 | 13 test id(s) prove it |
+| correct | 60.0 | 0.25 | 13 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
+| seller | 0.0 | 0.13 | no Seller-Tester output scored for this service |
+| complete | 100.0 | 0.12 | 1/1 declared Bojo tools wired: plan_campaign |
+| usable | 100.0 | 0.07 | no readiness finding names this service |
+| measured | 100.0 | 0.1 | route /adpilot -> northstar-os-ui\src\pages\internal\AdPilot.jsx; app p95 3.4 ms |
+| contract | 0.0 | 0.1 | empty_payload: payload has no measured rows or fields (keys: uploads,note) |
+
+Seller scenarios:
+- `backed` — hold ROAS while doubling spend on the winner
+- `backed` — cut the keywords that only cost money
+- `backed` — show me what the campaign did last week
 
 ## Support (`beta-support`)
 
@@ -279,6 +235,28 @@ Seller scenarios:
 - `backed` — compare landed cost across three suppliers
 - `backed` — tell me the margin at my fee tier
 
+## SourceScout (`product-finder`)
+
+SourceScout: match a product idea to suppliers and landed cost.
+
+- route `/product-finder`, group Sourcing, kind workspace
+- **score 77.0 / bar 85** (impact 0.9, gap 7.2)
+
+| dimension | score | weight | evidence |
+|---|---|---|---|
+| works | 100.0 | 0.23 | 25 test id(s) prove it |
+| correct | 60.0 | 0.25 | 25 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
+| seller | 0.0 | 0.13 | no Seller-Tester output scored for this service |
+| complete | 100.0 | 0.12 | 1/1 declared Bojo tools wired: scan_products |
+| usable | 100.0 | 0.07 | no readiness finding names this service |
+| measured | 100.0 | 0.1 | route /product-finder -> northstar-os-ui\src\pages\internal\ProductFinder.jsx; app p95 3.4 ms |
+| contract | 100.0 | 0.1 | GET /api/products/finder -> 200; 89 row(s) under 'evaluated' |
+
+Seller scenarios:
+- `backed` — find a product in a category I have never sold
+- `backed` — compare landed cost across three suppliers
+- `backed` — tell me the margin at my fee tier
+
 ## Listing Guardian (`listings`)
 
 Listing Guardian: keep live listings compliant and correct.
@@ -301,27 +279,27 @@ Seller scenarios:
 - `backed` — rewrite the bullets for a different audience
 - `backed` — fix the listing that lost its buy box
 
-## Competitor Monitor (`competitor-monitor`)
+## ListingForge (`listingforge`)
 
-the competitor feed behind Rival Board.
+create and version listings with the copy that converts.
 
-- route `/competitor-monitor`, group Monitoring, kind workspace
-- **score 74.7 / bar 85** (impact 0.5, gap 5.1)
+- route `/listingforge`, group Listings, kind workspace
+- **score 77.0 / bar 85** (impact 0.85, gap 6.8)
 
 | dimension | score | weight | evidence |
 |---|---|---|---|
-| works | 100.0 | 0.23 | 6 test id(s) prove it |
-| correct | 100.0 | 0.25 | 6 test id(s) prove behaviour; this service produces no seller-facing artefact, so tests are the evidence |
-| seller | None | 0.13 | this service does not produce a seller-facing artefact, so there is nothing to score |
-| complete | 0.0 | 0.12 | 0/1 declared Bojo tools wired: watch_competitor |
+| works | 100.0 | 0.23 | 35 test id(s) prove it |
+| correct | 60.0 | 0.25 | 35 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
+| seller | 0.0 | 0.13 | no Seller-Tester output scored for this service |
+| complete | 100.0 | 0.12 | 1/1 declared Bojo tools wired: compose_listing |
 | usable | 100.0 | 0.07 | no readiness finding names this service |
-| measured | 100.0 | 0.1 | route /competitor-monitor -> northstar-os-ui\src\pages\internal\CompetitorMonitor.jsx; app p95 3.4 ms |
-| contract | 0.0 | 0.1 | empty_payload: payload has no measured rows or fields (keys: kind,count,items,summary) |
+| measured | 100.0 | 0.1 | route /listingforge -> northstar-os-ui\src\pages\internal\ListingForge.jsx; app p95 3.4 ms |
+| contract | 100.0 | 0.1 | POST /api/design-studio/listing-records -> 200; 6 measured field(s) (id,record); read back adad0461-16cd-4966-a146-69d94d9f9097 via /api/design-studio/listing-records |
 
 Seller scenarios:
-- `backed` — tell me what changed before I lose the buy box
-- `backed` — show rank over the last 90 days
-- `backed` — alert me when a competitor undercuts me
+- `backed` — turn this product into a listing that will not be suppressed
+- `backed` — rewrite the bullets for a different audience
+- `backed` — fix the listing that lost its buy box
 
 ## Tester Dashboard (`beta-ops`)
 
@@ -601,14 +579,14 @@ Seller scenarios:
 product pictures in any seller situation, and A+ content, from a prompt, stored references, or uploads - Canva-grade to use.
 
 - route `/design-studio`, group Create, kind studio
-- **score 85.2 / bar 85** (impact 0.95, gap 0.0)
+- **score 89.3 / bar 85** (impact 0.95, gap 0.0)
 
 | dimension | score | weight | evidence |
 |---|---|---|---|
 | works | 100.0 | 0.23 | 166 test id(s) prove it |
 | correct | 60.0 | 0.25 | 166 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
-| seller | 93.5 | 0.13 | 12 Seller-Tester outputs (generated/composite), mean 93.5, 9 passed; 40 replayed artefact(s) excluded as context (mean 29.2) |
-| complete | 66.7 | 0.12 | 2/3 declared Bojo tools wired: build_dieline, generate_image, list_templates |
+| seller | 94.9 | 0.13 | 12 Seller-Tester outputs (generated/composite), mean 94.9, 11 passed; 40 replayed artefact(s) excluded as context (mean 22.1) |
+| complete | 100.0 | 0.12 | 3/3 declared Bojo tools wired: build_dieline, generate_image, list_templates |
 | usable | 100.0 | 0.07 | no readiness finding names this service |
 | measured | 100.0 | 0.1 | route /design-studio -> northstar-os-ui\src\pages\internal\DesignStudio.jsx; app p95 3.4 ms |
 | contract | 100.0 | 0.1 | POST /api/design-studio/assets/upload -> 200; 10 measured field(s) (id,asset,file_url); read back 78fbb038-e23f-4323-95e8-5b7912410382 via /api/design-studio/assets |
@@ -623,17 +601,39 @@ Seller scenarios:
 which keywords are worth owning, measured not guessed.
 
 - route `/keyword-tracker`, group Monitoring, kind workspace
-- **score 86.2 / bar 85** (impact 0.6, gap 0.0)
+- **score 100.0 / bar 85** (impact 0.6, gap 0.0)
 
 | dimension | score | weight | evidence |
 |---|---|---|---|
 | works | 100.0 | 0.23 | 77 test id(s) prove it |
 | correct | 100.0 | 0.25 | 77 test id(s) prove behaviour; this service produces no seller-facing artefact, so tests are the evidence |
 | seller | None | 0.13 | this service does not produce a seller-facing artefact, so there is nothing to score |
-| complete | 0.0 | 0.12 | 0/1 declared Bojo tools wired: track_keywords |
+| complete | 100.0 | 0.12 | 1/1 declared Bojo tools wired: track_keywords |
 | usable | 100.0 | 0.07 | no readiness finding names this service |
 | measured | 100.0 | 0.1 | route /keyword-tracker -> northstar-os-ui\src\pages\internal\KeywordTracker.jsx; app p95 3.4 ms |
 | contract | 100.0 | 0.1 | GET /api/v1/noncreative/keywords -> 200; 10 row(s) under 'items' |
+
+Seller scenarios:
+- `backed` — tell me what changed before I lose the buy box
+- `backed` — show rank over the last 90 days
+- `backed` — alert me when a competitor undercuts me
+
+## Competitor Monitor (`competitor-monitor`)
+
+the competitor feed behind Rival Board.
+
+- route `/competitor-monitor`, group Monitoring, kind workspace
+- **score 88.5 / bar 85** (impact 0.5, gap 0.0)
+
+| dimension | score | weight | evidence |
+|---|---|---|---|
+| works | 100.0 | 0.23 | 6 test id(s) prove it |
+| correct | 100.0 | 0.25 | 6 test id(s) prove behaviour; this service produces no seller-facing artefact, so tests are the evidence |
+| seller | None | 0.13 | this service does not produce a seller-facing artefact, so there is nothing to score |
+| complete | 100.0 | 0.12 | 1/1 declared Bojo tools wired: watch_competitor |
+| usable | 100.0 | 0.07 | no readiness finding names this service |
+| measured | 100.0 | 0.1 | route /competitor-monitor -> northstar-os-ui\src\pages\internal\CompetitorMonitor.jsx; app p95 3.4 ms |
+| contract | 0.0 | 0.1 | empty_payload: payload has no measured rows or fields (keys: kind,count,items,summary) |
 
 Seller scenarios:
 - `backed` — tell me what changed before I lose the buy box
@@ -645,14 +645,14 @@ Seller scenarios:
 per-SKU profitability after fees, ads and returns.
 
 - route `/profitability`, group Workspace, kind workspace
-- **score 86.2 / bar 85** (impact 0.75, gap 0.0)
+- **score 100.0 / bar 85** (impact 0.75, gap 0.0)
 
 | dimension | score | weight | evidence |
 |---|---|---|---|
 | works | 100.0 | 0.23 | 4 test id(s) prove it |
 | correct | 100.0 | 0.25 | 4 test id(s) prove behaviour; this service produces no seller-facing artefact, so tests are the evidence |
 | seller | None | 0.13 | this service does not produce a seller-facing artefact, so there is nothing to score |
-| complete | 0.0 | 0.12 | 0/1 declared Bojo tools wired: margin_report |
+| complete | 100.0 | 0.12 | 1/1 declared Bojo tools wired: margin_report |
 | usable | 100.0 | 0.07 | no readiness finding names this service |
 | measured | 100.0 | 0.1 | route /profitability -> northstar-os-ui\src\pages\internal\ProfitabilityDashboard.jsx; app p95 3.4 ms |
 | contract | 100.0 | 0.1 | GET /api/v1/foundation/economics/contract -> 200; 10 measured field(s) (formula_version,money_type,rounding,readiness_states,metrics) |

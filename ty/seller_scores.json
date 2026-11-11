@@ -1,28 +1,37 @@
 {
   "services": {
     "design-studio": {
-      "mean": 93.5,
+      "mean": 94.9,
       "scored": 12,
-      "passed": 9,
-      "at": "2026-11-09T07:44:43+00:00",
+      "passed": 11,
+      "at": "2026-11-11T04:23:37+00:00",
       "population": "generated",
       "replay": {
-        "mean": 29.2,
+        "mean": 22.1,
         "scored": 40,
         "passed": 0
       }
     }
   },
-  "at": "2026-11-09T07:58:16+00:00",
+  "at": "2026-11-11T04:29:22+00:00",
+  "pipeline": {
+    "rendered_by": "tools/seller_tester ProductPipelineGenerator -> product_picture.build",
+    "product_renders_with": "Northstar_backend/product_picture.py::build (brand_art + mockup_compositor + mockup_quality.assert_legible)",
+    "same_pipeline": true,
+    "plate_source": "drawn",
+    "judged": true,
+    "at": "2026-11-11T04:23:37+00:00",
+    "why_it_matters": "sel-06 (2026-11-11): the pass renders through the same product_picture.build the API calls, so the number describes the product. The plate is named above: when it is 'drawn' the picture's photograph is a stand-in and only the artwork, warp and gate are real."
+  },
   "pass": {
     "population": "generated",
     "scored": 12,
-    "passed": 9,
-    "mean_score": 93.5,
+    "passed": 11,
+    "mean_score": 94.9,
     "replay": {
       "scored": 40,
       "passed": 0,
-      "mean_score": 29.2
+      "mean_score": 22.1
     }
   },
   "ceiling": {

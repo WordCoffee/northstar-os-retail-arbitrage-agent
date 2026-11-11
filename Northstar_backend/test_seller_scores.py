@@ -127,6 +127,59 @@ def test_many_replays_do_not_satisfy_the_generated_sample_floor():
     assert "40 replayed artefact(s) are context only" in verdict["evidence"]
 
 
+# --------------------------------------------------------------- the app path
+def _app_pass(rows=None):
+    return {"generated_at": "2026-11-11T00:00:00+00:00", "generator": "product_pipeline",
+            "pipeline": "app", "plate_source": "drawn", "judge_enabled": True,
+            "results": rows if rows is not None else [
+                {"brief_id": "ST-001", "score": 100, "passed": True,
+                 "generation": {"route": "product_picture"}},
+                {"brief_id": "ST-001", "score": 90, "passed": True,
+                 "generation": {"route": "product_picture"}},
+                {"brief_id": "ST-001", "score": 80, "passed": True,
+                 "generation": {"route": "product_picture"}},
+                {"brief_id": "ST-001", "score": 95, "passed": True,
+                 "generation": {"route": "product_picture"}},
+                {"brief_id": "ST-001", "score": 85, "passed": True,
+                 "generation": {"route": "product_picture"}},
+            ]}
+
+
+def test_the_app_path_pass_is_the_published_population():
+    replay = {"generator": "stored", "results": [
+        {"brief_id": "ST-001", "score": 10, "passed": False}]}
+    harness = {"generator": "composite", "results": [
+        {"brief_id": "ST-001", "score": 60, "passed": False} for _ in range(5)]}
+    built = seller_scores.build(summary=replay, composite=harness,
+                               product=_app_pass(), briefs=BRIEFS)
+    row = built["services"]["design-studio"]
+    assert row["mean"] == 90.0          # (100+90+80+95+85)/5, app path only
+    assert row["scored"] == 5
+    assert built["pipeline"]["same_pipeline"] is True
+    assert built["pipeline"]["plate_source"] == "drawn"
+    assert built["pipeline"]["judged"] is True
+    assert "product_picture.build" in built["pipeline"]["rendered_by"]
+
+
+def test_the_harness_pass_is_not_averaged_beside_the_app_pass():
+    """Two pipelines over the same briefs are two pipelines, not one population."""
+    harness = {"generator": "composite", "results": [
+        {"brief_id": "ST-001", "score": 0, "passed": False} for _ in range(5)]}
+    built = seller_scores.build(summary={"generator": "stored", "results": []},
+                               composite=harness, product=_app_pass(), briefs=BRIEFS)
+    assert built["services"]["design-studio"]["mean"] == 90.0
+    assert built["pass"]["scored"] == 5
+
+
+def test_without_an_app_pass_the_pipeline_is_named_as_the_harness():
+    harness = {"generator": "composite", "results": [
+        {"brief_id": "ST-001", "score": 50, "passed": False} for _ in range(5)]}
+    built = seller_scores.build(summary={"generator": "stored", "results": []},
+                               composite=harness, briefs=BRIEFS)
+    assert built["pipeline"]["same_pipeline"] is False
+    assert "harness pipeline" in built["pipeline"]["why_it_matters"]
+
+
 # --------------------------------------------------------------- ceiling
 def test_ceiling_counts_what_can_actually_be_judged():
     briefs = {"briefs": [
