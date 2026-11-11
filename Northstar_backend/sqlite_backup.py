@@ -125,9 +125,10 @@ def _connect_ro(path: Path) -> sqlite3.Connection:
     return sqlite3.connect(uri, uri=True, timeout=10)
 
 
-def store_path(store: Dict[str, Any], root: Path = REPO_ROOT,
+def store_path(store: Dict[str, Any], root: Optional[Path] = None,
                environ: Optional[Dict[str, str]] = None) -> Path:
     """Resolve a store's live path, honouring the module's own env override."""
+    root = REPO_ROOT if root is None else root
     env = environ if environ is not None else os.environ
     override = env.get(store["env"]) if store.get("env") else None
     if override and str(override).strip():
@@ -142,9 +143,10 @@ def find_store(store_id: str) -> Dict[str, Any]:
     raise BackupError(f"unknown store: {store_id!r}")
 
 
-def describe_stores(root: Path = REPO_ROOT,
+def describe_stores(root: Optional[Path] = None,
                     environ: Optional[Dict[str, str]] = None) -> List[Dict[str, Any]]:
     """Inventory with live presence for each store (no content is read)."""
+    root = REPO_ROOT if root is None else root
     rows: List[Dict[str, Any]] = []
     for store in STORE_INVENTORY:
         path = store_path(store, root=root, environ=environ)
@@ -233,9 +235,10 @@ def inspect_database(path: Path) -> Dict[str, Any]:
 # Backup
 # ---------------------------------------------------------------------------
 
-def backup_store(store_id: str, dest_dir: Path, *, root: Path = REPO_ROOT,
+def backup_store(store_id: str, dest_dir: Path, *, root: Optional[Path] = None,
                  environ: Optional[Dict[str, str]] = None) -> Dict[str, Any]:
     """Write a consistent snapshot plus its manifest; return the manifest."""
+    root = REPO_ROOT if root is None else root
     store = find_store(store_id)
     source = store_path(store, root=root, environ=environ)
     if not source.is_file():
@@ -299,9 +302,10 @@ def backup_store(store_id: str, dest_dir: Path, *, root: Path = REPO_ROOT,
     return manifest
 
 
-def backup_all(dest_dir: Path, *, root: Path = REPO_ROOT,
+def backup_all(dest_dir: Path, *, root: Optional[Path] = None,
                environ: Optional[Dict[str, str]] = None) -> List[Dict[str, Any]]:
     """Back every store that exists in this tree; absent stores are skipped."""
+    root = REPO_ROOT if root is None else root
     results: List[Dict[str, Any]] = []
     for store in STORE_INVENTORY:
         path = store_path(store, root=root, environ=environ)
