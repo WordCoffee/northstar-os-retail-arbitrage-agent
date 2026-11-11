@@ -422,3 +422,13 @@ path already exists), and then the six briefs should pass their own gate. Queued
 brief problem: the same briefs pass `sheet`, `panels`, `bleed`, `pdf`, `safe` (skipped with
 the reason) — only the missing layer fails them.
 
+
+
+**Closed 2026-11-11** (`ty-dir-fix-carton-safe-layer`). `_panel_blank(..., safe_mm=)` writes
+one safe rectangle per body face, inset by the margin from the trim and from both folds;
+`build_carton(..., safe_mm=)` and the three carton templates declare it (default 3 mm) and
+`build_from_template` passes it through. Measured on the same eight briefs: **2/8 → 8/8
+passed, mean 78.6 → 100.0**, safe margins readable per artefact (5 mm doypacks, 3 mm
+cartons). 13 checks written first, 80 + 45 related green.
+`reports/ty/d023_carton_safe_layer.md`.
+

@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-11-11T03:43:15",
+  "generated_at": "2026-11-11T03:46:58",
   "generator": "design_studio_print.build_from_template + render_svg + render_pdf",
   "selected": 8,
   "scored": 8,
-  "passed": 2,
-  "failed": 6,
+  "passed": 8,
+  "failed": 0,
   "refused": 0,
-  "pass_rate": 25.0,
-  "mean_score": 78.6,
+  "pass_rate": 100.0,
+  "mean_score": 100.0,
   "results": [
     {
       "brief_id": "PK-001",
@@ -106,7 +106,7 @@
       "status": "scored",
       "artefact": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\packaging\\PK-001.svg",
       "pdf": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\packaging\\PK-001.pdf",
-      "seconds": 0.04,
+      "seconds": 0.06,
       "width_mm": 158.0,
       "height_mm": 506.0,
       "layers": [
@@ -121,12 +121,9 @@
     {
       "brief_id": "PK-002",
       "template": "tuck_end",
-      "score": 71.4,
-      "passed": false,
-      "failed_checks": [
-        "layers",
-        "readiness"
-      ],
+      "score": 100.0,
+      "passed": true,
+      "failed_checks": [],
       "checks": {
         "sheet": {
           "ok": true,
@@ -163,22 +160,22 @@
         "safe": {
           "ok": true,
           "check": "safe",
-          "skipped": true,
-          "detail": "this template declares no safe-margin field; trim/fold geometry is the engine's own gate for it"
+          "safe_mm": 3.0,
+          "needed_mm": 3.0,
+          "detail": "safe margin 3 mm vs the brief's 3 mm"
         },
         "layers": {
-          "ok": false,
+          "ok": true,
           "check": "layers",
           "layers": [
             "bleed",
             "fold",
             "info",
+            "safe",
             "trim"
           ],
-          "missing": [
-            "safe"
-          ],
-          "detail": "missing layers: ['safe']"
+          "missing": [],
+          "detail": "layers ['bleed', 'fold', 'info', 'safe', 'trim']"
         },
         "pdf": {
           "ok": true,
@@ -194,14 +191,12 @@
           "detail": "page 569.8x561.3 pt vs the sheet's 569.8x561.3 pt"
         },
         "readiness": {
-          "ok": false,
+          "ok": true,
           "check": "readiness",
           "assessed": true,
-          "blockers": [
-            "dieline is missing its 'safe' layer"
-          ],
+          "blockers": [],
           "warnings": [],
-          "detail": "dieline is missing its 'safe' layer"
+          "detail": "retail-ready dieline"
         }
       },
       "status": "scored",
@@ -214,18 +209,16 @@
         "bleed",
         "fold",
         "info",
+        "safe",
         "trim"
       ]
     },
     {
       "brief_id": "PK-003",
       "template": "rsc_box",
-      "score": 71.4,
-      "passed": false,
-      "failed_checks": [
-        "layers",
-        "readiness"
-      ],
+      "score": 100.0,
+      "passed": true,
+      "failed_checks": [],
       "checks": {
         "sheet": {
           "ok": true,
@@ -262,22 +255,22 @@
         "safe": {
           "ok": true,
           "check": "safe",
-          "skipped": true,
-          "detail": "this template declares no safe-margin field; trim/fold geometry is the engine's own gate for it"
+          "safe_mm": 3.0,
+          "needed_mm": 3.0,
+          "detail": "safe margin 3 mm vs the brief's 3 mm"
         },
         "layers": {
-          "ok": false,
+          "ok": true,
           "check": "layers",
           "layers": [
             "bleed",
             "fold",
             "info",
+            "safe",
             "trim"
           ],
-          "missing": [
-            "safe"
-          ],
-          "detail": "missing layers: ['safe']"
+          "missing": [],
+          "detail": "layers ['bleed', 'fold', 'info', 'safe', 'trim']"
         },
         "pdf": {
           "ok": true,
@@ -293,14 +286,12 @@
           "detail": "page 1193.4x413.9 pt vs the sheet's 1193.4x413.9 pt"
         },
         "readiness": {
-          "ok": false,
+          "ok": true,
           "check": "readiness",
           "assessed": true,
-          "blockers": [
-            "dieline is missing its 'safe' layer"
-          ],
+          "blockers": [],
           "warnings": [],
-          "detail": "dieline is missing its 'safe' layer"
+          "detail": "retail-ready dieline"
         }
       },
       "status": "scored",
@@ -313,18 +304,16 @@
         "bleed",
         "fold",
         "info",
+        "safe",
         "trim"
       ]
     },
     {
       "brief_id": "PK-004",
       "template": "sleeve",
-      "score": 71.4,
-      "passed": false,
-      "failed_checks": [
-        "layers",
-        "readiness"
-      ],
+      "score": 100.0,
+      "passed": true,
+      "failed_checks": [],
       "checks": {
         "sheet": {
           "ok": true,
@@ -361,22 +350,22 @@
         "safe": {
           "ok": true,
           "check": "safe",
-          "skipped": true,
-          "detail": "this template declares no safe-margin field; trim/fold geometry is the engine's own gate for it"
+          "safe_mm": 3.0,
+          "needed_mm": 3.0,
+          "detail": "safe margin 3 mm vs the brief's 3 mm"
         },
         "layers": {
-          "ok": false,
+          "ok": true,
           "check": "layers",
           "layers": [
             "bleed",
             "fold",
             "info",
+            "safe",
             "trim"
           ],
-          "missing": [
-            "safe"
-          ],
-          "detail": "missing layers: ['safe']"
+          "missing": [],
+          "detail": "layers ['bleed', 'fold', 'info', 'safe', 'trim']"
         },
         "pdf": {
           "ok": true,
@@ -392,14 +381,12 @@
           "detail": "page 909.9x470.6 pt vs the sheet's 909.9x470.6 pt"
         },
         "readiness": {
-          "ok": false,
+          "ok": true,
           "check": "readiness",
           "assessed": true,
-          "blockers": [
-            "dieline is missing its 'safe' layer"
-          ],
+          "blockers": [],
           "warnings": [],
-          "detail": "dieline is missing its 'safe' layer"
+          "detail": "retail-ready dieline"
         }
       },
       "status": "scored",
@@ -412,6 +399,7 @@
         "bleed",
         "fold",
         "info",
+        "safe",
         "trim"
       ]
     },
@@ -521,12 +509,9 @@
     {
       "brief_id": "PK-006",
       "template": "tuck_end",
-      "score": 71.4,
-      "passed": false,
-      "failed_checks": [
-        "layers",
-        "readiness"
-      ],
+      "score": 100.0,
+      "passed": true,
+      "failed_checks": [],
       "checks": {
         "sheet": {
           "ok": true,
@@ -563,22 +548,22 @@
         "safe": {
           "ok": true,
           "check": "safe",
-          "skipped": true,
-          "detail": "this template declares no safe-margin field; trim/fold geometry is the engine's own gate for it"
+          "safe_mm": 3.0,
+          "needed_mm": 3.0,
+          "detail": "safe margin 3 mm vs the brief's 3 mm"
         },
         "layers": {
-          "ok": false,
+          "ok": true,
           "check": "layers",
           "layers": [
             "bleed",
             "fold",
             "info",
+            "safe",
             "trim"
           ],
-          "missing": [
-            "safe"
-          ],
-          "detail": "missing layers: ['safe']"
+          "missing": [],
+          "detail": "layers ['bleed', 'fold', 'info', 'safe', 'trim']"
         },
         "pdf": {
           "ok": true,
@@ -594,14 +579,12 @@
           "detail": "page 739.8x462.0 pt vs the sheet's 739.8x462.0 pt"
         },
         "readiness": {
-          "ok": false,
+          "ok": true,
           "check": "readiness",
           "assessed": true,
-          "blockers": [
-            "dieline is missing its 'safe' layer"
-          ],
+          "blockers": [],
           "warnings": [],
-          "detail": "dieline is missing its 'safe' layer"
+          "detail": "retail-ready dieline"
         }
       },
       "status": "scored",
@@ -614,18 +597,16 @@
         "bleed",
         "fold",
         "info",
+        "safe",
         "trim"
       ]
     },
     {
       "brief_id": "PK-007",
       "template": "rsc_box",
-      "score": 71.4,
-      "passed": false,
-      "failed_checks": [
-        "layers",
-        "readiness"
-      ],
+      "score": 100.0,
+      "passed": true,
+      "failed_checks": [],
       "checks": {
         "sheet": {
           "ok": true,
@@ -662,22 +643,22 @@
         "safe": {
           "ok": true,
           "check": "safe",
-          "skipped": true,
-          "detail": "this template declares no safe-margin field; trim/fold geometry is the engine's own gate for it"
+          "safe_mm": 3.0,
+          "needed_mm": 3.0,
+          "detail": "safe margin 3 mm vs the brief's 3 mm"
         },
         "layers": {
-          "ok": false,
+          "ok": true,
           "check": "layers",
           "layers": [
             "bleed",
             "fold",
             "info",
+            "safe",
             "trim"
           ],
-          "missing": [
-            "safe"
-          ],
-          "detail": "missing layers: ['safe']"
+          "missing": [],
+          "detail": "layers ['bleed', 'fold', 'info', 'safe', 'trim']"
         },
         "pdf": {
           "ok": true,
@@ -693,14 +674,12 @@
           "detail": "page 1533.5x357.2 pt vs the sheet's 1533.5x357.2 pt"
         },
         "readiness": {
-          "ok": false,
+          "ok": true,
           "check": "readiness",
           "assessed": true,
-          "blockers": [
-            "dieline is missing its 'safe' layer"
-          ],
+          "blockers": [],
           "warnings": [],
-          "detail": "dieline is missing its 'safe' layer"
+          "detail": "retail-ready dieline"
         }
       },
       "status": "scored",
@@ -713,18 +692,16 @@
         "bleed",
         "fold",
         "info",
+        "safe",
         "trim"
       ]
     },
     {
       "brief_id": "PK-008",
       "template": "sleeve",
-      "score": 71.4,
-      "passed": false,
-      "failed_checks": [
-        "layers",
-        "readiness"
-      ],
+      "score": 100.0,
+      "passed": true,
+      "failed_checks": [],
       "checks": {
         "sheet": {
           "ok": true,
@@ -761,22 +738,22 @@
         "safe": {
           "ok": true,
           "check": "safe",
-          "skipped": true,
-          "detail": "this template declares no safe-margin field; trim/fold geometry is the engine's own gate for it"
+          "safe_mm": 3.0,
+          "needed_mm": 3.0,
+          "detail": "safe margin 3 mm vs the brief's 3 mm"
         },
         "layers": {
-          "ok": false,
+          "ok": true,
           "check": "layers",
           "layers": [
             "bleed",
             "fold",
             "info",
+            "safe",
             "trim"
           ],
-          "missing": [
-            "safe"
-          ],
-          "detail": "missing layers: ['safe']"
+          "missing": [],
+          "detail": "layers ['bleed', 'fold', 'info', 'safe', 'trim']"
         },
         "pdf": {
           "ok": true,
@@ -792,14 +769,12 @@
           "detail": "page 1080.0x583.9 pt vs the sheet's 1080.0x583.9 pt"
         },
         "readiness": {
-          "ok": false,
+          "ok": true,
           "check": "readiness",
           "assessed": true,
-          "blockers": [
-            "dieline is missing its 'safe' layer"
-          ],
+          "blockers": [],
           "warnings": [],
-          "detail": "dieline is missing its 'safe' layer"
+          "detail": "retail-ready dieline"
         }
       },
       "status": "scored",
@@ -812,6 +787,7 @@
         "bleed",
         "fold",
         "info",
+        "safe",
         "trim"
       ]
     }

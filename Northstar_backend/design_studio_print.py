@@ -178,13 +178,17 @@ def build_label(shape: str, width_mm: float, height_mm: float, *,
 
 def _panel_blank(panels: List[float], body_h: float, top_depths: List[float],
                  bottom_depths: List[float], *, bleed_mm: float,
-                 label_axis: str = "x") -> dict:
+                 safe_mm: float = 3.0, label_axis: str = "x") -> dict:
     """Generic straight-fold blank from panel widths and tab depths.
 
     panels: body column widths (left->right), one tab depth per column.
     Top tabs extend upward by top_depths[i]; bottom tabs downward.
     Adjacent equal-depth tabs get a CUT slit; differing depths become outline
     steps. Vertical folds separate columns across the body only.
+
+    ``safe_mm`` adds the print-safe boundary inside every body face (D-023). It is a
+    *layer*, not a decoration: `package_readiness` requires trim, fold **and safe**, so a
+    carton without this rectangle is refused by the app's own retail-readiness gate.
     """
     if len(top_depths) != len(panels) or len(bottom_depths) != len(panels):
         raise ValueError("panels and tab depth lists must align")
@@ -250,6 +254,19 @@ def _panel_blank(panels: List[float], body_h: float, top_depths: List[float],
         x += panels[i]
         layers.append(_line(x, fold_top, x, fold_bot, "fold"))
 
+    # Print-safe boundary inside each body face (D-023). The glue tab is the last column
+    # and carries no print, so a face narrower than twice the margin gets no safe box
+    # rather than an inverted one.
+    margin = max(0.0, float(safe_mm))
+    if margin > 0:
+        x = bleed_mm
+        for i in range(len(panels) - 1):
+            face_w = float(panels[i])
+            if face_w > 2 * margin + 0.5 and body_h > 2 * margin + 0.5:
+                layers.append(_rect(x + margin, fold_top + margin,
+                                    face_w - 2 * margin, body_h - 2 * margin, "safe"))
+            x += face_w
+
     layers += _info_block(bleed_mm, total_h - 1.0, [
         f"Blank {_round(total_w)} x {_round(total_h)}mm (panels {[ _round(p) for p in panels ]})",
         "Northstar OS draft template — verify with manufacturer",
@@ -261,7 +278,8 @@ def _panel_blank(panels: List[float], body_h: float, top_depths: List[float],
                       "body_h": _round(body_h),
                       "top_depths": [_round(d) for d in top_depths],
                       "bottom_depths": [_round(d) for d in bottom_depths],
-                      "bleed_mm": _round(bleed_mm)}}
+                      "bleed_mm": _round(bleed_mm),
+                      "safe_mm": _round(margin)}}
     return build
 
 
@@ -421,8 +439,8 @@ def check_doypack_proportions(width_mm: float, height_mm: float, gusset_mm: floa
 def build_carton(template: str, length_mm: float, width_mm: float, height_mm: float, *,
                  flap_mm: Optional[float] = None, glue_mm: float = 15.0,
                  tuck_mm: Optional[float] = None, dust_mm: Optional[float] = None,
-                 bleed_mm: float = 3.0) -> dict:
-    """Build a layered carton blank (draft geometry)."""
+                 bleed_mm: float = 3.0, safe_mm: float = 3.0) -> dict:
+    """Build a layered carton blank (draft geometry), safe boundary included."""
     template = (template or "").strip().lower()
     if template not in CARTON_TEMPLATES:
         raise ValueError(f"unknown carton template {template!r}; use one of {CARTON_TEMPLATES}")
@@ -437,7 +455,8 @@ def build_carton(template: str, length_mm: float, width_mm: float, height_mm: fl
         f = float(flap_mm) if flap_mm is not None else min(L, W) / 2.0
         panels = [L, W, L, W, g]
         depths = [f, f, f, f, 0.0]
-        build = _panel_blank(panels, H, depths, depths, bleed_mm=bleed_mm)
+        build = _panel_blank(panels, H, depths, depths, bleed_mm=bleed_mm,
+                             safe_mm=safe_mm)
         build["meta"].update({"template": template, "length_mm": _round(L),
                               "width_mm": _round(W), "height_mm": _round(H),
                               "flap_mm": _round(f), "glue_mm": _round(g)})
@@ -449,7 +468,8 @@ def build_carton(template: str, length_mm: float, width_mm: float, height_mm: fl
         panels = [L, W, L, W, g]
         top = [t, d, t, d, 0.0]
         bottom = [d, t, d, t, 0.0]  # bottom closes in the opposite order
-        build = _panel_blank(panels, H, top, bottom, bleed_mm=bleed_mm)
+        build = _panel_blank(panels, H, top, bottom, bleed_mm=bleed_mm,
+                             safe_mm=safe_mm)
         build["meta"].update({"template": template, "length_mm": _round(L),
                               "width_mm": _round(W), "height_mm": _round(H),
                               "tuck_mm": _round(t), "dust_mm": _round(d),
@@ -458,7 +478,8 @@ def build_carton(template: str, length_mm: float, width_mm: float, height_mm: fl
     else:  # sleeve
         panels = [L, W, L, W, g]
         depths = [0.0] * 5
-        build = _panel_blank(panels, H, depths, depths, bleed_mm=bleed_mm)
+        build = _panel_blank(panels, H, depths, depths, bleed_mm=bleed_mm,
+                             safe_mm=safe_mm)
         build["meta"].update({"template": template, "length_mm": _round(L),
                               "width_mm": _round(W), "height_mm": _round(H),
                               "glue_mm": _round(g)})
@@ -587,14 +608,14 @@ TEMPLATES: List[dict] = [
      "params": {"width_mm": 100, "height_mm": 60, "bleed_mm": 3, "safe_mm": 3},
      "editable": ["width_mm", "height_mm", "bleed_mm", "safe_mm"]},
     {"id": "rsc_box", "name": "RSC box (FEFCO 0201-style)", "kind": "carton",
-     "params": {"length_mm": 200, "width_mm": 150, "height_mm": 100, "flap_mm": 75, "glue_mm": 15, "bleed_mm": 3},
-     "editable": ["length_mm", "width_mm", "height_mm", "flap_mm", "glue_mm", "bleed_mm"]},
+     "params": {"length_mm": 200, "width_mm": 150, "height_mm": 100, "flap_mm": 75, "glue_mm": 15, "bleed_mm": 3, "safe_mm": 3},
+     "editable": ["length_mm", "width_mm", "height_mm", "flap_mm", "glue_mm", "bleed_mm", "safe_mm"]},
     {"id": "tuck_end", "name": "Tuck-end carton", "kind": "carton",
-     "params": {"length_mm": 90, "width_mm": 60, "height_mm": 160, "tuck_mm": 36, "dust_mm": 21, "glue_mm": 15, "bleed_mm": 3},
-     "editable": ["length_mm", "width_mm", "height_mm", "tuck_mm", "dust_mm", "glue_mm", "bleed_mm"]},
+     "params": {"length_mm": 90, "width_mm": 60, "height_mm": 160, "tuck_mm": 36, "dust_mm": 21, "glue_mm": 15, "bleed_mm": 3, "safe_mm": 3},
+     "editable": ["length_mm", "width_mm", "height_mm", "tuck_mm", "dust_mm", "glue_mm", "bleed_mm", "safe_mm"]},
     {"id": "sleeve", "name": "Open sleeve", "kind": "carton",
-     "params": {"length_mm": 150, "width_mm": 100, "height_mm": 80, "glue_mm": 15, "bleed_mm": 3},
-     "editable": ["length_mm", "width_mm", "height_mm", "glue_mm", "bleed_mm"]},
+     "params": {"length_mm": 150, "width_mm": 100, "height_mm": 80, "glue_mm": 15, "bleed_mm": 3, "safe_mm": 3},
+     "editable": ["length_mm", "width_mm", "height_mm", "glue_mm", "bleed_mm", "safe_mm"]},
     {"id": "doypack", "name": "Stand-up pouch (doypack)", "kind": "carton",
      "params": {"width_mm": 130, "height_mm": 210, "gusset_mm": 40, "weld_mm": 6,
                 "top_weld_mm": 8, "zip_offset_mm": 25, "bleed_mm": 3, "safe_mm": 5,
@@ -657,7 +678,8 @@ def build_from_template(template_id: str, params: Optional[Dict[str, Any]]) -> d
             template_id, clean["length_mm"], clean["width_mm"], clean["height_mm"],
             flap_mm=clean.get("flap_mm"), glue_mm=clean.get("glue_mm", 15.0),
             tuck_mm=clean.get("tuck_mm"), dust_mm=clean.get("dust_mm"),
-            bleed_mm=clean.get("bleed_mm", 3.0))
+            bleed_mm=clean.get("bleed_mm", 3.0),
+            safe_mm=clean.get("safe_mm", 3.0))
     # One gate for every template: a dieline that cannot be printed is refused
     # here, before an SVG is rendered or an asset is persisted.
     return _dg.require_valid(build)

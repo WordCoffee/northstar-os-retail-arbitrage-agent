@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-11T09:44:05+00:00",
+  "updated_at": "2026-11-11T09:47:53+00:00",
   "cycle": 3,
   "unit_in_flight": "",
   "unit_order": [
@@ -1893,7 +1893,7 @@
       "id": "fix-carton-safe-layer",
       "unit": "U",
       "title": "D-023: build_carton emits no safe layer, so the app's own readiness gate blocks every carton and sleeve dieline",
-      "status": "queued",
+      "status": "merged",
       "owner": "",
       "write_paths": [
         "Northstar_backend/design_studio_print.py",
@@ -1908,9 +1908,9 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": "D-023 closed: _panel_blank(..., safe_mm=) writes one safe rect per body face inset from trim and folds; build_carton(..., safe_mm=) plus rsc_box/tuck_end/sleeve declare it (default 3 mm) and build_from_template passes it; packaging lane 2/8 -> 8/8 passed, mean 78.6 -> 100.0; 13 checks written first, 80+45 related green; reports/ty/d023_carton_safe_layer.md",
       "created_at": "2026-11-11T09:44:00+00:00",
-      "updated_at": "2026-11-11T09:44:04+00:00",
+      "updated_at": "2026-11-11T09:47:53+00:00",
       "rank": 1
     },
     {
