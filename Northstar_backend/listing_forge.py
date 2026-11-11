@@ -15,6 +15,8 @@ import hashlib
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional, Tuple
 
+from local_engine_url import ollama_base_url
+
 # Amazon listing limits
 MAX_TITLE_LENGTH = 200
 MAX_BULLET_LENGTH = 500
@@ -459,7 +461,8 @@ def _call_llm(prompt: str, model: Optional[str] = None,
     """Call local Ollama LLM for generation."""
     model = model or _default_model()
     import httpx
-    ollama_host = os.environ.get("OLLAMA_HOST", "http://localhost:11434")
+    # OLLAMA_HOST is a bind address on this box, not a URL — normalise it.
+    ollama_host = ollama_base_url()
 
     try:
         resp = httpx.post(

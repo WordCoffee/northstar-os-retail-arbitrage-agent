@@ -19,6 +19,8 @@ import re
 from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional
 
+from local_engine_url import ollama_base_url
+
 _log = logging.getLogger("northstar.socialpulse")
 
 
@@ -103,7 +105,8 @@ def generate_caption(
     caption = ""
     try:
         import httpx
-        ollama_host = os.environ.get("OLLAMA_HOST", "http://localhost:11434")
+        # OLLAMA_HOST is a bind address on this box, not a URL — normalise it.
+        ollama_host = ollama_base_url()
         resp = httpx.post(
             f"{ollama_host}/api/generate",
             json={

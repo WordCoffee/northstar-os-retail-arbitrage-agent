@@ -5,6 +5,9 @@ import { api } from '../services/api.js'
 
 export default function Autothink({ toast }) {
   const [models, setModels] = useState(null)
+  // 'checking' -> 'up' | 'no-models' | 'down'. The page badge and the Engine
+  // metric both read this, so neither can claim a live engine that is not there.
+  const [engine, setEngine] = useState('checking')
   const [history, setHistory] = useState([])
   const [running, setRunning] = useState(false)
   const [result, setResult] = useState('')
@@ -15,7 +18,8 @@ export default function Autothink({ toast }) {
       try {
         const m = await api.models()
         setModels(m.data)
-      } catch { /* engine may be offline */ }
+        setEngine((m.data?.local?.installed || []).length > 0 ? 'up' : 'no-models')
+      } catch { setEngine('down') }
       try {
         const h = await api.autothinkHistory(8)
         setHistory(Array.isArray(h) ? h : h.items || [])
@@ -41,13 +45,19 @@ export default function Autothink({ toast }) {
 
   const local = models?.local || {}
   const installed = local.installed || []
+  const engineBadge = {
+    up: { label: 'live · local engine', tone: 'live' },
+    'no-models': { label: 'engine up · no local models', tone: 'demo' },
+    down: { label: 'engine unreachable', tone: 'demo' },
+    checking: { label: 'checking engine…', tone: 'demo' },
+  }[engine]
 
   return (
     <div className="page">
       <PageHead
         title="AutothinK"
         sub="AI decision engine — live local models and real runs"
-        badges={[{ label: 'live · local engine', tone: 'live' }]}
+        badges={[engineBadge]}
         right={
           <button className="btn btn-primary" onClick={run} disabled={running}>
             <Icon name="brain" size={15} /> {running ? 'Running…' : 'Run'}
@@ -58,9 +68,9 @@ export default function Autothink({ toast }) {
       <div className="stack" style={{ marginTop: 14 }}>
         <Card title="Engine Status" icon="brain">
           <div className="metric">
-            <Metric k="Engine" v="local" d="Ollama" tone="glow" />
-            <Metric k="T2 Model" v={local.defaults?.T2 || 'northstaros-qwen3.8:27b'} d="default reasoning" tone="lime" />
-            <Metric k="Installed Models" v={installed.length} d={installed.join(' · ') || 'none detected'} />
+            <Metric k="Engine" v={engine === 'up' ? 'local' : engine === 'no-models' ? 'no models' : engine === 'down' ? 'unreachable' : '…'} d="Ollama" tone={engine === 'up' ? 'glow' : undefined} />
+            <Metric k="T2 Model" v={local.defaults?.T2 || '—'} d="default reasoning" tone="lime" />
+            <Metric k="Installed Models" v={engine === 'checking' ? '…' : installed.length} d={installed.join(' · ') || (engine === 'down' ? 'catalogue request failed' : 'none detected')} />
           </div>
           <div className="divider" />
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>

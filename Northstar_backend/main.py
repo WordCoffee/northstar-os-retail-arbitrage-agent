@@ -34,6 +34,7 @@ import live_gate
 import completeness_score
 from canopy_client import get_canopy_product
 from ui_serving import mount_ui
+from local_engine_url import ollama_base_url as _ollama_base_url_shared
 
 # Hosted reasoning provider for non-creative tasks (Phase H2 / Go integration)
 from adapters.reasoning_provider import (
@@ -248,12 +249,14 @@ def install_egress_guard() -> Dict[str, Any]:
 
 def _ollama_base_url() -> str:
     """Local LLM base URL — configurable so the local lane is not anchored to
-    Ollama's default port. Ollama today; any OpenAI-compatible server later."""
-    return (
-        os.environ.get("OLLAMA_BASE_URL")
-        or os.environ.get("OLLAMA_HOST")
-        or "http://localhost:11434"
-    ).rstrip("/")
+    Ollama's default port. Ollama today; any OpenAI-compatible server later.
+
+    Normalised in one shared place: `OLLAMA_HOST` is Ollama's *bind* address on
+    this box (`0.0.0.0:11434`), so used raw it is not a URL and every probe
+    failed with UnsupportedProtocol — the catalogue then reported zero installed
+    models while the engine was listening. See local_engine_url.
+    """
+    return _ollama_base_url_shared()
 
 
 @asynccontextmanager
