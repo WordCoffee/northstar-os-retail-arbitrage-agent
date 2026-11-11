@@ -138,3 +138,7 @@ state/author/
 
 # Owner downloads and loose documents, not source
 Downloads/
+
+# Dev-stack runtime state: the tracked dev-start.pids already churns on every start, and
+# dev-start.pids.json is the same fact in JSON. Neither is source; both are regenerable.
+dev-start.pids.json

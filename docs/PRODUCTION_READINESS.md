@@ -1,4 +1,4 @@
-# Production readiness
+﻿# Production readiness
 
 This is the checklist the repository can **prove**, not the checklist someone
 believes. Every row names a command; every command is either the assertion
@@ -17,7 +17,7 @@ python Northstar_backend/production_assert.py --list
 
 Exit code `0` = the repository is production-shaped. `1` = at least one claim
 failed (the failing row names what and where). `2` = usage error. `--strict`
-also fails on the tracked gaps in [§2.3](#23-known-config-documentation-gaps),
+also fails on the tracked gaps in [Â§2.3](#23-known-config-documentation-gaps),
 which the default run reports as advisories.
 
 Last full run on this machine (Windows, Python 3.14.5, node 20): 12 of 12 checks
@@ -40,10 +40,10 @@ passed, 10 advisories, exit 0. The evidence for that run is
 | Area | Requirement | Command | What it proves |
 |---|---|---|---|
 | No secrets | no secret value in the code that ships (backend, `northstar`, `shared`, `autothink`) | `python Northstar_backend/production_assert.py --only secrets.repo_clean` (`secrets.repo_clean`) | Scans every tracked source/config file (3,300) with `northstar/security/secret_scan.py`. Measured: 4 findings in shipped code, all the same registered pattern false positive (the `authorization:` parameter annotation in `operator_rea_capture.py`), 0 real values. Findings outside shipped code are classified (40 test fixtures, 2 reports, 2 tools) and reported; 11,474 tracked evidence/media/vendored files are declared as not scanned, and the whole-tree command remains `python -m northstar.security.secret_scan --tracked`. |
-| Secrets documented | every secret-shaped key the API reads at import time is named in `.env.example` | `python Northstar_backend/production_assert.py --only config.env_example_covers_secrets` (`config.env_example_covers_secrets`) | Walks the real import graph from `Northstar_backend/main.py`, parses every env read, and compares with `.env.example`. Measured: 123 import-time keys, 4 registered gaps ([§2.3](#23-known-config-documentation-gaps)). |
+| Secrets documented | every secret-shaped key the API reads at import time is named in `.env.example` | `python Northstar_backend/production_assert.py --only config.env_example_covers_secrets` (`config.env_example_covers_secrets`) | Walks the real import graph from `Northstar_backend/main.py`, parses every env read, and compares with `.env.example`. Measured: 123 import-time keys, 4 registered gaps ([Â§2.3](#23-known-config-documentation-gaps)). |
 | Hosted config | every key the hosted deploy requires is documented, or is a compose variable | `python Northstar_backend/production_assert.py --only config.env_example_covers_hosted` (`config.env_example_covers_hosted`) | Reads `deploy/hosted.env.example` and checks each name against `.env.example` and `docker-compose*.yml`. Measured: 15 keys, 3 registered gaps. |
 | Dev bypass | the local identity shim is unreachable outside `ENVIRONMENT=development` | `python Northstar_backend/production_assert.py --only config.dev_bypass_guarded` (`config.dev_bypass_guarded`) | Proves it functionally: a loopback request with `X-User-Id` returns no identity under `production` and `staging`; under `development` it needs an explicit header. Also parses the AST of `dev_shim_enabled()` and refuses anything but `return environment() == "development"`. |
-| Rate-limit opt-out | `NORTHSTAR_DISABLE_RATE_LIMIT=1` is refused in staging/production | `python Northstar_backend/production_assert.py --only rate_limits.enforced` (`rate_limits.enforced`) | Calls `assert_prod_posture()` with a production environment and requires the refusal; see [§6](#6-rate-limits). |
+| Rate-limit opt-out | `NORTHSTAR_DISABLE_RATE_LIMIT=1` is refused in staging/production | `python Northstar_backend/production_assert.py --only rate_limits.enforced` (`rate_limits.enforced`) | Calls `assert_prod_posture()` with a production environment and requires the refusal; see [Â§6](#6-rate-limits). |
 
 ### 2.3 Known config documentation gaps
 
@@ -82,7 +82,7 @@ headroom); they are not secrets and the process starts without them.
 
 | Area | Requirement | Command | What it proves |
 |---|---|---|---|
-| Log redaction | log lines and tracebacks never carry a key, bearer token or JWT | `python Northstar_backend/production_assert.py --only redaction.enforced` (`redaction.enforced`) | Enforced by `northstar/security/redaction.py` (`RedactionFilter`, `RedactingFormatter`), wired into every handler by `logging_config.setup_logging()`. The check logs a fake key, a fake `Authorization` header and a fake JWT — including through `logger.exception` — and asserts the values do not appear and `[REDACTED]` does, and that the handler really carries the filter and the wrapped formatter. |
+| Log redaction | log lines and tracebacks never carry a key, bearer token or JWT | `python Northstar_backend/production_assert.py --only redaction.enforced` (`redaction.enforced`) | Enforced by `northstar/security/redaction.py` (`RedactionFilter`, `RedactingFormatter`), wired into every handler by `logging_config.setup_logging()`. The check logs a fake key, a fake `Authorization` header and a fake JWT â€” including through `logger.exception` â€” and asserts the values do not appear and `[REDACTED]` does, and that the handler really carries the filter and the wrapped formatter. |
 | Error paths | an exception message cannot leak a credential either | `python Northstar_backend/production_assert.py --only redaction.enforced` | The formatter redacts the **final** formatted string, so `record.exc_info`'s traceback is covered too; the check raises inside a `try` and asserts the traceback is clean. |
 
 ## 4. Health and readiness
@@ -92,7 +92,27 @@ headroom); they are not secrets and the process starts without them.
 | Liveness | `GET /health` answers 200 with JSON | `python Northstar_backend/production_assert.py --only health.endpoints_answer` (`health.endpoints_answer`) | Boots `main:app` in a **subprocess** with FastAPI's TestClient (no port, no egress). |
 | Readiness | `GET /readyz` (and `/health/readyz` through Caddy's `/health*` rule) answers 200 `ready`, or **503** with the failing checks | `python Northstar_backend/production_assert.py --only health.endpoints_answer` | `northstar-backend`'s `production_health.readiness_snapshot()` asserts rate-limit posture, redaction wiring, a writable data dir, the UI build (critical in production-like envs), the Foundation store (`PRAGMA quick_check`) and the live posture. A wedged or misconfigured instance is drained, not served. |
 | Detail | `GET /health/detailed` answers 200 and reports files, providers (names only), scanner mode, live posture, adapter load failures and data readiness | `python Northstar_backend/production_assert.py --only health.endpoints_answer` | The existing monitoring surface still works after the readiness route was added. |
-| Compose probe | the API container healthcheck targets `/health`; the worker and scheduler target `/readyz` on 8090/8091 | `python Northstar_backend/production_assert.py --only health.endpoints_answer` (the route contract) and `docker compose config` for the compose wiring | The probes exist and answer; wiring a container to `/readyz` is a compose change (see [§7](#7-what-this-lane-did-not-do)). |
+| Compose probe | the API container healthcheck targets `/health`; the worker and scheduler target `/readyz` on 8090/8091 | `python Northstar_backend/production_assert.py --only health.endpoints_answer` (the route contract) and `docker compose config` for the compose wiring | The probes exist and answer; wiring a container to `/readyz` is a compose change (see [Â§7](#7-what-this-lane-did-not-do)). |
+
+
+## 4a. Running the tests on *this* machine (environment note, 2026-11-11)
+
+`C:\Users\T2Hol\AppData\Local\Temp\pytest-of-T2Hol` is owned by another principal (it was
+created by an elevated run) and cannot be read, written or deleted from a normal session:
+`Access is denied`, `Get-Acl` â†’ *unauthorized operation*. pytest therefore fails **any test
+that uses `tmp_path`** with `PermissionError: [WinError 5]` unless it is pointed somewhere
+else:
+
+```
+python -m pytest <paths> -q -p no:cacheprovider --basetemp=<a directory you own>
+```
+
+The block7 verifier hit this: the readiness suite reported `8 passed, 21 errors` as issued and
+`29 passed` with `--basetemp`. The suite is not broken; the machine's shared temp root is.
+
+**One action, elevated:** delete `C:\Users\T2Hol\AppData\Local\Temp\pytest-of-T2Hol` (or
+`takeown /f â€¦ /r /d y` then `icacls â€¦ /grant %USERNAME%:F /T`). After that the flag is
+optional. Until then, every command in this document that runs pytest needs it.
 
 ## 5. Backup and restore
 
@@ -108,7 +128,7 @@ headroom); they are not secrets and the process starts without them.
 | Area | Requirement | Command | What it proves |
 |---|---|---|---|
 | Configured | per-plan budgets exist and the anonymous bucket is the tightest | `python Northstar_backend/production_assert.py --only rate_limits.enforced` (`rate_limits.enforced`) | Reads `RateLimitMiddleware.PLAN_LIMITS` and mounts the real middleware on a throwaway app. |
-| Enforced | the 31st anonymous request in a minute is a `429` carrying `X-RateLimit-Limit` and `Retry-After` | `python Northstar_backend/production_assert.py --only rate_limits.enforced` | 30 allowed, 1 throttled, headers present — measured every run. |
+| Enforced | the 31st anonymous request in a minute is a `429` carrying `X-RateLimit-Limit` and `Retry-After` | `python Northstar_backend/production_assert.py --only rate_limits.enforced` | 30 allowed, 1 throttled, headers present â€” measured every run. |
 | Mounted | the real app mounts the limiter, and the probe paths are exempt | `python Northstar_backend/production_assert.py --only rate_limits.enforced` | Asserts `app.add_middleware(RateLimitMiddleware` in `Northstar_backend/main.py`; `/health`, `/health/detailed`, `/health/readyz`, `/readyz` bypass the bucket so a probe can never be throttled. |
 
 ## 7. The checklist itself
@@ -120,7 +140,7 @@ headroom); they are not secrets and the process starts without them.
 ## 8. What this lane did not do
 
 - **`.env.example` was not edited** (outside the write manifest). The seven gaps
-  in [§2.3](#23-known-config-documentation-gaps) are one commit away.
+  in [Â§2.3](#23-known-config-documentation-gaps) are one commit away.
 - **`docker-compose.yml` / `Dockerfile.api` were not edited** (outside the
   manifest). The API container still healthchecks `/health`; pointing it at
   `/readyz`, and giving the `api` service a `healthcheck` block, is the next
