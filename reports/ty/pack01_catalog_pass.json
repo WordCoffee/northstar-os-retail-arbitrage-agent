@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-11T06:29:32+00:00",
+  "generated_at": "2026-11-11T06:57:50+00:00",
   "generator": "product_pipeline",
   "judge_enabled": false,
   "mode_filter": null,
@@ -17,14 +17,14 @@
   "passed": 20,
   "failed": 0,
   "pass_rate": 100.0,
-  "mean_score": 96.0,
+  "mean_score": 95.0,
   "gaps_filed": 0,
   "gaps_in_file": 0,
   "gaps_path": "state/seller/pack01_gaps.json",
   "mirror_path": "state/seller/pack01_gaps.json",
   "escalations": [
     {
-      "at": "2026-11-11T06:29:29+00:00",
+      "at": "2026-11-11T06:57:47+00:00",
       "from_brief_id": "ST-001",
       "from_difficulty": 1,
       "source_mode": "prompt_only",
@@ -34,10 +34,10 @@
       "to_brief_id": "ST-001",
       "to_difficulty": 2,
       "score": 100.0,
-      "artefact_path": "renders/heldout_cylinder4/ST-001/product_front.png"
+      "artefact_path": "renders/heldout_white3/ST-001/product_front.png"
     },
     {
-      "at": "2026-11-11T06:29:29+00:00",
+      "at": "2026-11-11T06:57:47+00:00",
       "from_brief_id": "ST-002",
       "from_difficulty": 1,
       "source_mode": "prompt_only",
@@ -47,10 +47,10 @@
       "to_brief_id": "ST-002",
       "to_difficulty": 2,
       "score": 100.0,
-      "artefact_path": "renders/heldout_cylinder4/ST-002/product_front.png"
+      "artefact_path": "renders/heldout_white3/ST-002/product_front.png"
     },
     {
-      "at": "2026-11-11T06:29:29+00:00",
+      "at": "2026-11-11T06:57:47+00:00",
       "from_brief_id": "ST-004",
       "from_difficulty": 1,
       "source_mode": "prompt_only",
@@ -60,10 +60,10 @@
       "to_brief_id": "ST-004",
       "to_difficulty": 2,
       "score": 100.0,
-      "artefact_path": "renders/heldout_cylinder4/ST-004/product_front.png"
+      "artefact_path": "renders/heldout_white3/ST-004/product_front.png"
     },
     {
-      "at": "2026-11-11T06:29:29+00:00",
+      "at": "2026-11-11T06:57:47+00:00",
       "from_brief_id": "ST-006",
       "from_difficulty": 1,
       "source_mode": "prompt_only",
@@ -73,10 +73,10 @@
       "to_brief_id": "ST-006",
       "to_difficulty": 2,
       "score": 100.0,
-      "artefact_path": "renders/heldout_cylinder4/ST-006/product_front.png"
+      "artefact_path": "renders/heldout_white3/ST-006/product_front.png"
     },
     {
-      "at": "2026-11-11T06:29:30+00:00",
+      "at": "2026-11-11T06:57:47+00:00",
       "from_brief_id": "ST-008",
       "from_difficulty": 1,
       "source_mode": "prompt_only",
@@ -86,10 +86,10 @@
       "to_brief_id": "ST-008",
       "to_difficulty": 2,
       "score": 100.0,
-      "artefact_path": "renders/heldout_cylinder4/ST-008/product_front.png"
+      "artefact_path": "renders/heldout_white3/ST-008/product_front.png"
     },
     {
-      "at": "2026-11-11T06:29:30+00:00",
+      "at": "2026-11-11T06:57:47+00:00",
       "from_brief_id": "ST-009",
       "from_difficulty": 2,
       "source_mode": "prompt_only",
@@ -99,10 +99,10 @@
       "to_brief_id": "ST-009",
       "to_difficulty": 3,
       "score": 100.0,
-      "artefact_path": "renders/heldout_cylinder4/ST-009/product_front.png"
+      "artefact_path": "renders/heldout_white3/ST-009/product_front.png"
     },
     {
-      "at": "2026-11-11T06:29:30+00:00",
+      "at": "2026-11-11T06:57:48+00:00",
       "from_brief_id": "ST-011",
       "from_difficulty": 2,
       "source_mode": "prompt_only",
@@ -112,10 +112,10 @@
       "to_brief_id": "ST-011",
       "to_difficulty": 3,
       "score": 70.0,
-      "artefact_path": "renders/heldout_cylinder4/ST-011/product_front.png"
+      "artefact_path": "renders/heldout_white3/ST-011/product_front.png"
     },
     {
-      "at": "2026-11-11T06:29:30+00:00",
+      "at": "2026-11-11T06:57:48+00:00",
       "from_brief_id": "ST-013",
       "from_difficulty": 2,
       "source_mode": "prompt_only",
@@ -125,10 +125,10 @@
       "to_brief_id": "ST-013",
       "to_difficulty": 3,
       "score": 100.0,
-      "artefact_path": "renders/heldout_cylinder4/ST-013/product_front.png"
+      "artefact_path": "renders/heldout_white3/ST-013/product_front.png"
     },
     {
-      "at": "2026-11-11T06:29:31+00:00",
+      "at": "2026-11-11T06:57:48+00:00",
       "from_brief_id": "ST-015",
       "from_difficulty": 2,
       "source_mode": "prompt_only",
@@ -138,10 +138,10 @@
       "to_brief_id": "ST-015",
       "to_difficulty": 3,
       "score": 100.0,
-      "artefact_path": "renders/heldout_cylinder4/ST-015/product_front.png"
+      "artefact_path": "renders/heldout_white3/ST-015/product_front.png"
     },
     {
-      "at": "2026-11-11T06:29:31+00:00",
+      "at": "2026-11-11T06:57:48+00:00",
       "from_brief_id": "ST-016",
       "from_difficulty": 2,
       "source_mode": "prompt_only",
@@ -151,10 +151,10 @@
       "to_brief_id": "ST-016",
       "to_difficulty": 3,
       "score": 100.0,
-      "artefact_path": "renders/heldout_cylinder4/ST-016/product_front.png"
+      "artefact_path": "renders/heldout_white3/ST-016/product_front.png"
     },
     {
-      "at": "2026-11-11T06:29:31+00:00",
+      "at": "2026-11-11T06:57:48+00:00",
       "from_brief_id": "ST-018",
       "from_difficulty": 3,
       "source_mode": "prompt_only",
@@ -164,10 +164,10 @@
       "to_brief_id": "ST-018",
       "to_difficulty": 3,
       "score": 100.0,
-      "artefact_path": "renders/heldout_cylinder4/ST-018/product_front.png"
+      "artefact_path": "renders/heldout_white3/ST-018/product_front.png"
     },
     {
-      "at": "2026-11-11T06:29:31+00:00",
+      "at": "2026-11-11T06:57:49+00:00",
       "from_brief_id": "ST-020",
       "from_difficulty": 3,
       "source_mode": "prompt_only",
@@ -177,10 +177,10 @@
       "to_brief_id": "ST-020",
       "to_difficulty": 3,
       "score": 100.0,
-      "artefact_path": "renders/heldout_cylinder4/ST-020/product_front.png"
+      "artefact_path": "renders/heldout_white3/ST-020/product_front.png"
     },
     {
-      "at": "2026-11-11T06:29:31+00:00",
+      "at": "2026-11-11T06:57:49+00:00",
       "from_brief_id": "ST-022",
       "from_difficulty": 3,
       "source_mode": "prompt_only",
@@ -190,10 +190,10 @@
       "to_brief_id": "ST-022",
       "to_difficulty": 3,
       "score": 100.0,
-      "artefact_path": "renders/heldout_cylinder4/ST-022/product_front.png"
+      "artefact_path": "renders/heldout_white3/ST-022/product_front.png"
     },
     {
-      "at": "2026-11-11T06:29:31+00:00",
+      "at": "2026-11-11T06:57:49+00:00",
       "from_brief_id": "ST-023",
       "from_difficulty": 3,
       "source_mode": "prompt_only",
@@ -203,10 +203,10 @@
       "to_brief_id": "ST-023",
       "to_difficulty": 3,
       "score": 100.0,
-      "artefact_path": "renders/heldout_cylinder4/ST-023/product_front.png"
+      "artefact_path": "renders/heldout_white3/ST-023/product_front.png"
     },
     {
-      "at": "2026-11-11T06:29:32+00:00",
+      "at": "2026-11-11T06:57:49+00:00",
       "from_brief_id": "ST-024",
       "from_difficulty": 3,
       "source_mode": "prompt_only",
@@ -215,11 +215,11 @@
       "constraint": "tight_background",
       "to_brief_id": "ST-024",
       "to_difficulty": 3,
-      "score": 100.0,
-      "artefact_path": "renders/heldout_cylinder4/ST-024/product_front.png"
+      "score": 80.0,
+      "artefact_path": "renders/heldout_white3/ST-024/product_front.png"
     },
     {
-      "at": "2026-11-11T06:29:32+00:00",
+      "at": "2026-11-11T06:57:49+00:00",
       "from_brief_id": "ST-025",
       "from_difficulty": 3,
       "source_mode": "prompt_only",
@@ -229,10 +229,10 @@
       "to_brief_id": "ST-025",
       "to_difficulty": 3,
       "score": 100.0,
-      "artefact_path": "renders/heldout_cylinder4/ST-025/product_front.png"
+      "artefact_path": "renders/heldout_white3/ST-025/product_front.png"
     },
     {
-      "at": "2026-11-11T06:29:32+00:00",
+      "at": "2026-11-11T06:57:50+00:00",
       "from_brief_id": "ST-027",
       "from_difficulty": 3,
       "source_mode": "prompt_only",
@@ -242,10 +242,10 @@
       "to_brief_id": "ST-027",
       "to_difficulty": 3,
       "score": 70.0,
-      "artefact_path": "renders/heldout_cylinder4/ST-027/product_front.png"
+      "artefact_path": "renders/heldout_white3/ST-027/product_front.png"
     },
     {
-      "at": "2026-11-11T06:29:32+00:00",
+      "at": "2026-11-11T06:57:50+00:00",
       "from_brief_id": "ST-029",
       "from_difficulty": 3,
       "source_mode": "prompt_only",
@@ -254,11 +254,11 @@
       "constraint": "tight_background",
       "to_brief_id": "ST-029",
       "to_difficulty": 3,
-      "score": 80.0,
-      "artefact_path": "renders/heldout_cylinder4/ST-029/product_front.png"
+      "score": 100.0,
+      "artefact_path": "renders/heldout_white3/ST-029/product_front.png"
     },
     {
-      "at": "2026-11-11T06:29:32+00:00",
+      "at": "2026-11-11T06:57:50+00:00",
       "from_brief_id": "ST-030",
       "from_difficulty": 3,
       "source_mode": "prompt_only",
@@ -268,10 +268,10 @@
       "to_brief_id": "ST-030",
       "to_difficulty": 3,
       "score": 100.0,
-      "artefact_path": "renders/heldout_cylinder4/ST-030/product_front.png"
+      "artefact_path": "renders/heldout_white3/ST-030/product_front.png"
     },
     {
-      "at": "2026-11-11T06:29:32+00:00",
+      "at": "2026-11-11T06:57:50+00:00",
       "from_brief_id": "ST-031",
       "from_difficulty": 3,
       "source_mode": "prompt_only",
@@ -280,8 +280,8 @@
       "constraint": "tight_background",
       "to_brief_id": "ST-031",
       "to_difficulty": 3,
-      "score": 100.0,
-      "artefact_path": "renders/heldout_cylinder4/ST-031/product_front.png"
+      "score": 80.0,
+      "artefact_path": "renders/heldout_white3/ST-031/product_front.png"
     }
   ],
   "results": [
@@ -294,7 +294,7 @@
       "fidelity": "tolerant",
       "route": "product_picture",
       "population": "generated",
-      "artefact_path": "renders/heldout_cylinder4/ST-001/product_front.png",
+      "artefact_path": "renders/heldout_white3/ST-001/product_front.png",
       "width": 2000,
       "height": 2000,
       "score": 100.0,
@@ -325,7 +325,7 @@
           "ok": true,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "subject fill 25.1% vs 12.0-100.0% (distance > 20)"
+          "detail": "subject fill 44.7% vs 12.0-100.0% (distance > 20)"
         },
         "alpha_matte": {
           "ok": true,
@@ -337,7 +337,7 @@
           "ok": true,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "107260 bytes (0.027 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+          "detail": "176869 bytes (0.044 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
         },
         "text_free": {
           "ok": true,
@@ -393,11 +393,12 @@
               "units_found": 1
             }
           ],
-          "manifest": "renders\\heldout_cylinder4\\ST-001\\product_picture_manifest.json"
+          "manifest": "renders\\heldout_white3\\ST-001\\product_picture_manifest.json"
         },
         "product_box": null,
-        "bytes": 107260,
-        "seconds": 8.55
+        "flat_background": true,
+        "bytes": 176869,
+        "seconds": 9.69
       }
     },
     {
@@ -409,7 +410,7 @@
       "fidelity": "tolerant",
       "route": "product_picture",
       "population": "generated",
-      "artefact_path": "renders/heldout_cylinder4/ST-002/product_front.png",
+      "artefact_path": "renders/heldout_white3/ST-002/product_front.png",
       "width": 2000,
       "height": 2000,
       "score": 100.0,
@@ -508,11 +509,12 @@
               "units_found": 1
             }
           ],
-          "manifest": "renders\\heldout_cylinder4\\ST-002\\product_picture_manifest.json"
+          "manifest": "renders\\heldout_white3\\ST-002\\product_picture_manifest.json"
         },
         "product_box": null,
+        "flat_background": false,
         "bytes": 514493,
-        "seconds": 5.7
+        "seconds": 5.56
       }
     },
     {
@@ -524,7 +526,7 @@
       "fidelity": "tolerant",
       "route": "product_picture",
       "population": "generated",
-      "artefact_path": "renders/heldout_cylinder4/ST-004/product_front.png",
+      "artefact_path": "renders/heldout_white3/ST-004/product_front.png",
       "width": 2000,
       "height": 2000,
       "score": 100.0,
@@ -555,7 +557,7 @@
           "ok": true,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "subject fill 37.2% vs 8.0-50.0% (distance > 20)"
+          "detail": "subject fill 21.5% vs 8.0-50.0% (distance > 20)"
         },
         "alpha_matte": {
           "ok": true,
@@ -567,7 +569,7 @@
           "ok": true,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "608724 bytes (0.152 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+          "detail": "410794 bytes (0.103 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
         },
         "text_free": {
           "ok": true,
@@ -623,11 +625,12 @@
               "units_found": 1
             }
           ],
-          "manifest": "renders\\heldout_cylinder4\\ST-004\\product_picture_manifest.json"
+          "manifest": "renders\\heldout_white3\\ST-004\\product_picture_manifest.json"
         },
         "product_box": null,
-        "bytes": 608724,
-        "seconds": 5.48
+        "flat_background": true,
+        "bytes": 410794,
+        "seconds": 5.57
       }
     },
     {
@@ -639,7 +642,7 @@
       "fidelity": "tolerant",
       "route": "product_picture",
       "population": "generated",
-      "artefact_path": "renders/heldout_cylinder4/ST-006/product_front.png",
+      "artefact_path": "renders/heldout_white3/ST-006/product_front.png",
       "width": 2000,
       "height": 2500,
       "score": 100.0,
@@ -738,11 +741,12 @@
               "units_found": 1
             }
           ],
-          "manifest": "renders\\heldout_cylinder4\\ST-006\\product_picture_manifest.json"
+          "manifest": "renders\\heldout_white3\\ST-006\\product_picture_manifest.json"
         },
         "product_box": null,
+        "flat_background": false,
         "bytes": 395922,
-        "seconds": 5.92
+        "seconds": 5.88
       }
     },
     {
@@ -754,7 +758,7 @@
       "fidelity": "tolerant",
       "route": "product_picture",
       "population": "generated",
-      "artefact_path": "renders/heldout_cylinder4/ST-008/product_front.png",
+      "artefact_path": "renders/heldout_white3/ST-008/product_front.png",
       "width": 2000,
       "height": 2000,
       "score": 100.0,
@@ -785,7 +789,7 @@
           "ok": true,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "subject fill 28.1% vs 20.0-50.0% (distance > 20)"
+          "detail": "subject fill 33.4% vs 20.0-50.0% (distance > 20)"
         },
         "alpha_matte": {
           "ok": true,
@@ -797,7 +801,7 @@
           "ok": true,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "527299 bytes (0.132 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+          "detail": "623977 bytes (0.156 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
         },
         "text_free": {
           "ok": true,
@@ -853,11 +857,12 @@
               "units_found": 1
             }
           ],
-          "manifest": "renders\\heldout_cylinder4\\ST-008\\product_picture_manifest.json"
+          "manifest": "renders\\heldout_white3\\ST-008\\product_picture_manifest.json"
         },
         "product_box": null,
-        "bytes": 527299,
-        "seconds": 5.97
+        "flat_background": true,
+        "bytes": 623977,
+        "seconds": 6.38
       }
     },
     {
@@ -869,7 +874,7 @@
       "fidelity": "tolerant",
       "route": "product_picture",
       "population": "generated",
-      "artefact_path": "renders/heldout_cylinder4/ST-009/product_front.png",
+      "artefact_path": "renders/heldout_white3/ST-009/product_front.png",
       "width": 2000,
       "height": 2000,
       "score": 100.0,
@@ -900,7 +905,7 @@
           "ok": true,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "subject fill 29.9% vs 18.0-100.0% (distance > 20)"
+          "detail": "subject fill 35.2% vs 18.0-100.0% (distance > 20)"
         },
         "alpha_matte": {
           "ok": true,
@@ -912,7 +917,7 @@
           "ok": true,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "504924 bytes (0.126 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+          "detail": "625778 bytes (0.156 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
         },
         "text_free": {
           "ok": true,
@@ -968,11 +973,12 @@
               "units_found": 1
             }
           ],
-          "manifest": "renders\\heldout_cylinder4\\ST-009\\product_picture_manifest.json"
+          "manifest": "renders\\heldout_white3\\ST-009\\product_picture_manifest.json"
         },
         "product_box": null,
-        "bytes": 504924,
-        "seconds": 5.42
+        "flat_background": true,
+        "bytes": 625778,
+        "seconds": 5.97
       }
     },
     {
@@ -984,7 +990,7 @@
       "fidelity": "tolerant",
       "route": "product_picture",
       "population": "generated",
-      "artefact_path": "renders/heldout_cylinder4/ST-011/product_front.png",
+      "artefact_path": "renders/heldout_white3/ST-011/product_front.png",
       "width": 1600,
       "height": 2000,
       "score": 70.0,
@@ -1085,11 +1091,12 @@
               "units_found": 1
             }
           ],
-          "manifest": "renders\\heldout_cylinder4\\ST-011\\product_picture_manifest.json"
+          "manifest": "renders\\heldout_white3\\ST-011\\product_picture_manifest.json"
         },
         "product_box": null,
+        "flat_background": false,
         "bytes": 424536,
-        "seconds": 5.69
+        "seconds": 5.7
       }
     },
     {
@@ -1101,7 +1108,7 @@
       "fidelity": "tolerant",
       "route": "product_picture",
       "population": "generated",
-      "artefact_path": "renders/heldout_cylinder4/ST-013/product_front.png",
+      "artefact_path": "renders/heldout_white3/ST-013/product_front.png",
       "width": 2000,
       "height": 2000,
       "score": 100.0,
@@ -1132,7 +1139,7 @@
           "ok": true,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "subject fill 37.6% vs 28.0-80.0% (distance > 20)"
+          "detail": "subject fill 40.5% vs 28.0-80.0% (distance > 20)"
         },
         "alpha_matte": {
           "ok": true,
@@ -1144,7 +1151,7 @@
           "ok": true,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "391288 bytes (0.098 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+          "detail": "455400 bytes (0.114 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
         },
         "text_free": {
           "ok": true,
@@ -1200,11 +1207,12 @@
               "units_found": 1
             }
           ],
-          "manifest": "renders\\heldout_cylinder4\\ST-013\\product_picture_manifest.json"
+          "manifest": "renders\\heldout_white3\\ST-013\\product_picture_manifest.json"
         },
         "product_box": null,
-        "bytes": 391288,
-        "seconds": 5.23
+        "flat_background": true,
+        "bytes": 455400,
+        "seconds": 5.47
       }
     },
     {
@@ -1216,7 +1224,7 @@
       "fidelity": "tolerant",
       "route": "product_picture",
       "population": "generated",
-      "artefact_path": "renders/heldout_cylinder4/ST-015/product_front.png",
+      "artefact_path": "renders/heldout_white3/ST-015/product_front.png",
       "width": 2000,
       "height": 2000,
       "score": 100.0,
@@ -1247,7 +1255,7 @@
           "ok": true,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "subject fill 28.1% vs 18.0-60.0% (distance > 20)"
+          "detail": "subject fill 37.2% vs 18.0-60.0% (distance > 20)"
         },
         "alpha_matte": {
           "ok": true,
@@ -1259,7 +1267,7 @@
           "ok": true,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "622080 bytes (0.156 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+          "detail": "798825 bytes (0.200 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
         },
         "text_free": {
           "ok": true,
@@ -1315,11 +1323,12 @@
               "units_found": 1
             }
           ],
-          "manifest": "renders\\heldout_cylinder4\\ST-015\\product_picture_manifest.json"
+          "manifest": "renders\\heldout_white3\\ST-015\\product_picture_manifest.json"
         },
         "product_box": null,
-        "bytes": 622080,
-        "seconds": 5.96
+        "flat_background": true,
+        "bytes": 798825,
+        "seconds": 6.78
       }
     },
     {
@@ -1331,7 +1340,7 @@
       "fidelity": "tolerant",
       "route": "product_picture",
       "population": "generated",
-      "artefact_path": "renders/heldout_cylinder4/ST-016/product_front.png",
+      "artefact_path": "renders/heldout_white3/ST-016/product_front.png",
       "width": 2000,
       "height": 2000,
       "score": 100.0,
@@ -1362,7 +1371,7 @@
           "ok": true,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "subject fill 25.1% vs 22.0-48.0% (distance > 20)"
+          "detail": "subject fill 28.0% vs 22.0-48.0% (distance > 20)"
         },
         "alpha_matte": {
           "ok": true,
@@ -1374,7 +1383,7 @@
           "ok": true,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "133121 bytes (0.033 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+          "detail": "160829 bytes (0.040 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
         },
         "text_free": {
           "ok": true,
@@ -1430,11 +1439,12 @@
               "units_found": 1
             }
           ],
-          "manifest": "renders\\heldout_cylinder4\\ST-016\\product_picture_manifest.json"
+          "manifest": "renders\\heldout_white3\\ST-016\\product_picture_manifest.json"
         },
         "product_box": null,
-        "bytes": 133121,
-        "seconds": 5.42
+        "flat_background": true,
+        "bytes": 160829,
+        "seconds": 6.19
       }
     },
     {
@@ -1446,7 +1456,7 @@
       "fidelity": "tolerant",
       "route": "product_picture",
       "population": "generated",
-      "artefact_path": "renders/heldout_cylinder4/ST-018/product_front.png",
+      "artefact_path": "renders/heldout_white3/ST-018/product_front.png",
       "width": 2000,
       "height": 2000,
       "score": 100.0,
@@ -1545,11 +1555,12 @@
               "units_found": 1
             }
           ],
-          "manifest": "renders\\heldout_cylinder4\\ST-018\\product_picture_manifest.json"
+          "manifest": "renders\\heldout_white3\\ST-018\\product_picture_manifest.json"
         },
         "product_box": null,
+        "flat_background": false,
         "bytes": 610482,
-        "seconds": 5.46
+        "seconds": 5.8
       }
     },
     {
@@ -1561,7 +1572,7 @@
       "fidelity": "tolerant",
       "route": "product_picture",
       "population": "generated",
-      "artefact_path": "renders/heldout_cylinder4/ST-020/product_front.png",
+      "artefact_path": "renders/heldout_white3/ST-020/product_front.png",
       "width": 2000,
       "height": 2000,
       "score": 100.0,
@@ -1592,7 +1603,7 @@
           "ok": true,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "subject fill 37.6% vs 10.0-40.0% (distance > 20)"
+          "detail": "subject fill 18.8% vs 10.0-40.0% (distance > 20)"
         },
         "alpha_matte": {
           "ok": true,
@@ -1604,7 +1615,7 @@
           "ok": true,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "391288 bytes (0.098 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+          "detail": "239242 bytes (0.060 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
         },
         "text_free": {
           "ok": true,
@@ -1660,11 +1671,12 @@
               "units_found": 1
             }
           ],
-          "manifest": "renders\\heldout_cylinder4\\ST-020\\product_picture_manifest.json"
+          "manifest": "renders\\heldout_white3\\ST-020\\product_picture_manifest.json"
         },
         "product_box": null,
-        "bytes": 391288,
-        "seconds": 4.2
+        "flat_background": true,
+        "bytes": 239242,
+        "seconds": 5.19
       }
     },
     {
@@ -1676,7 +1688,7 @@
       "fidelity": "tolerant",
       "route": "product_picture",
       "population": "generated",
-      "artefact_path": "renders/heldout_cylinder4/ST-022/product_front.png",
+      "artefact_path": "renders/heldout_white3/ST-022/product_front.png",
       "width": 2000,
       "height": 2500,
       "score": 100.0,
@@ -1775,11 +1787,12 @@
               "units_found": 1
             }
           ],
-          "manifest": "renders\\heldout_cylinder4\\ST-022\\product_picture_manifest.json"
+          "manifest": "renders\\heldout_white3\\ST-022\\product_picture_manifest.json"
         },
         "product_box": null,
+        "flat_background": false,
         "bytes": 743647,
-        "seconds": 6.61
+        "seconds": 6.76
       }
     },
     {
@@ -1791,7 +1804,7 @@
       "fidelity": "tolerant",
       "route": "product_picture",
       "population": "generated",
-      "artefact_path": "renders/heldout_cylinder4/ST-023/product_front.png",
+      "artefact_path": "renders/heldout_white3/ST-023/product_front.png",
       "width": 2000,
       "height": 2000,
       "score": 100.0,
@@ -1822,7 +1835,7 @@
           "ok": true,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "subject fill 25.1% vs 20.0-55.0% (distance > 20)"
+          "detail": "subject fill 30.1% vs 20.0-55.0% (distance > 20)"
         },
         "alpha_matte": {
           "ok": true,
@@ -1834,7 +1847,7 @@
           "ok": true,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "132183 bytes (0.033 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+          "detail": "174375 bytes (0.044 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
         },
         "text_free": {
           "ok": true,
@@ -1890,11 +1903,12 @@
               "units_found": 1
             }
           ],
-          "manifest": "renders\\heldout_cylinder4\\ST-023\\product_picture_manifest.json"
+          "manifest": "renders\\heldout_white3\\ST-023\\product_picture_manifest.json"
         },
         "product_box": null,
-        "bytes": 132183,
-        "seconds": 6.07
+        "flat_background": true,
+        "bytes": 174375,
+        "seconds": 5.52
       }
     },
     {
@@ -1906,14 +1920,16 @@
       "fidelity": "tolerant",
       "route": "product_picture",
       "population": "generated",
-      "artefact_path": "renders/heldout_cylinder4/ST-024/product_front.png",
+      "artefact_path": "renders/heldout_white3/ST-024/product_front.png",
       "width": 2000,
       "height": 2000,
-      "score": 100.0,
+      "score": 80.0,
       "passed": true,
       "cannot_verify": false,
       "cannot_verify_reason": null,
-      "failed_checks": [],
+      "failed_checks": [
+        "subject_fill"
+      ],
       "checks": {
         "dimensions": {
           "ok": true,
@@ -1934,10 +1950,10 @@
           "detail": "corners [(255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255)] vs target (255, 255, 255) +-3; max deviation 0, corner spread 0"
         },
         "subject_fill": {
-          "ok": true,
+          "ok": false,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "subject fill 29.9% vs 24.0-45.0% (distance > 20)"
+          "detail": "subject fill 20.7% vs 24.0-45.0% (distance > 20)"
         },
         "alpha_matte": {
           "ok": true,
@@ -1949,7 +1965,7 @@
           "ok": true,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "504924 bytes (0.126 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+          "detail": "388036 bytes (0.097 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
         },
         "text_free": {
           "ok": true,
@@ -2005,11 +2021,12 @@
               "units_found": 1
             }
           ],
-          "manifest": "renders\\heldout_cylinder4\\ST-024\\product_picture_manifest.json"
+          "manifest": "renders\\heldout_white3\\ST-024\\product_picture_manifest.json"
         },
         "product_box": null,
-        "bytes": 504924,
-        "seconds": 4.8
+        "flat_background": true,
+        "bytes": 388036,
+        "seconds": 5.39
       }
     },
     {
@@ -2021,7 +2038,7 @@
       "fidelity": "tolerant",
       "route": "product_picture",
       "population": "generated",
-      "artefact_path": "renders/heldout_cylinder4/ST-025/product_front.png",
+      "artefact_path": "renders/heldout_white3/ST-025/product_front.png",
       "width": 2000,
       "height": 2000,
       "score": 100.0,
@@ -2052,7 +2069,7 @@
           "ok": true,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "subject fill 37.2% vs 22.0-100.0% (distance > 20)"
+          "detail": "subject fill 45.4% vs 22.0-100.0% (distance > 20)"
         },
         "alpha_matte": {
           "ok": true,
@@ -2064,7 +2081,7 @@
           "ok": true,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "608724 bytes (0.152 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+          "detail": "747350 bytes (0.187 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
         },
         "text_free": {
           "ok": true,
@@ -2120,11 +2137,12 @@
               "units_found": 1
             }
           ],
-          "manifest": "renders\\heldout_cylinder4\\ST-025\\product_picture_manifest.json"
+          "manifest": "renders\\heldout_white3\\ST-025\\product_picture_manifest.json"
         },
         "product_box": null,
-        "bytes": 608724,
-        "seconds": 3.8
+        "flat_background": true,
+        "bytes": 747350,
+        "seconds": 5.58
       }
     },
     {
@@ -2136,7 +2154,7 @@
       "fidelity": "tolerant",
       "route": "product_picture",
       "population": "generated",
-      "artefact_path": "renders/heldout_cylinder4/ST-027/product_front.png",
+      "artefact_path": "renders/heldout_white3/ST-027/product_front.png",
       "width": 1600,
       "height": 2000,
       "score": 70.0,
@@ -2237,11 +2255,12 @@
               "units_found": 1
             }
           ],
-          "manifest": "renders\\heldout_cylinder4\\ST-027\\product_picture_manifest.json"
+          "manifest": "renders\\heldout_white3\\ST-027\\product_picture_manifest.json"
         },
         "product_box": null,
+        "flat_background": false,
         "bytes": 263550,
-        "seconds": 4.79
+        "seconds": 4.77
       }
     },
     {
@@ -2253,16 +2272,14 @@
       "fidelity": "tolerant",
       "route": "product_picture",
       "population": "generated",
-      "artefact_path": "renders/heldout_cylinder4/ST-029/product_front.png",
+      "artefact_path": "renders/heldout_white3/ST-029/product_front.png",
       "width": 2000,
       "height": 2000,
-      "score": 80.0,
+      "score": 100.0,
       "passed": true,
       "cannot_verify": false,
       "cannot_verify_reason": null,
-      "failed_checks": [
-        "subject_fill"
-      ],
+      "failed_checks": [],
       "checks": {
         "dimensions": {
           "ok": true,
@@ -2283,10 +2300,10 @@
           "detail": "corners [(255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255)] vs target (255, 255, 255) +-4; max deviation 0, corner spread 0"
         },
         "subject_fill": {
-          "ok": false,
+          "ok": true,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "subject fill 28.1% vs 30.0-72.0% (distance > 20)"
+          "detail": "subject fill 48.6% vs 30.0-72.0% (distance > 20)"
         },
         "alpha_matte": {
           "ok": true,
@@ -2298,7 +2315,7 @@
           "ok": true,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "527299 bytes (0.132 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+          "detail": "906895 bytes (0.227 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
         },
         "text_free": {
           "ok": true,
@@ -2354,11 +2371,12 @@
               "units_found": 1
             }
           ],
-          "manifest": "renders\\heldout_cylinder4\\ST-029\\product_picture_manifest.json"
+          "manifest": "renders\\heldout_white3\\ST-029\\product_picture_manifest.json"
         },
         "product_box": null,
-        "bytes": 527299,
-        "seconds": 5.18
+        "flat_background": true,
+        "bytes": 906895,
+        "seconds": 6.7
       }
     },
     {
@@ -2370,7 +2388,7 @@
       "fidelity": "tolerant",
       "route": "product_picture",
       "population": "generated",
-      "artefact_path": "renders/heldout_cylinder4/ST-030/product_front.png",
+      "artefact_path": "renders/heldout_white3/ST-030/product_front.png",
       "width": 2000,
       "height": 2500,
       "score": 100.0,
@@ -2469,11 +2487,12 @@
               "units_found": 1
             }
           ],
-          "manifest": "renders\\heldout_cylinder4\\ST-030\\product_picture_manifest.json"
+          "manifest": "renders\\heldout_white3\\ST-030\\product_picture_manifest.json"
         },
         "product_box": null,
+        "flat_background": false,
         "bytes": 139552,
-        "seconds": 5.68
+        "seconds": 5.9
       }
     },
     {
@@ -2485,14 +2504,16 @@
       "fidelity": "tolerant",
       "route": "product_picture",
       "population": "generated",
-      "artefact_path": "renders/heldout_cylinder4/ST-031/product_front.png",
+      "artefact_path": "renders/heldout_white3/ST-031/product_front.png",
       "width": 2000,
       "height": 2000,
-      "score": 100.0,
+      "score": 80.0,
       "passed": true,
       "cannot_verify": false,
       "cannot_verify_reason": null,
-      "failed_checks": [],
+      "failed_checks": [
+        "subject_fill"
+      ],
       "checks": {
         "dimensions": {
           "ok": true,
@@ -2513,10 +2534,10 @@
           "detail": "corners [(245, 245, 245), (245, 245, 245), (245, 245, 245), (245, 245, 245)] vs target (245, 245, 245) +-3; max deviation 0, corner spread 0"
         },
         "subject_fill": {
-          "ok": true,
+          "ok": false,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "subject fill 26.4% vs 20.0-55.0% (distance > 20)"
+          "detail": "subject fill 19.8% vs 20.0-55.0% (distance > 20)"
         },
         "alpha_matte": {
           "ok": true,
@@ -2528,7 +2549,7 @@
           "ok": true,
           "skipped": false,
           "cannot_verify": false,
-          "detail": "504912 bytes (0.126 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+          "detail": "420615 bytes (0.105 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
         },
         "text_free": {
           "ok": true,
@@ -2584,11 +2605,12 @@
               "units_found": 1
             }
           ],
-          "manifest": "renders\\heldout_cylinder4\\ST-031\\product_picture_manifest.json"
+          "manifest": "renders\\heldout_white3\\ST-031\\product_picture_manifest.json"
         },
         "product_box": null,
-        "bytes": 504912,
-        "seconds": 5.44
+        "flat_background": true,
+        "bytes": 420615,
+        "seconds": 5.33
       }
     }
   ],
@@ -2598,7 +2620,7 @@
       "passed": 20,
       "failed": 0,
       "pass_rate": 100.0,
-      "mean_score": 96.0
+      "mean_score": 95.0
     }
   },
   "by_mode": {
@@ -2607,7 +2629,7 @@
       "passed": 20,
       "failed": 0,
       "pass_rate": 100.0,
-      "mean_score": 96.0
+      "mean_score": 95.0
     },
     "stored_reference": {
       "scored": 0,
@@ -2630,14 +2652,14 @@
       "passed": 3,
       "failed": 0,
       "pass_rate": 100.0,
-      "mean_score": 100.0
+      "mean_score": 93.3
     },
     "bundle_multipack": {
       "scored": 2,
       "passed": 2,
       "failed": 0,
       "pass_rate": 100.0,
-      "mean_score": 90.0
+      "mean_score": 100.0
     },
     "infographic": {
       "scored": 2,
@@ -2672,7 +2694,7 @@
       "passed": 3,
       "failed": 0,
       "pass_rate": 100.0,
-      "mean_score": 100.0
+      "mean_score": 93.3
     },
     "white_background_main": {
       "scored": 3,
@@ -2688,14 +2710,14 @@
       "passed": 4,
       "failed": 0,
       "pass_rate": 100.0,
-      "mean_score": 100.0
+      "mean_score": 90.0
     },
     "food_jar": {
       "scored": 4,
       "passed": 4,
       "failed": 0,
       "pass_rate": 100.0,
-      "mean_score": 95.0
+      "mean_score": 100.0
     },
     "pet_product": {
       "scored": 4,

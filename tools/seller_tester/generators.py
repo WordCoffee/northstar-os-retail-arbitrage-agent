@@ -185,6 +185,28 @@ class ProductPipelineGenerator:
             design = self._design(brief)
             record["design"] = design.get("id") or design.get("brand")
             record["form"] = brand_art.form_of(design)
+            # A brief that asks for a flat background (uniform field or a white
+            # matte) is a main-image brief: the product stands alone on that
+            # value, cut out of its plate. Anything else keeps the photograph.
+            constraints = brief.get("constraints") or {}
+            background_spec = constraints.get("background") or {}
+            matte_spec = constraints.get("matte") or {}
+            flat_background = (
+                str(background_spec.get("mode") or "").lower() in
+                ("uniform", "solid", "white") or
+                str(matte_spec.get("mode") or "").lower() == "white_matte")
+            flat_kwargs: Dict[str, Any] = {}
+            if flat_background:
+                fill_spec = constraints.get("fill_pct") or {}
+                low = float(fill_spec.get("min", 15.0))
+                high = float(fill_spec.get("max", 85.0))
+                target = min(max((low + high) / 2.0, low + 1.0), high - 1.0) / 100.0
+                flat_kwargs = {
+                    "background": "white",
+                    "background_value": int(background_spec.get("value") or 255),
+                    "fill": round(max(0.02, min(0.72, target)), 4),
+                }
+            record["flat_background"] = bool(flat_background)
 
             if self.renderer_name == "comfy":
                 # The app's own plate lane IS the render lane: FLUX 3 Klein through
@@ -204,6 +226,7 @@ class ProductPipelineGenerator:
                     height=height,
                     seed=self.seed,
                     units=int(brief.get("units") or 1),
+                    **flat_kwargs,
                 )
             else:
                 plate = self._plate(brief, (width, height))
@@ -224,6 +247,7 @@ class ProductPipelineGenerator:
                     seed=self.seed,
                     units=int(brief.get("units") or 1),
                     generator=_plate_source,
+                    **flat_kwargs,
                 )
             record["build"] = {
                 "ok": result.get("ok"),

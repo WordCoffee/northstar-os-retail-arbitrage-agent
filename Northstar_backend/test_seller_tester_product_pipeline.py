@@ -124,7 +124,10 @@ def test_the_apps_own_refusal_is_carried_out(tmp_path):
     with pytest.raises(GeneratorUnavailable) as err:
         gen.generate(_brief(id="PO-T6"))
     message = str(err.value)
-    assert "plate_face_not_found" in message
+    # A blank plate is refused by the app, by name, before any picture is written.
+    # With a flat-background brief the cutout is what notices first (`cutout_empty`);
+    # with any other brief the face measurement does (`plate_face_not_found`).
+    assert "cutout_empty" in message or "plate_face_not_found" in message, message
     assert not (tmp_path / "PO-T6" / "product_front.png").exists()
 
 

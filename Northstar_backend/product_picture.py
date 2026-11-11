@@ -270,6 +270,78 @@ def _compose_cylinder(plate: Image.Image, design: Dict[str, Any], face: str,
     }
 
 
+def _place_on_flat(composed: Image.Image, *, value: int = 255,
+                   fill: float = 0.80, method: str = "background_distance"
+                   ) -> Dict[str, Any]:
+    """Cut the product out of its plate and stand it on a flat white canvas.
+
+    A main-image brief is not a photograph of a product on a sweep: it is the
+    product alone on 255 white, at least 85 % of the frame's linear fill. The app
+    composited the label onto the photograph and stopped there, so every
+    white-background brief failed `background` and `alpha_matte` on a real plate
+    (measured 2026-11-11: ST-001 at 70). This does the last step of the product
+    picture: cut, scale, centre, paste.
+    """
+    import numpy as np
+
+    import product_cutout as pc
+
+    rgb = np.asarray(composed.convert("RGB"))
+    try:
+        cut = pc.cutout(rgb, method)
+        alpha = cut.alpha
+    except Exception:  # noqa: BLE001 - a cutout that cannot run is stated, not swapped
+        cut = pc.cutout(rgb, "grabcut")
+        alpha = cut.alpha
+        method = "grabcut"
+    mask = np.asarray(alpha, dtype=np.uint8)
+    # A studio plate carries a soft contact shadow. It is part of the same colour
+    # difference as the product but it is translucent, so a solid alpha keeps the
+    # product and drops the shadow: threshold high, keep the largest blob, fill
+    # its holes, then feather the edge so the paste is not jagged.
+    solid = (mask > 200).astype(np.uint8)
+    if solid.sum() > 0:
+        import cv2
+
+        count, labels, stats, _ = cv2.connectedComponentsWithStats(solid, connectivity=8)
+        if count > 1:
+            biggest = 1 + int(np.argmax(stats[1:, cv2.CC_STAT_AREA]))
+            solid = (labels == biggest).astype(np.uint8)
+        solid = cv2.morphologyEx(solid, cv2.MORPH_CLOSE, np.ones((5, 5), np.uint8))
+        solid = cv2.GaussianBlur(solid * 255, (3, 3), 0)
+        # Keep the union: the solid pass restores any part of the product a soft
+        # alpha lost, and never clips the product's own bright edge. A shadow that
+        # is opaque enough to survive the solid pass stays — removing it needs a
+        # real matte (BiRefNet in the lane), which is filed as D-017.
+        mask = np.maximum(mask, solid)
+    ys, xs = np.nonzero(mask > 8)
+    if xs.size < 16:
+        raise ValueError("cutout_empty: the plate produced no product to stand on white")
+    left, right = int(xs.min()), int(xs.max()) + 1
+    top, bottom = int(ys.min()), int(ys.max()) + 1
+    cut_rgba = Image.fromarray(
+        np.dstack([rgb, mask]).astype(np.uint8), "RGBA").crop((left, top, right, bottom))
+
+    canvas = Image.new("RGB", composed.size, (int(value), int(value), int(value)))
+    # `fill` is the share of the CANVAS AREA the product should occupy: the briefs
+    # state fill as an area percentage, and Amazon's 85 % linear guidance is about
+    # 72 % area for a square subject. Scaling by area keeps every brief inside its
+    # own band instead of overshooting the ones with an upper bound.
+    target_area = max(0.02, min(0.72, float(fill)))
+    scale = (target_area * canvas.width * canvas.height
+             / max(1.0, float(cut_rgba.width * cut_rgba.height))) ** 0.5
+    size = (max(1, int(cut_rgba.width * scale)), max(1, int(cut_rgba.height * scale)))
+    if size[0] > canvas.width or size[1] > canvas.height:
+        shrink = min(canvas.width / size[0], canvas.height / size[1])
+        size = (max(1, int(size[0] * shrink)), max(1, int(size[1] * shrink)))
+    scaled = cut_rgba.resize(size, Image.LANCZOS)
+    position = ((canvas.width - size[0]) // 2, (canvas.height - size[1]) // 2)
+    canvas.paste(scaled, position, scaled)
+    return {"image": canvas, "method": method,
+            "box": [position[0], position[1], position[0] + size[0], position[1] + size[1]],
+            "fill": round(size[0] * size[1] / float(canvas.width * canvas.height), 4)}
+
+
 def compose_face(plate: Image.Image, design: Dict[str, Any], face: str, *,
                  shading: float = 0.45, feather: Optional[float] = 2.2,
                  form: Optional[str] = None, quad: Optional[Sequence] = None,
@@ -357,7 +429,10 @@ def build(design: Optional[Dict[str, Any]] = None, *,
           shading: float = 0.45,
           out_root: Optional[str] = None,
           reference: Optional[bytes] = None,
-          units: int = 1) -> Dict[str, Any]:
+          units: int = 1,
+          background: Optional[str] = None,
+          background_value: int = 255,
+          fill: float = 0.85) -> Dict[str, Any]:
     """Render the plates, compose the panels and gate every picture.
 
     ``generator(brief, width=…, height=…, tier=…, seed=…)`` is injectable so the
@@ -443,6 +518,26 @@ def build(design: Optional[Dict[str, Any]] = None, *,
             records.append(record)
             ok = False
             continue
+
+        placed: Optional[Dict[str, Any]] = None
+        if str(background or "").strip().lower() in ("white", "flat"):
+            # A main-image brief is the product alone on a flat canvas, not a
+            # photograph of it on a sweep. The cutout happens on the PLATE, before
+            # the label is composed: cutting the finished picture punches the
+            # label's own light panel out of it (measured 2026-11-11 — the wordmark
+            # went with it).
+            try:
+                placed = _place_on_flat(plate, value=background_value, fill=fill)
+            except ValueError as exc:
+                record.update({"ok": False, "stage": "background", "reason": str(exc)})
+                plate.save(rejected / f"{face}_plate.png")
+                records.append(record)
+                ok = False
+                continue
+            plate = placed["image"]
+            record["background"] = {"mode": "flat", "value": int(background_value),
+                                    "method": placed["method"], "box": placed["box"],
+                                    "fill": placed["fill"]}
 
         try:
             composed = compose_face(plate, dsn, face, shading=shading, form=form,
