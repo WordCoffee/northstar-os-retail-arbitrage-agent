@@ -187,6 +187,18 @@ def build(*, summary: Optional[Dict[str, Any]] = None,
     return {
         "services": services,
         "at": _now(),
+        "pipeline": {
+            "rendered_by": "tools/seller_tester (CompositeGenerator: product_composite.place_product "
+                           "+ label_warp)",
+            "product_renders_with": "Northstar_backend/product_picture.py::build "
+                                    "(mockup_compositor + mogra_label_art)",
+            "same_pipeline": False,
+            "why_it_matters": (
+                "D-011 (2026-11-11): a count of product_picture|mockup_compositor|mogra_label_art "
+                "across tools/seller_tester/*.py is 0, so these scores measure the harness pipeline, "
+                "not the one the app sells. Do not read them as a product quality claim until "
+                "sel-06-exercise-product-pipeline lands."),
+        },
         "pass": {
             "population": "generated",
             "scored": made_total,
