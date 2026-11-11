@@ -10,6 +10,31 @@ A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.m
 > and `reports/ty/handoff.md`, then continue from the first unfinished unit. No
 > questions, no reports between cycles. Idle means re-plan.
 
+## Position, 2026-11-11 cycle 19 — D-022 measured on a real lane, and its sibling defect fixed
+
+Reports: `reports/ty/d022_fullgen_white_composite.md` (measurement section),
+`reports/ty/d024_composite_shadow.md`. Tags `ty-dir-fix-fullgen-white-composite`,
+`ty-dir-fix-composite-white-shadow`.
+
+| # | job | result |
+|---|---|---|
+| 1 | `d022-real-rerender` (rank 3) — D-022 was fixed by test but not yet measured on a real render | **done.** The lane came free; `composite --limit 2 --renderer comfy --method birefnet --model sdxl` ran. `check_matte_residue`: PO-001 **25.647 % → 0.000 %** (1 025 874 px → 0 px, 1 022 424 of them neutral before) |
+| 2 | found on the same run: **SR-001** (white-main, composite route) carried **11.473 %** residue — 458 900 of 458 901 px neutral | **D-024 closed.** The composite's white-main guard measured the four **corners**, which a shadow under the product never touches. `_composite` now places with `shadow=not white_main`; two checks (white-main `False`, lifestyle `True`) |
+
+**The 25.647 % → 0.000 % is a real render**, at the model's own seed, on the app's own path
+(`renders/d022/PO-001.png`); the before is the published artefact that scored 100.0.
+Record: `reports/ty/d022_residue_before_after.json`.
+
+**Still owed, and queued:** the real-lane after-number for SR-001 (`d024-real-residue`,
+rank 2) — the GPU lock was held by another lane (`role: seller_composite`, pid 2144) when
+this unit closed, and one heavy lane at a time is the rule.
+
+**Tests:** 26 in the composite group, 4 in the full-generation group.
+
+**Next, in rank order:** `d024-real-residue` → `pack-02-apparel-flat-print` →
+`reference-depth` → `pack-03-boxart-forms` → `block3-workspaces` → `block4-seller-tests` →
+`block5-production-hardening` → `block7-verification` → D-019.
+
 ## Position, 2026-11-11 cycle 18 — cartons carry their safe layer, and the packaging lane is 8/8
 
 Unit report: `reports/ty/d023_carton_safe_layer.md`. Tag `ty-dir-fix-carton-safe-layer`.
