@@ -172,9 +172,54 @@ def _background_colour(rgb: np.ndarray) -> np.ndarray:
     return np.median(corners, axis=0)
 
 
+def _product_mask_from_cutout(cutout: Any, product_box: Optional[Any],
+                              shape: Tuple[int, int]) -> Optional[np.ndarray]:
+    """The product's own pixels on the frame's grid, from the saved cutout.
+
+    D-018 (measured 2026-11-11): a white product on a white canvas defeats the
+    corner-colour instrument — ST-024 read 20.7 % against a 24 % floor and ST-031
+    19.8 % against 20 %, not because the product was small but because it is the
+    same colour as the canvas. The cutout the generator saved beside the artefact
+    is the product's own silhouette, so its area is the honest measure whatever the
+    colours are.
+    """
+    if cutout is None or product_box is None:
+        return None
+    try:
+        box = [int(v) for v in product_box]
+    except (TypeError, ValueError):
+        return None
+    if len(box) != 4:
+        return None
+    left, top, right, bottom = box
+    frame_h, frame_w = shape
+    left, right = max(0, left), min(frame_w, right)
+    top, bottom = max(0, top), min(frame_h, bottom)
+    if right - left < 2 or bottom - top < 2:
+        return None
+    array = np.asarray(cutout)
+    if array.ndim != 3 or array.shape[2] < 4:
+        return None
+    from PIL import Image
+
+    alpha = Image.fromarray(array[..., 3].astype(np.uint8), "L")
+    # the saved cutout is the generator's canvas, not the product: trim to the alpha
+    # box first or the product is measured at a fraction of its real size (measured
+    # 2026-11-11: a 768 px cutout canvas resized into a 1 375 px product box read
+    # 13.6 % where the product covers ~35 % of the frame).
+    bounds = alpha.point(lambda v: 255 if v > 8 else 0).getbbox()
+    if bounds:
+        alpha = alpha.crop(bounds)
+    alpha = alpha.resize((right - left, bottom - top), Image.NEAREST)
+    mask = np.zeros((frame_h, frame_w), dtype=bool)
+    mask[top:bottom, left:right] = np.asarray(alpha) > 128
+    return mask
+
+
 def check_subject_fill(rgb: np.ndarray, spec: Dict[str, Any],
                        background_spec: Optional[Dict[str, Any]] = None,
-                       product_box: Optional[Any] = None) -> Dict[str, Any]:
+                       product_box: Optional[Any] = None,
+                       subject_mask: Optional[np.ndarray] = None) -> Dict[str, Any]:
     """How much of the frame the product occupies.
 
     Two instruments, chosen by the background the brief asked for:
@@ -212,6 +257,21 @@ def check_subject_fill(rgb: np.ndarray, spec: Dict[str, Any],
     diff = np.abs(rgb.astype(np.int16) - bg.astype(np.int16)).max(axis=2)
     mask = diff > distance
     pct = float(mask.mean() * 100.0)
+    if subject_mask is not None and pct < 5.0:
+        # D-018: a white product on a white canvas has no colour difference to find
+        # from, so the corner instrument reads ~0 %. Only in that blind case — and
+        # only when the product's own cutout is available — the cutout's area is used.
+        # Every other picture keeps the instrument it was scored with before.
+        share = float(np.asarray(subject_mask, dtype=bool).mean() * 100.0)
+        if share >= 5.0:
+            ok = low <= share <= high
+            return _ok(ok=ok,
+                       detail=f"subject fill {share:.1f}% vs {low:.1f}-{high:.1f}% "
+                              f"(the product's own cutout: the corner colour found "
+                              f"{pct:.1f}% and cannot see this product)",
+                       fill_pct=round(share, 2), min=low, max=high,
+                       instrument="cutout_mask", check="subject_fill",
+                       corner_fill_pct=round(pct, 2))
     ok = low <= pct <= high
     return _ok(ok=ok,
                detail=f"subject fill {pct:.1f}% vs {low:.1f}-{high:.1f}% "
@@ -350,7 +410,8 @@ def check_text_free(rgb: np.ndarray, spec: Dict[str, Any]) -> Dict[str, Any]:
 
 def _run_checks(loaded: LoadedImage, brief: Dict[str, Any], *,
                 composite_route: bool = True,
-                product_box: Optional[Any] = None) -> Dict[str, Dict[str, Any]]:
+                product_box: Optional[Any] = None,
+                cutout: Any = None) -> Dict[str, Dict[str, Any]]:
     """Every mechanical check for this brief.
 
     `composite_route` decides whether `alpha_matte` is *applicable*. A composite route cuts the
@@ -371,7 +432,9 @@ def _run_checks(loaded: LoadedImage, brief: Dict[str, Any], *,
     checks["background"] = check_background(loaded.rgb, background_spec)
     checks["subject_fill"] = check_subject_fill(
         loaded.rgb, constraints.get("fill_pct") or {}, background_spec,
-        product_box=product_box)
+        product_box=product_box,
+        subject_mask=_product_mask_from_cutout(cutout, product_box,
+                                               loaded.rgb.shape[:2]))
     matte_spec = constraints.get("matte") or {}
     if composite_route:
         checks["alpha_matte"] = check_alpha_matte(loaded, matte_spec)
@@ -594,7 +657,7 @@ def score_image(image_bytes: bytes, brief: Dict[str, Any], *,
         return base
 
     checks = _run_checks(loaded, brief, composite_route=composite_route,
-                         product_box=product_box)
+                         product_box=product_box, cutout=cutout)
     base.update({
         "width": loaded.width,
         "height": loaded.height,

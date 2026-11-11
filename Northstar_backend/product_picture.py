@@ -363,9 +363,12 @@ def _place_on_flat(composed: Image.Image, *, value: int = 255,
     scaled = cut_rgba.resize(size, Image.LANCZOS)
     position = ((canvas.width - size[0]) // 2, (canvas.height - size[1]) // 2)
     canvas.paste(scaled, position, scaled)
+    buffer = io.BytesIO()
+    cut_rgba.save(buffer, format="PNG")
     return {"image": canvas, "method": method,
             "box": [position[0], position[1], position[0] + size[0], position[1] + size[1]],
-            "fill": round(size[0] * size[1] / float(canvas.width * canvas.height), 4)}
+            "fill": round(size[0] * size[1] / float(canvas.width * canvas.height), 4),
+            "cutout": buffer.getvalue()}
 
 
 def compose_face(plate: Image.Image, design: Dict[str, Any], face: str, *,
@@ -485,6 +488,7 @@ def build(design: Optional[Dict[str, Any]] = None, *,
         face_seed = None if base_seed is None else base_seed + offset
         brief = plate_brief(face, form, dsn, units=units)
         plate_record: Dict[str, Any] = {}
+        cutout_bytes: Dict[str, Any] = {}
         try:
             if generator is not None:
                 plate_record = generator(brief, width=width, height=height,
@@ -564,6 +568,8 @@ def build(design: Optional[Dict[str, Any]] = None, *,
             record["background"] = {"mode": "flat", "value": int(background_value),
                                     "method": placed["method"], "box": placed["box"],
                                     "fill": placed["fill"]}
+            record["product_box"] = list(placed["box"])
+            cutout_bytes["png"] = placed.get("cutout")
 
         try:
             composed = compose_face(plate, dsn, face, shading=shading, form=form,
@@ -591,6 +597,13 @@ def build(design: Optional[Dict[str, Any]] = None, *,
             composed["image"].save(path, dpi=(300, 300))
             record["file"] = str(path)
             record["bytes"] = path.stat().st_size
+            if cutout_bytes.get("png"):
+                # D-018: keep the product's own silhouette beside the picture, so a
+                # white product on a white canvas can be measured by its shape rather
+                # than by a colour difference that is zero.
+                cutout_path = path.with_suffix(".cutout.png")
+                cutout_path.write_bytes(cutout_bytes["png"])
+                record["cutout_path"] = str(cutout_path)
         else:
             rejected.mkdir(parents=True, exist_ok=True)
             path = rejected / f"product_{face}.png"

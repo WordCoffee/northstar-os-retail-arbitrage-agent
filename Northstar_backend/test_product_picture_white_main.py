@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import io
 import json
+from pathlib import Path
 
 import numpy as np
 import pytest
@@ -74,6 +75,22 @@ def test_a_flat_background_brief_gets_the_product_on_that_value(tmp_path):
     corners = _corners(rgb)
     assert corners.min() >= 250, corners.min()
     assert float(corners.std()) <= 4.0, float(corners.std())
+
+
+def test_a_flat_background_brief_records_where_the_product_stands(tmp_path):
+    """D-018: the picture must carry the box and the cutout the fill check needs."""
+    result = pp.build(ba.design_for("mogra-lions-mane"), out_dir=str(tmp_path / "w"),
+                      out_root=str(tmp_path), faces=("front",), width=1200,
+                      height=1200, generator=_generator(_sweep_plate()),
+                      background="white", background_value=255, fill=0.5)
+    record = result["faces"][0]
+    assert record["product_box"] == record["background"]["box"]
+    left, top, right, bottom = record["product_box"]
+    assert right > left and bottom > top
+    cutout = Path(record["file"]).with_suffix(".cutout.png")
+    assert cutout.is_file(), "the product's own silhouette must sit beside the picture"
+    alpha = Image.open(cutout).convert("RGBA").getchannel("A")
+    assert alpha.getextrema()[1] == 255
 
 
 def test_the_label_survives_the_cutout(tmp_path):

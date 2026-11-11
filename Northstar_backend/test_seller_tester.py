@@ -209,6 +209,55 @@ def test_subject_fill_pass_and_fail():
     assert blank["fill_pct"] < 5
 
 
+def test_a_white_product_on_white_is_measured_by_its_cutout():
+    """D-018: the corner-colour instrument reads ~0 % for white on white."""
+    rgb = np.full((1000, 1000, 3), 255, dtype=np.uint8)
+    rgb[300:700, 300:700] = (250, 250, 250)          # a white product, 16 % of the frame
+    cutout = np.zeros((400, 400, 4), dtype=np.uint8)
+    cutout[..., 0:3] = (250, 250, 250)
+    cutout[..., 3] = 255
+
+    blind = scorers.check_subject_fill(rgb, {"min": 10, "max": 40},
+                                       {"mode": "uniform", "value": 255})
+    assert blind["instrument"] == "corner_colour"
+    assert blind["fill_pct"] < 2, "the old instrument should be blind here"
+
+    mask = scorers._product_mask_from_cutout(cutout, [300, 300, 700, 700], rgb.shape[:2])
+    seen = scorers.check_subject_fill(rgb, {"min": 10, "max": 40},
+                                      {"mode": "uniform", "value": 255},
+                                      product_box=[300, 300, 700, 700],
+                                      subject_mask=mask)
+    assert seen["instrument"] == "cutout_mask"
+    assert 15.0 <= seen["fill_pct"] <= 17.0
+    assert seen["ok"] is True
+
+
+def test_a_visible_product_keeps_the_corner_instrument_even_with_a_cutout():
+    """The cutout is a fallback for a blind instrument, not a replacement."""
+    rgb = np.full((400, 400, 3), 255, dtype=np.uint8)
+    rgb[80:320, 80:320] = (40, 90, 60)               # a dark product, 36 % of the frame
+    cutout = np.zeros((240, 240, 4), dtype=np.uint8)
+    cutout[..., 3] = 255                              # a cutout claiming a tiny product
+    mask = scorers._product_mask_from_cutout(cutout, [0, 0, 40, 40], rgb.shape[:2])
+    check = scorers.check_subject_fill(rgb, {"min": 20, "max": 45},
+                                       {"mode": "uniform", "value": 255},
+                                       product_box=[0, 0, 40, 40], subject_mask=mask)
+    assert check["instrument"] == "corner_colour"
+    assert 34 <= check["fill_pct"] <= 38
+
+
+def test_the_cutout_mask_is_the_product_not_its_box():
+    circle = np.zeros((100, 100, 4), dtype=np.uint8)
+    yy, xx = np.mgrid[0:100, 0:100]
+    inside = (yy - 50) ** 2 + (xx - 50) ** 2 <= 40 ** 2
+    circle[..., 3] = np.where(inside, 255, 0)
+    mask = scorers._product_mask_from_cutout(circle, [0, 0, 100, 100], (100, 100))
+    share = float(mask.mean())
+    # the cutout is trimmed to its alpha box, so a disc inside that box covers pi/4
+    assert 0.70 < share < 0.85, f"a disc fills pi/4 = 78.5 % of its box; got {share:.2f}"
+    assert scorers._product_mask_from_cutout(None, [0, 0, 10, 10], (10, 10)) is None
+
+
 # --------------------------------------------------------------------------- matte / alpha
 def test_white_matte_pass_and_fail():
     spec = {"mode": "white_matte", "value": 255, "tolerance": 6, "max_border_std": 6}

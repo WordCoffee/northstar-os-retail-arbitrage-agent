@@ -291,3 +291,26 @@ white canvas, so nothing survives there.
 product, or the scene rejected when it carries geometry outside the product's
 columns. Until then the honest count is 10 of 12 clean, and it is stated in
 `reports/ty/label_conform.md`.
+
+## D-018 — a white product on a white canvas defeats the fill instrument (closed 2026-11-11)
+
+**Measured:** ST-024 read 20.7 % against a 24 % floor and ST-031 19.8 % against 20 %
+(`reports/ty/white_main_pass.json`). The instrument measured the share of pixels that
+differ from the corner colour; white on 255 white differs by about 5 levels against a
+distance of 20, so it found almost nothing.
+
+**Closed 2026-11-11:** `scorers._product_mask_from_cutout` maps the product's own
+silhouette onto the frame, and `check_subject_fill` uses it **only** when the corner
+instrument is blind (under 5 % on a flat background). Provenance added in
+`product_picture.build`: `product_box` is recorded and `<face>.cutout.png` is written
+beside the picture. Re-scoring the twelve prompt-only artefacts leaves all twelve on
+`corner_colour`, so no published score moved. `reports/ty/d018_fill_instrument.md`.
+
+**Still owed:** ST-024/ST-031 were rendered before the provenance existed and must be
+re-rendered for their new number.
+
+## D-017 — a plate's opaque contact shadow survives the cutout (open 2026-11-11)
+
+`_place_on_flat` keeps a contact shadow that is opaque enough to pass its solid-alpha
+threshold; its own comment says a real matte (BiRefNet in the lane) is what removes it.
+Not claimed as done. Queued as `fix-plate-shadow-matte`.

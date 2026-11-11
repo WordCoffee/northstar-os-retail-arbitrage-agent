@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-11T08:21:08+00:00",
+  "updated_at": "2026-11-11T08:44:13+00:00",
   "cycle": 3,
   "unit_in_flight": "",
   "unit_order": [
@@ -1469,6 +1469,29 @@
       "rank": 0
     },
     {
+      "id": "fix-plate-shadow-matte",
+      "unit": "D4",
+      "title": "D-017: a plate's opaque contact shadow survives the cutout; remove it with a real matte (BiRefNet in the lane), not a colour threshold",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "Northstar_backend/product_picture.py",
+        "Northstar_backend/product_cutout.py",
+        "Northstar_backend/test_*.py"
+      ],
+      "branch": "ty/fix-plate-shadow-matte",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-11T08:44:13+00:00",
+      "updated_at": "2026-11-11T08:44:13+00:00",
+      "rank": 0
+    },
+    {
       "id": "sel-01c-cutout-provenance",
       "unit": "D12",
       "title": "Composite provenance: save the cutout and placement beside every composite so the product-region check can verify it",
@@ -1957,7 +1980,7 @@
       "id": "fix-shadow-and-white-fill",
       "unit": "D4",
       "title": "D-017/D-018: a plate's opaque shadow survives the cutout, and a white product on white defeats the fill instrument",
-      "status": "queued",
+      "status": "merged",
       "owner": "",
       "write_paths": [
         "Northstar_backend/product_picture.py",
@@ -1972,9 +1995,9 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": "D-018 fixed: cutout-mask fallback fires only when the corner instrument is blind (<5% on a flat background); product_picture.build records product_box and writes <face>.cutout.png; re-scoring the 12 prompt-only artefacts leaves 12/12 on corner_colour so no published score moved; 8+8+74+89 tests. D-017 (plate shadow needs a real matte) NOT done, queued as fix-plate-shadow-matte. reports/ty/d018_fill_instrument.md",
       "created_at": "2026-11-11T06:58:31+00:00",
-      "updated_at": "2026-11-11T06:58:32+00:00",
+      "updated_at": "2026-11-11T08:44:13+00:00",
       "rank": 3
     },
     {

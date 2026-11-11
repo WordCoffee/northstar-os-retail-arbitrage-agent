@@ -10,6 +10,34 @@ A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.m
 > and `reports/ty/handoff.md`, then continue from the first unfinished unit. No
 > questions, no reports between cycles. Idle means re-plan.
 
+## Position, 2026-11-11 cycle 12 — the fill instrument can see white on white
+
+Unit report: `reports/ty/d018_fill_instrument.md`. Tag `ty-dir-d018-fill`.
+
+| # | job | result |
+|---|---|---|
+| 1 | `fix-shadow-and-white-fill` (rank 3) — ST-024 read 20.7 % against a 24 % floor and ST-031 19.8 % against 20 %, because `subject_fill` measured the share of pixels that differ from the corner colour and a white product on 255 white differs by ~5 levels | **D-018 fixed.** `_product_mask_from_cutout` maps the product's own silhouette onto the frame, and the fill check uses it **only when the corner instrument is blind** (under 5 % on a flat background). `product_picture.build` now records `product_box` and writes `<face>.cutout.png` — without that provenance the fallback cannot fire |
+
+**No published score moved:** re-scoring the twelve prompt-only artefacts leaves
+`instrument: corner_colour` on **12 of 12**, so the fallback fires only where the old
+instrument was blind. Proven by test against a known 36 % white-on-white product (corner
+reads under 2 %, the cutout reads 35.0–37.0 %).
+
+**Still owed:** ST-024/ST-031 were rendered before the provenance existed and have
+`product_box: None`; their new number needs a white-main re-render at the pinned seeds.
+
+**D-017 is not done and is not claimed:** a plate's opaque contact shadow still survives
+the cutout; its own comment says a real matte (BiRefNet in the lane) is what removes it.
+Queued as `fix-plate-shadow-matte`.
+
+**Tests:** 8 in `test_subject_fill_instrument.py`, 8 in `test_product_picture_white_main.py`,
+74 in the package/composite/label group, 89 in the seller group.
+
+**Next, in rank order:** `fix-bundle-units` (D-012) → `fix-plate-shadow-matte` (D-017) →
+`reference-depth` → `block3-workspaces` → `block4-seller-tests` → `pack-02-apparel-flat-print`
+→ `pack-03-boxart-forms` → `block5-production-hardening` → `block7-verification` →
+`sel-04-packaging` → D-019.
+
 ## Position, 2026-11-11 cycle 11 — the label sits on the pack, and the pack is whole
 
 Unit report: `reports/ty/label_conform.md`. Tag `ty-dir-fix-label-conform`.
