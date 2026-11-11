@@ -290,7 +290,9 @@
       ],
       "source_mode": "prompt_only",
       "fidelity": "exact",
-      "product_in_frame": true
+      "product_in_frame": true,
+      "units": 3,
+      "note": " | D-012: bundle brief declares units=3, so the plate asks for three packages and the picture is measured as a bundle instead of one unit."
     },
     {
       "id": "ST-006",
@@ -726,7 +728,8 @@
           "A daily chew for older dogs"
         ]
       },
-      "note": " | pack-01: wired to the app product_picture path on the rigid-cylinder form (label_mode warp, product_line, body_prompt); the label is composed and wrapped by the app, not drawn by the model."
+      "note": " | pack-01: wired to the app product_picture path on the rigid-cylinder form (label_mode warp, product_line, body_prompt); the label is composed and wrapped by the app, not drawn by the model. | D-012: bundle brief declares units=3, so the plate asks for three packages and the picture is measured as a bundle instead of one unit.",
+      "units": 3
     },
     {
       "id": "ST-014",
@@ -1148,7 +1151,9 @@
       ],
       "source_mode": "prompt_only",
       "fidelity": "exact",
-      "product_in_frame": true
+      "product_in_frame": true,
+      "units": 3,
+      "note": " | D-012: bundle brief declares units=3, so the plate asks for three packages and the picture is measured as a bundle instead of one unit."
     },
     {
       "id": "ST-022",
@@ -1594,7 +1599,8 @@
         ]
       },
       "body_prompt": "Product photograph of a plain slim folding gift box with a blank front panel, no text, no lettering, no logo, arranged as a bundle on a warm oak table top. Photorealistic, unlabelled packaging.",
-      "note": " | sel-08: wired to the app product_picture path (label_mode warp, product_line, body_prompt) so it can be produced and scored through the shipped packaging lane."
+      "note": " | sel-08: wired to the app product_picture path (label_mode warp, product_line, body_prompt) so it can be produced and scored through the shipped packaging lane. | D-012: bundle brief declares units=3, so the plate asks for three packages and the picture is measured as a bundle instead of one unit.",
+      "units": 3
     },
     {
       "id": "ST-030",
@@ -2022,7 +2028,9 @@
         "background"
       ],
       "fidelity": "exact",
-      "product_in_frame": true
+      "product_in_frame": true,
+      "units": 3,
+      "note": " | D-012: bundle brief declares units=3, so the plate asks for three packages and the picture is measured as a bundle instead of one unit."
     },
     {
       "id": "ST-038",
@@ -2673,7 +2681,9 @@
         "background"
       ],
       "fidelity": "exact",
-      "product_in_frame": true
+      "product_in_frame": true,
+      "units": 3,
+      "note": " | D-012: bundle brief declares units=3, so the plate asks for three packages and the picture is measured as a bundle instead of one unit."
     },
     {
       "id": "ST-050",

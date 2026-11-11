@@ -147,13 +147,28 @@ def resolve_out_dir(out_dir: Optional[str], *, base: Optional[str] = None) -> Pa
 
 
 def plate_brief(face: str, form: str = art.POUCH,
-                design: Optional[Dict[str, Any]] = None) -> str:
+                design: Optional[Dict[str, Any]] = None,
+                units: int = 1) -> str:
     briefs = FORM_PLATE_BRIEFS.get(form)
     if briefs is None:
         raise ValueError(f"unknown form {form!r}; known: {', '.join(FORM_PLATE_BRIEFS)}")
     if face not in briefs:
         raise ValueError(f"unknown face {face!r}; known: front, back")
     subject = str((design or {}).get("plate_subject") or "").strip()
+    if units and int(units) > 1:
+        # A bundle plate must SHOW the units: a photograph of one package measured
+        # against a three-unit request is refused (`units_not_found`), so the brief
+        # asks for the bundle rather than letting the measurement fail.
+        count = int(units)
+        word = {2: "two", 3: "three", 4: "four"}.get(count, str(count))
+        base = subject or "rigid cylindrical package" if form == art.CYLINDER else (
+            "slim folding gift box" if form == art.GIFT_BOX else "kraft stand-up pouch")
+        return (f"a photograph of {word} identical blank unprinted {base}s standing "
+                f"side by side in a row on a pale grey seamless studio sweep, every "
+                f"package in frame and separated from its neighbours, no lettering and "
+                f"no label, a soft contact shadow under each, soft diffused key light "
+                f"from the upper left, photoreal commercial product photography, sharp "
+                f"focus on the packages")
     if subject and form == art.CYLINDER:
         # A design that names its own body gets a plate of that object; a plain
         # cylinder is only the default. Without this a mug was drawn as a tube.
@@ -468,7 +483,7 @@ def build(design: Optional[Dict[str, Any]] = None, *,
         if face not in ("front", "back"):
             raise ValueError(f"unknown face {face!r}; known: front, back")
         face_seed = None if base_seed is None else base_seed + offset
-        brief = plate_brief(face, form, dsn)
+        brief = plate_brief(face, form, dsn, units=units)
         plate_record: Dict[str, Any] = {}
         try:
             if generator is not None:
