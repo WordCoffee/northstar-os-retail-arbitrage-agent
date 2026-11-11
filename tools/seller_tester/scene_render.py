@@ -58,7 +58,22 @@ def scene_prompt(brief: Dict[str, Any]) -> str:
 
 
 def full_prompt(brief: Dict[str, Any]) -> str:
-    """The prompt for a full generation, used only where exact fidelity is not required."""
+    """The prompt for a full generation, used only where exact fidelity is not required.
+
+    A brief with ``label_mode: "warp"`` draws its lettering deterministically and warps it on, so
+    the model must be asked for an **unlettered body**. Its ``body_prompt`` is the prompt; using the
+    brief's `prompt` there would ask the diffusion model to spell the brand, which is exactly the
+    part it cannot do (measured 2026-11-11: "MOGGARA" for "MOGRA ORGANICS", "AOW" for "Word
+    Coffee").
+    """
+    if str(brief.get("label_mode") or "") == "warp":
+        body = str(brief.get("body_prompt") or "").strip()
+        if body:
+            return body
+        raise ValueError(
+            "label_mode 'warp' needs a body_prompt: the label is composed deterministically, so "
+            "the prompt must describe an unlettered body. A brief with no body_prompt would ask "
+            "the model for lettering and then paste a second copy over it")
     explicit = str(brief.get("prompt") or "").strip()
     if explicit:
         return explicit

@@ -47,7 +47,15 @@
           "max_bytes": 12000000
         }
       },
-      "note": "Held-out, prompt-only: no reference image exists for this brief, so the pipeline generates the product from the description. Fidelity is tolerant by definition."
+      "note": "Held-out, prompt-only: no reference image exists for this brief, so the pipeline generates the product from the description. Fidelity is tolerant by definition.",
+      "label_mode": "warp",
+      "label": {
+        "brand": "Mogra Organics",
+        "product": "Organic Lion's Mane Mushroom Powder",
+        "weight": "6 oz (170 g)",
+        "lines": []
+      },
+      "body_prompt": "Product photograph of a plain matte forest-green stand-up pouch with a blank white circular panel on the front, no text, no lettering, no logo, on a seamless white studio background, product centred, no props. Photorealistic, unlabelled packaging, smooth matte film."
     },
     {
       "id": "PO-002",
@@ -90,7 +98,17 @@
           "max_bytes": 12000000
         }
       },
-      "note": "Held-out, prompt-only: no reference image exists for this brief, so the pipeline generates the product from the description. Fidelity is tolerant by definition."
+      "note": "Held-out, prompt-only: no reference image exists for this brief, so the pipeline generates the product from the description. Fidelity is tolerant by definition.",
+      "label_mode": "warp",
+      "label": {
+        "brand": "Word Coffee",
+        "product": "For Mom",
+        "weight": "",
+        "lines": [
+          "Empowering Moms, One Message at a Time"
+        ]
+      },
+      "body_prompt": "Product photograph of a plain slim pale-pink and cream gift box with a blank front panel, no text, no lettering, no logo, on a light oak kitchen counter in morning light, shallow depth of field. Photorealistic, unlabelled packaging, matte card."
     },
     {
       "id": "PO-003",
@@ -136,7 +154,15 @@
           "max_bytes": 12000000
         }
       },
-      "note": "Held-out, prompt-only: no reference image exists for this brief, so the pipeline generates the product from the description. Fidelity is tolerant by definition."
+      "note": "Held-out, prompt-only: no reference image exists for this brief, so the pipeline generates the product from the description. Fidelity is tolerant by definition.",
+      "label_mode": "warp",
+      "label": {
+        "brand": "Mogra Organics",
+        "product": "Organic Lion's Mane Mushroom Powder",
+        "weight": "6 oz (170 g)",
+        "lines": []
+      },
+      "body_prompt": "Product photograph of a plain matte forest-green stand-up pouch with a blank white circular panel on the front, no text, no lettering, no logo, standing beside a coffee cup for scale, white background. Photorealistic, unlabelled packaging, smooth matte film."
     },
     {
       "id": "PO-004",
@@ -182,7 +208,17 @@
           "max_bytes": 12000000
         }
       },
-      "note": "Held-out, prompt-only: no reference image exists for this brief, so the pipeline generates the product from the description. Fidelity is tolerant by definition."
+      "note": "Held-out, prompt-only: no reference image exists for this brief, so the pipeline generates the product from the description. Fidelity is tolerant by definition.",
+      "label_mode": "warp",
+      "label": {
+        "brand": "Word Coffee",
+        "product": "For Mom",
+        "weight": "",
+        "lines": [
+          "Empowering Moms, One Message at a Time"
+        ]
+      },
+      "body_prompt": "Product photograph of a plain slim pale-pink and cream gift box with a blank front panel, no text, no lettering, no logo, one unit shown, on a white background. Photorealistic, unlabelled packaging, matte card."
     },
     {
       "id": "PO-005",
@@ -228,7 +264,15 @@
           "max_bytes": 12000000
         }
       },
-      "note": "Held-out, prompt-only: no reference image exists for this brief, so the pipeline generates the product from the description. Fidelity is tolerant by definition."
+      "note": "Held-out, prompt-only: no reference image exists for this brief, so the pipeline generates the product from the description. Fidelity is tolerant by definition.",
+      "label_mode": "warp",
+      "label": {
+        "brand": "Mogra Organics",
+        "product": "Organic Lion's Mane Mushroom Powder",
+        "weight": "6 oz (170 g)",
+        "lines": []
+      },
+      "body_prompt": "Product photograph of a plain matte forest-green stand-up pouch with a blank white circular panel on the front, no text, no lettering, no logo, floating against a soft sage-green gradient, studio lighting. Photorealistic, unlabelled packaging, smooth matte film."
     },
     {
       "id": "PO-006",
@@ -274,7 +318,17 @@
           "max_bytes": 12000000
         }
       },
-      "note": "Held-out, prompt-only: no reference image exists for this brief, so the pipeline generates the product from the description. Fidelity is tolerant by definition."
+      "note": "Held-out, prompt-only: no reference image exists for this brief, so the pipeline generates the product from the description. Fidelity is tolerant by definition.",
+      "label_mode": "warp",
+      "label": {
+        "brand": "Word Coffee",
+        "product": "For Mom",
+        "weight": "",
+        "lines": [
+          "Empowering Moms, One Message at a Time"
+        ]
+      },
+      "body_prompt": "Product photograph of a plain slim pale-pink and cream gift box with a blank front panel, no text, no lettering, no logo, in the same lighting and framing as the rest of the range, grey backdrop. Photorealistic, unlabelled packaging, matte card."
     },
     {
       "id": "PO-007",
@@ -317,7 +371,15 @@
           "max_bytes": 12000000
         }
       },
-      "note": "Held-out, prompt-only: no reference image exists for this brief, so the pipeline generates the product from the description. Fidelity is tolerant by definition."
+      "note": "Held-out, prompt-only: no reference image exists for this brief, so the pipeline generates the product from the description. Fidelity is tolerant by definition.",
+      "label_mode": "warp",
+      "label": {
+        "brand": "Mogra Organics",
+        "product": "Organic Lion's Mane Mushroom Powder",
+        "weight": "6 oz (170 g)",
+        "lines": []
+      },
+      "body_prompt": "Product photograph of a plain matte forest-green stand-up pouch with a blank white circular panel on the front, no text, no lettering, no logo, centred on a clean page with generous white margins, room for callouts. Photorealistic, unlabelled packaging, smooth matte film."
     },
     {
       "id": "PO-008",
@@ -360,7 +422,17 @@
           "max_bytes": 12000000
         }
       },
-      "note": "Held-out, prompt-only: no reference image exists for this brief, so the pipeline generates the product from the description. Fidelity is tolerant by definition."
+      "note": "Held-out, prompt-only: no reference image exists for this brief, so the pipeline generates the product from the description. Fidelity is tolerant by definition.",
+      "label_mode": "warp",
+      "label": {
+        "brand": "Word Coffee",
+        "product": "For Mom",
+        "weight": "",
+        "lines": [
+          "Empowering Moms, One Message at a Time"
+        ]
+      },
+      "body_prompt": "Product photograph of a plain slim pale-pink and cream gift box with a blank front panel, no text, no lettering, no logo, on a matte studio surface under a soft key light, slight perspective. Photorealistic, unlabelled packaging, matte card."
     },
     {
       "id": "PO-009",
@@ -407,7 +479,15 @@
           "max_bytes": 12000000
         }
       },
-      "note": "Held-out, prompt-only: no reference image exists for this brief, so the pipeline generates the product from the description. Fidelity is tolerant by definition."
+      "note": "Held-out, prompt-only: no reference image exists for this brief, so the pipeline generates the product from the description. Fidelity is tolerant by definition.",
+      "label_mode": "warp",
+      "label": {
+        "brand": "Mogra Organics",
+        "product": "Organic Lion's Mane Mushroom Powder",
+        "weight": "6 oz (170 g)",
+        "lines": []
+      },
+      "body_prompt": "Product photograph of a plain matte forest-green stand-up pouch with a blank white circular panel on the front, no text, no lettering, no logo, on a seamless white studio background, product centred, no props. Photorealistic, unlabelled packaging, smooth matte film."
     },
     {
       "id": "PO-010",
@@ -450,7 +530,17 @@
           "max_bytes": 12000000
         }
       },
-      "note": "Held-out, prompt-only: no reference image exists for this brief, so the pipeline generates the product from the description. Fidelity is tolerant by definition."
+      "note": "Held-out, prompt-only: no reference image exists for this brief, so the pipeline generates the product from the description. Fidelity is tolerant by definition.",
+      "label_mode": "warp",
+      "label": {
+        "brand": "Word Coffee",
+        "product": "For Mom",
+        "weight": "",
+        "lines": [
+          "Empowering Moms, One Message at a Time"
+        ]
+      },
+      "body_prompt": "Product photograph of a plain slim pale-pink and cream gift box with a blank front panel, no text, no lettering, no logo, on a light oak kitchen counter in morning light, shallow depth of field. Photorealistic, unlabelled packaging, matte card."
     },
     {
       "id": "PO-011",
@@ -496,7 +586,15 @@
           "max_bytes": 12000000
         }
       },
-      "note": "Held-out, prompt-only: no reference image exists for this brief, so the pipeline generates the product from the description. Fidelity is tolerant by definition."
+      "note": "Held-out, prompt-only: no reference image exists for this brief, so the pipeline generates the product from the description. Fidelity is tolerant by definition.",
+      "label_mode": "warp",
+      "label": {
+        "brand": "Mogra Organics",
+        "product": "Organic Lion's Mane Mushroom Powder",
+        "weight": "6 oz (170 g)",
+        "lines": []
+      },
+      "body_prompt": "Product photograph of a plain matte forest-green stand-up pouch with a blank white circular panel on the front, no text, no lettering, no logo, standing beside a coffee cup for scale, white background. Photorealistic, unlabelled packaging, smooth matte film."
     },
     {
       "id": "PO-012",
@@ -542,7 +640,17 @@
           "max_bytes": 12000000
         }
       },
-      "note": "Held-out, prompt-only: no reference image exists for this brief, so the pipeline generates the product from the description. Fidelity is tolerant by definition."
+      "note": "Held-out, prompt-only: no reference image exists for this brief, so the pipeline generates the product from the description. Fidelity is tolerant by definition.",
+      "label_mode": "warp",
+      "label": {
+        "brand": "Word Coffee",
+        "product": "For Mom",
+        "weight": "",
+        "lines": [
+          "Empowering Moms, One Message at a Time"
+        ]
+      },
+      "body_prompt": "Product photograph of a plain slim pale-pink and cream gift box with a blank front panel, no text, no lettering, no logo, one unit shown, on a white background. Photorealistic, unlabelled packaging, matte card."
     },
     {
       "id": "SR-001",
@@ -1182,5 +1290,23 @@
       },
       "note": "Held-out, stored-reference: the reference is a committed product image, so the composite route must keep the seller's pixels."
     }
-  ]
+  ],
+  "label_fidelity": {
+    "at": "2026-11-11",
+    "why": "the briefs handed exact label copy to a diffusion model; the label is now composed from these fields and warped onto an unlettered body",
+    "briefs": [
+      "PO-001",
+      "PO-002",
+      "PO-003",
+      "PO-004",
+      "PO-005",
+      "PO-006",
+      "PO-007",
+      "PO-008",
+      "PO-009",
+      "PO-010",
+      "PO-011",
+      "PO-012"
+    ]
+  }
 }

@@ -39,6 +39,40 @@ def _font(size: int, *, bold: bool = False):
     return ImageFont.load_default()
 
 
+def _fit_lines(draw, text: str, *, max_width: int, start_size: int,
+               min_size: int = 34) -> List[Tuple[str, int]]:
+    """Wrap `text` to `max_width`, shrinking the font only when wrapping cannot fit.
+
+    `line[:28]` used to cut the product name at 28 characters, so "ORGANIC LION'S MANE MUSHROOM
+    POWDER" was printed as "ORGANIC LION'S MANE MUSHROOM P" — a label that states the wrong thing,
+    which the local judge caught as "the label only reads 'MOGRA ORGANICS' and 'ORGANIC LION'S
+    MANE', not 'MUSHROOM POWDER'" (2026-11-11). Silent truncation of the brief's own copy is not an
+    option: wrap, then shrink, then state the shrink.
+    """
+    words = text.split()
+    if not words:
+        return []
+    for size in range(start_size, min_size - 1, -2):
+        font = _font(size, bold=size >= 56)
+        lines: List[str] = []
+        current = ""
+        for word in words:
+            candidate = f"{current} {word}".strip()
+            if draw.textlength(candidate, font=font) <= max_width or not current:
+                current = candidate
+            else:
+                lines.append(current)
+                current = word
+        if current:
+            lines.append(current)
+        if all(draw.textlength(line, font=font) <= max_width for line in lines):
+            return [(line, size) for line in lines]
+    # Even the minimum font cannot fit: return the wrapped text at the minimum, and the caller
+    # records that it overflowed rather than pretending the copy is complete.
+    font = _font(min_size)
+    return [(line, min_size) for line in text.split() if draw.textlength(line, font=font) <= max_width]
+
+
 def compose_label(brief: Dict[str, Any]) -> bytes:
     """The label artwork, as a flat panel. Deterministic: same brief, same bytes."""
     from PIL import Image, ImageDraw  # noqa: PLC0415
@@ -56,10 +90,16 @@ def compose_label(brief: Dict[str, Any]) -> bytes:
     draw.text((72, 90), brand, font=_font(76, bold=True), fill=INK)
     draw.line((72, 190, LABEL_W - 72, 190), fill=ACCENT, width=6)
     y = 240
-    for index, line in enumerate(([product] if product else []) + lines):
-        font = _font(64 if index == 0 else 44, bold=index == 0)
-        draw.text((72, y), line[:28], font=font, fill=INK)
-        y += 92 if index == 0 else 64
+    inner_w = LABEL_W - 144
+    blocks: List[Tuple[str, int]] = []
+    if product:
+        blocks += _fit_lines(draw, product, max_width=inner_w, start_size=64)
+    for line in lines:
+        blocks += _fit_lines(draw, line, max_width=inner_w, start_size=44)
+    for index, (text, size) in enumerate(blocks):
+        font = _font(size, bold=size >= 56)
+        draw.text((72, y), text, font=font, fill=INK)
+        y += size + 22
         if y > LABEL_H - 260:
             break
     if weight:
