@@ -198,6 +198,28 @@ git fetch origin --prune --tags
 After the force-push, say the word and I will run `python tools/retire_chat_exports.py --retire`,
 which removes the exports from the tree and allowlists their dead fingerprints, then re-scan.
 
+## SEC-1. Rotation: real hosts found in history by shape (2026-11-11, counts only)
+
+New measurement (`tools/history_credential_classify.py`, `reports/ty/history_credential_classes.md`):
+of the **88** `user:pass@` URLs in all 189 refs, **2** reach a real host; the other 86 are
+localhost (15), reserved/example hosts (42), documentation placeholders such as `host` / `dbhost`
+(28) and one unparseable. Of the **535** password/token-shaped assignments, **17** sit on a line that
+also names a real host; 274 are code references (`os.environ`, `getenv`, `process.env`), 57 are
+placeholders, 188 are literals with no host on the line.
+
+**Three hosts need your eye. No user, password or token is printed anywhere.**
+
+| host | what the shape is | occurrences | action |
+|---|---|---|---|
+| `github.com` | a `user:pass@` URL plus token-shaped assignments on lines naming GitHub (PAT-shaped token already queued as `DIR-1c`) | 11 | revoke every PAT issued before 2026-11-11 in GitHub → Settings → Developer settings → Tokens |
+| `www.packify.ai` | a `user:pass@` URL (a captured login) plus two token-shaped assignments on the same page text | 3 | if any Packify account exists, change that password; the text is in history, so a rotation is the only fix |
+| `api.scrape.do` | a token-shaped assignment naming the real API host | 1 | rotate the scrape.do token if the account is live; the earlier Scavio/Bright Data entries do not cover it |
+
+Not rotation items, recorded so they are not silently dropped: `www.aboutamazon.com` (3) and
+`www.w3.org` (1) appear on the same line as a token-shaped assignment but are a corporate link and an
+XML namespace, not credential endpoints. **No Amazon request was made to reach this conclusion** — the
+host came out of local git history and nothing else.
+
 ## DIR-1a. Rotate the Scavio API key (committed)
 
 `FirstNorthstarautomationchat.md` **line 1143** and **line 1291** contain a Scavio API key — the same

@@ -164,5 +164,47 @@ visible rather than silent. A lock held by a **live** process is still refused, 
 that matters. A probe that errors counts as alive: stealing a lock because `psutil` is missing would
 be worse than refusing. Six tests in `test_gpu_lock.py`.
 
+## D-008 — `alpha_matte` is graded on a route that cannot satisfy it (2026-11-11)
+
+**Measured:** six of twelve prompt-only briefs score **exactly 90.0** and every one of them fails
+`alpha_matte` and nothing else (`tools/prompt_only_rescore.py`, per-brief check table in
+`reports/ty/prompt_only_rescore.md`). The score is `100 × 0.90 / 1.00`: the check carries 0.10 of a
+denominator that is exactly 1.00 for a full generation, because `reference_subject` is not graded.
+
+**Cause:** `alpha_matte` asks for 3–98 % transparent pixels. A text-to-image plate is opaque by
+construction; only the composite route produces an alpha cutout. So the check caps every prompt-only
+artefact at 90.0 by design, and the number reads like a quality plateau when it is a rubric constant.
+
+**Fix (not applied here):** either the prompt-only briefs stop grading `alpha_matte` — it is not a
+property of that route — or the generator exports the cut subject with alpha. **Not** by lowering the
+weight, which would silently change every historical score.
+
+## D-009 — `dev-start.pids` is stale, so stack provenance is only partly provable (2026-11-11)
+
+**Measured:** `dev-start.pids` lists `11664,16960,23512,17252,25384`; 23512/17252/25384 no longer
+exist, and the live vite process (15472, parent 13944) is not in the file. Both listeners are
+correct and loopback-only (127.0.0.1:8000, 127.0.0.1:8101) and `/health` and `/ui/` return 200.
+
+**Fix:** the script should rewrite the pid file on every start (truncate, not append) and prune dead
+pids before it exits, so "started by `scripts/dev-start.ps1`" is a claim the file can support.
+
+## D-010 — a launcher that cannot start its own lane failed silently for days (2026-11-11)
+
+**Measured:** `logs/ty_director_stream.jsonl` held 73 identical
+`{"type":"error", … "Agent not found: \"director\""}` lines and `logs/ty_director.log` a five-minute
+restart cadence from 2026-11-10T19:40. `heartbeat.json` was last written 2026-11-09T20:46 and said
+`ram_paused`, so nothing in the heartbeat reflected the failure. The task itself reported `Running`
+and `267009` (still running) the whole time.
+
+**Cause:** `opencode.jsonc` never defined an agent named `director`, so `opencode run --agent
+director` exited immediately. The launcher counts a *process exit* as a crash but a *lane-not-found*
+as a normal short turn, and the stream file is not read by anything.
+
+**Fix:** the agent is defined now (`opencode.jsonc`, model pinned). The follow-up is to make the
+heartbeat red when the stream's last line is an error, so this can never again look healthy for a
+day.
+
+
+
 
 

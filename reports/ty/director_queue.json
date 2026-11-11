@@ -1,7 +1,7 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-09T06:40:16+00:00",
-  "cycle": 1,
+  "updated_at": "2026-11-11T01:41:36+00:00",
+  "cycle": 2,
   "unit_in_flight": "",
   "unit_order": [
     "D0",
@@ -615,7 +615,7 @@
       "id": "sel-02-design-studio",
       "unit": "D12",
       "title": "Design Studio output quality: move the 16.7 mean on real product pictures",
-      "status": "queued",
+      "status": "reported",
       "owner": "",
       "write_paths": [
         "tools/seller_tester",
@@ -629,16 +629,20 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": [
+        "reports/ty/sel02_design_studio.md",
+        "reports/ty/sel02_explained.md"
+      ],
       "created_at": "2026-11-08T21:21:18+00:00",
       "updated_at": "2026-11-09T06:31:02+00:00",
-      "rank": 4
+      "rank": 4,
+      "note": "a report exists for this unit; the status is 'reported', not 'merged', because the queue was never updated when the work landed. Live verification is the separate job ux-0610-live-verify."
     },
     {
       "id": "sel-03-aplus",
       "unit": "D12",
       "title": "A+ content modules: briefs, real renders, scored like a seller would",
-      "status": "queued",
+      "status": "reported",
       "owner": "",
       "write_paths": [
         "ty/seller_briefs.json",
@@ -651,10 +655,13 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": [
+        "reports/ty/sel03_aplus.md"
+      ],
       "created_at": "2026-11-08T21:21:18+00:00",
       "updated_at": "2026-11-09T06:31:02+00:00",
-      "rank": 5
+      "rank": 5,
+      "note": "a report exists for this unit; the status is 'reported', not 'merged', because the queue was never updated when the work landed. Live verification is the separate job ux-0610-live-verify."
     },
     {
       "id": "sel-04-packaging",
@@ -676,13 +683,13 @@
       "evidence": "",
       "created_at": "2026-11-08T21:21:18+00:00",
       "updated_at": "2026-11-09T06:31:02+00:00",
-      "rank": 6
+      "rank": 7
     },
     {
       "id": "ux-06-shell",
       "unit": "U",
       "title": "Shell chrome on every service route: top nav, side nav and workspace outlet, with the DevBanner in the shell rather than only on sign-in",
-      "status": "queued",
+      "status": "reported",
       "owner": "",
       "write_paths": [
         "northstar-os-ui/src/shell",
@@ -695,16 +702,19 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": [
+        "reports/ty/ux06_shell.md"
+      ],
       "created_at": "2026-11-09T03:16:49+00:00",
       "updated_at": "2026-11-09T06:31:02+00:00",
-      "rank": 7
+      "rank": 7,
+      "note": "a report exists for this unit; the status is 'reported', not 'merged', because the queue was never updated when the work landed. Live verification is the separate job ux-0610-live-verify."
     },
     {
       "id": "ux-07-tabs",
       "unit": "U",
       "title": "Workspace tab bar: tabs keep state across switching and the shell tells Bojo which tab is open and a summary of its state",
-      "status": "queued",
+      "status": "reported",
       "owner": "",
       "write_paths": [
         "northstar-os-ui/src/shell"
@@ -716,16 +726,20 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": [
+        "reports/ty/ux07_tabs.md",
+        "reports/ty/ux07b_tab_context.md"
+      ],
       "created_at": "2026-11-09T03:16:49+00:00",
       "updated_at": "2026-11-09T06:31:02+00:00",
-      "rank": 8
+      "rank": 8,
+      "note": "a report exists for this unit; the status is 'reported', not 'merged', because the queue was never updated when the work landed. Live verification is the separate job ux-0610-live-verify."
     },
     {
       "id": "ux-08-scene",
       "unit": "U",
       "title": "Scene engine wired to the shell: exactly one scene loaded per service, unloaded on switch, still-frame fallback when WebGL is unavailable, reduced-motion honoured",
-      "status": "queued",
+      "status": "reported",
       "owner": "",
       "write_paths": [
         "northstar-os-ui/src/scenes",
@@ -738,16 +752,19 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": [
+        "reports/ty/ux08_scene.md"
+      ],
       "created_at": "2026-11-09T03:16:49+00:00",
       "updated_at": "2026-11-09T06:31:02+00:00",
-      "rank": 9
+      "rank": 9,
+      "note": "a report exists for this unit; the status is 'reported', not 'merged', because the queue was never updated when the work landed. Live verification is the separate job ux-0610-live-verify."
     },
     {
       "id": "ux-09-design-studio-canvas",
       "unit": "U",
       "title": "Design Studio canvas workspace: content-type selector, tool rail, canvas with text/image/shapes/layers/snap/zoom/undo/autosave, properties and layers panel, PNG+PDF export, wired to the asset dashboard and dielines",
-      "status": "queued",
+      "status": "reported",
       "owner": "",
       "write_paths": [
         "northstar-os-ui/src/rooms",
@@ -761,16 +778,19 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": [
+        "reports/ty/ux09_canvas.md"
+      ],
       "created_at": "2026-11-09T03:35:26+00:00",
       "updated_at": "2026-11-09T06:31:02+00:00",
-      "rank": 10
+      "rank": 10,
+      "note": "a report exists for this unit; the status is 'reported', not 'merged', because the queue was never updated when the work landed. Live verification is the separate job ux-0610-live-verify."
     },
     {
       "id": "tool-scan-products",
       "unit": "D12",
       "title": "Implement the scan_products handler so Product Finder can drive the catalogue from Bojo",
-      "status": "queued",
+      "status": "reported",
       "owner": "",
       "write_paths": [
         "Northstar_backend"
@@ -782,16 +802,19 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": [
+        "reports/ty/reg03_handlers_built.md"
+      ],
       "created_at": "2026-11-09T06:40:09+00:00",
       "updated_at": "2026-11-09T06:40:09+00:00",
-      "rank": 11
+      "rank": 11,
+      "note": "a report exists for this unit; the status is 'reported', not 'merged', because the queue was never updated when the work landed. Live verification is the separate job ux-0610-live-verify."
     },
     {
       "id": "tool-compose-listing",
       "unit": "D12",
       "title": "Implement the compose_listing handler so ListingForge can compose a listing from Bojo",
-      "status": "queued",
+      "status": "reported",
       "owner": "",
       "write_paths": [
         "Northstar_backend"
@@ -803,16 +826,19 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": [
+        "reports/ty/reg03_handlers_built.md"
+      ],
       "created_at": "2026-11-09T06:40:09+00:00",
       "updated_at": "2026-11-09T06:40:09+00:00",
-      "rank": 12
+      "rank": 12,
+      "note": "a report exists for this unit; the status is 'reported', not 'merged', because the queue was never updated when the work landed. Live verification is the separate job ux-0610-live-verify."
     },
     {
       "id": "tool-build-dieline",
       "unit": "D12",
       "title": "Implement the build_dieline handler so Design Studio can produce a dieline from Bojo",
-      "status": "queued",
+      "status": "reported",
       "owner": "",
       "write_paths": [
         "Northstar_backend"
@@ -824,16 +850,19 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": [
+        "reports/ty/reg03_handlers_built.md"
+      ],
       "created_at": "2026-11-09T06:40:09+00:00",
       "updated_at": "2026-11-09T06:40:09+00:00",
-      "rank": 13
+      "rank": 13,
+      "note": "a report exists for this unit; the status is 'reported', not 'merged', because the queue was never updated when the work landed. Live verification is the separate job ux-0610-live-verify."
     },
     {
       "id": "tool-track-keywords",
       "unit": "D12",
       "title": "Implement the track_keywords handler so Keyword Tracker can track from Bojo",
-      "status": "queued",
+      "status": "reported",
       "owner": "",
       "write_paths": [
         "Northstar_backend"
@@ -845,16 +874,19 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": [
+        "reports/ty/reg03_handlers_built.md"
+      ],
       "created_at": "2026-11-09T06:40:09+00:00",
       "updated_at": "2026-11-09T06:40:09+00:00",
-      "rank": 14
+      "rank": 14,
+      "note": "a report exists for this unit; the status is 'reported', not 'merged', because the queue was never updated when the work landed. Live verification is the separate job ux-0610-live-verify."
     },
     {
       "id": "tool-watch-competitor",
       "unit": "D12",
       "title": "Implement the watch_competitor handler so Competitor Monitor can watch from Bojo",
-      "status": "queued",
+      "status": "reported",
       "owner": "",
       "write_paths": [
         "Northstar_backend"
@@ -866,16 +898,19 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": [
+        "reports/ty/reg03_handlers_built.md"
+      ],
       "created_at": "2026-11-09T06:40:09+00:00",
       "updated_at": "2026-11-09T06:40:09+00:00",
-      "rank": 15
+      "rank": 15,
+      "note": "a report exists for this unit; the status is 'reported', not 'merged', because the queue was never updated when the work landed. Live verification is the separate job ux-0610-live-verify."
     },
     {
       "id": "tool-margin-report",
       "unit": "D12",
       "title": "Implement the margin_report handler so Profitability can report from Bojo",
-      "status": "queued",
+      "status": "reported",
       "owner": "",
       "write_paths": [
         "Northstar_backend"
@@ -887,16 +922,19 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": [
+        "reports/ty/reg03_handlers_built.md"
+      ],
       "created_at": "2026-11-09T06:40:09+00:00",
       "updated_at": "2026-11-09T06:40:09+00:00",
-      "rank": 16
+      "rank": 16,
+      "note": "a report exists for this unit; the status is 'reported', not 'merged', because the queue was never updated when the work landed. Live verification is the separate job ux-0610-live-verify."
     },
     {
       "id": "tool-plan-campaign",
       "unit": "D12",
       "title": "Implement the plan_campaign handler so AdPilot can plan from Bojo",
-      "status": "queued",
+      "status": "reported",
       "owner": "",
       "write_paths": [
         "Northstar_backend"
@@ -908,14 +946,186 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": [
+        "reports/ty/reg03_handlers_built.md"
+      ],
       "created_at": "2026-11-09T06:40:09+00:00",
       "updated_at": "2026-11-09T06:40:09+00:00",
-      "rank": 17
+      "rank": 17,
+      "note": "a report exists for this unit; the status is 'reported', not 'merged', because the queue was never updated when the work landed. Live verification is the separate job ux-0610-live-verify."
+    },
+    {
+      "id": "sec-classify-history",
+      "title": "Classify credential assignments/URLs and non-machine emails/phones in history, counts only",
+      "status": "merged",
+      "rank": 0,
+      "evidence": [
+        "reports/ty/history_credential_classes.md",
+        "reports/ty/history_credential_classes.json",
+        "tools/history_credential_classify.py"
+      ],
+      "note": "88 URLs: 15 localhost, 42 fixture, 28 doc placeholder, 2 real host. 535 assignments: 274 code refs, 188 literals, 57 placeholders, 17 real-host lines. 674 emails and 319 phones classified. Three real hosts queued to needs_you SEC-1."
+    },
+    {
+      "id": "sec-wordcoffee-repos",
+      "title": "Scan the other nine public WordCoffee repos, counts only; list Pages hosts and recommend",
+      "status": "merged",
+      "rank": 0,
+      "evidence": [
+        "reports/ty/wordcoffee_repos_scan.md",
+        "reports/ty/wordcoffee_repos_scan.json",
+        "tools/wordcoffee_repo_scan.py"
+      ],
+      "note": "house-finder 12 generic_secret shapes -> make private now; word-coffee 12.4 MB public storefront -> candidate for private; seven can stay public; one is empty."
+    },
+    {
+      "id": "sec-rewrite-plan-extended",
+      "title": "Extend the rewrite plan (commit map, quiet window, re-point, hash remap) and evaluate recreate-private",
+      "status": "merged",
+      "rank": 0,
+      "evidence": [
+        "reports/ty/history_rewrite_plan.md",
+        "tools/remap_hashes.py",
+        "Northstar_backend/test_remap_hashes.py"
+      ],
+      "note": "90 files cite a hash (39 full, 2160 short candidates). 7 remap tests pass. Recommendation: delete-and-recreate-private with a git bundle first. Nothing run."
+    },
+    {
+      "id": "sec-keys-rotated-watcher",
+      "title": "Model-free 5-minute poll for state/security/keys_rotated.json, then retire + gitleaks + promotion test",
+      "status": "merged",
+      "rank": 0,
+      "evidence": [
+        "tools/keys_rotated_watch.py",
+        "reports/ty/keys_rotated_watch.log"
+      ],
+      "note": "Running detached (pid 4480). Idempotent per marker digest; honours STOP/PAUSE."
+    },
+    {
+      "id": "fix-stage-refused",
+      "title": "stage_guard: typed StageRefused replaces ValueError/RuntimeError tolerance; anything else aborts",
+      "status": "merged",
+      "rank": 0,
+      "evidence": [
+        "tools/seller_tester/stage_guard.py",
+        "tools/seller_tester/generators.py",
+        "Northstar_backend/test_stage_guard.py"
+      ],
+      "note": "17 tests pass; 38 with the composite suite. Two behavioural tests: undeclared ValueError aborts, declared cutout refusal is recorded."
+    },
+    {
+      "id": "fix-ppc-primary-action",
+      "title": "PPC's real primary action (upload report -> bulk ads file, plan persisted) shown on the AdPilot surface",
+      "status": "merged",
+      "rank": 0,
+      "evidence": [
+        "northstar-os-ui/src/pages/internal/AdPilot.jsx",
+        "tests/e2e/ppc_primary_action.spec.ts"
+      ],
+      "note": "Toast replaced by a toggle that mounts the real AmazonFiles flow. npm build 0 errors; e2e chromium-desktop 1 passed, chromium-mobile 1 passed."
+    },
+    {
+      "id": "fix-rescan-main-ef9cad1d",
+      "title": "Rescan main at ef9cad1d with the fixed config and no file-size cap",
+      "status": "merged",
+      "rank": 0,
+      "evidence": [
+        "reports/ty/main_rescan_ef9cad1d_large.json"
+      ],
+      "note": "3816 files, 8 over 1 MB, 116.14 MB scanned, 5 findings (the two exports). Large-file scanning changed nothing."
+    },
+    {
+      "id": "score-prompt-only-rescore",
+      "title": "Explain the exactly-90 prompt-only scores and rescore after the label-warp stage",
+      "status": "merged",
+      "rank": 0,
+      "evidence": [
+        "tools/prompt_only_rescore.py",
+        "reports/ty/prompt_only_rescore.md"
+      ],
+      "note": "90.0 = alpha_matte (0.10) failing alone against a 1.00 denominator. Six briefs in this run; per-mode n/pass/mean reported separately. Defect D-008 filed."
+    },
+    {
+      "id": "fix-launcher-director-agent",
+      "title": "Define the missing `director` agent so the launcher can start its lane",
+      "status": "merged",
+      "rank": 0,
+      "evidence": [
+        "opencode.jsonc",
+        "python tools/guard_agents.py -> OK (4 agents)",
+        "python scripts/ty_director.py --once -> state running, director_pid 21844"
+      ]
+    },
+    {
+      "id": "sel-coverage-44",
+      "title": "Seller reference coverage: build references for the 44 briefs that have none (rank-1 blocker)",
+      "status": "queued",
+      "rank": 1,
+      "write_paths": [
+        "renders/references/",
+        "ty/seller_briefs.json",
+        "tools/seller_tester/"
+      ],
+      "acceptance": "44 briefs gain a reviewed reference and a scored output; seller dimension computed over >= 50 briefs per mode, per-mode table only."
+    },
+    {
+      "id": "fix-alpha-matte-route",
+      "title": "D-008: stop grading alpha_matte on prompt-only briefs, or export the cut subject with alpha",
+      "status": "queued",
+      "rank": 2,
+      "write_paths": [
+        "tools/seller_tester/scorers.py",
+        "tools/seller_tester/briefs.py",
+        "Northstar_backend/test_seller_tester*.py"
+      ],
+      "acceptance": "Prompt-only scores stop clustering at a rubric constant; historical scores are recomputed and the delta is reported per brief."
+    },
+    {
+      "id": "ppc-upload-live",
+      "title": "Prove the PPC upload -> propose -> approve -> write -> download path end to end with a real session",
+      "status": "queued",
+      "rank": 3,
+      "write_paths": [
+        "Northstar_backend/design_studio_api.py",
+        "Northstar_backend/test_amazon_files_primary_action.py",
+        "northstar-os-ui/src/pages/internal/AdPilot.jsx"
+      ],
+      "acceptance": "A backend test uploads a bulksheet, approves a row, writes a change file, downloads bytes and proves the version increments."
+    },
+    {
+      "id": "ux-0610-live-verify",
+      "title": "Verify ux-06..ux-09 live on desktop and iPhone 12 WebKit; run the visual regression gate",
+      "status": "queued",
+      "rank": 4,
+      "write_paths": [
+        "tests/e2e/",
+        "reports/ty/"
+      ],
+      "acceptance": "Playwright desktop + iPhone 12 WebKit click paths pass on 8101; visual regression gate green with before/after images.",
+      "blocked_on": "desktop locked (ty_unlock_checks --status: no foreground window)"
+    },
+    {
+      "id": "fix-launcher-heartbeat-red",
+      "title": "D-010: heartbeat turns red when the stream's last line is an error",
+      "status": "queued",
+      "rank": 5,
+      "write_paths": [
+        "scripts/ty_director.py",
+        "Northstar_backend/test_ty_director*.py"
+      ]
+    },
+    {
+      "id": "fix-dev-start-pids",
+      "title": "D-009: dev-start.ps1 truncates and prunes dev-start.pids so provenance is provable",
+      "status": "queued",
+      "rank": 6,
+      "write_paths": [
+        "scripts/dev-start.ps1"
+      ]
     }
   ],
   "service_scores": {},
   "blocked": [],
-  "notes": "The queue is the ranked gap list (D5), not a to-do list. Until D4/D5 exist, the unit order in director_work_order.md is the ranking.",
+  "notes": "The queue is the ranked gap list (D5), not a to-do list. Until D4/D5 exist, the unit order in director_work_order.md is the ranking.\n2026-11-11T01:41:36+00:00 lease: no live director found (launcher children died with 'Agent not found: \"director\"'); this session claimed the queue. `director` agent defined. See reports/ty/unit_20261111_security_and_fixes.md.",
   "patch": "PATCH 2026-11-07 applied: 1 public-source rubric (no owner examples), 2 REA/clone-and-adopt with licence+vet+provenance, 3 D16 model scout, 4 GPU budget 80-90% VRAM / 92% ceiling / 2 GB RAM free. | PATCH 2: D17 tool bake-off (REA vs Craft Anything), Openverse as rubric reference source with per-image licence+URL."
 }
