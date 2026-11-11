@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-11T09:32:34+00:00",
+  "updated_at": "2026-11-11T09:37:20+00:00",
   "cycle": 3,
   "unit_in_flight": "",
   "unit_order": [
@@ -1983,7 +1983,7 @@
       "id": "fix-fullgen-white-composite",
       "unit": "U",
       "title": "D-022: a full generation has no white-composite step, so a main-image brief gets a generated sweep with a grey pool (10.2-25.6% of the frame)",
-      "status": "queued",
+      "status": "merged",
       "owner": "",
       "write_paths": [
         "tools/seller_tester/generators.py",
@@ -2000,9 +2000,9 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": "D-022 closed: _generate_cut_and_compose passes shadow=not flat(brief) to product_composite.place_product, whose default contact shadow was the grey pool on 255 white; a free brief keeps it; 4 checks written first (spy on the argument, delivered residue <=0.5%, and the shadowed control FAILS the same check); 4+91 tests; real re-render refused by the GPU budget (qwen2.5vl resident for another lane) so it is queued as d022-real-rerender; reports/ty/d022_fullgen_white_composite.md",
       "created_at": "2026-11-11T09:23:53+00:00",
-      "updated_at": "2026-11-11T09:23:57+00:00",
+      "updated_at": "2026-11-11T09:37:20+00:00",
       "rank": 2
     },
     {
@@ -2073,6 +2073,28 @@
       "evidence": "D-018 fixed: cutout-mask fallback fires only when the corner instrument is blind (<5% on a flat background); product_picture.build records product_box and writes <face>.cutout.png; re-scoring the 12 prompt-only artefacts leaves 12/12 on corner_colour so no published score moved; 8+8+74+89 tests. D-017 (plate shadow needs a real matte) NOT done, queued as fix-plate-shadow-matte. reports/ty/d018_fill_instrument.md",
       "created_at": "2026-11-11T06:58:31+00:00",
       "updated_at": "2026-11-11T08:44:13+00:00",
+      "rank": 3
+    },
+    {
+      "id": "d022-real-rerender",
+      "unit": "U",
+      "title": "D-022 measurement retirement: two full-generation briefs through a real lane at the model's seeds, residue before vs after",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "reports/ty/",
+        "renders/"
+      ],
+      "branch": "ty/d022-real-rerender",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-11T09:37:20+00:00",
+      "updated_at": "2026-11-11T09:37:20+00:00",
       "rank": 3
     },
     {

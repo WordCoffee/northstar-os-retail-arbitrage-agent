@@ -1038,7 +1038,12 @@ class CompositeGenerator:
                 background = _resize_png(scene["bytes"], target_px)
                 record["background_resampled"] = {"from": "scene", "to": target_px}
             placed = declined("place_product", composite.place_product, background, cut_png,
-                              scale=0.62, anchor=(0.5, 0.6))
+                              scale=0.62, anchor=(0.5, 0.6),
+                              # D-022: a main image has no shadow under the product — on
+                              # 255 white the composite's own contact shadow *is* the grey
+                              # pool (measured 2026-11-11: 10.2-25.6 % of the frame on eight
+                              # published artefacts). A free/scene brief keeps its shadow.
+                              shadow=not flat(brief))
             if str(brief.get("label_mode") or "") == "warp":
                 # The body was drawn without lettering; the label is composed and warped on here, so
                 # the copy is readable by construction rather than by luck.

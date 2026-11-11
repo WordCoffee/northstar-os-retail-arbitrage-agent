@@ -389,3 +389,13 @@ deliver a main image two ways and only one of them is a main image.
 white step (or refuse the brief on that route with the reason). Queued as
 `fix-fullgen-white-composite`.
 
+**Closed 2026-11-11** (`ty-dir-fix-fullgen-white-composite`). The cutout-on-white step was
+already there; what was missing is `shadow=False`. `_generate_cut_and_compose` now passes
+`shadow=not flat(brief)` to `product_composite.place_product`, whose default contact shadow
+(1.15 × width, 0.22 × height, blurred, `(18,14,10)`) **was** the grey pool on 255 white. A
+free/scene brief keeps its shadow. 4 checks written first: a main image composes with
+`shadow=False`, a free brief with `shadow=True`, the delivered main image measures ≤ 0.5 %
+residue with `check_matte_residue`, and the same composition with the shadow on **fails** the
+same check (the control). 4 + 91 tests green.
+`reports/ty/d022_fullgen_white_composite.md`.
+
