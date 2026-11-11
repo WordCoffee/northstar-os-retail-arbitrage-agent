@@ -741,6 +741,55 @@ class CompositeGenerator:
             return self.cutout_fn(rgb)
         return pc.cutout(rgb, method or self.method)
 
+    #: VRAM a BiRefNet matte needs inside the media lane (measured 3.7 s per 1536² plate).
+    MATTE_NEEDED_GB = 3.0
+
+    def _matte_cut(self, rgb: Any) -> Any:
+        """The product's real matte for a **generated** plate (D-025).
+
+        A generated plate carries its own cast shadow. It is attached to the product and
+        opaque, so a colour cut keeps it — measured on PO-001 at seed 2747063199: a
+        590 541 px grey band outside the product survived a grabcut that kept the shadow.
+        BiRefNet segments the object, not the light, so its alpha is the only one that
+        separates them (the same finding as D-017 on the app's plate route).
+
+        Raises :class:`product_cutout.MatteUnavailable` with the lane's own reason when a
+        matte cannot be produced. The caller records that reason and falls back to
+        grabcut: a substitution that is stated is not a silent one.
+        """
+        import product_cutout as pc  # noqa: PLC0415
+
+        started = time.time()
+        if self.cutout_fn is not None:
+            # A caller that injects the cut has already decided how it is made; applying a
+            # matte on top would make the injected cut a lie.
+            raise pc.MatteUnavailable("an injected cutout was supplied; no matte was run")
+
+        def as_cutout(alpha: Any, source: str) -> Any:
+            return pc.Cutout(method="birefnet", alpha=alpha, rgb=rgb,
+                             seconds=round(time.time() - started, 3), working_side=0,
+                             notes={"source": source})
+
+        if pc.lane_reachable():
+            # Already inside a lane (or one is resident and idle): use it, stop nothing.
+            return as_cutout(pc.matte_alpha(rgb), "running lane")
+
+        from tools import comfy_lane  # noqa: PLC0415
+
+        box: Dict[str, Any] = {}
+
+        def work() -> Any:
+            box["alpha"] = pc.matte_alpha(rgb)
+            return box["alpha"]
+
+        row = comfy_lane.lane(work, needed_gb=self.MATTE_NEEDED_GB, role="scene:matte",
+                             timeout=600.0)
+        if not row.get("ok") or "alpha" not in box:
+            raise pc.MatteUnavailable(
+                "the matte lane did not return an alpha: "
+                f"{row.get('reason') or row.get('error') or 'no reason given'}")
+        return as_cutout(box["alpha"], "fresh matte lane")
+
     def _layout_stage(self, brief: Dict[str, Any], placed: Dict[str, Any],
                       record: Dict[str, Any]) -> Dict[str, Any]:
         """Run the deterministic stage for the situations a free render cannot satisfy.
@@ -1022,7 +1071,23 @@ class CompositeGenerator:
         try:
             plate = Image.open(BytesIO(scene["bytes"])).convert("RGB")
             array = np.asarray(plate)
-            cut = declined("cutout", self._cut, array, method="grabcut")
+            # D-025: a generated plate carries the model's own cast shadow, attached and
+            # opaque, so a colour cut keeps it. Try the real matte first and record what
+            # happened either way; grabcut is the fallback, never the silent default.
+            cut = None
+            matte_reason = None
+            try:
+                cut = self._matte_cut(array)
+            except pc.MatteUnavailable as exc:
+                matte_reason = str(exc)
+            record["cutout_matte"] = {
+                "requested": "birefnet",
+                "method": "birefnet" if cut is not None else "grabcut",
+                "reason": matte_reason,
+            }
+            record["cutout_method"] = record["cutout_matte"]["method"]
+            if cut is None:
+                cut = declined("cutout", self._cut, array, method="grabcut")
             if int(np.asarray(cut.alpha).sum()) == 0:
                 raise StageRefused("the cutout is empty: the generated plate has no separable subject")
             cut_png = declined("rgba_png_bytes", pc.rgba_png_bytes, cut.rgb, cut.alpha)

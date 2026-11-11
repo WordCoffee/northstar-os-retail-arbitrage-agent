@@ -201,6 +201,20 @@ def _product_mask_from_cutout(cutout: Any, product_box: Optional[Any],
     top, bottom = max(0, top), min(frame_h, bottom)
     if right - left < 2 or bottom - top < 2:
         return None
+    if isinstance(cutout, (bytes, bytearray)):
+        # The cutout saved beside an artefact is a PNG on disk; a caller that hands the
+        # checker those bytes gets the same answer as one that decoded them first.
+        # (Measured 2026-11-11: passing `path.read_bytes()` made np.asarray produce a
+        # 1-D array, so this returned None and the residue check was *skipped* — a
+        # silent skip is how a masked shadow passes as a clean picture.)
+        from io import BytesIO
+
+        from PIL import Image as _Image
+
+        try:
+            cutout = _Image.open(BytesIO(cutout)).convert("RGBA")
+        except Exception:  # noqa: BLE001 - unreadable bytes are "no silhouette"
+            return None
     array = np.asarray(cutout)
     if array.ndim != 3 or array.shape[2] < 4:
         return None
