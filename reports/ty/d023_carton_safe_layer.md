@@ -1,4 +1,4 @@
-# D-023 — cartons carry their safe layer, and the packaging lane goes 6/8 to 8/8
+# D-023 — cartons carry their safe layer, and the packaging lane goes 2/8 to 8/8
 
 Unit `fix-carton-safe-layer`. Tag `ty-dir-fix-carton-safe-layer`. Rollback point
 `rollback/pre-d023-20261111` at `bfbd71a1`.
