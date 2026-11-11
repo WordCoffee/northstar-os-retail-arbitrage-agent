@@ -10,6 +10,26 @@ A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.m
 > and `reports/ty/handoff.md`, then continue from the first unfinished unit. No
 > questions, no reports between cycles. Idle means re-plan.
 
+## Position, 2026-11-11 cycle 18 — cartons carry their safe layer, and the packaging lane is 8/8
+
+Unit report: `reports/ty/d023_carton_safe_layer.md`. Tag `ty-dir-fix-carton-safe-layer`.
+
+| # | job | result |
+|---|---|---|
+| 1 | `fix-carton-safe-layer` (D-023, rank 1) — `package_readiness.REQUIRED_LAYERS` needs trim, fold **and safe**, and `build_carton` never emitted `safe`; the app blocked every carton and sleeve it printed | **D-023 closed.** `_panel_blank(..., safe_mm=)` writes one safe rectangle per body face, inset from the trim and from both folds; `build_carton(..., safe_mm=)` and all three carton templates declare it (default 3 mm) and `build_from_template` passes it through |
+
+**Measured on the same eight briefs, same engine: 2/8 → 8/8 passed, mean 78.6 → 100.0.**
+Safe margins are now readable per artefact: 5 mm on the two doypacks, 3 mm on the six
+cartons. `reports/ty/packaging_pass.json`, artefacts in `renders/packaging/`.
+
+**Tests:** 13 in `test_carton_safe_layer.py` (written first — including "each safe rectangle
+sits inside the trim by the margin on all four sides" measured against the trim polyline's
+own bounding box, and "the margin is the brief's own number"), 80 + 45 related green.
+
+**Next, in rank order:** `d022-real-rerender` → `pack-02-apparel-flat-print` →
+`reference-depth` → `pack-03-boxart-forms` → `block3-workspaces` → `block4-seller-tests` →
+`block5-production-hardening` → `block7-verification` → D-019.
+
 ## Position, 2026-11-11 cycle 17 — packaging is a real lane, and the app's own gate blocks six of eight
 
 Unit report: `reports/ty/sel04_packaging.md`. Tag `ty-dir-sel-04-packaging`.
@@ -1201,3 +1221,5 @@ that, re-score and re-plan again. Empty queue means re-plan, never idle.
 - 2026-11-11T07:05:17+00:00 launcher: director session ended (session 21024 gone; launcher restarting).
 
 - 2026-11-11T09:40:08+00:00 launcher: director session ended (session 25952 ended after output; launcher restarting).
+
+- 2026-11-11T09:45:10+00:00 launcher: director session ended (session 18732 gone; launcher restarting).
