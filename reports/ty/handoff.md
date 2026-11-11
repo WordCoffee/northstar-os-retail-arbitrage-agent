@@ -903,6 +903,39 @@ are true. No bar was changed. `fix-label-conform` is rank 1.
 39 tuning, disjoint image split. **Depth is thin — 1 to 3 reviewed images per category** — and is
 rank 5 (`reference-depth`). Neck Nirvana stays unscorable.
 
+## LAUNCH PUSH (Nov 11, later block) — G1 for Golden Goose: 3 gates → 4
+
+**Lease:** held by the owner session (pid 540, the opencode process serving this session); no second
+director was running, so the queue continued in place.
+
+**G1 proved by two fixes, both measured through the real UI:**
+
+1. `POST /golden-goose/evaluate` computed a decision and **never stored it**. The item and its
+   decision are now written org-scoped in the same step that returns them (`persisted: true`).
+2. The Evaluate panel **crashed the whole page** the moment a result arrived: it rendered
+   `resale_score`, an object, as a React child. No click path had ever completed here, which is why
+   nobody had seen it. Every value in the result block is coerced to text at the edge now, and an
+   unknown shape reads UNKNOWN rather than taking the tree down.
+
+Evidence: `tests/e2e/g1_golden_goose_persist.spec.ts` — evaluate (sample row, which can never be
+purchase-ready) → reload → the item is in the persisted queue → its own review route reads it back.
+**2 passed** (chromium-desktop and chromium-mobile). 58 tests green on the golden-goose suites;
+`npm run build` 0 errors.
+
+Also fixed in this block: the dev stack had **five** `dev-start.ps1` supervisors running from earlier
+sessions, each with a `finally` that kills recorded pids — which is why the backend on 8000 had gone
+down and stayed down. All were stopped and exactly one was started; `/health` is 200 on
+127.0.0.1:8000. Defect filed: the script has no single-instance guard.
+
+Core services launch-ready: **0 of 6** — Golden Goose is at 4 of 5 gates, and the last one (G5) is
+the verifier reproducing it (Block 7).
+
+| next | unit |
+|---|---|
+| 1 | `g1-research` — product-finder query → persist → read back |
+| 2 | `g1-design-studio` — generate → persist → read back (GPU lane) |
+| 3 | `g1-listings` — compose → persist → read back |
+
 ## Position, 2026-11-11 (cycle 2)
 
 Unit report: `reports/ty/unit_20261111_security_and_fixes.md`. Nine units merged, three defects filed.

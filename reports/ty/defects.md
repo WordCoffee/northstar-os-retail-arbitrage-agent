@@ -222,6 +222,31 @@ as a normal short turn, and the stream file is not read by anything.
 heartbeat red when the stream's last line is an error, so this can never again look healthy for a
 day.
 
+## D-012 — five dev-start supervisors, and no single-instance guard (2026-11-11)
+
+**Measured:** a process query for `dev-start.ps1` returned **five** live supervisors (pids 1612, 4040,
+9284, 21648, 16108) started by different sessions. Each ends in a `finally` that stops the pids
+recorded in `dev-start.pids`, so the last one to die kills the servers the current one is using. The
+backend on 8000 was down while 8101 still served: the UI answered and every `/api` call failed.
+
+**Fix applied:** all supervisors stopped, exactly one started, `/health` 200 on 127.0.0.1:8000.
+**Fix still owed:** a single-instance lock in `scripts/dev-start.ps1`, and a truncating rewrite of
+`dev-start.pids` rather than an append (D-009).
+
+## D-013 — the Golden Goose result block crashed the page it was reporting to (2026-11-11)
+
+**Measured:** clicking Evaluate took the whole SPA to a blank screen.
+`pageerror: Objects are not valid as a React child (found: object with keys {scorer_version,
+code_name, ...})`. The result block rendered `resale_score`, which the API returns as a scored
+payload, directly inside a `<span>`.
+
+**Why it survived:** no click path had ever completed on this panel, so the crash was never reached.
+The launch gate that read "no click path" was describing exactly this.
+
+**Fix:** every value the block renders is coerced to text at the edge, an unknown shape reads
+UNKNOWN, and non-string warnings render as their readable field. Pinned by
+`tests/e2e/g1_golden_goose_persist.spec.ts`.
+
 ## D-011 — a lease takeover has a race window of one heartbeat (2026-11-11)
 
 **Measured:** stopping a live auto director (pid 26000) at 06:09Z and writing the lease at 06:10Z

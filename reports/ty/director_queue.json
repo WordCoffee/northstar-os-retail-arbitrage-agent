@@ -788,7 +788,7 @@
       "evidence": "heartbeat.red + stream health; 25 tests in test_ty_director_launcher.py; 243 historical error lines would now be red",
       "created_at": "2026-11-11T02:43:16+00:00",
       "updated_at": "2026-11-11T02:46:44+00:00",
-      "rank": 0
+      "rank": 16
     },
     {
       "id": "fix-dev-start-pids",
@@ -809,7 +809,7 @@
       "evidence": "dry run keeps the live pid, prunes 999999, names ui/backend by listener (15472/11664); role map; 4 tests",
       "created_at": "2026-11-11T02:43:16+00:00",
       "updated_at": "2026-11-11T03:13:04+00:00",
-      "rank": 0
+      "rank": 17
     },
     {
       "id": "rerender-prompt-only",
@@ -1058,7 +1058,7 @@
       "evidence": "",
       "created_at": "2026-11-11T17:43:51+00:00",
       "updated_at": "2026-11-11T17:43:51+00:00",
-      "rank": 0
+      "rank": 6
     },
     {
       "id": "fix-seller-offer-caption",
@@ -1080,7 +1080,7 @@
       "evidence": "",
       "created_at": "2026-11-11T17:43:51+00:00",
       "updated_at": "2026-11-11T17:43:51+00:00",
-      "rank": 0
+      "rank": 7
     },
     {
       "id": "fix-chat-composer-spec",
@@ -1101,7 +1101,7 @@
       "evidence": "",
       "created_at": "2026-11-11T17:43:51+00:00",
       "updated_at": "2026-11-11T17:43:51+00:00",
-      "rank": 0
+      "rank": 8
     },
     {
       "id": "fix-golden-goose-scoring",
@@ -1123,7 +1123,7 @@
       "evidence": "",
       "created_at": "2026-11-11T17:43:51+00:00",
       "updated_at": "2026-11-11T17:43:51+00:00",
-      "rank": 0
+      "rank": 9
     },
     {
       "id": "fix-beta-complete",
@@ -1289,7 +1289,7 @@
       "evidence": "label_warp.face_quad measures the face on the silhouette body band and clips every pixel to the mask (0 px outside on 12/12); product_composite drops detached specks and thin attached runs (PO-001 230 rows); 12 prompt-only briefs re-rendered at pinned seeds 12/12 mean 100.0; local judge 12/12 label-on-pack, 10/12 no-stray (D-019 filed for scene strays); 12+97 tests; reports/ty/label_conform.md",
       "created_at": "2026-11-11T07:35:10+00:00",
       "updated_at": "2026-11-11T08:21:08+00:00",
-      "rank": 1
+      "rank": 10
     },
     {
       "id": "fix-matte-residue-check",
@@ -1758,7 +1758,7 @@
       "evidence": "sel-04 closed as a real lane: 8 packaging briefs over 4 templates, build through design_studio_print (geometry gate) + render_svg + render_pdf, 7 mechanical checks (sheet, panels incl. carton face-span identity, bleed, safe, layers, PDF page, app readiness) and a gap file; measured 8 scored / 2 passed / 6 failed / mean 78.6, the 6 failures are D-023 (build_carton emits no safe layer and the app's own readiness gate blocks every carton); CLI 'python -m tools.seller_tester packaging'; 9 tests; reports/ty/sel04_packaging.md",
       "created_at": "2026-11-08T21:21:18+00:00",
       "updated_at": "2026-11-11T09:44:00+00:00",
-      "rank": 5
+      "rank": 18
     },
     {
       "id": "pack-02-apparel-flat-print",
@@ -1811,7 +1811,7 @@
       "evidence": "3 thin categories deepened through reference_coverage.fetch (Openverse, CC0/BY/BY-SA, licence+URL+source per row): 6 fetched, 5 kept, 1 refused on visual review (clipart body wash); ceramic_mug 2->3 and food_jar 1->3 usable depth; acceptance NOT fully met: the tool's depth table still shows pet_product 1, toy 2, tool 2, small_appliance 1, electronics_accessories 1 because 14 rows carry earlier rejections; queued as reference-review-backfill; reports/ty/reference_depth.md",
       "created_at": "2026-11-11T07:35:10+00:00",
       "updated_at": "2026-11-11T10:01:54+00:00",
-      "rank": 5
+      "rank": 11
     },
     {
       "id": "reference-review-backfill",
@@ -1909,7 +1909,7 @@
       "evidence": "scene_workspaces block (6 services + default_scene) added additively to ty/northstar_workspaces.json; one data-driven WorkspaceFrame mounted in WorkspacePanels; new /product-pictures route. e2e: 56 passed across desktop-chromium AND iphone-12-webkit (28 each), default-scene fallback for /hub and /keywords. npm test:ui 231/231 (was 221), build 0 errors. shell-chrome route count 72->73 with the reason in the comment. Lane C; reports/ty/lane_block3.md; tag ty-dir-block3-workspaces",
       "created_at": "2026-11-11T07:35:10+00:00",
       "updated_at": "2026-11-11T16:59:40+00:00",
-      "rank": 6
+      "rank": 12
     },
     {
       "id": "design-motifs",
@@ -2000,7 +2000,7 @@
       "evidence": "4 non-image paths scored: listing 2/2 100.0, ppc 1/1 100.0 (upload->bulk->download sha256 match), golden_goose 100.0, research 100.0; services run 5 scored/5 passed/0 refused, network none. D-019 split: PO-007 was an acceptance bug (population-scoped, panel-graded, diagnostic), PO-006 is an app bug left alone (4 detached dashes inside the silhouette, product_composite.py). scorecards drift corrected (design-studio 89.5, seller 96.2/32). 24 new tests + 8 e2e; 107 green. reports/ty/lane_block4.md; tag ty-dir-block4-seller-tests",
       "created_at": "2026-11-11T07:35:10+00:00",
       "updated_at": "2026-11-11T16:47:10+00:00",
-      "rank": 7
+      "rank": 13
     },
     {
       "id": "fix-tabbar-a11y",
@@ -2064,7 +2064,7 @@
       "evidence": "",
       "created_at": "2026-11-11T17:06:27+00:00",
       "updated_at": "2026-11-11T17:06:35+00:00",
-      "rank": 8
+      "rank": 4
     },
     {
       "id": "ux-08-scene",
@@ -2109,7 +2109,7 @@
       "evidence": "",
       "created_at": "2026-11-11T17:15:09+00:00",
       "updated_at": "2026-11-11T17:15:09+00:00",
-      "rank": 9
+      "rank": 5
     },
     {
       "id": "ux-09-design-studio-canvas",
@@ -2176,7 +2176,7 @@
       "evidence": "docs/PRODUCTION_READINESS.md (30 rows, a command per row, doc checked against assertion ids) + production_assert.py (12 checks, --json/--only/--strict, 12 pass 0 fail 10 advisory, exit 0) + production_health.py (/readyz, 503 when not ready, probes exempt from the rate limiter) + sqlite_backup.py (VACUUM INTO, manifest, verify, restore; 6 stores/60034 rows, 2 restored). Measured: 78 hashed assets 0 maps, 3300 files scanned, 30/min+429. --strict still fails on 7 .env keys and the compose healthcheck, registered in the doc. Fresh-checkout run of 8 suites: 124 passed 2 skipped. reports/ty/lane_block5.md; tag ty-dir-block5-hardening",
       "created_at": "2026-11-11T07:35:10+00:00",
       "updated_at": "2026-11-11T17:32:37+00:00",
-      "rank": 11
+      "rank": 14
     },
     {
       "id": "tool-compose-listing",
@@ -2240,7 +2240,7 @@
       "evidence": "Independent session, read-only. 4 AGREE (production assertion 12/0/10, seller depth 21 scored/19 passed with design-studio 96.2 unblended, scorecard counts, registry boundaries) and 3 FAILED, all now closed: (1) no rollback tags for block3/block4/block5/ui-defects/149ca718 - 29 restore points created retroactively at the exact parents and a commit-matching checker + test now enforce it (42 unit tags, 0 gaps); (2) readiness suite fails as issued because this machine's shared pytest temp root is owned by another principal - documented in docs/PRODUCTION_READINESS.md 4a, one elevated owner action filed; (3) dev-start.pids.json was untracked and unignored - now ignored. Fresh worktree at HEAD: 129 passed 2 skipped. reports/ty/verify_block7_20261111.md; tag ty-dir-rollback-guard",
       "created_at": "2026-11-11T07:35:10+00:00",
       "updated_at": "2026-11-11T17:57:10+00:00",
-      "rank": 13
+      "rank": 15
     },
     {
       "id": "tool-track-keywords",
@@ -2325,6 +2325,51 @@
       "created_at": "2026-11-09T06:40:09+00:00",
       "updated_at": "2026-11-11T02:43:16+00:00",
       "rank": 17
+    },
+    {
+      "id": "g1-golden-goose",
+      "title": "G1: Golden Goose evaluate persists and reads back after reload",
+      "status": "merged",
+      "rank": 0,
+      "evidence": [
+        "Northstar_backend/foundation/api/router.py",
+        "northstar-os-ui/src/pages/internal/GoldenGoose.jsx",
+        "tests/e2e/g1_golden_goose_persist.spec.ts"
+      ],
+      "note": "evaluate stored item+decision org-scoped; the panel no longer crashes rendering an object. 2 e2e passed desktop+mobile; gates 3->4."
+    },
+    {
+      "id": "g1-research",
+      "title": "G1: research query persists and reads back (product-finder)",
+      "status": "queued",
+      "rank": 1,
+      "write_paths": [
+        "Northstar_backend/",
+        "northstar-os-ui/src/",
+        "tests/e2e/"
+      ]
+    },
+    {
+      "id": "g1-design-studio",
+      "title": "G1: generate a picture through the UI, persist, read back",
+      "status": "queued",
+      "rank": 2,
+      "write_paths": [
+        "northstar-os-ui/src/",
+        "Northstar_backend/",
+        "tests/e2e/"
+      ]
+    },
+    {
+      "id": "g1-listings",
+      "title": "G1: compose and persist a listing through the UI",
+      "status": "queued",
+      "rank": 3,
+      "write_paths": [
+        "northstar-os-ui/src/",
+        "Northstar_backend/",
+        "tests/e2e/"
+      ]
     }
   ],
   "service_scores": {},
