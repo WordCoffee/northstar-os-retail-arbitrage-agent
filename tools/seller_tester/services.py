@@ -30,6 +30,12 @@ is skipped is reported as skipped and is not counted as a pass, a refusal is
 recorded with the engine's own words, and the path score is the share of graded
 checks that passed (0-100). Nothing is averaged across paths.
 
+**Who owns which path.** A path is measured, not attributed: the fixture file's
+`service_attribution` block names the one service whose declared code path
+produces each artefact, and names *none* where no service does.
+`tools/seller_scores.py` reads that block when it buckets the pass per service, so
+a path cannot quietly lend its sample to a service that does not produce it.
+
     python -m tools.seller_tester services
     python -m tools.seller_tester services --only ppc,golden_goose
 """
@@ -80,6 +86,26 @@ def load_fixtures(path: str | Path | None = None) -> Dict[str, Any]:
     for name in PATHS:
         payload.setdefault(name, [])
     return payload
+
+
+def load_attribution(path: str | Path | None = None) -> Dict[str, Dict[str, Any]]:
+    """Which service each path belongs to, as the fixture declares it.
+
+    An entry with ``"service": null`` is a path that no service owns; it is kept
+    so the absence is a recorded statement rather than a missing key.
+    """
+    payload = load_fixtures(path)
+    block = payload.get("service_attribution") or {}
+    out: Dict[str, Dict[str, Any]] = {}
+    for name, entry in block.items():
+        if isinstance(entry, dict):
+            out[str(name)] = dict(entry)
+        elif isinstance(entry, str):
+            out[str(name)] = {"service": entry}
+        else:
+            out[str(name)] = {"service": None}
+    return out
+
 
 
 def _ok(check: str, **kw: Any) -> Dict[str, Any]:
@@ -205,6 +231,32 @@ def run_listing(brief: Dict[str, Any], *, work_dir: Path) -> Dict[str, Any]:
         if not invented else
         _bad("no_invented_numbers",
              f"numbers with no source in the brief's facts: {invented}"))
+    # A draft that carries a claim the seller cannot support must come out clean.
+    # The brief names the phrases (`must_not_keep`); a phrase it names but its own
+    # draft does not carry is a stale brief and fails rather than passing vacuously.
+    must_not_keep = [str(p) for p in (brief.get("must_not_keep") or []) if str(p).strip()]
+    if not must_not_keep:
+        checks["draft_claims_removed"] = _skip(
+            "draft_claims_removed",
+            "this brief declares no claim in the seller's draft to remove")
+    else:
+        draft_text = " ".join([str(brief.get("title") or ""),
+                               *[str(b) for b in (brief.get("bullets") or [])],
+                               str(brief.get("description") or "")]).lower()
+        absent = [p for p in must_not_keep if p.lower() not in draft_text]
+        kept = [p for p in must_not_keep if p.lower() in everything.lower()]
+        if absent:
+            checks["draft_claims_removed"] = _bad(
+                "draft_claims_removed",
+                f"the brief declares {absent} but its own draft does not carry it")
+        elif kept:
+            checks["draft_claims_removed"] = _bad(
+                "draft_claims_removed",
+                f"the proposal repeats claim(s) the seller's draft carried: {kept}")
+        else:
+            checks["draft_claims_removed"] = _ok("draft_claims_removed",
+                                                removed=must_not_keep)
+
     reasons = [str(r) for r in (data.get("reasons") or [])]
     checks["reasons_recorded"] = (
         _ok("reasons_recorded", count=len(reasons)) if reasons else
@@ -509,17 +561,32 @@ def run_research(brief: Dict[str, Any], *, work_dir: Path) -> Dict[str, Any]:
         _bad("single_source_labelled",
              "no single-source claim was labelled, or a label names no source"))
     conflicts = validation.get("conflicts") or []
-    want_values = [str(v) for v in ((brief.get("expect") or {}).get("conflict_values") or [])]
-    surfaced = [conflict for conflict in conflicts
-                if want_values and all(any(value in str(key)
-                                           for key in (conflict.get("values") or {}))
-                                       for value in want_values)]
-    checks["numeric_conflict_surfaced"] = (
-        _ok("numeric_conflict_surfaced", conflicts=surfaced)
-        if surfaced else
-        _bad("numeric_conflict_surfaced",
-             f"the disagreeing figures {want_values} were not surfaced as one conflict: "
-             f"{conflicts}"))
+    declared = (brief.get("expect") or {}).get("conflict_values")
+    want_values = [str(v) for v in (declared or [])]
+    if declared is None:
+        checks["numeric_conflict_surfaced"] = _skip(
+            "numeric_conflict_surfaced",
+            "the brief does not say whether its sources agree or disagree")
+    elif not want_values:
+        # The corpus was declared to agree: surfacing a conflict here is the bug.
+        checks["numeric_conflict_surfaced"] = (
+            _ok("numeric_conflict_surfaced", conflicts=[], declared="sources agree")
+            if not conflicts else
+            _bad("numeric_conflict_surfaced",
+                 f"the brief's sources were declared to agree, but the graph surfaced "
+                 f"{len(conflicts)} conflict(s): {conflicts}"))
+    else:
+        surfaced = [conflict for conflict in conflicts
+                    if all(any(value in str(key)
+                               for key in (conflict.get("values") or {}))
+                           for value in want_values)]
+        checks["numeric_conflict_surfaced"] = (
+            _ok("numeric_conflict_surfaced", conflicts=surfaced)
+            if surfaced else
+            _bad("numeric_conflict_surfaced",
+                 f"the disagreeing figures {want_values} were not surfaced as one conflict: "
+                 f"{conflicts}"))
+
     summary = str(result.get("summary") or "")
     checks["headline_is_a_measurement"] = (
         _ok("headline_is_a_measurement", summary=summary)
@@ -565,6 +632,7 @@ def run_pass(*, fixtures: Optional[str | Path] = None, only: Optional[str] = Non
              now: Optional[str] = None) -> Dict[str, Any]:
     """Run each selected path over every fixture of its kind. A refusal is recorded."""
     payload = load_fixtures(fixtures)
+    attribution = load_attribution(fixtures)
     selected = parse_only(only)
     started = time.time()
     results: List[Dict[str, Any]] = []
@@ -595,6 +663,7 @@ def run_pass(*, fixtures: Optional[str | Path] = None, only: Optional[str] = Non
     for name in PATHS:
         rows = [row for row in results if row["path"] == name]
         scored = [row for row in rows if row.get("status") == "scored"]
+        owner = attribution.get(name) or {}
         by_path[name] = {
             "selected": len(rows) if name in selected else 0,
             "scored": len(scored),
@@ -603,6 +672,8 @@ def run_pass(*, fixtures: Optional[str | Path] = None, only: Optional[str] = Non
             "mean_score": (round(sum(float(row["score"]) for row in scored) / len(scored), 1)
                            if scored else None),
             "measured": name in selected,
+            "service": owner.get("service"),
+            "service_aliases": owner.get("aliases") or [],
         }
     summary = {
         "generated_at": now or time.strftime("%Y-%m-%dT%H:%M:%S"),
@@ -628,9 +699,9 @@ def run_pass(*, fixtures: Optional[str | Path] = None, only: Optional[str] = Non
 
 
 __all__ = ["DEFAULT_FIXTURES", "DEFAULT_OUT", "DEFAULT_WORK_DIR", "PATHS",
-           "RECORDED_PROVIDER_NOTE", "RUNNERS", "ServiceRefused", "load_fixtures",
-           "parse_only", "run_golden_goose", "run_listing", "run_pass", "run_ppc",
-           "run_research", "score_checks"]
+           "RECORDED_PROVIDER_NOTE", "RUNNERS", "ServiceRefused", "load_attribution",
+           "load_fixtures", "parse_only", "run_golden_goose", "run_listing", "run_pass",
+           "run_ppc", "run_research", "score_checks"]
 
 
 

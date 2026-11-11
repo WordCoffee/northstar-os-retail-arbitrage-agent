@@ -13,7 +13,115 @@
       }
     }
   },
-  "at": "2026-11-11T06:57:54+00:00",
+  "at": "2026-11-11T17:38:34+00:00",
+  "service_path": {
+    "population": "service-path",
+    "source": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\seller\\services_proof.json",
+    "aliases": {
+      "golden-goose": "goldengoose"
+    },
+    "attribution": {
+      "listing": {
+        "service": "listingforge",
+        "population": "service-path",
+        "why": "the path calls bojo_tools.publishing.compose_listing -> reasoning_tasks.listing_proposal; ty/services.json gives listingforge the compose_listing tool and calls it ListingForge copy"
+      },
+      "ppc": {
+        "service": "design-studio",
+        "population": "service-path",
+        "why": "upload -> proposal -> approve -> write -> download are the /api/design-studio/amazon-files/* endpoints in design_studio_api.py, and the surface is Design Studio -> Ads -> Amazon files (northstar-os-ui/src/pages/internal/design-studio/AmazonFiles.jsx). AdPilot only reads the imported bulksheets, so it is not the producer of this artefact.",
+        "never_blended": "design-studio's published seller score comes from the image pass. These rows are a separate population and are reported, never averaged with it."
+      },
+      "golden_goose": {
+        "service": "goldengoose",
+        "aliases": [
+          "golden-goose"
+        ],
+        "population": "service-path",
+        "why": "the path calls bojo_tools.sourcing.golden_goose_scan, which is the golden_goose_scan tool. ty/services.json declares that same tool, and the same purpose text, for both 'goldengoose' and 'golden-goose', so the two ids are one product under two names rather than two services.",
+        "alias_note": "the alias is declared here, not inferred: it adds no brief and no sample, it reuses the one sample the registry's own duplicate id describes."
+      },
+      "research": {
+        "service": null,
+        "population": null,
+        "why": "no service in ty/services.json declares a path that reaches research_graph.research: the module is exercised by its own test only, and nothing in the registry or the backend calls it. The pass is measured and reported, but attributing it to product-finder (or anything else) would be inventing an owner."
+      }
+    },
+    "services": {
+      "listingforge": {
+        "population": "service-path",
+        "mean": 100.0,
+        "scored": 6,
+        "passed": 6,
+        "paths": [
+          "listing"
+        ],
+        "at": "2026-11-11T11:38:26"
+      },
+      "design-studio": {
+        "population": "service-path",
+        "mean": 100.0,
+        "scored": 5,
+        "passed": 5,
+        "paths": [
+          "ppc"
+        ],
+        "at": "2026-11-11T11:38:26"
+      },
+      "goldengoose": {
+        "population": "service-path",
+        "mean": 95.6,
+        "scored": 5,
+        "passed": 3,
+        "paths": [
+          "golden_goose"
+        ],
+        "at": "2026-11-11T11:38:26"
+      }
+    },
+    "paths": {
+      "listing": {
+        "scored": 6,
+        "passed": 6,
+        "service": "listingforge",
+        "mean": 100.0,
+        "why_unattributed": null
+      },
+      "ppc": {
+        "scored": 5,
+        "passed": 5,
+        "service": "design-studio",
+        "mean": 100.0,
+        "why_unattributed": null
+      },
+      "golden_goose": {
+        "scored": 5,
+        "passed": 3,
+        "service": "goldengoose",
+        "mean": 95.6,
+        "why_unattributed": null
+      },
+      "research": {
+        "scored": 5,
+        "passed": 5,
+        "service": null,
+        "mean": 100.0,
+        "why_unattributed": "no service in ty/services.json declares a path that reaches research_graph.research: the module is exercised by its own test only, and nothing in the registry or the backend calls it. The pass is measured and reported, but attributing it to product-finder (or anything else) would be inventing an owner."
+      }
+    },
+    "unattributed": [
+      "research"
+    ],
+    "refused": [],
+    "at": "2026-11-11T11:38:26",
+    "command": "python -m tools.seller_tester services",
+    "pass": {
+      "population": "service-path",
+      "scored": 16,
+      "passed": 14,
+      "paths_measured": 4
+    }
+  },
   "pipeline": {
     "rendered_by": "tools/seller_tester ProductPipelineGenerator -> product_picture.build",
     "product_renders_with": "Northstar_backend/product_picture.py::build (brand_art + mockup_compositor + mockup_quality.assert_legible)",
@@ -33,14 +141,11 @@
       "passed": 0,
       "mean_score": 22.1
     },
-    "matte_residue_audit": {
-      "at": "2026-11-11",
-      "check": "check_matte_residue (D-020)",
-      "source": "reports/ty/d020_residue_audit.json",
-      "artefacts_checked": 8,
-      "newly_failed": 8,
-      "mean_score_after_checked": 90.0,
-      "note": "The published mean was scored before the background was measured off the corners; the 12 full-generation artefacts re-scored with the residue check are 8 checked, 8 failed, residue 10.2-25.6% of the frame, mean 90.0. The other 20 artefacts are drawn-plate product_picture outputs whose silhouette includes the plate shadow, so the check cannot see it there (D-021). The published mean is provisional until a re-render on the fixed routes."
+    "service_path": {
+      "population": "service-path",
+      "scored": 16,
+      "passed": 14,
+      "paths_measured": 4
     }
   },
   "ceiling": {

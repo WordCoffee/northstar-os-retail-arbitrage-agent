@@ -1,6 +1,31 @@
 {
-  "version": 1,
-  "note": "Offline fixtures for the four non-image service paths. Nothing here contacts a network. The PPC sheet is a bulksheet the seller uploads; the Golden Goose candidates are wholesale rows the seller's buyer enters; the research corpus is a small local document set; each listing brief is the product facts the seller has plus a recorded model answer, so the app's own deterministic normalisation is exercised without a paid call.",
+  "version": 2,
+  "note": "Offline fixtures for the four non-image service paths. Nothing here contacts a network, and no brief names an Amazon host: the bulksheet is a file the seller already downloaded, the Golden Goose candidates are rows the seller's buyer typed in, the research corpus is a local document set, and each listing brief is the product facts the seller has plus a recorded model answer, so the app's own deterministic normalisation is exercised without a paid call. Five briefs per path at minimum, each one a different situation with its own constraints, ordered from ordinary to awkward.",
+  "service_attribution": {
+    "listing": {
+      "service": "listingforge",
+      "population": "service-path",
+      "why": "the path calls bojo_tools.publishing.compose_listing -> reasoning_tasks.listing_proposal; ty/services.json gives listingforge the compose_listing tool and calls it ListingForge copy"
+    },
+    "ppc": {
+      "service": "design-studio",
+      "population": "service-path",
+      "why": "upload -> proposal -> approve -> write -> download are the /api/design-studio/amazon-files/* endpoints in design_studio_api.py, and the surface is Design Studio -> Ads -> Amazon files (northstar-os-ui/src/pages/internal/design-studio/AmazonFiles.jsx). AdPilot only reads the imported bulksheets, so it is not the producer of this artefact.",
+      "never_blended": "design-studio's published seller score comes from the image pass. These rows are a separate population and are reported, never averaged with it."
+    },
+    "golden_goose": {
+      "service": "goldengoose",
+      "aliases": ["golden-goose"],
+      "population": "service-path",
+      "why": "the path calls bojo_tools.sourcing.golden_goose_scan, which is the golden_goose_scan tool. ty/services.json declares that same tool, and the same purpose text, for both 'goldengoose' and 'golden-goose', so the two ids are one product under two names rather than two services.",
+      "alias_note": "the alias is declared here, not inferred: it adds no brief and no sample, it reuses the one sample the registry's own duplicate id describes."
+    },
+    "research": {
+      "service": null,
+      "population": null,
+      "why": "no service in ty/services.json declares a path that reaches research_graph.research: the module is exercised by its own test only, and nothing in the registry or the backend calls it. The pass is measured and reported, but attributing it to product-finder (or anything else) would be inventing an owner."
+    }
+  },
   "listing": [
     {
       "id": "LST-001",
@@ -82,8 +107,171 @@
         "missing_evidence": ["envelope count", "card dimensions"],
         "warnings": []
       }
+    },
+    {
+      "id": "LST-003",
+      "sku": "MOGRA-MG-060",
+      "brand": "Mogra Organics",
+      "title": "Mogra Organics Nightly Magnesium, best sleep supplement",
+      "bullets": [
+        "Sixty servings per pouch",
+        "200 mg magnesium glycinate per serving"
+      ],
+      "description": "A magnesium glycinate powder the seller's draft markets as the best sleep supplement on the shelf.",
+      "attributes": {
+        "form": "powder",
+        "servings": "60 servings",
+        "serving_size": "200 mg",
+        "ingredients": "magnesium glycinate"
+      },
+      "keywords": ["magnesium powder", "magnesium glycinate"],
+      "facts": ["60 servings", "200 mg"],
+      "must_not_keep": ["best sleep supplement"],
+      "recorded_proposal": {
+        "title": "Mogra Organics Nightly Magnesium Glycinate Powder, 60 Servings, 200 mg per Serving",
+        "bullets": [
+          "60 SERVINGS: the pouch holds 60 servings at 200 mg magnesium glycinate each",
+          "ONE ACTIVE INGREDIENT: magnesium glycinate powder, as supplied",
+          "SCOOP AND STIR: a powder that mixes into water or a warm drink",
+          "FACT PANEL ONLY: form, serving count and serving size listed exactly as supplied",
+          "RESEALABLE POUCH: the stand-up pouch keeps the powder dry between servings"
+        ],
+        "description": "Mogra Organics Nightly Magnesium is a magnesium glycinate powder: 60 servings per pouch at 200 mg per serving. The seller's draft called it a sleep supplement; that wording is dropped here because the supplied facts do not support it, and an unsupported supplement claim is a listing risk.",
+        "attributes": {
+          "form": "powder",
+          "servings": "60 servings",
+          "serving_size": "200 mg"
+        },
+        "reasons": [
+          "removed the sleep claim the seller's draft carried, because no supplied fact supports it",
+          "moved the serving count and serving size into the title",
+          "every bullet restates a supplied fact instead of a promise"
+        ],
+        "missing_evidence": ["third-party assay", "cGMP certificate"],
+        "warnings": []
+      }
+    },
+    {
+      "id": "LST-004",
+      "sku": "NL-SOYGS-1204",
+      "brand": "Northlight Studio",
+      "title": "Northlight Studio Hand-Poured Soy Candle Gift Set, 12 Candles in 4 Scents",
+      "bullets": [
+        "Twelve candles, three ounces each",
+        "Four scents, three of each",
+        "Cotton wicks, no dye",
+        "Reusable kraft gift box with ribbon"
+      ],
+      "description": "A twelve-candle gift set: four scents, three candles of each, poured by hand into tins.",
+      "attributes": {
+        "count": "12 candles",
+        "scents": "4 scents",
+        "unit_size": "3 oz",
+        "wick": "cotton",
+        "box": "kraft gift box with ribbon",
+        "wax": "soy"
+      },
+      "keywords": ["candle gift set", "soy candle"],
+      "facts": ["12 candles", "4 scents", "3 oz"],
+      "recorded_proposal": {
+        "title": "Northlight Studio Hand-Poured Soy Candle Gift Set, 12 Candles in 4 Scents, 3 oz Each, Cotton Wicks, Reusable Kraft Gift Box with Ribbon, Ready to Give",
+        "bullets": [
+          "TWELVE CANDLES: 12 soy candles in 4 scents, 3 oz each, poured by hand in small batches",
+          "FOUR SCENTS: three candles per scent, so the set can be split between four people",
+          "COTTON WICKS: a cotton wick in every tin, no dye added to the wax",
+          "GIFT-READY BOX: a reusable kraft box with a ribbon, handed over without wrapping",
+          "SIZED FOR A SMALL ROOM: a 3 oz tin that suits a bedside table or a desk"
+        ],
+        "description": "Northlight Studio's soy candle gift set holds 12 hand-poured candles in 4 scents, three of each, at 3 oz per tin. The wax is soy, the wicks are cotton with no dye added, and the set arrives in a reusable kraft box with a ribbon so it can be given as it stands.",
+        "attributes": {
+          "count": "12 candles",
+          "scents": "4 scents",
+          "unit_size": "3 oz",
+          "wick": "cotton"
+        },
+        "reasons": [
+          "the seller's title stopped at the scent count; the pack size and unit weight now lead",
+          "bullets split into count, scent split, wick, packaging and use, one fact each",
+          "description restates the attribute panel instead of repeating the title"
+        ],
+        "missing_evidence": ["burn time per tin", "fragrance ingredient list", "country of manufacture"],
+        "warnings": []
+      }
+    },
+    {
+      "id": "LST-005",
+      "sku": "HARBO-OIL-6X8",
+      "brand": "Harbor",
+      "title": "Harbor Body Oil 8 oz",
+      "bullets": ["Single bottle", "Pressed oil for body and bath"],
+      "description": "A single 8 oz bottle of Harbor body oil.",
+      "attributes": {
+        "pack": "6 pack",
+        "unit_size": "8 oz",
+        "total": "48 oz",
+        "ingredients": "pressed seed oil blend"
+      },
+      "keywords": ["body oil", "bath oil"],
+      "facts": ["6 pack", "8 oz", "48 oz"],
+      "recorded_proposal": {
+        "title": "Harbor Body Oil, 6 Pack of 8 oz Bottles, 48 oz Total, Pressed Oil for Body and Bath",
+        "bullets": [
+          "6 PACK: six 8 oz bottles, 48 oz in total, one case rather than six reorders",
+          "PRESSED OIL: a blend of pressed seed oils, as supplied on the label",
+          "BODY AND BATH: a few drops in the bath or onto damp skin after a shower",
+          "EIGHT OUNCE BOTTLE: a single bottle that lasts a month of daily use",
+          "STORAGE: keep the case closed and out of direct sun between bottles"
+        ],
+        "description": "Harbor body oil ships as a 6 pack of 8 oz bottles, 48 oz in total. The blend is pressed seed oil, exactly as the label lists it, for use on the body or in the bath. The case keeps the spare bottles together so the shelf does not fill with loose bottles.",
+        "attributes": {
+          "pack": "6 pack",
+          "unit_size": "8 oz",
+          "total": "48 oz"
+        },
+        "reasons": [
+          "the listing sold one bottle while the seller ships six, so the pack count now leads",
+          "total volume is stated because a buyer compares cases, not bottles",
+          "attributes reduced to the three numbers the seller actually supplied"
+        ],
+        "missing_evidence": ["full ingredient list", "expiry or best-by date"],
+        "warnings": []
+      }
+    },
+    {
+      "id": "LST-006",
+      "sku": "KC-ENAMEL-01",
+      "brand": "Kettle & Co",
+      "title": "Kettle & Co Enamel Mug",
+      "bullets": ["Enamel on steel"],
+      "description": "",
+      "attributes": {},
+      "keywords": ["enamel mug", "camping mug"],
+      "facts": [],
+      "recorded_proposal": {
+        "title": "Kettle & Co Enamel Mug, Enamel on Steel, Camping Cup for Coffee and Tea",
+        "bullets": [
+          "ENAMEL ON STEEL: the body is enamel over steel, as the seller supplied",
+          "CAMP AND KITCHEN: a cup that suits a camp stove and a kitchen shelf alike",
+          "FOR COFFEE AND TEA: a plain interior that takes either drink",
+          "SIMPLE CARE: hand wash to keep the enamel rim intact",
+          "ONE MUG: sold as a single mug, not a set"
+        ],
+        "description": "Kettle & Co's enamel mug is enamel over steel, sold as a single mug for coffee or tea. Hand wash it to keep the enamel rim intact. The seller supplied no capacity, no dimensions and no care instructions; those are listed as missing evidence rather than guessed at.",
+        "attributes": {},
+        "reasons": [
+          "the seller supplied one fact, so the copy repeats it and claims nothing else",
+          "no capacity, diameter or dishwasher claim was written, because none was supplied",
+          "missing evidence is recorded rather than filled with a plausible number"
+        ],
+        "missing_evidence": [
+          "capacity in ml",
+          "rim diameter",
+          "dishwasher safety",
+          "country of manufacture"
+        ],
+        "warnings": []
+      }
     }
-
   ],
   "ppc": [
     {
@@ -109,6 +297,138 @@
         "before_bid": "1.10",
         "after_bid": "0.90",
         "reason": "raise the bid on the converting term"
+      }
+    },
+    {
+      "id": "PPC-002",
+      "filename": "bulk-20261112-three-campaigns.xlsx",
+      "sheet_title": "Sponsored Products Campaigns",
+      "rows": [
+        ["Product", "Entity", "Operation", "Campaign ID", "Ad Group ID", "Keyword ID",
+         "Campaign Name", "Ad Group Name", "Keyword Text", "Match Type", "Bid", "State"],
+        ["Sponsored Products", "Campaign", "Update", "C200", "", "",
+         "Body Oil Core", "", "", "", "", "enabled"],
+        ["Sponsored Products", "Ad Group", "Update", "C200", "A210", "",
+         "Body Oil Core", "Exact", "", "", "", "enabled"],
+        ["Sponsored Products", "Keyword", "Update", "C200", "A210", "K400",
+         "Body Oil Core", "Exact", "body oil 8 oz", "exact", "1.25", "enabled"],
+        ["Sponsored Products", "Keyword", "Update", "C200", "A210", "K401",
+         "Body Oil Core", "Exact", "body oil", "phrase", "0.95", "enabled"],
+        ["Sponsored Products", "Campaign", "Update", "C201", "", "",
+         "Body Oil Discovery", "", "", "", "", "enabled"],
+        ["Sponsored Products", "Ad Group", "Update", "C201", "A220", "",
+         "Body Oil Discovery", "Research", "", "", "", "enabled"],
+        ["Sponsored Products", "Keyword", "Update", "C201", "A220", "K402",
+         "Body Oil Discovery", "Research", "harbor body oil", "exact", "1.85", "enabled"],
+        ["Sponsored Products", "Keyword", "Update", "C201", "A220", "K403",
+         "Body Oil Discovery", "Research", "body oil bulk", "broad", "0.70", "enabled"],
+        ["Sponsored Products", "Campaign", "Update", "C202", "", "",
+         "Bath Oil Long Tail", "", "", "", "", "enabled"],
+        ["Sponsored Products", "Ad Group", "Update", "C202", "A230", "",
+         "Bath Oil Long Tail", "Broad", "", "", "", "enabled"],
+        ["Sponsored Products", "Keyword", "Update", "C202", "A230", "K404",
+         "Bath Oil Long Tail", "Broad", "bath oil for dry skin", "broad", "0.45", "enabled"],
+        ["Sponsored Products", "Keyword", "Update", "C202", "A230", "K405",
+         "Bath Oil Long Tail", "Broad", "harbor bath oil", "exact", "1.10", "enabled"]
+      ],
+      "expect": {
+        "row_index": 6,
+        "before_bid": "1.85",
+        "after_bid": "1.20",
+        "reason": "cut a discovery bid that spends without converting; the money moves to Body Oil Core"
+      }
+    },
+    {
+      "id": "PPC-003",
+      "filename": "bulk-20261113-paused-parent.xlsx",
+      "sheet_title": "Sponsored Products Campaigns",
+      "rows": [
+        ["Product", "Entity", "Operation", "Campaign ID", "Ad Group ID", "Keyword ID",
+         "Campaign Name", "Ad Group Name", "Keyword Text", "Match Type", "Bid", "State"],
+        ["Sponsored Products", "Campaign", "Update", "C300", "", "",
+         "Tea Sampler Winter", "", "", "", "", "paused"],
+        ["Sponsored Products", "Ad Group", "Update", "C300", "A310", "",
+         "Tea Sampler Winter", "Exact", "", "", "", "paused"],
+        ["Sponsored Products", "Keyword", "Update", "C300", "A310", "K500",
+         "Tea Sampler Winter", "Exact", "tea sampler", "exact", "0.50", "paused"],
+        ["Sponsored Products", "Ad Group", "Update", "C300", "A311", "",
+         "Tea Sampler Winter", "Gifting", "", "", "", "enabled"],
+        ["Sponsored Products", "Keyword", "Update", "C300", "A311", "K501",
+         "Tea Sampler Winter", "Gifting", "sampler box", "phrase", "0.60", "enabled"],
+        ["Sponsored Products", "Keyword", "Update", "C300", "A311", "K502",
+         "Tea Sampler Winter", "Gifting", "gift tea set", "exact", "0.55", "enabled"],
+        ["Sponsored Products", "Keyword", "Update", "C300", "A311", "K503",
+         "Tea Sampler Winter", "Gifting", "loose leaf tea", "broad", "0.40", "enabled"]
+      ],
+      "expect": {
+        "row_index": 5,
+        "before_bid": "0.55",
+        "after_bid": "0.75",
+        "reason": "raise the gift-set term only; the paused ad group keeps its bids untouched"
+      }
+    },
+    {
+      "id": "PPC-004",
+      "filename": "bulk-20261114-wide-adgroup.xlsx",
+      "sheet_title": "Sponsored Products Campaigns",
+      "rows": [
+        ["Product", "Entity", "Operation", "Campaign ID", "Ad Group ID", "Keyword ID",
+         "Campaign Name", "Ad Group Name", "Keyword Text", "Match Type", "Bid", "State"],
+        ["Sponsored Products", "Campaign", "Update", "C400", "", "",
+         "Candle Set Core", "", "", "", "", "enabled"],
+        ["Sponsored Products", "Ad Group", "Update", "C400", "A410", "",
+         "Candle Set Core", "All Keywords", "", "", "", "enabled"],
+        ["Sponsored Products", "Keyword", "Update", "C400", "A410", "K600",
+         "Candle Set Core", "All Keywords", "soy candle set", "exact", "1.40", "enabled"],
+        ["Sponsored Products", "Keyword", "Update", "C400", "A410", "K601",
+         "Candle Set Core", "All Keywords", "candle gift box", "exact", "1.65", "enabled"],
+        ["Sponsored Products", "Keyword", "Update", "C400", "A410", "K602",
+         "Candle Set Core", "All Keywords", "scented candle set", "phrase", "1.20", "enabled"],
+        ["Sponsored Products", "Keyword", "Update", "C400", "A410", "K603",
+         "Candle Set Core", "All Keywords", "soy candles 12 pack", "exact", "2.00", "enabled"],
+        ["Sponsored Products", "Keyword", "Update", "C400", "A410", "K604",
+         "Candle Set Core", "All Keywords", "hand poured candle", "broad", "0.85", "enabled"],
+        ["Sponsored Products", "Keyword", "Update", "C400", "A410", "K605",
+         "Candle Set Core", "All Keywords", "candle sampler", "broad", "0.65", "enabled"]
+      ],
+      "expect": {
+        "row_index": 5,
+        "before_bid": "2.00",
+        "after_bid": "1.60",
+        "reason": "the pack-size term is at the top of the useful range; bring it back under the target cost per click"
+      }
+    },
+    {
+      "id": "PPC-005",
+      "filename": "bulk-20261115-two-portfolios.xlsx",
+      "sheet_title": "Sponsored Products Campaigns",
+      "rows": [
+        ["Product", "Entity", "Operation", "Campaign ID", "Ad Group ID", "Keyword ID",
+         "Campaign Name", "Ad Group Name", "Keyword Text", "Match Type", "Bid", "State"],
+        ["Sponsored Products", "Campaign", "Update", "C500", "", "",
+         "Enamel Mug Core", "", "", "", "", "enabled"],
+        ["Sponsored Products", "Ad Group", "Update", "C500", "A510", "",
+         "Enamel Mug Core", "Exact", "", "", "", "enabled"],
+        ["Sponsored Products", "Keyword", "Update", "C500", "A510", "K700",
+         "Enamel Mug Core", "Exact", "enamel mug", "exact", "0.90", "enabled"],
+        ["Sponsored Products", "Keyword", "Update", "C500", "A510", "K701",
+         "Enamel Mug Core", "Exact", "camping mug", "phrase", "0.55", "enabled"],
+        ["Sponsored Products", "Campaign", "Update", "C501", "", "",
+         "Enamel Mug Long Tail", "", "", "", "", "enabled"],
+        ["Sponsored Products", "Ad Group", "Update", "C501", "A520", "",
+         "Enamel Mug Long Tail", "Broad", "", "", "", "enabled"],
+        ["Sponsored Products", "Keyword", "Update", "C501", "A520", "K702",
+         "Enamel Mug Long Tail", "Broad", "enamel coffee cup", "broad", "0.45", "enabled"],
+        ["Sponsored Products", "Keyword", "Update", "C501", "A520", "K703",
+         "Enamel Mug Long Tail", "Broad", "tin cup for camping", "broad", "0.35", "enabled"],
+        ["Sponsored Products", "Keyword", "Update", "C501", "A520", "K704",
+         "Enamel Mug Long Tail", "Broad", "steel mug 12 oz", "exact", "0.30", "enabled"]
+      ],
+      "expect": {
+        "row_index": 8,
+        "before_bid": "0.30",
+        "after_bid": "0.45",
+        "reason": "the last row in the sheet is the only exact-match long-tail term and it is underbid"
       }
     }
   ],
@@ -163,6 +483,283 @@
         "rejected_asin": "B0TEST0003",
         "first_asin": "B0TEST0001"
       }
+    },
+    {
+      "id": "GG-002",
+      "roi_floor": 10.0,
+      "min_monthly_sales": 1000,
+      "note": "One product, four offers: the seller's own listing, Amazon itself, the brand owner, and a reseller who can actually win it. A seller cannot out-hold Amazon or the brand on price, so only the reseller offer is a buy.",
+      "candidates": [
+        {
+          "asin": "B0GG2001",
+          "title": "Harbor Body Oil 8 oz, pack of 3",
+          "brand": "Harbor",
+          "category_slug": "beauty",
+          "amazon_price": 34.99,
+          "wholesale_price": 22.99,
+          "pack_count": 3,
+          "bsr": 900,
+          "review_rating": 4.7,
+          "review_count": 3100,
+          "fba_sellers": 0,
+          "weight_oz": 10.0,
+          "monthly_sales_estimate": 2200,
+          "seller_name": "Joes Resale",
+          "is_brand_seller": false,
+          "is_amazon_seller": false
+        },
+        {
+          "asin": "B0GG2002",
+          "title": "Harbor Body Oil 8 oz, pack of 3",
+          "brand": "Harbor",
+          "category_slug": "beauty",
+          "amazon_price": 34.99,
+          "wholesale_price": 22.99,
+          "pack_count": 3,
+          "bsr": 900,
+          "review_rating": 4.7,
+          "review_count": 3100,
+          "fba_sellers": 1,
+          "weight_oz": 10.0,
+          "monthly_sales_estimate": 2200,
+          "seller_name": "Amazon.com",
+          "is_brand_seller": false,
+          "is_amazon_seller": true
+        },
+        {
+          "asin": "B0GG2003",
+          "title": "Harbor Body Oil 8 oz, pack of 3",
+          "brand": "Harbor",
+          "category_slug": "beauty",
+          "amazon_price": 34.99,
+          "wholesale_price": 22.99,
+          "pack_count": 3,
+          "bsr": 900,
+          "review_rating": 4.7,
+          "review_count": 3100,
+          "fba_sellers": 1,
+          "weight_oz": 10.0,
+          "monthly_sales_estimate": 2200,
+          "seller_name": "Harbor Brand Store",
+          "is_brand_seller": true,
+          "is_amazon_seller": false
+        },
+        {
+          "asin": "B0GG2004",
+          "title": "Harbor Body Oil 8 oz, pack of 3",
+          "brand": "Harbor",
+          "category_slug": "beauty",
+          "amazon_price": 34.99,
+          "wholesale_price": 22.99,
+          "pack_count": 3,
+          "bsr": 900,
+          "review_rating": 4.7,
+          "review_count": 3100,
+          "fba_sellers": 1,
+          "weight_oz": 10.0,
+          "monthly_sales_estimate": 2200,
+          "seller_name": "Discount Vitamin Outlet",
+          "is_brand_seller": false,
+          "is_amazon_seller": false
+        }
+      ],
+      "expect": {
+        "rejected_asin": "B0GG2002",
+        "first_asin": "B0GG2001"
+      }
+    },
+    {
+      "id": "GG-003",
+      "roi_floor": 10.0,
+      "min_monthly_sales": 1000,
+      "note": "The fattest margin in the batch is a blender that weighs 5.6 lb. Over the 5 lb ceiling it cannot be shipped cheaply, so a seller buys the light body lotion instead even though it earns less per unit.",
+      "candidates": [
+        {
+          "asin": "B0GG3001",
+          "title": "KitchenAid Counter Blender 5 Speed",
+          "brand": "KitchenAid",
+          "category_slug": "kitchen",
+          "amazon_price": 129.99,
+          "wholesale_price": 62.99,
+          "pack_count": 1,
+          "bsr": 800,
+          "review_rating": 4.8,
+          "review_count": 6200,
+          "fba_sellers": 0,
+          "weight_oz": 90.0,
+          "monthly_sales_estimate": 2400,
+          "seller_name": "Joes Resale",
+          "is_brand_seller": false,
+          "is_amazon_seller": false
+        },
+        {
+          "asin": "B0GG3002",
+          "title": "Harbor Body Lotion 12 oz, pack of 2",
+          "brand": "Harbor",
+          "category_slug": "beauty",
+          "amazon_price": 39.99,
+          "wholesale_price": 19.99,
+          "pack_count": 2,
+          "bsr": 1800,
+          "review_rating": 4.5,
+          "review_count": 1500,
+          "fba_sellers": 0,
+          "weight_oz": 26.0,
+          "monthly_sales_estimate": 1700,
+          "seller_name": "Joes Resale",
+          "is_brand_seller": false,
+          "is_amazon_seller": false
+        },
+        {
+          "asin": "B0GG3003",
+          "title": "Mystery Crate",
+          "brand": ""
+        }
+      ],
+      "expect": {
+        "rejected_asin": "B0GG3003",
+        "first_asin": "B0GG3002"
+      }
+    },
+    {
+      "id": "GG-004",
+      "roi_floor": 20.0,
+      "min_monthly_sales": 3000,
+      "note": "The seller raised both floors: 20 dollars of net profit per unit and 3000 units a month. Only the tin set clears both, so it is the only buy even though the candle case sells nearly as well.",
+      "candidates": [
+        {
+          "asin": "B0GG4001",
+          "title": "Northlight Tin Candle Set, pack of 6",
+          "brand": "Northlight Studio",
+          "category_slug": "home",
+          "amazon_price": 74.99,
+          "wholesale_price": 24.99,
+          "pack_count": 3,
+          "bsr": 640,
+          "review_rating": 4.7,
+          "review_count": 4100,
+          "fba_sellers": 0,
+          "weight_oz": 18.0,
+          "monthly_sales_estimate": 3600,
+          "seller_name": "Joes Resale",
+          "is_brand_seller": false,
+          "is_amazon_seller": false
+        },
+        {
+          "asin": "B0GG4002",
+          "title": "Northlight Soy Candle Case, pack of 12",
+          "brand": "Northlight Studio",
+          "category_slug": "home",
+          "amazon_price": 39.99,
+          "wholesale_price": 21.99,
+          "pack_count": 4,
+          "bsr": 2100,
+          "review_rating": 4.4,
+          "review_count": 900,
+          "fba_sellers": 0,
+          "weight_oz": 36.0,
+          "monthly_sales_estimate": 2400,
+          "seller_name": "Joes Resale",
+          "is_brand_seller": false,
+          "is_amazon_seller": false
+        },
+        {
+          "asin": "B0GG4003",
+          "title": "Enamel Mug 12 oz, pack of 4",
+          "brand": "Kettle & Co",
+          "category_slug": "home",
+          "amazon_price": 44.99,
+          "wholesale_price": 27.99,
+          "pack_count": 4,
+          "bsr": 4200,
+          "review_rating": 4.6,
+          "review_count": 1200,
+          "fba_sellers": 0,
+          "weight_oz": 48.0,
+          "monthly_sales_estimate": 1100,
+          "seller_name": "Joes Resale",
+          "is_brand_seller": false,
+          "is_amazon_seller": false
+        },
+        {
+          "asin": "B0GG4004",
+          "title": "Unlabelled Pallet Item"
+        }
+      ],
+      "expect": {
+        "rejected_asin": "B0GG4004",
+        "first_asin": "B0GG4001"
+      }
+    },
+    {
+      "id": "GG-005",
+      "roi_floor": 10.0,
+      "min_monthly_sales": 1000,
+      "note": "The six-pack looks like the winner on pack ROI and loses on unit economics: the floor is per unit, not per case. The single bottle clears the unit floor, so it is the buy.",
+      "candidates": [
+        {
+          "asin": "B0GG5001",
+          "title": "Harbor Body Oil 8 oz, case of 12",
+          "brand": "Harbor",
+          "category_slug": "beauty",
+          "amazon_price": 19.99,
+          "wholesale_price": 39.99,
+          "pack_count": 12,
+          "bsr": 1100,
+          "review_rating": 4.6,
+          "review_count": 2600,
+          "fba_sellers": 0,
+          "weight_oz": 40.0,
+          "monthly_sales_estimate": 1900,
+          "seller_name": "Joes Resale",
+          "is_brand_seller": false,
+          "is_amazon_seller": false
+        },
+        {
+          "asin": "B0GG5002",
+          "title": "Harbor Bath Salts 16 oz, single jar",
+          "brand": "Harbor",
+          "category_slug": "beauty",
+          "amazon_price": 39.99,
+          "wholesale_price": 11.99,
+          "pack_count": 1,
+          "bsr": 1400,
+          "review_rating": 4.5,
+          "review_count": 1800,
+          "fba_sellers": 0,
+          "weight_oz": 18.0,
+          "monthly_sales_estimate": 1600,
+          "seller_name": "Joes Resale",
+          "is_brand_seller": false,
+          "is_amazon_seller": false
+        },
+        {
+          "asin": "B0GG5003",
+          "title": "Harbor Soap Bar, pack of 6",
+          "brand": "Harbor",
+          "category_slug": "beauty",
+          "amazon_price": 18.99,
+          "wholesale_price": 14.99,
+          "pack_count": 6,
+          "bsr": 2600,
+          "review_rating": 4.3,
+          "review_count": 700,
+          "fba_sellers": 0,
+          "weight_oz": 20.0,
+          "monthly_sales_estimate": 1200,
+          "seller_name": "Joes Resale",
+          "is_brand_seller": false,
+          "is_amazon_seller": false
+        },
+        {
+          "asin": "B0GG5004",
+          "title": "Unknown Sample Box"
+        }
+      ],
+      "expect": {
+        "rejected_asin": "B0GG5004",
+        "first_asin": "B0GG5002"
+      }
     }
   ],
   "research": [
@@ -189,6 +786,110 @@
       "expect": {
         "min_sources": 2,
         "conflict_values": ["2.10", "2.45"]
+      }
+    },
+    {
+      "id": "RES-002",
+      "query": "freight cost per pallet from Shenzhen",
+      "note": "Two documents agree on the figure and a third is silent about it. Nothing here disagrees, so the honest answer is one number and no conflict.",
+      "corpus": [
+        {
+          "source_id": "forwarder-quote-2026-11",
+          "source": "forwarder quote",
+          "text": "The freight cost per pallet from Shenzhen is 480 dollars at the current rate. The freight cost per pallet includes port handling. Cheap freight often means a slower sailing. The quote holds for thirty days."
+        },
+        {
+          "source_id": "buyer-call-note-2026-11",
+          "source": "buyer note",
+          "text": "The freight cost per pallet from Shenzhen is 480 dollars at the current rate. The freight cost per pallet includes port handling. Our buyer wrote the number down after the call and did not countersign it."
+        },
+        {
+          "source_id": "packing-method-note",
+          "source": "packing note",
+          "text": "The pallet is wrapped in stretch film before loading. Every carton is corner-boarded on the long edge."
+        }
+      ],
+      "expect": {
+        "min_sources": 2,
+        "conflict_values": []
+      }
+    },
+    {
+      "id": "RES-003",
+      "query": "lead time for a reprinted label run",
+      "note": "Three suppliers, three different lead times, and one sentence they all repeat. The disagreement is real and must arrive as a single conflict, not an average.",
+      "corpus": [
+        {
+          "source_id": "label-printer-2026-10",
+          "source": "label printer",
+          "text": "The lead time for a reprinted label run is 14 days at the current queue. The lead time is measured from artwork approval. The press needs a vector file."
+        },
+        {
+          "source_id": "buyer-note-2026-10",
+          "source": "buyer note",
+          "text": "The lead time for a reprinted label run is 21 days if the stock is out. The lead time is measured from artwork approval. The buyer asked for a written promise and did not get one."
+        },
+        {
+          "source_id": "account-manager-2026-11",
+          "source": "account manager email",
+          "text": "The lead time for a reprinted label run is 30 days in December. The lead time is measured from artwork approval. December is the busiest month on their floor."
+        }
+      ],
+      "expect": {
+        "min_sources": 3,
+        "conflict_values": ["14", "21", "30"]
+      }
+    },
+    {
+      "id": "RES-004",
+      "query": "defect rate on the pouch seam",
+      "note": "Two reports on the same line, one before the film change and one after, both using the same counting method. The rates disagree; the method does not.",
+      "corpus": [
+        {
+          "source_id": "quality-report-run-a",
+          "source": "quality report",
+          "text": "The defect rate on the pouch seam is 1.5% for the last run. The defect rate is counted per thousand pouches. The sample was taken at the end of the shift."
+        },
+        {
+          "source_id": "line-supervisor-note",
+          "source": "line supervisor note",
+          "text": "The defect rate on the pouch seam is 2.2% after the film change. The defect rate is counted per thousand pouches. The supervisor blames the new film roll."
+        },
+        {
+          "source_id": "seam-spec-sheet",
+          "source": "seam spec",
+          "text": "The seam is a three-layer heat seal. The seal is checked by hand on the first carton of each run."
+        }
+      ],
+      "expect": {
+        "min_sources": 2,
+        "conflict_values": ["1.5", "2.2"]
+      }
+    },
+    {
+      "id": "RES-005",
+      "query": "unit cost of a kraft mailer box",
+      "note": "Two quotes disagree on the unit cost while repeating the same two method sentences, and a spec sheet carries dimensions that are not a disagreement at all. Only the money is a conflict.",
+      "corpus": [
+        {
+          "source_id": "supplier-quote-a-2026-09",
+          "source": "supplier quote",
+          "text": "The unit cost of a kraft mailer box is 0.42 dollars. The quote is based on 5000 pieces. The unit cost excludes freight. The mailer box ships flat."
+        },
+        {
+          "source_id": "buyer-comparison-2026-10",
+          "source": "buyer comparison",
+          "text": "The unit cost of a kraft mailer box is 0.51 dollars from the second supplier. The unit cost excludes freight. The mailer box ships flat."
+        },
+        {
+          "source_id": "mailer-spec-sheet",
+          "source": "spec sheet",
+          "text": "It measures 220 mm by 160 mm, printed in one colour. It is stored flat until packing."
+        }
+      ],
+      "expect": {
+        "min_sources": 2,
+        "conflict_values": ["0.42", "0.51"]
       }
     }
   ]

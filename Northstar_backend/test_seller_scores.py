@@ -224,3 +224,140 @@ def test_the_published_score_is_the_generated_population_of_the_live_passes():
     assert "replay" in row
     assert data.get("pass", {}).get("population") == "generated"
     assert "replay" in (data.get("pass") or {})
+
+
+# ------------------------------------------------------------- service paths
+ATTRIBUTION = {
+    "listing": {"service": "listingforge", "why": "compose_listing"},
+    "golden_goose": {"service": "goldengoose", "aliases": ["golden-goose"], "why": "scan"},
+    "research": {"service": None, "why": "no service calls research_graph"},
+}
+
+
+def _path_row(path, brief, score, passed=True):
+    return {"path": path, "brief_id": brief, "status": "scored",
+            "score": score, "passed": passed}
+
+
+def _proof(rows):
+    return {"generated_at": "2026-11-11T00:00:00+00:00",
+            "command": "python -m tools.seller_tester services", "results": rows}
+
+
+def _path_pass(rows=None):
+    return _proof(rows if rows is not None else [
+        _path_row("listing", f"LST-00{i}", 100.0, True) for i in range(1, 6)
+    ])
+
+
+def test_the_service_path_pass_is_bucketed_per_service_in_its_own_population():
+    rows = [_path_row("listing", f"LST-00{i}", 100.0) for i in range(1, 6)]
+    rows.append(_path_row("research", "RES-001", 100.0))
+    block = seller_scores.service_path(_proof(rows), ATTRIBUTION)
+    assert block["population"] == "service-path"
+    listing = block["services"]["listingforge"]
+    assert listing["scored"] == 5
+    assert listing["mean"] == 100.0
+    assert listing["paths"] == ["listing"]
+    assert listing["population"] == "service-path"
+    assert "research" in block["unattributed"]
+    assert "listingforge" not in block["unattributed"]
+
+
+def test_a_service_path_score_needs_the_same_sample_floor():
+    rows = [_path_row("listing", f"LST-00{i}", 100.0) for i in range(1, 5)]  # four
+    built = {"services": {},
+             "service_path": seller_scores.service_path(_proof(rows), ATTRIBUTION)}
+    verdict = seller_scores.score_for("listingforge", data=built)
+    assert verdict["score"] == 0.0
+    assert "only 4 service-path output(s)" in verdict["evidence"]
+
+
+def test_a_full_service_path_sample_is_the_measured_mean_and_names_its_population():
+    rows = [_path_row("listing", f"LST-00{i}", 100.0) for i in range(1, 5)]
+    rows.append(_path_row("listing", "LST-005", 50.0, False))
+    built = {"services": {},
+             "service_path": seller_scores.service_path(_proof(rows), ATTRIBUTION)}
+    verdict = seller_scores.score_for("listingforge", data=built)
+    assert verdict["score"] == 90.0
+    assert "5 Seller-Tester service-path outputs" in verdict["evidence"]
+    assert "population: service-path" in verdict["evidence"]
+    assert "4 passed" in verdict["evidence"]
+
+
+def test_a_picture_sample_and_a_service_path_sample_are_never_added_up():
+    """3 pictures + 3 listing briefs is two populations of three, so nothing is scored."""
+    built = {"services": {"design-studio": {"mean": 90.0, "scored": 3, "passed": 3}},
+             "service_path": seller_scores.service_path(
+                 _proof([_path_row("listing", f"LST-00{i}", 100.0) for i in range(1, 4)]),
+                 ATTRIBUTION)}
+    # The picture service keeps its own (thin) sample and is not topped up by the path.
+    verdict = seller_scores.score_for("design-studio", data=built)
+    assert verdict["score"] == 0.0
+    assert "only 3 generated/composite output(s)" in verdict["evidence"]
+    # ... and the listing service is not lifted by the pictures either.
+    listing = built["service_path"]["services"]["listingforge"]
+    assert listing["scored"] == 3
+
+
+def test_the_image_population_wins_when_it_is_the_services_own_output():
+    built = {"services": {"design-studio": {"mean": 96.2, "scored": 32, "passed": 32}},
+             "service_path": {"population": "service-path", "aliases": {}, "paths": {},
+                              "services": {"design-studio": {
+                                  "population": "service-path", "mean": 88.0,
+                                  "scored": 5, "passed": 5, "paths": ["ppc"]}}}}
+    verdict = seller_scores.score_for("design-studio", data=built)
+    assert verdict["score"] == 96.2
+    assert "5 service-path output(s) (mean 88.0) are a separate population" in verdict["evidence"]
+
+
+def test_a_declared_alias_reads_the_same_bucket_and_says_so():
+    built = {"services": {},
+             "service_path": seller_scores.service_path(_path_pass(), ATTRIBUTION)}
+    alias = seller_scores.score_for("golden-goose", data=built)
+    real = seller_scores.score_for("goldengoose", data=built)
+    assert alias["score"] == real["score"]
+    assert "declared alias of 'goldengoose'" in alias["evidence"]
+    assert "alias" not in real["evidence"]
+
+
+def test_a_refused_path_is_recorded_and_is_not_a_sample():
+    rows = [_path_row("listing", f"LST-00{i}", 100.0) for i in range(1, 5)]
+    rows.append({"path": "ppc", "brief_id": "PPC-005", "status": "refused",
+                 "score": 0.0, "passed": False, "reason": "write refused 422"})
+    block = seller_scores.service_path(_proof(rows), ATTRIBUTION)
+    assert block["refused"] == [{"path": "ppc", "brief_id": "PPC-005",
+                                 "reason": "write refused 422"}]
+    assert "ppc" not in block["services"].get("listingforge", {}).get("paths", [])
+    assert "design-studio" not in block["services"]
+
+
+def test_an_unowned_path_lends_its_sample_to_no_service():
+    rows = [_path_row("research", f"RES-00{i}", 100.0) for i in range(1, 6)]
+    block = seller_scores.service_path(_proof(rows), ATTRIBUTION)
+    assert block["services"] == {}
+    assert block["unattributed"] == ["research"]
+    assert block["paths"]["research"]["scored"] == 5
+    assert "no service calls research_graph" in block["paths"]["research"]["why_unattributed"]
+
+
+def test_build_is_hermetic_when_a_caller_supplies_its_own_rows():
+    """An injected pass must not pick up this machine's service-path proof."""
+    built = seller_scores.build(summary={"generator": "stored", "results": []},
+                                briefs=BRIEFS)
+    assert built["service_path"]["services"] == {}
+    assert "no service-path pass on disk" in built["service_path"]["reason"]
+
+
+def test_the_live_service_path_block_matches_its_proof_file():
+    data = seller_scores._read(seller_scores.OUT) or {}
+    block = data.get("service_path") or {}
+    if not block.get("services") and not block.get("paths"):
+        pytest.skip("no service-path pass on disk in this checkout")
+    assert block["population"] == "service-path"
+    for service, row in block["services"].items():
+        assert row["population"] == "service-path"
+        assert 0.0 <= float(row["mean"]) <= 100.0
+        assert int(row["scored"]) >= 1
+        assert block["paths"][row["paths"][0]]["scored"] >= int(row["scored"])
+

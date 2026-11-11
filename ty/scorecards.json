@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-11T05:04:46+00:00",
+  "at": "2026-11-11T17:33:49+00:00",
   "bar": 85.0,
   "weights": {
     "works": 0.23,
@@ -403,122 +403,6 @@
       "purpose": "schedule and judge social posts against a brand voice"
     },
     {
-      "id": "goldengoose",
-      "label": "Golden Goose",
-      "group": "Sourcing",
-      "kind": "workspace",
-      "route": "/goldengoose",
-      "impact": 0.95,
-      "bar": 85.0,
-      "score": 77.0,
-      "meets_bar": false,
-      "weakest": "seller",
-      "gap": 7.6,
-      "dimensions": {
-        "works": {
-          "score": 100.0,
-          "evidence": "567 test id(s) prove it"
-        },
-        "correct": {
-          "score": 60.0,
-          "evidence": "567 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
-        },
-        "seller": {
-          "score": 0.0,
-          "evidence": "no Seller-Tester output scored for this service"
-        },
-        "complete": {
-          "score": 100.0,
-          "evidence": "1/1 declared Bojo tools wired: golden_goose_scan"
-        },
-        "usable": {
-          "score": 100.0,
-          "evidence": "no readiness finding names this service"
-        },
-        "measured": {
-          "score": 100.0,
-          "evidence": "route /goldengoose -> northstar-os-ui\\src\\pages\\roomAdapters.jsx; app p95 3.4 ms"
-        },
-        "contract": {
-          "score": 100.0,
-          "evidence": "GET /api/kirkland/scanner -> 200; 89 row(s) under 'products'"
-        }
-      },
-      "scenarios": [
-        {
-          "text": "find a product in a category I have never sold",
-          "tag": "backed"
-        },
-        {
-          "text": "compare landed cost across three suppliers",
-          "tag": "backed"
-        },
-        {
-          "text": "tell me the margin at my fee tier",
-          "tag": "backed"
-        }
-      ],
-      "purpose": "the high-margin finder: score an opportunity and say why"
-    },
-    {
-      "id": "golden-goose",
-      "label": "Golden Goose",
-      "group": "Sourcing",
-      "kind": "workspace",
-      "route": "/golden-goose",
-      "impact": 0.95,
-      "bar": 85.0,
-      "score": 77.0,
-      "meets_bar": false,
-      "weakest": "seller",
-      "gap": 7.6,
-      "dimensions": {
-        "works": {
-          "score": 100.0,
-          "evidence": "567 test id(s) prove it"
-        },
-        "correct": {
-          "score": 60.0,
-          "evidence": "567 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
-        },
-        "seller": {
-          "score": 0.0,
-          "evidence": "no Seller-Tester output scored for this service"
-        },
-        "complete": {
-          "score": 100.0,
-          "evidence": "1/1 declared Bojo tools wired: golden_goose_scan"
-        },
-        "usable": {
-          "score": 100.0,
-          "evidence": "no readiness finding names this service"
-        },
-        "measured": {
-          "score": 100.0,
-          "evidence": "route /golden-goose -> northstar-os-ui\\src\\pages\\internal\\GoldenGoose.jsx; app p95 3.4 ms"
-        },
-        "contract": {
-          "score": 100.0,
-          "evidence": "POST /api/v1/foundation/golden-goose/evaluate -> 200; 17 measured field(s) (item_id,decision,resale_score)"
-        }
-      },
-      "scenarios": [
-        {
-          "text": "find a product in a category I have never sold",
-          "tag": "backed"
-        },
-        {
-          "text": "compare landed cost across three suppliers",
-          "tag": "backed"
-        },
-        {
-          "text": "tell me the margin at my fee tier",
-          "tag": "backed"
-        }
-      ],
-      "purpose": "the high-margin finder: score an opportunity and say why"
-    },
-    {
       "id": "product-finder",
       "label": "SourceScout",
       "group": "Sourcing",
@@ -633,64 +517,6 @@
         }
       ],
       "purpose": "Listing Guardian: keep live listings compliant and correct"
-    },
-    {
-      "id": "listingforge",
-      "label": "ListingForge",
-      "group": "Listings",
-      "kind": "workspace",
-      "route": "/listingforge",
-      "impact": 0.85,
-      "bar": 85.0,
-      "score": 77.0,
-      "meets_bar": false,
-      "weakest": "seller",
-      "gap": 6.8,
-      "dimensions": {
-        "works": {
-          "score": 100.0,
-          "evidence": "35 test id(s) prove it"
-        },
-        "correct": {
-          "score": 60.0,
-          "evidence": "35 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
-        },
-        "seller": {
-          "score": 0.0,
-          "evidence": "no Seller-Tester output scored for this service"
-        },
-        "complete": {
-          "score": 100.0,
-          "evidence": "1/1 declared Bojo tools wired: compose_listing"
-        },
-        "usable": {
-          "score": 100.0,
-          "evidence": "no readiness finding names this service"
-        },
-        "measured": {
-          "score": 100.0,
-          "evidence": "route /listingforge -> northstar-os-ui\\src\\pages\\internal\\ListingForge.jsx; app p95 3.4 ms"
-        },
-        "contract": {
-          "score": 100.0,
-          "evidence": "POST /api/design-studio/listing-records -> 200; 6 measured field(s) (id,record); read back adad0461-16cd-4966-a146-69d94d9f9097 via /api/design-studio/listing-records"
-        }
-      },
-      "scenarios": [
-        {
-          "text": "turn this product into a listing that will not be suppressed",
-          "tag": "backed"
-        },
-        {
-          "text": "rewrite the bullets for a different audience",
-          "tag": "backed"
-        },
-        {
-          "text": "fix the listing that lost its buy box",
-          "tag": "backed"
-        }
-      ],
-      "purpose": "create and version listings with the copy that converts"
     },
     {
       "id": "beta-ops",
@@ -911,6 +737,64 @@
         }
       ],
       "purpose": "find products worth selling, with demand and competition evidence"
+    },
+    {
+      "id": "goldengoose",
+      "label": "Golden Goose",
+      "group": "Sourcing",
+      "kind": "workspace",
+      "route": "/goldengoose",
+      "impact": 0.95,
+      "bar": 85.0,
+      "score": 89.4,
+      "meets_bar": false,
+      "weakest": "correct",
+      "gap": 0.0,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "567 test id(s) prove it"
+        },
+        "correct": {
+          "score": 60.0,
+          "evidence": "567 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+        },
+        "seller": {
+          "score": 95.6,
+          "evidence": "5 Seller-Tester service-path outputs (population: service-path; paths golden_goose), mean 95.6, 3 passed"
+        },
+        "complete": {
+          "score": 100.0,
+          "evidence": "1/1 declared Bojo tools wired: golden_goose_scan"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 100.0,
+          "evidence": "route /goldengoose -> northstar-os-ui\\src\\pages\\roomAdapters.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 100.0,
+          "evidence": "GET /api/kirkland/scanner -> 200; 89 row(s) under 'products'"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "find a product in a category I have never sold",
+          "tag": "backed"
+        },
+        {
+          "text": "compare landed cost across three suppliers",
+          "tag": "backed"
+        },
+        {
+          "text": "tell me the margin at my fee tier",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "the high-margin finder: score an opportunity and say why"
     },
     {
       "id": "auctioneer",
@@ -1430,7 +1314,7 @@
         },
         "seller": {
           "score": 96.2,
-          "evidence": "32 Seller-Tester outputs (generated/composite), mean 96.2, 32 passed; 40 replayed artefact(s) excluded as context (mean 22.1)"
+          "evidence": "32 Seller-Tester outputs (generated/composite), mean 96.2, 32 passed; 40 replayed artefact(s) excluded as context (mean 22.1); 5 service-path output(s) (mean 100.0) are a separate population and are not averaged in here"
         },
         "complete": {
           "score": 100.0,
@@ -1464,6 +1348,64 @@
         }
       ],
       "purpose": "product pictures in any seller situation, and A+ content, from a prompt, stored references, or uploads - Canva-grade to use"
+    },
+    {
+      "id": "golden-goose",
+      "label": "Golden Goose",
+      "group": "Sourcing",
+      "kind": "workspace",
+      "route": "/golden-goose",
+      "impact": 0.95,
+      "bar": 85.0,
+      "score": 89.4,
+      "meets_bar": false,
+      "weakest": "correct",
+      "gap": 0.0,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "567 test id(s) prove it"
+        },
+        "correct": {
+          "score": 60.0,
+          "evidence": "567 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+        },
+        "seller": {
+          "score": 95.6,
+          "evidence": "5 Seller-Tester service-path outputs (population: service-path; paths golden_goose), mean 95.6, 3 passed; 'golden-goose' is the declared alias of 'goldengoose' (ty/services.json gives both ids the same declared tool and the same purpose)"
+        },
+        "complete": {
+          "score": 100.0,
+          "evidence": "1/1 declared Bojo tools wired: golden_goose_scan"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 100.0,
+          "evidence": "route /golden-goose -> northstar-os-ui\\src\\pages\\internal\\GoldenGoose.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 100.0,
+          "evidence": "POST /api/v1/foundation/golden-goose/evaluate -> 200; 17 measured field(s) (item_id,decision,resale_score)"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "find a product in a category I have never sold",
+          "tag": "backed"
+        },
+        {
+          "text": "compare landed cost across three suppliers",
+          "tag": "backed"
+        },
+        {
+          "text": "tell me the margin at my fee tier",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "the high-margin finder: score an opportunity and say why"
     },
     {
       "id": "keyword-tracker",
@@ -1582,6 +1524,64 @@
         }
       ],
       "purpose": "the competitor feed behind Rival Board"
+    },
+    {
+      "id": "listingforge",
+      "label": "ListingForge",
+      "group": "Listings",
+      "kind": "workspace",
+      "route": "/listingforge",
+      "impact": 0.85,
+      "bar": 85.0,
+      "score": 90.0,
+      "meets_bar": false,
+      "weakest": "correct",
+      "gap": 0.0,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "35 test id(s) prove it"
+        },
+        "correct": {
+          "score": 60.0,
+          "evidence": "35 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+        },
+        "seller": {
+          "score": 100.0,
+          "evidence": "6 Seller-Tester service-path outputs (population: service-path; paths listing), mean 100.0, 6 passed"
+        },
+        "complete": {
+          "score": 100.0,
+          "evidence": "1/1 declared Bojo tools wired: compose_listing"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 100.0,
+          "evidence": "route /listingforge -> northstar-os-ui\\src\\pages\\internal\\ListingForge.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 100.0,
+          "evidence": "POST /api/design-studio/listing-records -> 200; 6 measured field(s) (id,record); read back adad0461-16cd-4966-a146-69d94d9f9097 via /api/design-studio/listing-records"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "turn this product into a listing that will not be suppressed",
+          "tag": "backed"
+        },
+        {
+          "text": "rewrite the bullets for a different audience",
+          "tag": "backed"
+        },
+        {
+          "text": "fix the listing that lost its buy box",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "create and version listings with the copy that converts"
     },
     {
       "id": "profitability",

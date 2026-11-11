@@ -1,6 +1,6 @@
 # Target spec — what production-ready means, per service
 
-Derived 2026-11-11T05:04:46+00:00 from `state/director/services.json`, 7465 measured test ids and 1 readiness findings. **Scores are measured, never asserted**: a dimension with no artefact scores 0 and says why.
+Derived 2026-11-11T17:33:49+00:00 from `state/director/services.json`, 7465 measured test ids and 1 readiness findings. **Scores are measured, never asserted**: a dimension with no artefact scores 0 and says why.
 
 Bar: **85 on every dimension** (not an average). A service is at the bar only when its weakest dimension clears it. Impact weight is what a paying seller needs first; gap = impact x (bar - score).
 
@@ -13,15 +13,13 @@ Bar: **85 on every dimension** (not an average). A service is at the bar only wh
 | Onboarding & Plan (`beta`) | 74.7 | complete | no | 9.3 | 0.9 |
 | Invite entry (`beta-signup`) | 74.7 | complete | no | 8.2 | 0.8 |
 | SocialPulse (`socialpulse`) | 67.0 | seller | no | 8.1 | 0.45 |
-| Golden Goose (`goldengoose`) | 77.0 | seller | no | 7.6 | 0.95 |
-| Golden Goose (`golden-goose`) | 77.0 | seller | no | 7.6 | 0.95 |
 | SourceScout (`product-finder`) | 77.0 | seller | no | 7.2 | 0.9 |
 | Listing Guardian (`listings`) | 77.0 | seller | no | 7.2 | 0.9 |
-| ListingForge (`listingforge`) | 77.0 | seller | no | 6.8 | 0.85 |
 | Tester Dashboard (`beta-ops`) | 74.7 | complete | no | 4.1 | 0.4 |
 | Operations Hub (`hub`) | 100.0 | works | yes | 0.0 | 0.85 |
 | The Ledger (`ledger`) | 86.2 | complete | no | 0.0 | 0.8 |
 | Prospector (`prospector`) | 100.0 | works | yes | 0.0 | 0.9 |
+| Golden Goose (`goldengoose`) | 89.4 | correct | no | 0.0 | 0.95 |
 | The Auctioneer (`auctioneer`) | 86.2 | complete | no | 0.0 | 0.7 |
 | AutothinK (`autothink`) | 86.2 | complete | no | 0.0 | 0.5 |
 | The Watch (`thewatch`) | 86.2 | complete | no | 0.0 | 0.6 |
@@ -31,9 +29,11 @@ Bar: **85 on every dimension** (not an average). A service is at the bar only wh
 | Operations Hub (`foundation`) | 86.2 | complete | no | 0.0 | 0.7 |
 | Jobs & Schedules (`jobs`) | 86.2 | complete | no | 0.0 | 0.4 |
 | Keywords & SEO (`keywords`) | 86.2 | complete | no | 0.0 | 0.6 |
-| Design Studio (`design-studio`) | 89.7 | correct | no | 0.0 | 0.95 |
+| Design Studio (`design-studio`) | 89.5 | correct | no | 0.0 | 0.95 |
+| Golden Goose (`golden-goose`) | 89.4 | correct | no | 0.0 | 0.95 |
 | Keyword Tracker (`keyword-tracker`) | 100.0 | works | yes | 0.0 | 0.6 |
 | Competitor Monitor (`competitor-monitor`) | 88.5 | contract | no | 0.0 | 0.5 |
+| ListingForge (`listingforge`) | 90.0 | correct | no | 0.0 | 0.85 |
 | Profitability (`profitability`) | 100.0 | works | yes | 0.0 | 0.75 |
 
 At the bar today: **4 of 29**.
@@ -191,50 +191,6 @@ Seller scenarios:
 - `backed` — post about a restock without sounding automated
 - `backed` — keep the voice consistent across three posts
 
-## Golden Goose (`goldengoose`)
-
-the high-margin finder: score an opportunity and say why.
-
-- route `/goldengoose`, group Sourcing, kind workspace
-- **score 77.0 / bar 85** (impact 0.95, gap 7.6)
-
-| dimension | score | weight | evidence |
-|---|---|---|---|
-| works | 100.0 | 0.23 | 567 test id(s) prove it |
-| correct | 60.0 | 0.25 | 567 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
-| seller | 0.0 | 0.13 | no Seller-Tester output scored for this service |
-| complete | 100.0 | 0.12 | 1/1 declared Bojo tools wired: golden_goose_scan |
-| usable | 100.0 | 0.07 | no readiness finding names this service |
-| measured | 100.0 | 0.1 | route /goldengoose -> northstar-os-ui\src\pages\roomAdapters.jsx; app p95 3.4 ms |
-| contract | 100.0 | 0.1 | GET /api/kirkland/scanner -> 200; 89 row(s) under 'products' |
-
-Seller scenarios:
-- `backed` — find a product in a category I have never sold
-- `backed` — compare landed cost across three suppliers
-- `backed` — tell me the margin at my fee tier
-
-## Golden Goose (`golden-goose`)
-
-the high-margin finder: score an opportunity and say why.
-
-- route `/golden-goose`, group Sourcing, kind workspace
-- **score 77.0 / bar 85** (impact 0.95, gap 7.6)
-
-| dimension | score | weight | evidence |
-|---|---|---|---|
-| works | 100.0 | 0.23 | 567 test id(s) prove it |
-| correct | 60.0 | 0.25 | 567 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
-| seller | 0.0 | 0.13 | no Seller-Tester output scored for this service |
-| complete | 100.0 | 0.12 | 1/1 declared Bojo tools wired: golden_goose_scan |
-| usable | 100.0 | 0.07 | no readiness finding names this service |
-| measured | 100.0 | 0.1 | route /golden-goose -> northstar-os-ui\src\pages\internal\GoldenGoose.jsx; app p95 3.4 ms |
-| contract | 100.0 | 0.1 | POST /api/v1/foundation/golden-goose/evaluate -> 200; 17 measured field(s) (item_id,decision,resale_score) |
-
-Seller scenarios:
-- `backed` — find a product in a category I have never sold
-- `backed` — compare landed cost across three suppliers
-- `backed` — tell me the margin at my fee tier
-
 ## SourceScout (`product-finder`)
 
 SourceScout: match a product idea to suppliers and landed cost.
@@ -273,28 +229,6 @@ Listing Guardian: keep live listings compliant and correct.
 | usable | 100.0 | 0.07 | no readiness finding names this service |
 | measured | 100.0 | 0.1 | route /listings -> northstar-os-ui\src\pages\internal\ListingGuardian.jsx; app p95 3.4 ms |
 | contract | 100.0 | 0.1 | GET /api/v1/noncreative/listings/health -> 200; 2 row(s) under 'items' |
-
-Seller scenarios:
-- `backed` — turn this product into a listing that will not be suppressed
-- `backed` — rewrite the bullets for a different audience
-- `backed` — fix the listing that lost its buy box
-
-## ListingForge (`listingforge`)
-
-create and version listings with the copy that converts.
-
-- route `/listingforge`, group Listings, kind workspace
-- **score 77.0 / bar 85** (impact 0.85, gap 6.8)
-
-| dimension | score | weight | evidence |
-|---|---|---|---|
-| works | 100.0 | 0.23 | 35 test id(s) prove it |
-| correct | 60.0 | 0.25 | 35 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
-| seller | 0.0 | 0.13 | no Seller-Tester output scored for this service |
-| complete | 100.0 | 0.12 | 1/1 declared Bojo tools wired: compose_listing |
-| usable | 100.0 | 0.07 | no readiness finding names this service |
-| measured | 100.0 | 0.1 | route /listingforge -> northstar-os-ui\src\pages\internal\ListingForge.jsx; app p95 3.4 ms |
-| contract | 100.0 | 0.1 | POST /api/design-studio/listing-records -> 200; 6 measured field(s) (id,record); read back adad0461-16cd-4966-a146-69d94d9f9097 via /api/design-studio/listing-records |
 
 Seller scenarios:
 - `backed` — turn this product into a listing that will not be suppressed
@@ -378,6 +312,28 @@ find products worth selling, with demand and competition evidence.
 | complete | 100.0 | 0.12 | 1/1 declared Bojo tools wired: catalog_pull |
 | usable | 100.0 | 0.07 | no readiness finding names this service |
 | measured | 100.0 | 0.1 | route /prospector -> northstar-os-ui\src\pages\roomAdapters.jsx; app p95 3.4 ms |
+| contract | 100.0 | 0.1 | GET /api/kirkland/scanner -> 200; 89 row(s) under 'products' |
+
+Seller scenarios:
+- `backed` — find a product in a category I have never sold
+- `backed` — compare landed cost across three suppliers
+- `backed` — tell me the margin at my fee tier
+
+## Golden Goose (`goldengoose`)
+
+the high-margin finder: score an opportunity and say why.
+
+- route `/goldengoose`, group Sourcing, kind workspace
+- **score 89.4 / bar 85** (impact 0.95, gap 0.0)
+
+| dimension | score | weight | evidence |
+|---|---|---|---|
+| works | 100.0 | 0.23 | 567 test id(s) prove it |
+| correct | 60.0 | 0.25 | 567 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
+| seller | 95.6 | 0.13 | 5 Seller-Tester service-path outputs (population: service-path; paths golden_goose), mean 95.6, 3 passed |
+| complete | 100.0 | 0.12 | 1/1 declared Bojo tools wired: golden_goose_scan |
+| usable | 100.0 | 0.07 | no readiness finding names this service |
+| measured | 100.0 | 0.1 | route /goldengoose -> northstar-os-ui\src\pages\roomAdapters.jsx; app p95 3.4 ms |
 | contract | 100.0 | 0.1 | GET /api/kirkland/scanner -> 200; 89 row(s) under 'products' |
 
 Seller scenarios:
@@ -579,13 +535,13 @@ Seller scenarios:
 product pictures in any seller situation, and A+ content, from a prompt, stored references, or uploads - Canva-grade to use.
 
 - route `/design-studio`, group Create, kind studio
-- **score 89.7 / bar 85** (impact 0.95, gap 0.0)
+- **score 89.5 / bar 85** (impact 0.95, gap 0.0)
 
 | dimension | score | weight | evidence |
 |---|---|---|---|
 | works | 100.0 | 0.23 | 166 test id(s) prove it |
 | correct | 60.0 | 0.25 | 166 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
-| seller | 98.0 | 0.13 | 20 Seller-Tester outputs (generated/composite), mean 98.0, 20 passed; 40 replayed artefact(s) excluded as context (mean 22.1) |
+| seller | 96.2 | 0.13 | 32 Seller-Tester outputs (generated/composite), mean 96.2, 32 passed; 40 replayed artefact(s) excluded as context (mean 22.1); 5 service-path output(s) (mean 100.0) are a separate population and are not averaged in here |
 | complete | 100.0 | 0.12 | 3/3 declared Bojo tools wired: build_dieline, generate_image, list_templates |
 | usable | 100.0 | 0.07 | no readiness finding names this service |
 | measured | 100.0 | 0.1 | route /design-studio -> northstar-os-ui\src\pages\internal\DesignStudio.jsx; app p95 3.4 ms |
@@ -595,6 +551,28 @@ Seller scenarios:
 - `backed` — white-background main image from a phone photo
 - `backed` — lifestyle scene with a scale reference
 - `backed` — an A+ module set that matches the brand
+
+## Golden Goose (`golden-goose`)
+
+the high-margin finder: score an opportunity and say why.
+
+- route `/golden-goose`, group Sourcing, kind workspace
+- **score 89.4 / bar 85** (impact 0.95, gap 0.0)
+
+| dimension | score | weight | evidence |
+|---|---|---|---|
+| works | 100.0 | 0.23 | 567 test id(s) prove it |
+| correct | 60.0 | 0.25 | 567 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
+| seller | 95.6 | 0.13 | 5 Seller-Tester service-path outputs (population: service-path; paths golden_goose), mean 95.6, 3 passed; 'golden-goose' is the declared alias of 'goldengoose' (ty/services.json gives both ids the same declared tool and the same purpose) |
+| complete | 100.0 | 0.12 | 1/1 declared Bojo tools wired: golden_goose_scan |
+| usable | 100.0 | 0.07 | no readiness finding names this service |
+| measured | 100.0 | 0.1 | route /golden-goose -> northstar-os-ui\src\pages\internal\GoldenGoose.jsx; app p95 3.4 ms |
+| contract | 100.0 | 0.1 | POST /api/v1/foundation/golden-goose/evaluate -> 200; 17 measured field(s) (item_id,decision,resale_score) |
+
+Seller scenarios:
+- `backed` — find a product in a category I have never sold
+- `backed` — compare landed cost across three suppliers
+- `backed` — tell me the margin at my fee tier
 
 ## Keyword Tracker (`keyword-tracker`)
 
@@ -639,6 +617,28 @@ Seller scenarios:
 - `backed` — tell me what changed before I lose the buy box
 - `backed` — show rank over the last 90 days
 - `backed` — alert me when a competitor undercuts me
+
+## ListingForge (`listingforge`)
+
+create and version listings with the copy that converts.
+
+- route `/listingforge`, group Listings, kind workspace
+- **score 90.0 / bar 85** (impact 0.85, gap 0.0)
+
+| dimension | score | weight | evidence |
+|---|---|---|---|
+| works | 100.0 | 0.23 | 35 test id(s) prove it |
+| correct | 60.0 | 0.25 | 35 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
+| seller | 100.0 | 0.13 | 6 Seller-Tester service-path outputs (population: service-path; paths listing), mean 100.0, 6 passed |
+| complete | 100.0 | 0.12 | 1/1 declared Bojo tools wired: compose_listing |
+| usable | 100.0 | 0.07 | no readiness finding names this service |
+| measured | 100.0 | 0.1 | route /listingforge -> northstar-os-ui\src\pages\internal\ListingForge.jsx; app p95 3.4 ms |
+| contract | 100.0 | 0.1 | POST /api/design-studio/listing-records -> 200; 6 measured field(s) (id,record); read back adad0461-16cd-4966-a146-69d94d9f9097 via /api/design-studio/listing-records |
+
+Seller scenarios:
+- `backed` — turn this product into a listing that will not be suppressed
+- `backed` — rewrite the bullets for a different audience
+- `backed` — fix the listing that lost its buy box
 
 ## Profitability (`profitability`)
 

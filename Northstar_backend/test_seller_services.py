@@ -24,12 +24,53 @@ def test_the_fixture_file_carries_all_four_paths():
     assert set(svc.PATHS) <= set(payload)
     for name in svc.PATHS:
         assert payload[name], f"{name} has no fixture"
-    assert len(payload["listing"]) >= 2
+        # Five is the sample floor: fewer briefs than MIN_SCORED means no service can be
+        # scored from this path however good the answer is.
+        assert len(payload[name]) >= 5, f"{name} carries only {len(payload[name])} brief(s)"
     ppc = payload["ppc"][0]
     assert ppc["rows"][0][0] == "Product" and len(ppc["rows"]) >= 5
     assert {c["asin"] for c in payload["golden_goose"][0]["candidates"]} >= {
         "B0TEST0001", "B0TEST0003"}
     assert payload["research"][0]["corpus"]
+
+
+def test_every_brief_of_a_path_is_its_own_situation():
+    """No near-duplicates: a brief that only renames a colour is the same brief."""
+    payload = svc.load_fixtures()
+    for name in svc.PATHS:
+        ids = [brief.get("id") for brief in payload[name]]
+        assert len(ids) == len(set(ids)), f"{name} repeats an id: {ids}"
+        if name == "listing":
+            skus = [brief.get("sku") for brief in payload[name]]
+            assert len(skus) == len(set(skus)), f"listing repeats a sku: {skus}"
+        if name == "research":
+            queries = [brief.get("query") for brief in payload[name]]
+            assert len(queries) == len(set(queries)), f"research repeats a query: {queries}"
+
+
+def test_each_path_names_the_one_service_that_produces_it():
+    """Attribution is declared in the fixture and must match the registry's own tools."""
+    attribution = svc.load_attribution()
+    registry = json.loads((Path(svc.ROOT) / "ty" / "services.json").read_text(encoding="utf-8"))
+    services = {row["id"]: row for row in registry["services"]}
+    #: The tool a path actually exercises, as declared in ty/services.json.
+    tool = {"listing": "compose_listing", "golden_goose": "golden_goose_scan"}
+    assert set(attribution) == set(svc.PATHS), "every path must be attributed or declared unowned"
+    for name in svc.PATHS:
+        entry = attribution[name]
+        owner = entry.get("service")
+        if owner is None:
+            assert entry.get("why"), f"{name} is unowned with no stated reason"
+            continue
+        assert owner in services, f"{name} names {owner}, which is not in the registry"
+        if name in tool:
+            assert tool[name] in (services[owner].get("tools") or []), (
+                f"{name} is attributed to {owner}, which does not declare {tool[name]}")
+        for alias in entry.get("aliases") or []:
+            assert alias in services, f"{name} declares {alias} as an alias, not in the registry"
+            assert (services[alias].get("tools") or []) == (services[owner].get("tools") or []), (
+                f"{alias} does not declare the same tool as {owner}")
+
 
 
 def test_only_parsing_refuses_an_unknown_path_by_name():
@@ -78,6 +119,27 @@ def test_a_composer_that_returns_no_answer_is_a_named_refusal(tmp_path):
     with pytest.raises(svc.ServiceRefused) as caught:
         svc.run_listing(brief, work_dir=tmp_path / "listing")
     assert "no model answer" in str(caught.value)
+
+
+def test_a_draft_claim_that_survives_the_proposal_fails_the_check(tmp_path):
+    """Control: the compliance brief is measured, not assumed."""
+    brief = next(b for b in svc.load_fixtures()["listing"] if b.get("must_not_keep"))
+    kept = json.loads(json.dumps(brief))
+    kept["recorded_proposal"]["bullets"][0] = (
+        "BEST SLEEP SUPPLEMENT: " + kept["recorded_proposal"]["bullets"][0])
+    row = svc.run_listing(kept, work_dir=tmp_path / "listing")
+    assert row["passed"] is False
+    assert "draft_claims_removed" in row["failed_checks"]
+
+
+def test_a_brief_whose_own_draft_lacks_the_claim_fails_rather_than_passing_empty(tmp_path):
+    """A stale brief must not score a check that never looked at anything."""
+    brief = json.loads(json.dumps(svc.load_fixtures()["listing"][0]))
+    brief["must_not_keep"] = ["best sleep supplement"]
+    row = svc.run_listing(brief, work_dir=tmp_path / "listing")
+    assert "draft_claims_removed" in row["failed_checks"]
+    assert "does not carry it" in row["checks"]["draft_claims_removed"]["detail"]
+
 
 
 # ── ppc ─────────────────────────────────────────────────────────────────────
@@ -148,6 +210,24 @@ def test_the_research_control_an_empty_corpus_is_no_evidence_not_an_answer(tmp_p
     assert "no passage" in row["checks"]["evidence_returned"]["detail"]
 
 
+def test_sources_that_agree_must_not_be_reported_as_a_conflict(tmp_path):
+    """The other direction of the same check: a brief whose sources agree."""
+    brief = next(b for b in svc.load_fixtures()["research"]
+                 if (b.get("expect") or {}).get("conflict_values") == [])
+    row = svc.run_research(brief, work_dir=tmp_path / "research")
+    assert row["checks"]["numeric_conflict_surfaced"]["ok"] is True
+    assert row["checks"]["numeric_conflict_surfaced"]["declared"] == "sources agree"
+    # ... and a disagreement planted in that same corpus must be caught, not averaged.
+    contradicted = json.loads(json.dumps(brief))
+    contradicted["corpus"][2]["text"] = (
+        "The freight cost per pallet from Shenzhen is 520 dollars at the current rate. "
+        "The freight cost per pallet includes port handling.")
+    row = svc.run_research(contradicted, work_dir=tmp_path / "research")
+    assert row["checks"]["numeric_conflict_surfaced"]["ok"] is False
+    assert "declared to agree" in row["checks"]["numeric_conflict_surfaced"]["detail"]
+
+
+
 # ── the pass and the CLI ────────────────────────────────────────────────────
 
 def test_the_pass_runs_only_the_paths_it_was_asked_for(tmp_path):
@@ -157,7 +237,7 @@ def test_the_pass_runs_only_the_paths_it_was_asked_for(tmp_path):
     assert summary["paths"]["golden_goose"]["measured"] is True
     assert summary["paths"]["ppc"]["measured"] is False
     assert summary["paths"]["ppc"]["scored"] == 0
-    assert summary["scored"] == 1
+    assert summary["scored"] == len(svc.load_fixtures()["golden_goose"])
     assert (tmp_path / "proof.json").is_file()
 
 
