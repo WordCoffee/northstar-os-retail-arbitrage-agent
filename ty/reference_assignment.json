@@ -11,7 +11,7 @@
   "uncovered": [],
   "images": {
     "brand_asset": 8,
-    "public_licensed": 34,
+    "public_licensed": 36,
     "synthetic_excluded": 185
   },
   "categories_covered": [
@@ -24,7 +24,7 @@
     "supplement_pouch",
     "tool"
   ],
-  "rejected_by_review": 14,
+  "rejected_by_review": 16,
   "reviewed_depth": {
     "apparel": 3,
     "ceramic_mug": 3,

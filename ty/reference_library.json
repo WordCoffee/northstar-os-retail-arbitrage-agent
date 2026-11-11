@@ -86,7 +86,7 @@
       "id": "3c2448d4-f084-44b7-a615-629805ff4b7e",
       "query": "ceramic mug product",
       "title": "0501Ga4. Souvenir mug 'Novokhopersk'",
-      "creator": "\u0410\u043b\u0435\u043a\u0441\u0430\u043d\u0434\u0440\u043e\u0432\u0430 \u0413\u0430\u043b\u0438\u043d\u0430",
+      "creator": "Александрова Галина",
       "licence": "by",
       "licence_version": "4.0",
       "licence_url": "https://creativecommons.org/licenses/by/4.0/",
@@ -245,7 +245,7 @@
       "source_type": "public_licensed",
       "id": "a7e728bb-b06d-47f7-9d8c-81710186ab23",
       "query": "usb cable product",
-      "title": "\u201cDaily $AAPL UX FAIL WTF\u201d #Mac #annoyance / SML.20130128.IP3.SQ",
+      "title": "“Daily $AAPL UX FAIL WTF” #Mac #annoyance / SML.20130128.IP3.SQ",
       "creator": "See-ming Lee (SML)",
       "licence": "by",
       "licence_version": "2.0",
@@ -581,94 +581,6 @@
       "usage": "rubric reference only - never a product asset, never composited into a seller picture"
     },
     {
-      "category": "supplement_pouch",
-      "source_type": "brand_asset",
-      "id": "brand-6e54d5d4755ba9cd",
-      "file": "renders/references/mogra/mogra_pair_main.png",
-      "sha256": "6e54d5d4755ba9cd",
-      "licence": "owner-owned",
-      "licence_url": null,
-      "source_url": null,
-      "usage": "owner's own product photograph; usable as a seller reference"
-    },
-    {
-      "category": "supplement_pouch",
-      "source_type": "brand_asset",
-      "id": "brand-eb0f024d9dce5ecb",
-      "file": "renders/references/mogra/mogra_pair_lifestyle.png",
-      "sha256": "eb0f024d9dce5ecb",
-      "licence": "owner-owned",
-      "licence_url": null,
-      "source_url": null,
-      "usage": "owner's own product photograph; usable as a seller reference"
-    },
-    {
-      "category": "supplement_pouch",
-      "source_type": "brand_asset",
-      "id": "brand-f03b771df2f4fba3",
-      "file": "renders/references/mogra/mogra_forest_dusk.png",
-      "sha256": "f03b771df2f4fba3",
-      "licence": "owner-owned",
-      "licence_url": null,
-      "source_url": null,
-      "usage": "owner's own product photograph; usable as a seller reference"
-    },
-    {
-      "category": "supplement_pouch",
-      "source_type": "brand_asset",
-      "id": "brand-fb254b2eac489fc8",
-      "file": "renders/references/word-coffee/word_coffee_moms_front.jpg",
-      "sha256": "fb254b2eac489fc8",
-      "licence": "owner-owned",
-      "licence_url": null,
-      "source_url": null,
-      "usage": "owner's own product photograph; usable as a seller reference"
-    },
-    {
-      "category": "supplement_pouch",
-      "source_type": "brand_asset",
-      "id": "brand-ae941a3c3a32001a",
-      "file": "renders/references/word-coffee/word_coffee_women_front.jpg",
-      "sha256": "ae941a3c3a32001a",
-      "licence": "owner-owned",
-      "licence_url": null,
-      "source_url": null,
-      "usage": "owner's own product photograph; usable as a seller reference"
-    },
-    {
-      "category": "supplement_pouch",
-      "source_type": "brand_asset",
-      "id": "brand-6107b970dfc9eb9e",
-      "file": "renders/references/word-coffee/wc_women_pic_box.jpg",
-      "sha256": "6107b970dfc9eb9e",
-      "licence": "owner-owned",
-      "licence_url": null,
-      "source_url": null,
-      "usage": "owner's own product photograph; usable as a seller reference"
-    },
-    {
-      "category": "supplement_pouch",
-      "source_type": "brand_asset",
-      "id": "brand-2454743c07e2f2e0",
-      "file": "renders/references/word-coffee/wc_women_easter_table.png",
-      "sha256": "2454743c07e2f2e0",
-      "licence": "owner-owned",
-      "licence_url": null,
-      "source_url": null,
-      "usage": "owner's own product photograph; usable as a seller reference"
-    },
-    {
-      "category": "supplement_pouch",
-      "source_type": "brand_asset",
-      "id": "brand-2d94003b9b064093",
-      "file": "renders/references/word-coffee/wc_women_in_purse.png",
-      "sha256": "2d94003b9b064093",
-      "licence": "owner-owned",
-      "licence_url": null,
-      "source_url": null,
-      "usage": "owner's own product photograph; usable as a seller reference"
-    },
-    {
       "category": "ceramic_mug",
       "source_type": "public_licensed",
       "id": "e1ecd851-07ae-4011-b7e6-036f3170d6f9",
@@ -787,6 +699,134 @@
       "reviewed": true,
       "review_kind": "product_photo",
       "review_reason": "two labelled jars on a cloth with readable front and back labels: a real jar-label reference"
+    },
+    {
+      "category": "tool",
+      "source_type": "public_licensed",
+      "id": "dd57c603-7d21-4712-a9a3-0771d7085395",
+      "query": "hand tool product",
+      "title": "Heating evenly...",
+      "creator": "wbaiv",
+      "licence": "by-sa",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by-sa/2.0/",
+      "source_url": "https://www.flickr.com/photos/9998127@N06/7849499232",
+      "image_url": "https://live.staticflickr.com/8291/7849499232_50b911138a_b.jpg",
+      "file": "renders/references/categories/tool/dd57c603-7d21-4712-a9a3-0771d7085395.jpg",
+      "sha256": "8432732dc3df89ab",
+      "pixels": [
+        1024,
+        768
+      ],
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture"
+    },
+    {
+      "category": "tool",
+      "source_type": "public_licensed",
+      "id": "35974940-adf8-4abb-b242-6a124e29ac6e",
+      "query": "hand tool product",
+      "title": "Glass artwork at Tacoma Museum of Glass",
+      "creator": "wbaiv",
+      "licence": "by-sa",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by-sa/2.0/",
+      "source_url": "https://www.flickr.com/photos/9998127@N06/5673894678",
+      "image_url": "https://live.staticflickr.com/5066/5673894678_9050e7beff_b.jpg",
+      "file": "renders/references/categories/tool/35974940-adf8-4abb-b242-6a124e29ac6e.jpg",
+      "sha256": "4f55d3ec3b61028c",
+      "pixels": [
+        1024,
+        768
+      ],
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture"
+    },
+    {
+      "category": "supplement_pouch",
+      "source_type": "brand_asset",
+      "id": "brand-6e54d5d4755ba9cd",
+      "file": "renders/references/mogra/mogra_pair_main.png",
+      "sha256": "6e54d5d4755ba9cd",
+      "licence": "owner-owned",
+      "licence_url": null,
+      "source_url": null,
+      "usage": "owner's own product photograph; usable as a seller reference"
+    },
+    {
+      "category": "supplement_pouch",
+      "source_type": "brand_asset",
+      "id": "brand-eb0f024d9dce5ecb",
+      "file": "renders/references/mogra/mogra_pair_lifestyle.png",
+      "sha256": "eb0f024d9dce5ecb",
+      "licence": "owner-owned",
+      "licence_url": null,
+      "source_url": null,
+      "usage": "owner's own product photograph; usable as a seller reference"
+    },
+    {
+      "category": "supplement_pouch",
+      "source_type": "brand_asset",
+      "id": "brand-f03b771df2f4fba3",
+      "file": "renders/references/mogra/mogra_forest_dusk.png",
+      "sha256": "f03b771df2f4fba3",
+      "licence": "owner-owned",
+      "licence_url": null,
+      "source_url": null,
+      "usage": "owner's own product photograph; usable as a seller reference"
+    },
+    {
+      "category": "supplement_pouch",
+      "source_type": "brand_asset",
+      "id": "brand-fb254b2eac489fc8",
+      "file": "renders/references/word-coffee/word_coffee_moms_front.jpg",
+      "sha256": "fb254b2eac489fc8",
+      "licence": "owner-owned",
+      "licence_url": null,
+      "source_url": null,
+      "usage": "owner's own product photograph; usable as a seller reference"
+    },
+    {
+      "category": "supplement_pouch",
+      "source_type": "brand_asset",
+      "id": "brand-ae941a3c3a32001a",
+      "file": "renders/references/word-coffee/word_coffee_women_front.jpg",
+      "sha256": "ae941a3c3a32001a",
+      "licence": "owner-owned",
+      "licence_url": null,
+      "source_url": null,
+      "usage": "owner's own product photograph; usable as a seller reference"
+    },
+    {
+      "category": "supplement_pouch",
+      "source_type": "brand_asset",
+      "id": "brand-6107b970dfc9eb9e",
+      "file": "renders/references/word-coffee/wc_women_pic_box.jpg",
+      "sha256": "6107b970dfc9eb9e",
+      "licence": "owner-owned",
+      "licence_url": null,
+      "source_url": null,
+      "usage": "owner's own product photograph; usable as a seller reference"
+    },
+    {
+      "category": "supplement_pouch",
+      "source_type": "brand_asset",
+      "id": "brand-2454743c07e2f2e0",
+      "file": "renders/references/word-coffee/wc_women_easter_table.png",
+      "sha256": "2454743c07e2f2e0",
+      "licence": "owner-owned",
+      "licence_url": null,
+      "source_url": null,
+      "usage": "owner's own product photograph; usable as a seller reference"
+    },
+    {
+      "category": "supplement_pouch",
+      "source_type": "brand_asset",
+      "id": "brand-2d94003b9b064093",
+      "file": "renders/references/word-coffee/wc_women_in_purse.png",
+      "sha256": "2d94003b9b064093",
+      "licence": "owner-owned",
+      "licence_url": null,
+      "source_url": null,
+      "usage": "owner's own product photograph; usable as a seller reference"
     }
   ],
   "refused": [
@@ -1586,6 +1626,327 @@
       "file": "renders/references/categories/skincare_bottle/26e7cfb3-caf0-4597-ba7e-0c9e7242fd86.jpg",
       "reason": "a flat illustration, not a photograph: it would teach the rubric a drawing instead of a product",
       "decided_by": "director visual review"
+    },
+    {
+      "query": "pet toy product",
+      "reason": "HTTPError: HTTP Error 504: Gateway Timeout"
+    },
+    {
+      "query": "dog product photography",
+      "id": "0cca3b71-9d81-48fd-a5ed-d7c1649b2688",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "dog product photography",
+      "id": "92fa76e0-5e0a-4547-876f-e2d3fa67f702",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "dog product photography",
+      "id": "32e58a12-f26b-4389-9ffd-0a00ffd25ddf",
+      "reason": "small 683x1024"
+    },
+    {
+      "query": "dog product photography",
+      "id": "e609f437-ee42-4610-ad64-365012e97803",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "dog product photography",
+      "id": "27d9e706-b76a-42aa-8a3e-7499459a6adb",
+      "reason": "small 683x1024"
+    },
+    {
+      "query": "dog product photography",
+      "id": "407fc40e-0028-4dce-b753-7d31ff12c729",
+      "reason": "small 683x1024"
+    },
+    {
+      "query": "dog product photography",
+      "id": "fdb77a93-0685-42de-b5a9-f09c0de2d1ab",
+      "reason": "small 683x1024"
+    },
+    {
+      "query": "dog product photography",
+      "id": "4f6f8f39-1c62-4ae9-8a33-fb7b6f1d43ad",
+      "reason": "small 683x1024"
+    },
+    {
+      "query": "dog product photography",
+      "id": "7549777e-11e8-4eb5-8db2-84bf7d5fface",
+      "reason": "small 683x1024"
+    },
+    {
+      "query": "dog product photography",
+      "id": "dd984be1-f017-4670-a598-c875b60c73f2",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "dog product photography",
+      "id": "a3d8d35c-a4ea-4a32-8981-f768aea29bae",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "dog product photography",
+      "id": "f29ced72-3017-4b0e-9afa-9fa490635f30",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "dog product photography",
+      "id": "79f5df77-1491-4813-995a-8dffa650cc51",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "dog product photography",
+      "id": "e555d818-0baf-440f-ab32-4329818fc079",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "dog product photography",
+      "id": "1d893190-5f3e-487c-a07b-e01c591dc160",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "dog product photography",
+      "id": "513abd85-e62d-44a4-9287-8d9152fe5fb5",
+      "reason": "off_topic: no category term in title/tags/description"
+    },
+    {
+      "query": "kitchen appliance product",
+      "reason": "HTTPError: HTTP Error 504: Gateway Timeout"
+    },
+    {
+      "query": "hand tool product",
+      "reason": "HTTPError: HTTP Error 504: Gateway Timeout"
+    },
+    {
+      "query": "pet toy product",
+      "reason": "HTTPError: HTTP Error 504: Gateway Timeout"
+    },
+    {
+      "query": "dog product photography",
+      "id": "0cca3b71-9d81-48fd-a5ed-d7c1649b2688",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "dog product photography",
+      "id": "92fa76e0-5e0a-4547-876f-e2d3fa67f702",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "dog product photography",
+      "id": "32e58a12-f26b-4389-9ffd-0a00ffd25ddf",
+      "reason": "small 683x1024"
+    },
+    {
+      "query": "dog product photography",
+      "id": "e609f437-ee42-4610-ad64-365012e97803",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "dog product photography",
+      "id": "27d9e706-b76a-42aa-8a3e-7499459a6adb",
+      "reason": "small 683x1024"
+    },
+    {
+      "query": "dog product photography",
+      "id": "407fc40e-0028-4dce-b753-7d31ff12c729",
+      "reason": "small 683x1024"
+    },
+    {
+      "query": "dog product photography",
+      "id": "fdb77a93-0685-42de-b5a9-f09c0de2d1ab",
+      "reason": "small 683x1024"
+    },
+    {
+      "query": "dog product photography",
+      "id": "4f6f8f39-1c62-4ae9-8a33-fb7b6f1d43ad",
+      "reason": "small 683x1024"
+    },
+    {
+      "query": "dog product photography",
+      "id": "7549777e-11e8-4eb5-8db2-84bf7d5fface",
+      "reason": "small 683x1024"
+    },
+    {
+      "query": "dog product photography",
+      "id": "dd984be1-f017-4670-a598-c875b60c73f2",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "dog product photography",
+      "id": "a3d8d35c-a4ea-4a32-8981-f768aea29bae",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "dog product photography",
+      "id": "f29ced72-3017-4b0e-9afa-9fa490635f30",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "dog product photography",
+      "id": "79f5df77-1491-4813-995a-8dffa650cc51",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "dog product photography",
+      "id": "e555d818-0baf-440f-ab32-4329818fc079",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "dog product photography",
+      "id": "1d893190-5f3e-487c-a07b-e01c591dc160",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "dog product photography",
+      "id": "513abd85-e62d-44a4-9287-8d9152fe5fb5",
+      "reason": "off_topic: no category term in title/tags/description"
+    },
+    {
+      "query": "kitchen appliance product",
+      "id": "75a15671-bd28-42be-a978-7e161ac95cb8",
+      "reason": "small 369x500"
+    },
+    {
+      "query": "kitchen appliance product",
+      "id": "59501af1-4348-49b9-a439-ce732f911798",
+      "reason": "small 240x240"
+    },
+    {
+      "query": "kitchen appliance product",
+      "id": "f9d206f4-cf26-4d9b-abd1-5b50429f32fa",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "kitchen appliance product",
+      "id": "4e78644a-bc77-4a18-83e3-7518acb17731",
+      "reason": "small 240x240"
+    },
+    {
+      "query": "kitchen appliance product",
+      "id": "f27a14e6-b7a7-4bb6-adbd-b54c59554a4a",
+      "reason": "small 240x240"
+    },
+    {
+      "query": "kitchen appliance product",
+      "id": "35953d3c-ffc1-4872-85bf-6f060fd83937",
+      "reason": "small 500x382"
+    },
+    {
+      "query": "kitchen appliance product",
+      "id": "72a65717-59da-464c-b46d-474211536be8",
+      "reason": "small 1024x639"
+    },
+    {
+      "query": "kitchen appliance product",
+      "id": "daf12e08-8e4c-4c91-b125-29e5d2d3e876",
+      "reason": "small 500x375"
+    },
+    {
+      "query": "kitchen appliance product",
+      "id": "5e36d437-0bed-474c-88bb-ae2b604ff901",
+      "reason": "small 240x240"
+    },
+    {
+      "query": "kitchen appliance product",
+      "id": "d831189a-332c-4cb6-ae4a-2dde6dce2802",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "kitchen appliance product",
+      "id": "18be3902-7ce9-4cf1-9ea7-516f13b95ea5",
+      "reason": "small 240x240"
+    },
+    {
+      "query": "kitchen appliance product",
+      "id": "7b3af72a-411c-47ae-a0c3-ac40a34bd841",
+      "reason": "small 640x960"
+    },
+    {
+      "query": "kitchen appliance product",
+      "id": "331af815-7a13-4eb3-bb09-073a40d7a7d9",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "kitchen appliance product",
+      "id": "9f5b6d42-5de6-41d7-8cf8-e918b151f9f8",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "kitchen appliance product",
+      "id": "90dc7d6b-606e-452f-b99b-83f250076f5b",
+      "reason": "small 240x240"
+    },
+    {
+      "query": "kitchen appliance product",
+      "id": "feed1a0f-3f6c-496c-81f8-c007c7a2255f",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "hand tool product",
+      "id": "67ded8d8-ead2-4d31-b532-2be989631d55",
+      "reason": "off_topic: no category term in title/tags/description"
+    },
+    {
+      "query": "hand tool product",
+      "id": "a9484ed5-a46f-4d74-a28a-116a14cd6490",
+      "reason": "off_topic: no category term in title/tags/description"
+    },
+    {
+      "query": "hand tool product",
+      "id": "14b89791-3c34-44e0-ac6a-62fc711c497d",
+      "reason": "small 1024x685"
+    },
+    {
+      "query": "hand tool product",
+      "id": "f3d14bd7-25b8-43af-8cf6-fecfaa13b87a",
+      "reason": "small 567x1024"
+    },
+    {
+      "query": "hand tool product",
+      "id": "4c430d98-f9cd-4929-aa8e-6428f34a5ce8",
+      "reason": "small 682x1024"
+    },
+    {
+      "query": "hand tool product",
+      "id": "7a254387-265c-45fd-a4eb-a66987b7f388",
+      "reason": "small 500x338"
+    },
+    {
+      "query": "hand tool product",
+      "id": "2e8d593a-074c-42d4-a9df-a3aed23b3991",
+      "reason": "small 500x266"
+    },
+    {
+      "query": "hand tool product",
+      "id": "4a1715cd-2b9e-4687-89c3-14654da6b1ed",
+      "reason": "small 682x1024"
+    },
+    {
+      "query": "hand tool product",
+      "id": "6fcb3b8e-9194-43b3-939b-02d76379f1a4",
+      "reason": "small 682x1024"
+    },
+    {
+      "query": "pet toy product",
+      "reason": "HTTPError: HTTP Error 504: Gateway Timeout"
+    },
+    {
+      "query": "dog product photography",
+      "reason": "HTTPError: HTTP Error 504: Gateway Timeout"
+    },
+    {
+      "query": "kitchen appliance product",
+      "reason": "HTTPError: HTTP Error 504: Gateway Timeout"
+    },
+    {
+      "query": "hand tool product",
+      "reason": "HTTPError: HTTP Error 504: Gateway Timeout"
+    },
+    {
+      "query": "screwdriver product photography",
+      "reason": "HTTPError: HTTP Error 504: Gateway Timeout"
     }
   ],
   "at": "2026-11-11",

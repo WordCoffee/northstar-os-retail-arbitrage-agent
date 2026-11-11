@@ -8,8 +8,8 @@
 | `public_licensed` | 39 |
 | `synthetic` | **0 — excluded from pass-rate claims by construction** |
 
-Images available: 8 brand assets, 34 public licensed, 185 synthetic (excluded).
-**Visual review:** 28 usable of 42 reviewed — 14 rejected as not a product (`ty/reference_review.json`, sheet `reports/ty/reference_public_contact.png`).
+Images available: 8 brand assets, 36 public licensed, 185 synthetic (excluded).
+**Visual review:** 28 usable of 44 reviewed — 16 rejected as not a product (`ty/reference_review.json`, sheet `reports/ty/reference_public_contact.png`).
 
 ## Depth, not just coverage
 

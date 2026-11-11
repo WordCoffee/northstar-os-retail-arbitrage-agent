@@ -272,10 +272,15 @@ def test_an_already_failing_composite_is_not_called_provisional():
     from tools import composite_audit
 
     brief = composite_brief()
+    # A composite row carries both halves of the background property since D-020: the
+    # corner instrument and the whole-frame residue instrument. A fixture with only
+    # `background` is not a row this app can produce — its weight was split 0.20 into
+    # 0.10 + 0.10, so a missing `matte_residue` silently refunds half a failure.
     result = {"brief_id": "MG-C01", "passed": False, "score": 60.0,
               "checks": {"dimensions": {"ok": True, "skipped": False},
                          "aspect": {"ok": True, "skipped": False},
                          "background": {"ok": False, "skipped": False},
+                         "matte_residue": {"ok": False, "skipped": False},
                          "reference_subject": {"ok": True, "skipped": False}}}
     updated = composite_audit.apply_region_to_row(
         result, brief, {"ok": False, "cannot_verify": True, "detail": "no cutout"})

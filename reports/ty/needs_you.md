@@ -377,3 +377,33 @@ Either route closes V3; UIA needs nothing from you but presence.
 
 
 
+
+---
+
+## 2026-11-11 04:40 â€” reference depth is blocked on an image source, not on work
+
+`reference-review-backfill` (rank 4) needs **two more usable references each** for
+`pet_product` (1 of 3) and `small_appliance` (1 of 3). `tool` was tried too and is back to 2:
+the two new rows the topic gate accepted are a glassblowing class and a museum glass display,
+both rejected on sight (`ty/reference_review.json`).
+
+Measured, not guessed:
+
+| attempt | result |
+|---|---|
+| `python tools/reference_coverage.py --fetch --categories pet_product,small_appliance` | **+0 kept, 33 refused** â€” every row refused `small 1024x683` (short side 683 < the 800 px gate) |
+| same with `--min-side 700` | **+0 kept** â€” 683 is still under 700 |
+| `size=large` added to the Openverse query | answered **504 Gateway Timeout** on 2 of 3 categories; the one that answered returned 3466x1705 and 6000x4000, so the parameter is right and the gateway is not |
+| plain query, no `size` | 200 OK, 240 results, mostly 1024x683 |
+
+Openverse's free tier answers product queries with 1024x683 crops; the licence is fine
+(CC0/BY/BY-SA only) and the topic gate is fine; the **pixels** are the blocker.
+
+**One action, either one closes it:**
+1. an **Openverse client key** (openverse.org/api, register, free) so the `size=large`
+   filter is served reliably â€” put it in `.env` as `OPENVERSE_CLIENT_KEY`; or
+2. say the word that brand storefronts and design galleries may be used as reference
+   sources (permitted by the work order's reference rule, but they are scraped pages rather
+   than an API, so it is not started without your word).
+
+Nothing else in the queue is blocked: the program continues at `pack-03-boxart-forms`.
