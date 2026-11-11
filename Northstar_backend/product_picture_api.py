@@ -38,6 +38,9 @@ class ProductPictureIn(BaseModel):
     tier: str = Field("final", pattern="^(draft|final)$")
     seed: Optional[int] = Field(None, ge=0, le=2**31 - 1)
     design: Optional[Dict[str, Any]] = None
+    #: How many packages the picture must show. `units: 3` is a bundle: the plate
+    #: must contain three, one panel is warped onto each, and fewer is a refusal.
+    units: int = Field(1, ge=1, le=6)
     #: A generated asset id used as the reference product photo (FLUX 3 mi2i).
     #: The plate then carries the real pouch; the vector panel still replaces
     #: the label area, so typography is drawn, never diffused.
@@ -130,7 +133,8 @@ def create_product_picture(body: ProductPictureIn, acct: str = Depends(studio_ac
     try:
         result = pp.build(design, out_dir=body.out_dir, faces=faces,
                           width=body.width, height=body.height,
-                          tier=body.tier, seed=body.seed, reference=reference)
+                          tier=body.tier, seed=body.seed, reference=reference,
+                          units=body.units)
     except ValueError as exc:
         raise HTTPException(status_code=422, detail=str(exc))
     except RuntimeError as exc:  # engine refused (disarmed / VRAM busy)

@@ -287,3 +287,12 @@ def test_one_unit_is_still_one_unit(tmp_path):
                       height=2000, generator=_generator(plate))
     assert result["ok"] is True
     assert result["faces"][0]["units_found"] == 1
+
+
+def test_the_api_carries_units_and_bounds_them():
+    import product_picture_api as api
+
+    assert api.ProductPictureIn(product="word-coffee").units == 1
+    assert api.ProductPictureIn(product="word-coffee", units=3).units == 3
+    with pytest.raises(Exception):
+        api.ProductPictureIn(product="word-coffee", units=0)
