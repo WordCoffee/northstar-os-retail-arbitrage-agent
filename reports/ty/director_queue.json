@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-11T17:06:35+00:00",
+  "updated_at": "2026-11-11T17:15:09+00:00",
   "cycle": 3,
   "unit_in_flight": "",
   "unit_order": [
@@ -1975,6 +1975,29 @@
       "evidence": "[\"reports/ty/ux08_scene.md\"]",
       "created_at": "2026-11-09T03:16:49+00:00",
       "updated_at": "2026-11-11T02:43:16+00:00",
+      "rank": 9
+    },
+    {
+      "id": "retire-goldengoose-alias",
+      "unit": "U",
+      "title": "goldengoose and golden-goose are one surface counted twice: mark the legacy route an alias, or retire it",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "ty/service_registry.json",
+        "northstar-os-ui/src",
+        "tools/registry"
+      ],
+      "branch": "ty/retire-goldengoose-alias",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-11T17:15:09+00:00",
+      "updated_at": "2026-11-11T17:15:09+00:00",
       "rank": 9
     },
     {
