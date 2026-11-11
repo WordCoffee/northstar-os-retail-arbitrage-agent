@@ -1,41 +1,37 @@
 {
-  "at": "2026-11-09T15:25:02+00:00",
+  "at": "2026-11-11T07:11:40+00:00",
   "services": [
     {
       "service": "design-studio",
       "url": "http://127.0.0.1:8101/ui/design-studio",
-      "at": "2026-11-09T15:23:54+00:00",
-      "opened": false,
-      "title": "NorthstarOS — Retail Arbitrage Suite - Google Chrome",
+      "at": "2026-11-11T07:11:40+00:00",
       "ok": false,
-      "reason": "neither the title nor the pixels changed"
+      "blocked": true,
+      "reason": "no live Vision session: the desktop must be unlocked and Chrome attached before this can drive anything"
     },
     {
       "service": "listings",
       "url": "http://127.0.0.1:8101/ui/listings",
-      "at": "2026-11-09T15:24:11+00:00",
-      "opened": false,
-      "title": "NorthstarOS — Retail Arbitrage Suite - Google Chrome",
+      "at": "2026-11-11T07:11:40+00:00",
       "ok": false,
-      "reason": "neither the title nor the pixels changed"
+      "blocked": true,
+      "reason": "no live Vision session: the desktop must be unlocked and Chrome attached before this can drive anything"
     },
     {
       "service": "socialpulse",
       "url": "http://127.0.0.1:8101/ui/socialpulse",
-      "at": "2026-11-09T15:24:28+00:00",
-      "opened": false,
-      "title": "NorthstarOS — Retail Arbitrage Suite - Google Chrome",
+      "at": "2026-11-11T07:11:40+00:00",
       "ok": false,
-      "reason": "neither the title nor the pixels changed"
+      "blocked": true,
+      "reason": "no live Vision session: the desktop must be unlocked and Chrome attached before this can drive anything"
     },
     {
       "service": "competitor-monitor",
       "url": "http://127.0.0.1:8101/ui/competitor-monitor",
-      "at": "2026-11-09T15:24:45+00:00",
-      "opened": false,
-      "title": "NorthstarOS — Retail Arbitrage Suite - Google Chrome",
+      "at": "2026-11-11T07:11:40+00:00",
       "ok": false,
-      "reason": "neither the title nor the pixels changed"
+      "blocked": true,
+      "reason": "no live Vision session: the desktop must be unlocked and Chrome attached before this can drive anything"
     }
   ],
   "passed": 0,

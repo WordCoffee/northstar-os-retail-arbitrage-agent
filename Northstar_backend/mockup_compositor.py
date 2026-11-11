@@ -731,6 +731,14 @@ def find_cylinder_bands(image: Union[Image.Image, str, Path], *, count: int = 1,
     different in colour but only for a thin slice of a column, so a column profile
     separates body from shadow without merging two units into one blob. A band too
     small to be a package is a refusal, never a smaller label.
+
+    The mask cut is **relative to the plate's own subject contrast**, not a fixed
+    16 levels: on a pale body against a pale sweep the silhouette edge differs by
+    only a few levels, and a fixed cut drops it, so the measured body came out
+    narrower than the body and the label was drawn small (D-016, measured
+    2026-11-11: 479 px measured for a 500 px body, now 493 px). The cut stays at
+    or below `threshold` and never below the noise floor, so a caller can tighten
+    it but cannot make it looser than the plate justifies.
     """
     import numpy as np
 
@@ -754,9 +762,20 @@ def find_cylinder_bands(image: Union[Image.Image, str, Path], *, count: int = 1,
         rgb[-patch:, :patch].reshape(-1, 3), rgb[-patch:, -patch:].reshape(-1, 3)])
     background = np.median(corners, axis=0)
     diff = np.abs(rgb - background.reshape(1, 1, 3)).max(axis=2)
-    mask = (diff > float(threshold)).astype(np.uint8)
+    # The plate sets its own contrast: 20 % of its strongest subject pixel, capped
+    # by the caller's threshold and floored above the sweep's noise. See D-016.
+    strong = float(np.percentile(diff, 99.5))
+    cut = max(5.0, min(float(threshold), 0.20 * strong))
+    mask = (diff > cut).astype(np.uint8)
     mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, np.ones((5, 5), np.uint8))
     mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, np.ones((9, 9), np.uint8))
+    # The body's *vertical* extent is measured on the caller's own cut, not the
+    # fine one: the fine cut reaches into a soft contact shadow at the base and
+    # grew the band by 8 % (measured 2026-11-11: bottom 1125 px for a 1050 px
+    # body). The fine cut is for the silhouette edge only.
+    firm = (diff > float(threshold)).astype(np.uint8)
+    firm = cv2.morphologyEx(firm, cv2.MORPH_OPEN, np.ones((5, 5), np.uint8))
+    firm = cv2.morphologyEx(firm, cv2.MORPH_CLOSE, np.ones((9, 9), np.uint8))
 
     total = int(mask.sum())
     if total < 0.02 * w * h:
@@ -785,7 +804,7 @@ def find_cylinder_bands(image: Union[Image.Image, str, Path], *, count: int = 1,
         working[max(0, left - 8):min(w, right + 9)] = 0.0
         if right - left < min_width_frac * w:
             continue
-        band = mask[:, left:right + 1]
+        band = firm[:, left:right + 1]
         rows = band.sum(axis=1).astype(np.float32) / float(right - left + 1)
         row_runs = [run for run in _runs(rows >= 0.35)
                     if run[1] - run[0] >= min_height_frac * h]

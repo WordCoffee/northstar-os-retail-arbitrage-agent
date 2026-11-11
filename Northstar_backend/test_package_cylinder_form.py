@@ -76,6 +76,90 @@ def test_a_cylinder_plate_brief_is_not_a_pouch_and_not_a_carton():
     assert pp.plate_brief("front", ba.CYLINDER) == cylinder
 
 
+def test_a_design_names_its_own_body_in_the_plate_brief():
+    """A mug with a handle and a canister with a lid are not the same object."""
+    mug = ba.design_for("word-coffee-mug")
+    assert "mug with a handle" in pp.plate_brief("front", ba.CYLINDER, mug)
+    tub = ba.design_for("pine-paws-joint")
+    assert "supplement tub" in pp.plate_brief("back", ba.CYLINDER, tub)
+    assert "turned around" in pp.plate_brief("back", ba.CYLINDER, tub)
+    # a form with no per-design subject keeps its own brief
+    box = ba.design_for("word-coffee")
+    assert pp.plate_brief("front", ba.GIFT_BOX, box) == pp.FORM_PLATE_BRIEFS[ba.GIFT_BOX]["front"]
+
+
+# ── D-016: the measured body must be the body, on a low-contrast plate ──────
+
+def _low_contrast_cylinder(size=(1000, 1200), body=(250, 750), top=150,
+                           bottom=1050,*, noise_sigma=0.0, seed=7):
+    """A pale body on a paler sweep whose silhouette edges fade near the base.
+
+    The truth is exact: the body spans x 250..750, y 150..1050. Each column is a
+    body pixel for only the top `f(x)` share of the body height, and f falls from
+    1.0 in the middle of the body to 0.30 at the silhouette edge — the rounded-edge
+    shading that makes a fixed mask cut lose the edge.
+    """
+    import numpy as np
+
+    w, h = size
+    bg = np.array([212, 212, 209], dtype=np.float32)
+    img = np.tile(bg, (h, w, 1))
+    x0, x1 = body
+    half = (x1 - x0) / 2.0
+    centre = (x0 + x1) / 2.0
+    body_h = bottom - top
+    xs = np.arange(x0, x1)
+    t = np.abs(xs - centre) / half
+    f = np.ones_like(t)
+    outer = t > 0.55
+    f[outer] = 1.0 - (0.70 * (t[outer] - 0.55) / 0.45)
+    tint = np.array([238, 238, 235], dtype=np.float32)
+    for i, x in enumerate(xs):
+        img[top:int(round(top + f[i] * body_h)), x] = tint
+    # a soft contact shadow under the base, as a real plate has
+    yy, xx = np.mgrid[0:h, 0:w]
+    shadow = np.exp(-(((xx - w / 2) / 260.0) ** 2 + ((yy - (bottom + 40)) / 26.0) ** 2))
+    img = img * (1 - 0.16 * shadow[..., None])
+    if noise_sigma:
+        rng = np.random.default_rng(seed)
+        img = img + rng.normal(0, noise_sigma, img.shape)
+    return Image.fromarray(np.clip(img, 0, 255).astype(np.uint8), "RGB")
+
+
+def test_a_low_contrast_body_is_measured_to_its_silhouette():
+    """D-016: a fixed mask cut dropped the pale edge and the label came out small."""
+    band = mc.find_cylinder_bands(_low_contrast_cylinder(), count=1)[0]
+    width = band[2] - band[0]
+    assert 0.97 * 500 <= width <= 1.03 * 500, band
+    assert abs(band[1] - 150) <= 12 and abs(band[3] - 1050) <= 12, band
+
+
+def test_the_measurement_holds_with_plate_grain():
+    band = mc.find_cylinder_bands(
+        _low_contrast_cylinder(noise_sigma=2.5), count=1)[0]
+    width = band[2] - band[0]
+    assert 0.97 * 500 <= width <= 1.03 * 500, band
+
+
+def test_a_tall_side_shadow_is_not_measured_as_body():
+    """A shadow column is a thin slice of the height; a body column is most of it."""
+    img = _low_contrast_cylinder()
+    import numpy as np
+    a = np.asarray(img).astype(np.float32)
+    # a soft shadow immediately right of the body, masked for 30 % of its height
+    sh_top = 150 + int(0.70 * 900)
+    a[sh_top:1050, 750:840] = np.array([186, 186, 184], dtype=np.float32)
+    ramp = np.linspace(1.0, 0.0, 90, dtype=np.float32)[None, :, None]
+    bg = np.array([212, 212, 209], dtype=np.float32)[None, None, :]
+    a[sh_top:1050, 750:840] = (bg + (a[sh_top:1050, 750:840] - bg) * ramp)
+    shadowed = Image.fromarray(np.clip(a, 0, 255).astype(np.uint8), "RGB")
+    band = mc.find_cylinder_bands(shadowed, count=1)[0]
+    assert band[2] - band[0] <= 1.01 * 500, band
+    # known limit, stated in reports/ty/d016_label_scale_plate.md: when a caller
+    # asks for two units, a shadow 30 % of the body height can be counted as one.
+
+
+
 def test_the_cylinder_insets_leave_the_shoulder_and_the_base_unprinted():
     pouch = pp.FORM_INSETS[ba.POUCH]
     cylinder = pp.FORM_INSETS[ba.CYLINDER]
@@ -189,7 +273,8 @@ def test_a_cylinder_plate_yields_a_gated_labelled_picture(tmp_path):
                       faces=("front", "back"), generator=_generator(_plate("cylinder")))
     assert result["ok"] is True, json.dumps(result["faces"], indent=2)
     assert result["product"]["form"] == ba.CYLINDER
-    assert "cylindrical" in result["faces"][0]["brief"]
+    # the plate brief names the design's own body, not a generic cylinder
+    assert "amber glass bottle" in result["faces"][0]["brief"]
     for record in result["faces"]:
         assert record["units_found"] == 1
         assert record["quad"] and record["quads"]

@@ -91,6 +91,7 @@ WORD_COFFEE: Dict[str, Any] = {
 #: the panel across the 180-degree arc), not a flat carton face.
 WORD_COFFEE_CANISTER: Dict[str, Any] = {
     "id": "word-coffee-canister",
+    "plate_subject": "cylindrical coffee canister with a screw lid",
     "brand": "WORD COFFEE",
     "product": "GROUND COFFEE",
     "form": CYLINDER,
@@ -128,10 +129,11 @@ WORD_COFFEE_CANISTER: Dict[str, Any] = {
 #: A printed ceramic mug on the Word Coffee brand: the wrap label is the print.
 WORD_COFFEE_MUG: Dict[str, Any] = {
     "id": "word-coffee-mug",
+    "plate_subject": "ceramic mug with a handle",
     "brand": "WORD COFFEE",
     "product": "CERAMIC MUG",
     "form": CYLINDER,
-    "face_mm": {"front": [129.0, 100.0], "back": [129.0, 100.0]},
+    "face_mm": {"front": [129.0, 70.0], "back": [129.0, 70.0]},
     "theme": "blush",
     "script_line": "One Message",
     "subtitle": "CERAMIC  ·  350 ML",
@@ -162,6 +164,7 @@ WORD_COFFEE_MUG: Dict[str, Any] = {
 #: the back is driven by `label_sections` rather than by coffee-specific headings.
 HARBOR_BODY_OIL: Dict[str, Any] = {
     "id": "harbor-body-oil",
+    "plate_subject": "slim amber glass bottle with a pump cap",
     "brand": "HARBOR SAGE",
     "product": "BODY OIL",
     "form": CYLINDER,
@@ -198,6 +201,7 @@ HARBOR_BODY_OIL: Dict[str, Any] = {
 #: where an invented claim would be worst.
 PINE_PAWS_JOINT: Dict[str, Any] = {
     "id": "pine-paws-joint",
+    "plate_subject": "wide plastic supplement tub with a screw lid",
     "brand": "PINE PAWS",
     "product": "JOINT CHEWS",
     "form": CYLINDER,

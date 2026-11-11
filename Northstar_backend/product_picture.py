@@ -76,22 +76,24 @@ BOX_PLATE_BRIEFS: Dict[str, str] = {
 #: has no measurable silhouette (measured 2026-11-11: a beige body on a beige
 #: sweep left the right-hand edge undetectable), so the brief asks for contrast
 #: and for the whole package in frame.
+#:
+#: A design may name its own body (`plate_subject`), because a mug with a handle
+#: and a canister with a lid are not the same object even though both are
+#: cylinders: a plate brief that says "cylindrical package" draws a plain tube.
+CYLINDER_PLATE_TEMPLATE = (
+    "a photograph of one blank unprinted {subject} standing upright on a pale grey "
+    "seamless studio sweep, the whole package in frame with its silhouette clearly "
+    "separated from the background, {turn}, no lettering and no label, a soft "
+    "contact shadow, soft diffused key light from the upper left, photoreal "
+    "commercial product photography, sharp focus on the body")
+
 CYLINDER_PLATE_BRIEFS: Dict[str, str] = {
-    "front": (
-        "a photograph of one blank unprinted rigid cylindrical package standing "
-        "upright on a pale grey seamless studio sweep, the whole package in frame "
-        "with its silhouette clearly separated from the background, a plain matte "
-        "white body with no lettering and no label, a soft contact shadow, soft "
-        "diffused key light from the upper left, photoreal commercial product "
-        "photography, sharp focus on the body"),
-    "back": (
-        "a photograph of one blank unprinted rigid cylindrical package standing "
-        "upright on a pale grey seamless studio sweep, the whole package in frame "
-        "with its silhouette clearly separated from the background, turned around "
-        "so its back is square to the camera, a plain matte white body with no "
-        "lettering and no label, a soft contact shadow, soft diffused key light "
-        "from the upper left, photoreal commercial product photography, sharp "
-        "focus on the body"),
+    "front": CYLINDER_PLATE_TEMPLATE.format(
+        subject="rigid cylindrical package",
+        turn="its front square to the camera"),
+    "back": CYLINDER_PLATE_TEMPLATE.format(
+        subject="rigid cylindrical package",
+        turn="turned around so its back is square to the camera"),
 }
 
 #: Print-area insets per form. The pouch insets skip the top weld and the base
@@ -144,12 +146,21 @@ def resolve_out_dir(out_dir: Optional[str], *, base: Optional[str] = None) -> Pa
     return target
 
 
-def plate_brief(face: str, form: str = art.POUCH) -> str:
+def plate_brief(face: str, form: str = art.POUCH,
+                design: Optional[Dict[str, Any]] = None) -> str:
     briefs = FORM_PLATE_BRIEFS.get(form)
     if briefs is None:
         raise ValueError(f"unknown form {form!r}; known: {', '.join(FORM_PLATE_BRIEFS)}")
     if face not in briefs:
         raise ValueError(f"unknown face {face!r}; known: front, back")
+    subject = str((design or {}).get("plate_subject") or "").strip()
+    if subject and form == art.CYLINDER:
+        # A design that names its own body gets a plate of that object; a plain
+        # cylinder is only the default. Without this a mug was drawn as a tube.
+        return CYLINDER_PLATE_TEMPLATE.format(
+            subject=subject,
+            turn=("its front square to the camera" if face == "front" else
+                  "turned around so its back is square to the camera"))
     return briefs[face]
 
 
@@ -457,7 +468,7 @@ def build(design: Optional[Dict[str, Any]] = None, *,
         if face not in ("front", "back"):
             raise ValueError(f"unknown face {face!r}; known: front, back")
         face_seed = None if base_seed is None else base_seed + offset
-        brief = plate_brief(face, form)
+        brief = plate_brief(face, form, dsn)
         plate_record: Dict[str, Any] = {}
         try:
             if generator is not None:
