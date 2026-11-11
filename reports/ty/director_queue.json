@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-11T05:11:53+00:00",
+  "updated_at": "2026-11-11T06:06:50+00:00",
   "cycle": 2,
   "unit_in_flight": "",
   "unit_order": [
@@ -1517,6 +1517,29 @@
       "rank": 1
     },
     {
+      "id": "comfy-plate-live",
+      "unit": "D12",
+      "title": "Start ComfyUI and measure the seller sample on real plates instead of drawn ones",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "reports/ty/",
+        "tools/comfy_lane.py",
+        "state/seller/"
+      ],
+      "branch": "ty/comfy-plate-live",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-11T06:06:46+00:00",
+      "updated_at": "2026-11-11T06:06:46+00:00",
+      "rank": 1
+    },
+    {
       "id": "ux-05-render-routes",
       "unit": "D12",
       "title": "26 of 29 service routes render the chat shell instead of their own page",
@@ -1679,7 +1702,7 @@
       "id": "pack-01-rigid-cylinder-form",
       "unit": "D4",
       "title": "A rigid-cylinder packaging form (jar, bottle, tube): measure the label band with warp_cylinder and print the brand panel on it, so skincare_bottle, food_jar and the bottle briefs stop being unrenderable",
-      "status": "queued",
+      "status": "merged",
       "owner": "",
       "write_paths": [
         "Northstar_backend/mockup_compositor.py",
@@ -1696,9 +1719,9 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": "cylinder form + 4 designs + label renderers + physical band; catalog 8->20 briefs, 20/20, mean 96.0; seller 96.9/32; 23 tests, 268 related green",
       "created_at": "2026-11-11T05:11:53+00:00",
-      "updated_at": "2026-11-11T05:11:53+00:00",
+      "updated_at": "2026-11-11T06:06:31+00:00",
       "rank": 4
     },
     {
@@ -1743,6 +1766,33 @@
       "evidence": "",
       "created_at": "2026-11-08T21:21:18+00:00",
       "updated_at": "2026-11-11T05:11:53+00:00",
+      "rank": 5
+    },
+    {
+      "id": "pack-02-apparel-flat-print",
+      "unit": "D4",
+      "title": "Apparel flat-print form: a garment with a blank print area, so the 6 apparel briefs stop being unrenderable",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "Northstar_backend/brand_art.py",
+        "Northstar_backend/package_art.py",
+        "Northstar_backend/product_picture.py",
+        "Northstar_backend/mockup_compositor.py",
+        "Northstar_backend/test_*.py",
+        "tools/seller_tester/",
+        "ty/seller_briefs.json"
+      ],
+      "branch": "ty/pack-02-apparel-flat-print",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-11T06:06:41+00:00",
+      "updated_at": "2026-11-11T06:06:41+00:00",
       "rank": 5
     },
     {
@@ -1887,6 +1937,31 @@
       "rank": 6
     },
     {
+      "id": "pack-03-boxart-forms",
+      "unit": "D4",
+      "title": "Box-art forms: small appliance carton art and tool blister card, so 11 more briefs are renderable",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "Northstar_backend/brand_art.py",
+        "Northstar_backend/package_art.py",
+        "Northstar_backend/product_picture.py",
+        "tools/seller_tester/",
+        "ty/seller_briefs.json"
+      ],
+      "branch": "ty/pack-03-boxart-forms",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-11T06:06:41+00:00",
+      "updated_at": "2026-11-11T06:06:41+00:00",
+      "rank": 6
+    },
+    {
       "id": "ux-06-shell",
       "unit": "U",
       "title": "Shell chrome on every service route: top nav, side nav and workspace outlet, with the DevBanner in the shell rather than only on sign-in",
@@ -1906,6 +1981,28 @@
       "evidence": "[\"reports/ty/ux06_shell.md\"]",
       "created_at": "2026-11-09T03:16:49+00:00",
       "updated_at": "2026-11-11T02:43:16+00:00",
+      "rank": 7
+    },
+    {
+      "id": "fix-bundle-units",
+      "unit": "D9",
+      "title": "D-012: bundle_multipack briefs declare no units, so a bundle plate is drawn as one unit",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "ty/seller_briefs.json",
+        "tools/seller_tester/"
+      ],
+      "branch": "ty/fix-bundle-units",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-11T06:06:46+00:00",
+      "updated_at": "2026-11-11T06:06:46+00:00",
       "rank": 7
     },
     {

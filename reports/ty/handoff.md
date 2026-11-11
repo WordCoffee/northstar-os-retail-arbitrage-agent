@@ -10,6 +10,34 @@ A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.m
 > and `reports/ty/handoff.md`, then continue from the first unfinished unit. No
 > questions, no reports between cycles. Idle means re-plan.
 
+## Position, 2026-11-11 cycle 7 — a third form, and the sample is 20 briefs across five categories
+
+Unit report: `reports/ty/pack01_rigid_cylinder.md`. Tag `ty-dir-pack-01`.
+
+| # | job | result |
+|---|---|---|
+| 1 | `pack-01-rigid-cylinder-form` — the app printed a pouch and a carton; a mug, a bottle and a tub had no form | merged. `CYLINDER` is a declared form with its own plate brief, its own insets and a **physical** label band: the body's measured width gives px-per-mm, the design's declared label height gives the band height, and a label taller than the body is refused as `label_too_tall_for_body`. Four designs (`word-coffee-canister`, `word-coffee-mug`, `harbor-body-oil`, `pine-paws-joint`), label front/back renderers, `warp_cylinder` now takes the RGB panel the app produces, drawn cylinder body. 23 tests |
+| 2 | the catalog | 12 prompt-only briefs wired through the app path (mug 4, skincare 4, pet 4); 5 uploaded-reference briefs left alone for want of a file |
+
+**Published seller dimension: 96.9 over 32 outputs, 32 passed** (was 98.0 over 20).
+The catalog pass alone: **20 scored, 20 passed, mean 96.0, five categories**
+(ceramic_mug 90, food_jar 95, pet_product 90, skincare_bottle 95, supplement_pouch 100).
+Coverage up 60 %, mean down 1.1 — the new pictures are a harder set.
+
+**Checks that fail inside passing pictures:** ST-011/ST-027 are *infographic*
+briefs that require margin ink and the app has no overlay layer (D-013); ST-029 is
+a `food_jar` brief whose design is the Word Coffee gift box, so it misses a bundle
+fill band (D-012). Both are stated in the report, not hidden.
+
+**One command that changes the next number:** start ComfyUI, then
+`python -m tools.seller_tester product --renderer comfy --skip-unavailable`.
+Every plate stops being drawn — that is job rank 1 (`comfy-plate-live`).
+
+**Next, in rank order:** `comfy-plate-live` → `pack-02-apparel-flat-print` →
+`pack-03-boxart-forms` (small appliance + tool) → `sel-04-packaging` →
+`fix-bundle-units` (D-012) → `ux-0610-live-verify` (still parked:
+`python tools/ty_unlock_checks.py --status`).
+
 ## Position, 2026-11-11 cycle 6 — the sample is 20 outputs, and six product categories have no form
 
 Reports: `reports/ty/sel_refs_designs.md`, `reports/ty/sel08_prompt_only_coverage.md`, and the
@@ -844,3 +872,5 @@ that, re-score and re-plan again. Empty queue means re-plan, never idle.
 - 2026-11-11T00:47:46+00:00 launcher: director session ended (session 15316 gone; launcher restarting).
 
 - 2026-11-11T03:43:57+00:00 launcher: director session ended (session 24680 gone; launcher restarting).
+
+- 2026-11-11T05:14:38+00:00 launcher: director session ended (session 26360 gone; launcher restarting).
