@@ -407,3 +407,35 @@ Openverse's free tier answers product queries with 1024x683 crops; the licence i
    than an API, so it is not started without your word).
 
 Nothing else in the queue is blocked: the program continues at `pack-03-boxart-forms`.
+
+---
+
+## 2026-11-11 05:45 â€” the scheduled `tys` watchdog restarts a second writer on the director's tree
+
+`NorthstarTysWatchdog` is a Task Scheduler entry that starts `tools/tys_launcher.py`, which
+starts an `opencode run --agent tys` worker. It is not the director and it does not know about
+the director's lease. Today it started at **05:32** while four director lanes were writing in
+the same worktree, and by the next check:
+
+- `Northstar_backend/production_assert.py`, `production_health.py`, `sqlite_backup.py` were
+  gone, and `main.py` / `rate_limiter.py` had lost their edits (lane A's work);
+- `reports/ty/verify_20261111.md` was gone (the verifier's report);
+- three correction blocks I had written into `reports/ty/*.md` were reverted to HEAD.
+
+All three losses were re-done (commits `a12d6511`, `4619691e`). I cannot disable the task
+from this session: `schtasks /Change /TN NorthstarTysWatchdog /DISABLE` returns
+**Access is denied**, and `Disable-ScheduledTask` leaves it `Ready`.
+
+What I did instead: `tools/tys_launcher.py` now reads `state/director/director.pid` before any
+work and **refuses to start while a live pid holds it** (`a12d6511`, 5 tests). A stale or
+corrupt lease does not block. The watchdog will keep spawning the launcher every tick; the
+launcher now exits with `{"reason": "director_lease_held"}` and writes nothing.
+
+**One action, when you get a moment:** disable or delete the `NorthstarTysWatchdog` scheduled
+task (Task Scheduler â†’ Disable), or tell me to run an elevated session to do it. It is not
+urgent â€” the lease guard makes it harmless â€” but it is a second autonomous writer that will
+come back the moment the lease is released.
+
+Note: the same task is also the most likely source of the browser pages you asked me to stop
+on 2026-11-11 03:48, since the `tys` lane is the one permitted to delegate to a browser lane.
+`state/vision/PAUSE` is still in place.
