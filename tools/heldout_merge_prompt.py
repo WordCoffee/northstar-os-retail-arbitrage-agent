@@ -16,8 +16,17 @@ PROMPT = ROOT / "state" / "seller" / "heldout_prompt_only_proof4.json"
 
 
 def main() -> int:
+    import argparse
+
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--prompt", default=str(PROMPT),
+                        help="the prompt-only proof whose rows replace the old ones")
+    args = parser.parse_args()
+    prompt_path = Path(args.prompt)
+    if not prompt_path.is_absolute():
+        prompt_path = (ROOT / prompt_path).resolve()
     modes = json.loads(MODES.read_text(encoding="utf-8"))
-    prompt = json.loads(PROMPT.read_text(encoding="utf-8"))
+    prompt = json.loads(prompt_path.read_text(encoding="utf-8"))
     new_prompt = {str(row.get("brief_id")): row for row in prompt.get("results") or []}
     kept = [row for row in modes.get("results") or []
             if str(row.get("brief_id")) not in new_prompt]
@@ -25,10 +34,11 @@ def main() -> int:
     merged.sort(key=lambda row: str(row.get("brief_id")))
     modes["results"] = merged
     modes["prompt_only_rerun"] = {
-        "proof": str(PROMPT.relative_to(ROOT)),
+        "proof": str(prompt_path.relative_to(ROOT)),
         "rows": len(new_prompt),
-        "why": ("the first prompt-only pass failed every brief on a product-region check that does "
-                "not apply to a route with no reference; the check now skips with a stated reason"),
+        "why": prompt.get("rerender", {}).get("why")
+        or ("the first prompt-only pass failed every brief on a product-region check that does "
+            "not apply to a route with no reference; the check now skips with a stated reason"),
     }
     MODES.write_text(json.dumps(modes, indent=2) + "\n", encoding="utf-8")
     prompt_rows = [row for row in merged if str(row.get("brief_id")).startswith("PO-")]
