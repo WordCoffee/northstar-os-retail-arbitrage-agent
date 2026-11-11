@@ -235,7 +235,7 @@ leaks found: 5
 Large-file scanning changed nothing: the totals are identical with a 0 MB cap, and no finding lives
 in a large file. Artefact: `reports/ty/main_rescan_ef9cad1d_large.json`.
 
-## 9. Why prompt-only briefs score exactly 90.0 — the arithmetic, not a coincidence
+## 9. Why prompt-only briefs score exactly 90.0 — measured, and the first answer was wrong
 
 The score is a weighted sum of **binary** checks normalised by the weights of the graded checks
 (`tools/seller_tester/scorers.py:combine_checks`). A prompt-only brief does not grade
@@ -246,12 +246,32 @@ dimensions 0.20 + aspect 0.10 + background 0.20 + subject_fill 0.20
 + alpha_matte 0.10 + file_size 0.05 + text_free 0.15 = 1.00
 ```
 
-A rendered plate is opaque, so `alpha_matte` fails — and if that is the **only** failure the score is
-`100 × 0.90 / 1.00 = 90.0`. Every brief that fails only that check lands on the same number; it is a
-constant of the rubric, not a measurement of quality.
+One failing check at weight 0.10 gives `100 × 0.90 / 1.00 = 90.0`. That part is arithmetic.
 
-Rescored the post-label-warp artefacts with the current scorer
-(`python tools/prompt_only_rescore.py`, `reports/ty/prompt_only_rescore.md`):
+The **first explanation in this unit was wrong**: it said `alpha_matte` was being failed because a
+text-to-image plate has no alpha channel. The check's own detail says otherwise — the failing mode is
+`white_matte`, the brightness passes, and the **border variance** fails:
+
+| brief | border mean (≥ 249) | border std (≤ 6.0) | brief std limit |
+|---|---|---|---|
+| PO-001 | 252.1 | **7.19** | 6.0 |
+| PO-003 | 251.8 | **7.68** | 6.0 |
+| PO-004 | 252.1 | **7.17** | 6.0 |
+| PO-006 | 250.8 | **9.00** | 4.0 |
+| PO-011 | 251.2 | **8.43** | 6.0 |
+| PO-012 | 251.7 | **7.79** | 6.0 |
+
+**Root cause:** `generators.flat()` returned `background.mode != "uniform"`, so a **white-matte**
+brief was composited onto the *generated scene* rather than a flat canvas. The scene edge is bright
+but grainy; that is a real compositing defect, not a rubric constant.
+
+**Fixed:** `flat()` now means a flat field (uniform value, or `matte.mode == white_matte`), the compose
+step writes a flat canvas at the brief's level, and an alpha matte is no longer graded on a
+full-generation route (an opaque plate cannot produce one; it would be a constant). Three tests in
+`test_seller_tester_composite.py` plus one in `test_seller_tester.py`; `92 passed` across the three
+seller suites.
+
+Rescored the **existing** (pre-fix) artefacts with the current scorer:
 
 | brief | situation | score | passed | failed checks (weight) |
 |---|---|---|---|---|
@@ -268,9 +288,13 @@ Rescored the post-label-warp artefacts with the current scorer
 | PO-011 | scale_reference | 90.0 | yes | alpha_matte (0.10) |
 | PO-012 | bundle_multipack | 90.0 | yes | alpha_matte (0.10) |
 
-**Six** briefs sit on exactly 90.0 in this run (the count is "how many fail only `alpha_matte`", so it
+**Six** briefs sit on exactly 90.0 in this run (the count is "how many fail only that check", so it
 moves with the outputs; the order's "four" was an earlier run). Prompt-only: **n 12, pass 9, mean
 86.4** — a per-mode number, never blended.
+
+**The fix cannot show up until the twelve are re-rendered.** They were produced by the old branch, so
+`86.4` stands as the measured value of the artefacts on disk. The re-render is queued as
+`rerender-prompt-only`, not claimed.
 
 Per-mode table, unchanged by this unit and stated without a headline blend:
 
@@ -280,11 +304,6 @@ Per-mode table, unchanged by this unit and stated without a headline blend:
 | stored-reference | 12 | 11 | 91.8 |
 | uploaded-reference | 21 | 16 | 90.0 |
 
-**The real finding behind the 90s:** `alpha_matte` asks a text-to-image plate for a transparent
-cutout it cannot have. Either the prompt-only briefs stop grading it (it is not a property of that
-route) or the pipeline exports the subject with alpha. Grading a route on a check the route cannot
-satisfy caps every prompt-only artefact at 90 by construction. Filed as `defect D-008` rather than
-"fixed" by editing the bar.
 
 ## 10. `keys_rotated` watcher
 

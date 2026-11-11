@@ -208,9 +208,27 @@ def _required_px(brief: Dict[str, Any]) -> int:
 
 
 def flat(brief: Dict[str, Any]) -> bool:
-    """True when the brief wants a generated background rather than a flat canvas."""
-    background = ((brief.get("constraints") or {}).get("background") or {})
-    return str(background.get("mode") or "") != "uniform"
+    """True when the brief requires a **flat** canvas, not a generated background.
+
+    A brief asks for a flat field when its background is a uniform value or when it asks for a
+    clean white matte. Both are properties of a composited plate: the product sits on a flat
+    field and the outer ring is that field. A `free` background is the opposite — it wants the
+    generated scene kept.
+
+    Until 2026-11-11 this function returned `mode != "uniform"`, which meant a **white-matte**
+    brief was handed the generated scene, whose edge grain then failed `white_matte` on border
+    std (measured 7.17–9.00 against a 6.0 limit) while its brightness passed (250.8–253.3). Six
+    prompt-only briefs scored exactly 90.0 for that reason, which read like a rubric constant
+    and was in fact an inverted branch.
+    """
+    constraints = brief.get("constraints") or {}
+    background = constraints.get("background") or {}
+    matte = constraints.get("matte") or {}
+    mode = str(background.get("mode") or "").lower()
+    matte_mode = str(matte.get("mode") or "").lower()
+    if mode == "uniform" or matte_mode == "white_matte":
+        return True
+    return mode.startswith("white") or mode.startswith("solid")
 
 
 def _required_size(brief: Dict[str, Any]) -> Optional[Tuple[int, int]]:
@@ -759,14 +777,19 @@ class CompositeGenerator:
             cut_png = declined("rgba_png_bytes", pc.rgba_png_bytes, cut.rgb, cut.alpha)
             # The canvas has to be the brief's size, not the lane's 768: using the raw scene for a
             # free background meant every prompt-only brief failed `dimensions` at 768x768 (12 of 12,
-            # 2026-11-10). A free background is the scene resampled up; a uniform one is the flat
-            # canvas at the brief's level.
+            # 2026-11-10). A free background is the scene resampled up; a flat one (a uniform value
+            # or a clean white matte) is the flat canvas at the brief's level, because edge grain
+            # from a resampled scene is exactly what `white_matte` measures and fails.
             target_px = _required_px(brief)
+            background_spec = (brief.get("constraints") or {}).get("background") or {}
             if flat(brief):
+                level = int(background_spec.get("value", WHITE_LEVEL))
+                background = white_canvas_png(target_px, level)
+                record["background_path"] = "flat_canvas"
+                record["flat_level"] = level
+            else:
                 background = _resize_png(scene["bytes"], target_px)
                 record["background_resampled"] = {"from": "scene", "to": target_px}
-            else:
-                background = white_canvas_png(target_px)
             placed = declined("place_product", composite.place_product, background, cut_png,
                               scale=0.62, anchor=(0.5, 0.6))
             if str(brief.get("label_mode") or "") == "warp":

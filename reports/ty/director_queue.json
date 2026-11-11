@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-11T01:41:36+00:00",
+  "updated_at": "2026-11-11T01:59:49+00:00",
   "cycle": 2,
   "unit_in_flight": "",
   "unit_order": [
@@ -1060,7 +1060,7 @@
       "id": "sel-coverage-44",
       "title": "Seller reference coverage: build references for the 44 briefs that have none (rank-1 blocker)",
       "status": "queued",
-      "rank": 1,
+      "rank": 2,
       "write_paths": [
         "renders/references/",
         "ty/seller_briefs.json",
@@ -1070,15 +1070,22 @@
     },
     {
       "id": "fix-alpha-matte-route",
-      "title": "D-008: stop grading alpha_matte on prompt-only briefs, or export the cut subject with alpha",
-      "status": "queued",
+      "title": "D-008: the white-matte branch was inverted; a flat canvas for white-matte briefs",
+      "status": "merged",
       "rank": 2,
       "write_paths": [
         "tools/seller_tester/scorers.py",
         "tools/seller_tester/briefs.py",
         "Northstar_backend/test_seller_tester*.py"
       ],
-      "acceptance": "Prompt-only scores stop clustering at a rubric constant; historical scores are recomputed and the delta is reported per brief."
+      "acceptance": "Prompt-only scores stop clustering at a rubric constant; historical scores are recomputed and the delta is reported per brief.",
+      "evidence": [
+        "tools/seller_tester/generators.py",
+        "tools/seller_tester/scorers.py",
+        "Northstar_backend/test_seller_tester_composite.py",
+        "Northstar_backend/test_seller_tester.py"
+      ],
+      "note": "Measured cause corrected: border std 7.17-9.00 vs 6.0, brightness passing. flat() returned mode != 'uniform', so a white-matte brief got the scene as its canvas. Fixed + 4 tests; 92 passed. The 12 artefacts still need a re-render."
     },
     {
       "id": "ppc-upload-live",
@@ -1122,6 +1129,17 @@
       "write_paths": [
         "scripts/dev-start.ps1"
       ]
+    },
+    {
+      "id": "rerender-prompt-only",
+      "title": "Re-render the twelve prompt-only briefs with the flat-canvas fix and report per-mode delta",
+      "status": "queued",
+      "rank": 1,
+      "write_paths": [
+        "renders/heldout_prompt_only5/",
+        "reports/ty/"
+      ],
+      "acceptance": "12 artefacts render on the one GPU lane; white_matte passes on the six that failed it; per-mode n/pass/mean reported before and after, no blend."
     }
   ],
   "service_scores": {},

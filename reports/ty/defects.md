@@ -164,20 +164,38 @@ visible rather than silent. A lock held by a **live** process is still refused, 
 that matters. A probe that errors counts as alive: stealing a lock because `psutil` is missing would
 be worse than refusing. Six tests in `test_gpu_lock.py`.
 
-## D-008 — `alpha_matte` is graded on a route that cannot satisfy it (2026-11-11)
+## D-008 — six prompt-only briefs scored exactly 90.0 because of an inverted branch (2026-11-11)
 
-**Measured:** six of twelve prompt-only briefs score **exactly 90.0** and every one of them fails
-`alpha_matte` and nothing else (`tools/prompt_only_rescore.py`, per-brief check table in
-`reports/ty/prompt_only_rescore.md`). The score is `100 × 0.90 / 1.00`: the check carries 0.10 of a
-denominator that is exactly 1.00 for a full generation, because `reference_subject` is not graded.
+**Measured:** six of twelve prompt-only briefs score **exactly 90.0**. Every one fails
+`alpha_matte` and nothing else (`tools/prompt_only_rescore.py`). The check's own detail names the
+cause, and it is not brightness:
 
-**Cause:** `alpha_matte` asks for 3–98 % transparent pixels. A text-to-image plate is opaque by
-construction; only the composite route produces an alpha cutout. So the check caps every prompt-only
-artefact at 90.0 by design, and the number reads like a quality plateau when it is a rubric constant.
+| brief | border mean (need ≥ 249) | border std (need ≤ 6.0) | brief limit |
+|---|---|---|---|
+| PO-001 | 252.1 | **7.19** | std 6.0 |
+| PO-003 | 251.8 | **7.68** | std 6.0 |
+| PO-004 | 252.1 | **7.17** | std 6.0 |
+| PO-006 | 250.8 | **9.00** | mean 251, std 4.0 |
+| PO-011 | 251.2 | **8.43** | std 6.0 |
+| PO-012 | 251.7 | **7.79** | std 6.0 |
 
-**Fix (not applied here):** either the prompt-only briefs stop grading `alpha_matte` — it is not a
-property of that route — or the generator exports the cut subject with alpha. **Not** by lowering the
-weight, which would silently change every historical score.
+**Cause:** `tools/seller_tester/generators.py:flat()` returned `background.mode != "uniform"`, so a
+**white-matte** brief was handed the *generated scene* resampled as its canvas. The scene's edge
+grain is bright but not flat, which passes brightness and fails variance — a real compositing bug,
+not a rubric artifact, and not the "alpha check on a route with no alpha" this entry first claimed.
+The name and the code disagreed and nobody had looked at the pixels.
+
+**Fix:** `flat()` now means a flat field (uniform value, or `matte.mode == white_matte`), and the
+compose step writes a flat canvas at the brief's level for those briefs; a `free` brief keeps the
+scene. Three tests in `test_seller_tester_composite.py` (a white-matte brief's border passes the
+brief's own check, a free brief keeps the scene, and `flat()` semantics), plus one guard in
+`scorers.py`: an alpha matte is *not graded* on a full generation, because an opaque plate cannot
+produce one and the check would be a constant rather than a measurement.
+
+**Not yet re-measured:** the twelve prompt-only artefacts still on disk were produced by the old
+branch and still score 86.4 / 9 passed. The delta requires a re-render of the twelve (one GPU lane),
+which is the next unit — not claimed here.
+
 
 ## D-009 — `dev-start.pids` is stale, so stack provenance is only partly provable (2026-11-11)
 

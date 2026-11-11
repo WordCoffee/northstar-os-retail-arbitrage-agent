@@ -960,3 +960,43 @@ def test_escalation_keeps_the_ladder_inside_its_mode():
         assert brief["source_mode"] == "prompt_only"
         assert "reference" not in brief
 
+
+# ---------------------------------------------------------------- matte applicability (D-008)
+def test_an_alpha_matte_is_not_graded_on_a_full_generation():
+    """A prompt-only plate is opaque; an alpha cutout check caps it at a rubric constant.
+
+    Measured 2026-11-11: six prompt-only briefs scored exactly 90.0 because alpha_matte
+    (weight 0.10) was the only failing check against a 1.00 denominator. The check is not
+    applicable to a full generation and is now recorded as skipped, with that reason.
+    """
+    brief = make_brief("TASH-1", constraints={
+        "matte": {"mode": "alpha", "min": 3, "max": 98}})
+    result = score_image(png_bytes(product_canvas()), brief)
+    matte = result["checks"]["alpha_matte"]
+    assert matte["skipped"] is True
+    assert matte.get("not_applicable") is True
+    assert "opaque" in matte["detail"]
+    assert result["score"] == pytest.approx(100.0)
+
+
+def test_a_white_matte_is_still_graded_on_a_full_generation():
+    """A clean white ring is a pixel property; a generated plate can and must satisfy it."""
+    brief = make_brief("TASH-2", constraints={
+        "matte": {"mode": "white_matte", "value": 255, "tolerance": 6, "max_border_std": 6}})
+    result = score_image(png_bytes(product_canvas()), brief)
+    matte = result["checks"]["alpha_matte"]
+    assert not matte.get("skipped")
+    assert "not_applicable" not in matte
+    assert matte["ok"] is True
+
+
+def test_an_alpha_matte_is_graded_on_the_composite_route():
+    """The composite route cuts the product out, so an opaque result genuinely fails."""
+    brief = make_brief("TASH-3", constraints={
+        "matte": {"mode": "alpha", "min": 3, "max": 98}})
+    result = score_image(png_bytes(product_canvas()), brief, composite_route=True)
+    matte = result["checks"]["alpha_matte"]
+    assert not matte.get("skipped")
+    assert matte["ok"] is False
+    assert "no alpha channel" in matte["detail"]
+

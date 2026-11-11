@@ -320,7 +320,18 @@ def check_text_free(rgb: np.ndarray, spec: Dict[str, Any]) -> Dict[str, Any]:
                threshold=threshold, check="text_free")
 
 
-def _run_checks(loaded: LoadedImage, brief: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
+def _run_checks(loaded: LoadedImage, brief: Dict[str, Any], *,
+                composite_route: bool = True) -> Dict[str, Dict[str, Any]]:
+    """Every mechanical check for this brief.
+
+    `composite_route` decides whether `alpha_matte` is *applicable*. A composite route cuts the
+    seller's product out of its pixels, so a matte — a clean white ring or a real alpha channel —
+    is a property of the deliverable and is graded. A full generation produces one opaque plate:
+    the canvas has no cutout and cannot have one, so grading a matte there caps the route at a
+    rubric constant instead of measuring the picture (measured 2026-11-11: six prompt-only briefs
+    at exactly 90.0, every one failing only this check). The check is recorded as skipped *with a
+    reason*, never dropped, so an absent check can never be mistaken for a silent pass.
+    """
     constraints = brief.get("constraints") or {}
     background_spec = constraints.get("background") or {}
     checks: Dict[str, Dict[str, Any]] = {}
@@ -331,7 +342,22 @@ def _run_checks(loaded: LoadedImage, brief: Dict[str, Any]) -> Dict[str, Dict[st
     checks["background"] = check_background(loaded.rgb, background_spec)
     checks["subject_fill"] = check_subject_fill(
         loaded.rgb, constraints.get("fill_pct") or {}, background_spec)
-    checks["alpha_matte"] = check_alpha_matte(loaded, constraints.get("matte") or {})
+    matte_spec = constraints.get("matte") or {}
+    if composite_route:
+        checks["alpha_matte"] = check_alpha_matte(loaded, matte_spec)
+    elif str(matte_spec.get("mode") or "any") == "alpha":
+        # A white matte is a pixel property and a full generation can satisfy it; an ALPHA
+        # cutout cannot exist on an opaque plate, so grading it caps the route at a rubric
+        # constant instead of measuring the picture (measured 2026-11-11: six prompt-only
+        # briefs at exactly 90.0, every one failing only this check). Skipped with a reason,
+        # never dropped, so an absent check can never be mistaken for a silent pass.
+        checks["alpha_matte"] = _skip(
+            "not applicable to a full-generation deliverable: the plate is opaque and has no "
+            "cutout to matte. A brief that needs an alpha cutout routes through the composite "
+            "path, where this check is graded.")
+        checks["alpha_matte"]["not_applicable"] = True
+    else:
+        checks["alpha_matte"] = check_alpha_matte(loaded, matte_spec)
     checks["file_size"] = check_file_size(
         loaded.nbytes, loaded.width, loaded.height, constraints.get("file_size") or {})
     text_spec: Dict[str, Any] = {"rule": constraints.get("text_rule", "allowed")}
@@ -536,7 +562,7 @@ def score_image(image_bytes: bytes, brief: Dict[str, Any], *,
         base["failed_checks"] = list(DEFAULT_WEIGHTS)
         return base
 
-    checks = _run_checks(loaded, brief)
+    checks = _run_checks(loaded, brief, composite_route=composite_route)
     base.update({
         "width": loaded.width,
         "height": loaded.height,

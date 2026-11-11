@@ -432,3 +432,88 @@ def test_harness_records_the_route_and_fidelity(repo: Path):
     assert row["fidelity"] == "exact"
     assert (row.get("generation") or {}).get("method") is not None or \
         (row.get("generation") or {}).get("cutout_in_lane") is True
+
+
+# ---------------------------------------------------------------- the canvas a brief asks for
+def _prompt_brief(brief_id: str, *, matte: str, background: str) -> dict:
+    return {
+        "id": brief_id,
+        "category": "supplement_pouch",
+        "situation": "white_background_main",
+        "difficulty": 1,
+        "source_mode": "prompt_only",
+        "fidelity": "tolerant",
+        "placement": {"scale": 0.6, "anchor": [0.5, 0.6]},
+        "constraints": {
+            "dimensions": {"min_width": 200, "min_height": 200},
+            "aspect": {"ratio": 1.0, "tolerance": 0.02},
+            "background": {"value": 255, "tolerance": 6, "mode": background,
+                           "max_border_std": 6},
+            "fill_pct": {"min": 5, "max": 95},
+            "text_rule": "allowed",
+            "matte": {"mode": matte, "value": 255, "tolerance": 6, "max_border_std": 6},
+            "file_size": {"min_bytes": 100, "max_bytes": 12000000},
+        },
+    }
+
+
+def _border_std(path: Path) -> tuple[float, float]:
+    import numpy as np
+
+    with Image.open(path) as produced:
+        rgb = np.asarray(produced.convert("RGB"))
+    thickness = max(4, int(min(rgb.shape[:2]) * 0.01))
+    ring = np.concatenate([rgb[:thickness, :, :].reshape(-1, 3),
+                           rgb[-thickness:, :, :].reshape(-1, 3),
+                           rgb[:, :thickness, :].reshape(-1, 3),
+                           rgb[:, -thickness:, :].reshape(-1, 3)])
+    luminance = ring.astype("float32") @ np.array([0.299, 0.587, 0.114], dtype="float32")
+    return float(luminance.mean()), float(luminance.std())
+
+
+def test_a_white_matte_brief_is_composited_onto_a_flat_canvas(repo: Path):
+    """The inverted branch: a white-matte brief used to receive the generated scene as its canvas,
+    whose edge grain failed `white_matte` on std (7.17-9.00 vs 6.0) while brightness passed."""
+    brief = _prompt_brief("FLAT-1", matte="white_matte", background="white_matte")
+    generator = CompositeGenerator(
+        renderer=lambda b, m="scene", inside_lane=None: {
+            "bytes": _scene_bytes((320, 320), (150, 140, 120)), "source": "generated",
+            "prompt": "full", "image_path": None, "lane": {"stopped": {"ok": True}}},
+        out_dir=repo / "out", repo_root=repo,
+        cutout_fn=lambda rgb: _alpha_from_box(rgb, box=(120, 110, 200, 260)))
+    path = generator.generate(brief)
+    record = generator.record_for(brief["id"])
+    assert record["background_path"] == "flat_canvas"
+    mean, std = _border_std(path)
+    assert mean >= 249, (mean, std)
+    # The brief's own limit is 6.0; the scene canvas measured 7.17-9.00 on the real artefacts.
+    assert std <= 6.0, (mean, std)
+    from tools.seller_tester.scorers import score_image
+
+    verdict = score_image(path.read_bytes(), brief)
+    assert verdict["checks"]["alpha_matte"]["ok"] is True, verdict["checks"]["alpha_matte"]
+
+
+def test_a_free_background_brief_keeps_the_generated_scene(repo: Path):
+    brief = _prompt_brief("FLAT-2", matte="any", background="free")
+    generator = CompositeGenerator(
+        renderer=lambda b, m="scene", inside_lane=None: {
+            "bytes": _scene_bytes((320, 320), (150, 140, 120)), "source": "generated",
+            "prompt": "full", "image_path": None, "lane": {"stopped": {"ok": True}}},
+        out_dir=repo / "out", repo_root=repo,
+        cutout_fn=lambda rgb: _alpha_from_box(rgb, box=(120, 110, 200, 260)))
+    generator.generate(brief)
+    record = generator.record_for(brief["id"])
+    assert "background_resampled" in record
+    assert "background_path" not in record
+
+
+def test_flat_means_a_flat_field_not_a_generated_one():
+    from tools.seller_tester.generators import flat
+
+    uniform = {"constraints": {"background": {"mode": "uniform"}, "matte": {"mode": "any"}}}
+    white = {"constraints": {"background": {"mode": "free"}, "matte": {"mode": "white_matte"}}}
+    free = {"constraints": {"background": {"mode": "free"}, "matte": {"mode": "any"}}}
+    assert flat(uniform) is True
+    assert flat(white) is True
+    assert flat(free) is False
