@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-11T16:47:10+00:00",
+  "updated_at": "2026-11-11T17:06:35+00:00",
   "cycle": 3,
   "unit_in_flight": "",
   "unit_order": [
@@ -993,6 +993,51 @@
       "rank": 0
     },
     {
+      "id": "fix-ux-scorecard-scroll",
+      "unit": "U",
+      "title": "ux_scorecard chat-scroll check fails on the current shell",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "tests/e2e/ux_scorecard.spec.ts",
+        "northstar-os-ui/src"
+      ],
+      "branch": "ty/fix-ux-scorecard-scroll",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-11T17:06:27+00:00",
+      "updated_at": "2026-11-11T17:06:27+00:00",
+      "rank": 0
+    },
+    {
+      "id": "fix-registry-citations",
+      "unit": "U",
+      "title": "registry citations and generated-file merge (21 drifted line refs, hand-authored blocks preserved)",
+      "status": "merged",
+      "owner": "",
+      "write_paths": [
+        "tools/registry/",
+        "Northstar_backend/test_service_registry.py",
+        "ty/service_registry.json"
+      ],
+      "branch": "ty/fix-registry-citations",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "tools/registry/repair_citations.py recomputes every action citation from backend_index (21 rewritten, 0 unresolved, --check idempotent); build.expected_doc() merges generated keys with hand-authored blocks so regeneration cannot delete scene_workspaces; 19 tests green (3 new). tag none; commit 149ca718",
+      "created_at": "2026-11-11T17:06:35+00:00",
+      "updated_at": "2026-11-11T17:06:35+00:00",
+      "rank": 0
+    },
+    {
       "id": "sel-01c-cutout-provenance",
       "unit": "D12",
       "title": "Composite provenance: save the cutout and placement beside every composite so the product-region check can verify it",
@@ -1734,7 +1779,7 @@
       "id": "block3-workspaces",
       "unit": "U",
       "title": "Service workspaces: core six first (Design Studio, listings, PPC, Golden Goose, research, product pictures), then the rest on a default scene",
-      "status": "claimed",
+      "status": "merged",
       "owner": "lane-block3-workspaces",
       "write_paths": [
         "ty/northstar_workspaces.json",
@@ -1750,9 +1795,9 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": "scene_workspaces block (6 services + default_scene) added additively to ty/northstar_workspaces.json; one data-driven WorkspaceFrame mounted in WorkspacePanels; new /product-pictures route. e2e: 56 passed across desktop-chromium AND iphone-12-webkit (28 each), default-scene fallback for /hub and /keywords. npm test:ui 231/231 (was 221), build 0 errors. shell-chrome route count 72->73 with the reason in the comment. Lane C; reports/ty/lane_block3.md; tag ty-dir-block3-workspaces",
       "created_at": "2026-11-11T07:35:10+00:00",
-      "updated_at": "2026-11-11T15:57:37+00:00",
+      "updated_at": "2026-11-11T16:59:40+00:00",
       "rank": 6
     },
     {
@@ -1847,6 +1892,27 @@
       "rank": 7
     },
     {
+      "id": "fix-tabbar-a11y",
+      "unit": "U",
+      "title": "TabBar .wst-list fails aria-required-children (a11y)",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "northstar-os-ui/src/shell/TabBar.jsx"
+      ],
+      "branch": "ty/fix-tabbar-a11y",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-11T17:06:27+00:00",
+      "updated_at": "2026-11-11T17:06:35+00:00",
+      "rank": 7
+    },
+    {
       "id": "ux-07-tabs",
       "unit": "U",
       "title": "Workspace tab bar: tabs keep state across switching and the shell tells Bojo which tab is open and a summary of its state",
@@ -1865,6 +1931,28 @@
       "evidence": "[\"reports/ty/ux07_tabs.md\", \"reports/ty/ux07b_tab_context.md\"]",
       "created_at": "2026-11-09T03:16:49+00:00",
       "updated_at": "2026-11-11T02:43:16+00:00",
+      "rank": 8
+    },
+    {
+      "id": "fix-po006-stray-dashes",
+      "unit": "D9",
+      "title": "D-019 (PO-006): four detached dashes survive inside the recorded silhouette",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "Northstar_backend/product_composite.py",
+        "Northstar_backend/test_composite_framing.py"
+      ],
+      "branch": "ty/fix-po006-stray-dashes",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-11T17:06:27+00:00",
+      "updated_at": "2026-11-11T17:06:35+00:00",
       "rank": 8
     },
     {

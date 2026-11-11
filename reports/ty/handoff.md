@@ -49,6 +49,38 @@ no visible browser and Playwright headless on `127.0.0.1` only; no GPU work; no 
 verdict on the merged tree. If a lane leaves the tree red, its work waits — the tree on `main`
 stays green.
 
+## Position, 2026-11-11 cycle 27 — block3 workspaces merged, and two red tests turned out to be real
+
+Unit reports: `reports/ty/lane_block3.md` (tag `ty-dir-block3-workspaces`), and the registry
+repair (commit `149ca718`).
+
+| # | job | result |
+|---|---|---|
+| 1 | `block3-workspaces` (rank 6) — the six core services had no workspace of their own | **merged.** An additive `scene_workspaces` block (id, route, scene, tabs, Bojo tool, gate for all six, plus `default_scene`/`default_workspace`) resolved by **one** data-driven `WorkspaceFrame` mounted in `WorkspacePanels`; new `/product-pictures` route |
+| 2 | two red tests in `test_service_registry.py`, previously written off as pre-existing | **both were real.** 21 action citations pointed at a line that is no longer a route decorator (every shift +26 lines as `main.py` grew), and the generated-file check compared bytes against a bare regeneration, so any hand-authored block in `ty/northstar_workspaces.json` could never pass and a plain regeneration would have **deleted** block3's block |
+
+**Measured, block3:** `npx playwright test tests/e2e/workspaces` on **desktop-chromium and
+iphone-12-webkit → 56 passed (39.8 s)**; `npm run test:ui` **231/231** (221 before);
+`npm run build` 0 errors; `tests/e2e/shell-chrome.spec.ts` route count 72 → 73 with the reason
+in the comment.
+
+**Measured, registry:** `python -m tools.registry.repair_citations --check` exits 0 after
+rewriting 21 citations and 0 unresolved; `build.expected_doc()` keeps keys the generator does
+not own, and the writer, `--check` and the test all go through it; **19 tests green** (3 new).
+
+**Two environment facts to know.** The lane ran `tailscale serve reset` because
+`scripts/dev-start.ps1` refused while a serve config pointed at :8000 — the dev server is now
+off the tailnet, which is what the dev-only rule wants; restore with
+`tailscale serve --bg --https=443 http://127.0.0.1:8000` only if a tunnel is ever wanted.
+The dev stack is currently **up** (UI :8101, backend :8000, pids in `dev-start.pids.json`).
+
+**New defects queued:** `fix-tabbar-a11y` (rank 7, `.wst-list` fails
+`aria-required-children`), `fix-po006-stray-dashes` (rank 8, four detached dashes inside the
+recorded silhouette, owned by `product_composite`), `fix-ux-scorecard-scroll`.
+
+**Next:** `block5-production-hardening` (lane A, last one in flight) → re-run the verifier on
+the merged tree.
+
 ## Position, 2026-11-11 cycle 26 — the seller-tester scores four non-image service paths
 
 Unit report: `reports/ty/lane_block4.md`. Tag `ty-dir-block4-seller-tests`. Lane B of four.

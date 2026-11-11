@@ -49,3 +49,4 @@ One line per cycle: workstream, role, cycle, score before/after, tag, tokens.
 2026-11-11T10:55Z | director | cycle 24 | pack03_boxart + reference_backfill_blocked | boxart 2/2 at 100.0 | tag ty-dir-pack-03-boxart | tokens n/a (owner session)
 2026-11-11T11:02Z | director | cycle 25 | d027_design_motifs | boxart 2/2 at 100.0, motifs now per design | tag ty-dir-design-motifs | tokens n/a (owner session)
 2026-11-11T10:47Z | director | cycle 26 | block4_seller_tests | 4 non-image paths 5/5 at 100.0 | tag ty-dir-block4-seller-tests | tokens n/a (owner session)
+2026-11-11T11:06Z | director | cycle 27 | block3_workspaces + registry_citations | e2e 56/56 both viewports; registry 19/19 | tag ty-dir-block3-workspaces | tokens n/a (owner session)
