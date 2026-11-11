@@ -341,3 +341,41 @@ product-region check, not the matte check, is what catches that.
 the asked-for value outside the product's own silhouette (the cutout `D-018` now records)
 — and it belongs in `tools/seller_tester/scorers.py`. Queued as `fix-matte-residue-check`
 when the scorer lane is next open; until then it is stated here, not hidden.
+
+**Closed 2026-11-11** (`ty-dir-fix-matte-residue-check`). `scorers.check_matte_residue`
+measures the whole frame against the product's silhouette; `background` 0.20 → 0.10 +
+`matte_residue` 0.10 (the denominator is unchanged, and a picture with no silhouette keeps
+the old single weight, so no score moves for a reason other than a measured residue);
+`matte_residue` is critical wherever it is graded. Three wiring defects were fixed with it,
+each of which had been silently disabling provenance: the harness loaded a cutout **only**
+for the composite route (so 0 of 20 `product_picture` artefacts reached the scorers), the
+generator's `product_box` arrives nested and null, and the app's own manifest beside the
+picture carries the truth. Audit of the published artefacts: the 12 full-generation
+outputs re-score as **8 checked, 8 failed, residue 10.2–25.6 % of the frame, mean 100.0 →
+90.0**; the 20 drawn-plate outputs cannot be checked (D-021). `reports/ty/d020_residue_audit.json`.
+
+## D-021 — the drawn plate bakes its own shadow into the silhouette (open 2026-11-11)
+
+`scene_render.synthetic_plate` draws a base shadow ellipse `(206, 204, 200)` under every
+drawn package ("so the plate is not a sticker on a flat field"). On a white-main brief the
+colour cut keeps that ellipse, so **it is inside the silhouette**, and D-020's residue
+check — which measures outside the silhouette — reads **0.00 %** on all three drawn
+artefacts it could grade (`renders/d020/`, PO-001/003/004). The picture a seller gets is a
+product on white with a grey shadow under it, and two instruments agree it is clean.
+
+**Not yet done:** a flat-background brief must not paste a plate shadow: either
+`synthetic_plate` omits the base shadow when the brief is a main image, or `_place_on_flat`
+drops it by geometry rather than by colour. Queued as `fix-drawn-plate-shadow`.
+
+## D-022 — a full generation has no white-composite step, so its background is a sweep (open 2026-11-11)
+
+The eight failing artefacts above are `route: full_generation` (`SDXL`/`FLUX` scenes): the
+prompt says "on a seamless white studio background" and the model delivers a white field
+with a **soft grey pool** under the product — 10.2 % to 25.6 % of the frame. Nothing
+composites those pictures onto 255; only `product_picture.build` has that step. The app can
+deliver a main image two ways and only one of them is a main image.
+
+**Not yet done:** route a white-main brief's full generation through the same cutout-on-
+white step (or refuse the brief on that route with the reason). Queued as
+`fix-fullgen-white-composite`.
+

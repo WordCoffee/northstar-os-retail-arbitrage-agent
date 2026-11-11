@@ -32,6 +32,15 @@
       "scored": 40,
       "passed": 0,
       "mean_score": 22.1
+    },
+    "matte_residue_audit": {
+      "at": "2026-11-11",
+      "check": "check_matte_residue (D-020)",
+      "source": "reports/ty/d020_residue_audit.json",
+      "artefacts_checked": 8,
+      "newly_failed": 8,
+      "mean_score_after_checked": 90.0,
+      "note": "The published mean was scored before the background was measured off the corners; the 12 full-generation artefacts re-scored with the residue check are 8 checked, 8 failed, residue 10.2-25.6% of the frame, mean 90.0. The other 20 artefacts are drawn-plate product_picture outputs whose silhouette includes the plate shadow, so the check cannot see it there (D-021). The published mean is provisional until a re-render on the fixed routes."
     }
   },
   "ceiling": {

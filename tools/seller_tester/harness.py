@@ -40,9 +40,96 @@ from .escalate import DEFAULT_ESCALATION_PATH, EscalationLog, escalate
 from .gaps import DEFAULT_GAPS_PATH, DEFAULT_MIRROR_PATH, build_gap, file_gap, read_gaps
 from .judge import get_judge
 from .reference_check import describe_picture, reference_check_for_brief
-from .scorers import score_image
+from .scorers import check_matte_residue, combine_checks, load_image, score_image
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
+
+
+def audit_matte_residue(summary: Dict[str, Any], *,
+                        briefs: Any = None) -> Dict[str, Any]:
+    """Re-score the D-020 property on artefacts a pass already scored.
+
+    The harness scored these pictures when `check_matte_residue` did not exist, so the
+    question "does the published number survive the new check" has to be answered by
+    measuring the artefacts, not by asserting either way. Each row's picture and the
+    cutout beside it are read; the recorded checks are reused as they were recorded
+    (a `vision` verdict is never re-invented); only the residue check is new.
+
+    A row whose artefact and cutout cannot be found, or that carries no silhouette, is
+    reported as `unchecked` **with its reason** — never counted as a pass.
+    """
+    payload = briefs if briefs is not None else load_catalog(DEFAULT_CATALOG_PATH)
+    catalog = {str(b.get("id")): b for b in _briefs_from(payload)}
+    rows: List[Dict[str, Any]] = []
+    checked = unchecked = newly_failed = 0
+    scores_after: List[float] = []
+    for row in summary.get("results") or []:
+        artefact = REPO_ROOT / str(row.get("artefact_path") or "")
+        brief = catalog.get(str(row.get("brief_id")))
+        entry: Dict[str, Any] = {"brief_id": row.get("brief_id"),
+                                 "artefact": row.get("artefact_path"),
+                                 "score_before": row.get("score")}
+        cutout_path = artefact.with_suffix(".cutout.png")
+        if brief is None or not artefact.is_file():
+            entry["status"] = "unchecked"
+            entry["reason"] = "no brief or no artefact on disk"
+            unchecked += 1
+            rows.append(entry)
+            continue
+        cutout = _load_cutout(artefact)
+        background = ((brief.get("constraints") or {}).get("background") or {})
+        try:
+            loaded = load_image(artefact.read_bytes())
+        except ValueError as exc:
+            entry["status"] = "unchecked"
+            entry["reason"] = f"unreadable artefact: {exc}"
+            unchecked += 1
+            rows.append(entry)
+            continue
+        from .scorers import _product_mask_from_cutout  # noqa: PLC0415 - one source
+
+        mask = _product_mask_from_cutout(
+            cutout,
+            row.get("product_box") or (row.get("generation") or {}).get("product_box")
+            or _product_box_from_manifest(artefact),
+            loaded.rgb.shape[:2])
+        verdict = check_matte_residue(loaded.rgb, background, subject_mask=mask)
+        entry["residue"] = {key: verdict.get(key) for key in
+                            ("ok", "skipped", "residue_pct", "residue_px",
+                             "shadow_px", "detail")}
+        entry["cutout_present"] = cutout_path.is_file()
+        if verdict.get("skipped"):
+            entry["status"] = "unchecked"
+            entry["reason"] = str(verdict.get("detail") or "skipped")
+            unchecked += 1
+            rows.append(entry)
+            continue
+        recorded = {name: {"ok": bool(check.get("ok")),
+                           "skipped": bool(check.get("skipped"))}
+                    for name, check in (row.get("checks") or {}).items()}
+        recorded.pop("matte_residue", None)
+        recorded["matte_residue"] = verdict
+        combined = combine_checks(recorded, brief, composite_route=False)
+        entry["status"] = "checked"
+        entry["score_after"] = combined["score"]
+        entry["passed_after"] = bool(combined["passed"] and row.get("passed"))
+        if row.get("passed") and not entry["passed_after"]:
+            newly_failed += 1
+        checked += 1
+        scores_after.append(float(combined["score"]))
+        rows.append(entry)
+    summary_out = {
+        "artefacts": len(rows),
+        "checked": checked,
+        "unchecked": unchecked,
+        "newly_failed": newly_failed,
+        "mean_score_after_checked": (round(sum(scores_after) / len(scores_after), 1)
+                                     if scores_after else None),
+        "mean_score_before_published": summary.get("mean_score"),
+        "rows": rows,
+    }
+    return summary_out
+
 
 
 def _now() -> str:
@@ -113,6 +200,38 @@ def _placement_xywh(box: Any) -> Optional[List[int]]:
     if right <= left or bottom <= top:
         return None
     return [left, top, right - left, bottom - top]
+
+
+def _product_box_from_manifest(artefact: Path) -> Optional[List[int]]:
+    """The product's box as the app recorded it, when the generator dropped it.
+
+    Measured 2026-11-11 (D-020): `ProductPipelineGenerator` nests the app's build record
+    and leaves `product_box` null on 4 of 4 rows, so the silhouette D-018 saves beside
+    the picture never reached the scorers — the fill fallback and the residue check were
+    both dead on that route. The app's own manifest sits next to the picture and carries
+    the box per face; read it rather than invent one.
+    """
+    import json
+
+    manifest_path = Path(artefact).parent / "product_picture_manifest.json"
+    if not manifest_path.is_file():
+        return None
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    faces = manifest.get("faces") or []
+    wanted = Path(artefact).name
+    for face in faces:
+        if not isinstance(face, dict):
+            continue
+        recorded = Path(str(face.get("file") or "")).name
+        if recorded and recorded == wanted and face.get("product_box"):
+            return [int(v) for v in face["product_box"]]
+    for face in faces:
+        if isinstance(face, dict) and face.get("product_box"):
+            return [int(v) for v in face["product_box"]]
+    return None
 
 
 def _population(generator: Any, generation: Optional[Dict[str, Any]]) -> str:
@@ -201,12 +320,18 @@ def run_pass(*, generator: Any, briefs: Any = None, limit: int = 20,
         composite_route = recorded_route == "composite"
         if not recorded_route and getattr(generator, "name", "") == "composite":
             composite_route = True
-        cutout = _load_cutout(artefact) if composite_route else None
+        # The cutout file is the product's own silhouette wherever it exists. It used
+        # to be loaded only for the composite route, which silently disabled the D-018
+        # fill fallback and (from D-020) the residue check for every `product_picture`
+        # artefact — measured 2026-11-11: 20 published artefacts, 0 silhouettes passed
+        # to the scorers. Loading it is not a claim that the picture is a composite.
+        cutout = _load_cutout(artefact)
         # The product's box is recorded for every route (the generator always reports where it
         # pasted). `subject_fill` needs it on a free background, where the corner colour is the
         # scene rather than the background; the product-region check still uses it only for a
         # composite.
-        product_box = (generation or {}).get("product_box") or None
+        product_box = (generation or {}).get("product_box") or \
+            _product_box_from_manifest(artefact)
         placement = _placement_xywh(product_box) if composite_route else None
         placement_quad = (generation or {}).get("product_quad") if composite_route else None
         scored = score_image(

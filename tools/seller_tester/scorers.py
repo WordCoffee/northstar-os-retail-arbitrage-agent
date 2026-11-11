@@ -23,7 +23,11 @@ import numpy as np
 DEFAULT_WEIGHTS = {
     "dimensions": 0.20,
     "aspect": 0.10,
-    "background": 0.20,
+    # Split, not grown: `matte_residue` measures the same property `background` claims
+    # (a flat background), and the denominator is unchanged, so a clean picture keeps
+    # exactly the score it had before D-020. Measured 2026-11-11.
+    "background": 0.10,
+    "matte_residue": 0.10,
     "subject_fill": 0.20,
     "alpha_matte": 0.10,
     "file_size": 0.05,
@@ -280,6 +284,75 @@ def check_subject_fill(rgb: np.ndarray, spec: Dict[str, Any],
                background=tuple(int(v) for v in bg), check="subject_fill")
 
 
+#: Share of the frame that may differ from a flat background outside the product before
+#: the picture is not a main image any more. 0.5 % of a 2000² frame is 20 000 px.
+MATTE_RESIDUE_MAX = 0.005
+
+
+def check_matte_residue(rgb: np.ndarray, spec: Dict[str, Any], *,
+                        subject_mask: Optional[np.ndarray] = None) -> Dict[str, Any]:
+    """Is a flat background flat **everywhere**, not only in the corners?
+
+    D-020 (found 2026-11-11 while closing D-017): `check_background` samples the four
+    corner patches and `check_alpha_matte`'s white-matte branch samples an outer ring.
+    A contact shadow under the product sits between them, so both instruments pass a
+    picture a seller cannot list — and every white-main score before this check was
+    produced that way.
+
+    The measure is the product's own silhouette (the cutout `D-018` records beside a
+    main image): every pixel that differs from the asked value by more than the
+    tolerance and is *not* inside the silhouette is residue. Two things are tolerated
+    because they are not shadows: a thin blend at the cut edge (the silhouette is
+    dilated before the comparison) and isolated sparkle (blobs under 0.02 % of the
+    frame are dropped). A shadow is neither.
+
+    Without a silhouette the check is **skipped with a reason** — never passed. It is
+    the harness's job to count how many artefacts could not be checked; the number is
+    published, not hidden.
+    """
+    if not spec or str(spec.get("mode", "uniform")).lower() in ("free", "scene"):
+        return _skip("background is free for this brief")
+    if subject_mask is None:
+        return _skip("no product silhouette was recorded beside this artefact, so the "
+                     "background can only be sampled at the corners and the ring; the "
+                     "residue check is skipped WITH a reason, never passed")
+    mask = np.asarray(subject_mask, dtype=bool)
+    if mask.shape != rgb.shape[:2]:
+        return _skip("the recorded silhouette does not match the picture's frame")
+    if not mask.any():
+        return _skip("the recorded silhouette is empty, so nothing is inside it")
+    target = _as_rgb(spec.get("value", 255))
+    tolerance = int(spec.get("tolerance", 6))
+    import cv2
+
+    height, width = mask.shape[:2]
+    ring = cv2.dilate(mask.astype(np.uint8), np.ones((5, 5), np.uint8)) > 0
+    deviation = np.abs(rgb.astype(np.int16) - np.array(target, dtype=np.int16)).max(axis=2)
+    raw = (deviation > tolerance) & ~ring
+    px = int(raw.sum())
+    if px:
+        count, labels, stats, _ = cv2.connectedComponentsWithStats(
+            raw.astype(np.uint8), connectivity=8)
+        floor = max(64, int(0.0002 * float(raw.size)))
+        keep = np.zeros_like(raw)
+        for index in range(1, count):
+            if int(stats[index, cv2.CC_STAT_AREA]) >= floor:
+                keep |= (labels == index)
+        raw = keep
+        px = int(raw.sum())
+    share = 100.0 * px / float(raw.size)
+    neutral = np.abs(rgb[..., 0].astype(np.int16) - rgb[..., 2].astype(np.int16)) <= 14
+    shadow = int((raw & neutral).sum())
+    ok = share <= 100.0 * MATTE_RESIDUE_MAX
+    return _ok(ok=ok,
+               detail=(f"background residue {share:.2f}% of the frame ({px} px) outside "
+                       f"the product's silhouette, {shadow} px of it neutral "
+                       f"(shadow-shaped); limit {100.0 * MATTE_RESIDUE_MAX:.1f}% at "
+                       f"value {target[0]} ±{tolerance}"),
+               residue_pct=round(share, 3), residue_px=px, shadow_px=shadow,
+               tolerance=tolerance, target=list(target), check="matte_residue")
+
+
 def check_alpha_matte(loaded: LoadedImage, spec: Dict[str, Any]) -> Dict[str, Any]:
     """White-matte cleanliness, or a real alpha cutout when the brief asks for one."""
     mode = (spec or {}).get("mode", "any")
@@ -430,11 +503,14 @@ def _run_checks(loaded: LoadedImage, brief: Dict[str, Any], *,
     checks["aspect"] = check_aspect(
         loaded.width, loaded.height, constraints.get("aspect") or {})
     checks["background"] = check_background(loaded.rgb, background_spec)
+    subject_mask = _product_mask_from_cutout(cutout, product_box, loaded.rgb.shape[:2])
     checks["subject_fill"] = check_subject_fill(
         loaded.rgb, constraints.get("fill_pct") or {}, background_spec,
-        product_box=product_box,
-        subject_mask=_product_mask_from_cutout(cutout, product_box,
-                                               loaded.rgb.shape[:2]))
+        product_box=product_box, subject_mask=subject_mask)
+    # D-020: the same silhouette, used for the property `background` only samples at the
+    # corners. Graded only where a silhouette exists; otherwise skipped with the reason.
+    checks["matte_residue"] = check_matte_residue(
+        loaded.rgb, background_spec, subject_mask=subject_mask)
     matte_spec = constraints.get("matte") or {}
     if composite_route:
         checks["alpha_matte"] = check_alpha_matte(loaded, matte_spec)
@@ -559,6 +635,12 @@ def combine_checks(checks: Dict[str, Dict[str, Any]], brief: Dict[str, Any], *,
     """
     weights = dict(DEFAULT_WEIGHTS)
     weights.update(brief.get("weights") or {})
+    if (checks.get("matte_residue") or {}).get("skipped"):
+        # The split is only affordable where the residue can actually be measured. A
+        # picture with no recorded silhouette keeps the single background weight, so
+        # its score is exactly what it was before D-020 (measured 2026-11-11).
+        weights["background"] = float(brief.get("background_weight", 0.20))
+        weights.pop("matte_residue", None)
     if composite_route:
         # Graded only for composites; the denominator is the graded set, so a full
         # generation is unchanged.
@@ -577,6 +659,11 @@ def combine_checks(checks: Dict[str, Dict[str, Any]], brief: Dict[str, Any], *,
     failed = [name for name, check in checks.items()
               if not check.get("skipped") and not check["ok"]]
     critical = list(brief.get("critical") or DEFAULT_CRITICAL)
+    residue = checks.get("matte_residue") or {}
+    if not residue.get("skipped") and "matte_residue" not in critical:
+        # A main image with a shadow under the product is not listable, for the same
+        # reason `background` is critical: this is the property it claims.
+        critical.append("matte_residue")
     reference = checks.get("reference_subject") or {}
     if not reference.get("skipped") and "reference_subject" not in critical:
         # A picture that does not contain the reference subject cannot pass on
@@ -741,6 +828,7 @@ __all__ = [
     "check_dimensions",
     "check_aspect",
     "check_background",
+    "check_matte_residue",
     "check_subject_fill",
     "check_alpha_matte",
     "check_file_size",
