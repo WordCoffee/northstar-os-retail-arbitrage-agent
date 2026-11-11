@@ -23,10 +23,11 @@ Step (1) of the resume order, measured before any work:
 | `NorthstarTysWatchdog` task | Ready, last result `-1073741510` (control-C exit) — **not** keeping anything alive |
 | queue lock | there is no separate lock file; the pid file is the lease (`scripts/ty_director.py:find_director`) |
 
-**Conclusion: no other director holds the queue.** The lease is free, so this session claims every
-unclaimed job. The lease is re-pointed at the opencode process serving this session (pid 21844) so the
-launcher's `find_director` sees a live director and stops spawning dead children; when that process
-ends the launcher resumes normally.
+**Conclusion: no other director holds the queue.** The lease is free, so this session claimed every
+unclaimed job. The lease was held at the opencode process serving this session (pid 21844) so the
+launcher's `find_director` saw a live director and stopped spawning dead children; it is **released at
+the end of the unit** (the pid file is cleared) so the launcher resumes on its next tick — and now it
+can, because the lane it starts exists.
 
 **Defect found and being fixed:** `opencode.jsonc` defines `tys`, `verifier` and `research` — there is
 no `director` agent, so the launcher's `opencode run --agent director` has been failing since it was
