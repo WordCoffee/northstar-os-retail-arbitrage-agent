@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-11T06:06:50+00:00",
+  "updated_at": "2026-11-11T06:30:13+00:00",
   "cycle": 2,
   "unit_in_flight": "",
   "unit_order": [
@@ -1520,7 +1520,7 @@
       "id": "comfy-plate-live",
       "unit": "D12",
       "title": "Start ComfyUI and measure the seller sample on real plates instead of drawn ones",
-      "status": "queued",
+      "status": "merged",
       "owner": "",
       "write_paths": [
         "reports/ty/",
@@ -1534,9 +1534,33 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": "lane start/stop proven (pid, snapshots, stopped ok); ST-002 100 on a real FLUX plate, ST-001 70 (background/alpha_matte -> D-015); cylinder measurement moved to background-difference + column profile; drawn pass 20/20 96.0; 23 tests",
       "created_at": "2026-11-11T06:06:46+00:00",
-      "updated_at": "2026-11-11T06:06:46+00:00",
+      "updated_at": "2026-11-11T06:30:07+00:00",
+      "rank": 1
+    },
+    {
+      "id": "white-cutout-main",
+      "unit": "D4",
+      "title": "D-015: a main-image brief needs the product cut out on 255 white, not composited on a sweep",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "Northstar_backend/product_picture.py",
+        "Northstar_backend/mockup_compositor.py",
+        "Northstar_backend/test_*.py",
+        "tools/seller_tester/"
+      ],
+      "branch": "ty/white-cutout-main",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-11T06:30:07+00:00",
+      "updated_at": "2026-11-11T06:30:12+00:00",
       "rank": 1
     },
     {
@@ -1603,6 +1627,30 @@
       "evidence": "ProductPipelineGenerator drives product_picture.build; both brands reach the scorers; prompt-only 12/12/97.5 (drawn plate, labelled); 8 new tests + 98 harness tests; reports/ty/sel06_product_pipeline.md",
       "created_at": "2026-11-11T03:18:44+00:00",
       "updated_at": "2026-11-11T04:23:20+00:00",
+      "rank": 2
+    },
+    {
+      "id": "fix-label-scale-plate",
+      "unit": "D4",
+      "title": "D-016: the measured cylinder body is narrower than the body on a low-contrast plate, so the label is drawn too small; and a mug is drawn as a plain cylinder",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "Northstar_backend/mockup_compositor.py",
+        "Northstar_backend/product_picture.py",
+        "Northstar_backend/brand_art.py",
+        "Northstar_backend/test_*.py"
+      ],
+      "branch": "ty/fix-label-scale-plate",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-11T06:30:12+00:00",
+      "updated_at": "2026-11-11T06:30:12+00:00",
       "rank": 2
     },
     {

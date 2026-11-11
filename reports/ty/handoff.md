@@ -10,6 +10,37 @@ A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.m
 > and `reports/ty/handoff.md`, then continue from the first unfinished unit. No
 > questions, no reports between cycles. Idle means re-plan.
 
+## Position, 2026-11-11 cycle 8 — the render lane is real, and one real plate scores 100
+
+Unit report: `reports/ty/comfy_plate_live.md`. Tag `ty-dir-comfy-plate-live`.
+
+| # | job | result |
+|---|---|---|
+| 1 | `comfy-plate-live` — `engine_status()` had said *armed but unreachable* since 2026-11-08 | **merged.** ComfyUI is started by `tools/comfy_lane.lane()` (`--cache-none`), the pass runs, the process is stopped in `finally`; the proof the VRAM came back is that the process exited, not a `/free` acknowledgement. New `tools/comfy_plate_pass.py` runs one pass inside one lane |
+| 2 | the harness's `--renderer comfy` refused every brief | fixed: the comfy route no longer injects a plate, it calls the app's own FLUX 3 Klein text-safe lane, so the number is the product |
+| 3 | the cylinder measurement was pouch geometry | `find_cylinder_bands`: difference from the plate's own background + a column profile with hysteresis. The old measurement returned a **153 × 121 px patch of shadow** on a 410 px body |
+
+**Real plates: ST-002 (ceramic mug) 100 passed; ST-001 (pouch, white-background
+brief) 70, failing `background` and `alpha_matte`.** One `pp.build` on a real plate
+measured **72.4 s**. Lane row in `state/gpu/comfy_lanes.jsonl`; afterwards port
+closed, 16.0 GB VRAM free, 7.6 GB RAM free.
+
+**The two findings that matter:**
+1. **D-015** a main-image brief needs the product **cut out on 255 white**; the app
+   composites onto a photograph of a sweep. That is a missing path, not a lane fault.
+2. **D-016** on a white body against a pale sweep the measured body is narrower
+   than the body, so the label is drawn too small; and a mug is drawn as a plain
+   cylinder because the plate brief is per *form*, not per category.
+
+**Next, in rank order:** `white-cutout-main` (D-015) → `fix-label-scale-plate`
+(D-016) → `pack-02-apparel-flat-print` → `pack-03-boxart-forms` →
+`sel-04-packaging` → `fix-bundle-units` → `ux-0610-live-verify` (parked:
+`python tools/ty_unlock_checks.py --status`).
+
+**Lane discipline that is now proven, keep it:** one real-plate pass at a time,
+inside `comfy_lane.lane()`. With ComfyUI resident the app's own guard refused a
+second render at 2.6 GB free (`system_ram_insufficient: free 2601 MB, need 4096 MB`).
+
 ## Position, 2026-11-11 cycle 7 — a third form, and the sample is 20 briefs across five categories
 
 Unit report: `reports/ty/pack01_rigid_cylinder.md`. Tag `ty-dir-pack-01`.
