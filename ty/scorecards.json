@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-11T17:33:49+00:00",
+  "at": "2026-11-11T18:02:03+00:00",
   "bar": 85.0,
   "weights": {
     "works": 0.23,
@@ -184,171 +184,6 @@
       "purpose": "campaign control: budget, bids, and the report behind them"
     },
     {
-      "id": "beta-support",
-      "label": "Support",
-      "group": "Private Beta",
-      "kind": "onboarding",
-      "route": "/beta#support",
-      "impact": 0.5,
-      "bar": 85.0,
-      "score": 63.2,
-      "meets_bar": false,
-      "weakest": "complete",
-      "gap": 10.9,
-      "dimensions": {
-        "works": {
-          "score": 100.0,
-          "evidence": "17 test id(s) prove it"
-        },
-        "correct": {
-          "score": 100.0,
-          "evidence": "17 test id(s) prove behaviour; this service produces no seller-facing artefact, so tests are the evidence"
-        },
-        "seller": {
-          "score": null,
-          "not_applicable": true,
-          "evidence": "this service does not produce a seller-facing artefact, so there is nothing to score"
-        },
-        "complete": {
-          "score": 0.0,
-          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
-        },
-        "usable": {
-          "score": 100.0,
-          "evidence": "no readiness finding names this service"
-        },
-        "measured": {
-          "score": 0.0,
-          "evidence": "route '/beta#support' is not registered in the UI"
-        },
-        "contract": {
-          "score": 0.0,
-          "evidence": "no_primary_action: registry records no actions for this service"
-        }
-      },
-      "scenarios": [
-        {
-          "text": "an invitee signs up without help",
-          "tag": "backed"
-        },
-        {
-          "text": "a tester reports a bug and sees it acknowledged",
-          "tag": "backed"
-        }
-      ],
-      "purpose": "support inside the beta without a human in the loop"
-    },
-    {
-      "id": "beta",
-      "label": "Onboarding & Plan",
-      "group": "Private Beta",
-      "kind": "onboarding",
-      "route": "/beta",
-      "impact": 0.9,
-      "bar": 85.0,
-      "score": 74.7,
-      "meets_bar": false,
-      "weakest": "complete",
-      "gap": 9.3,
-      "dimensions": {
-        "works": {
-          "score": 100.0,
-          "evidence": "17 test id(s) prove it"
-        },
-        "correct": {
-          "score": 100.0,
-          "evidence": "17 test id(s) prove behaviour; this service produces no seller-facing artefact, so tests are the evidence"
-        },
-        "seller": {
-          "score": null,
-          "not_applicable": true,
-          "evidence": "this service does not produce a seller-facing artefact, so there is nothing to score"
-        },
-        "complete": {
-          "score": 0.0,
-          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
-        },
-        "usable": {
-          "score": 100.0,
-          "evidence": "no readiness finding names this service"
-        },
-        "measured": {
-          "score": 100.0,
-          "evidence": "route /beta -> northstar-os-ui\\src\\pages\\public\\BetaLanding.jsx; app p95 3.4 ms"
-        },
-        "contract": {
-          "score": 0.0,
-          "evidence": "no_primary_action: registry records no actions for this service"
-        }
-      },
-      "scenarios": [
-        {
-          "text": "an invitee signs up without help",
-          "tag": "backed"
-        },
-        {
-          "text": "a tester reports a bug and sees it acknowledged",
-          "tag": "backed"
-        }
-      ],
-      "purpose": "onboarding and plan selection for a private beta seller"
-    },
-    {
-      "id": "beta-signup",
-      "label": "Invite entry",
-      "group": "Private Beta",
-      "kind": "onboarding",
-      "route": "/beta-signup",
-      "impact": 0.8,
-      "bar": 85.0,
-      "score": 74.7,
-      "meets_bar": false,
-      "weakest": "complete",
-      "gap": 8.2,
-      "dimensions": {
-        "works": {
-          "score": 100.0,
-          "evidence": "17 test id(s) prove it"
-        },
-        "correct": {
-          "score": 100.0,
-          "evidence": "17 test id(s) prove behaviour; this service produces no seller-facing artefact, so tests are the evidence"
-        },
-        "seller": {
-          "score": null,
-          "not_applicable": true,
-          "evidence": "this service does not produce a seller-facing artefact, so there is nothing to score"
-        },
-        "complete": {
-          "score": 0.0,
-          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
-        },
-        "usable": {
-          "score": 100.0,
-          "evidence": "no readiness finding names this service"
-        },
-        "measured": {
-          "score": 100.0,
-          "evidence": "route /beta-signup -> northstar-os-ui\\src\\pages\\roomAdapters.jsx; app p95 3.4 ms"
-        },
-        "contract": {
-          "score": 0.0,
-          "evidence": "permission_denied: HTTP 403 - signup is not available at this time"
-        }
-      },
-      "scenarios": [
-        {
-          "text": "an invitee signs up without help",
-          "tag": "backed"
-        },
-        {
-          "text": "a tester reports a bug and sees it acknowledged",
-          "tag": "backed"
-        }
-      ],
-      "purpose": "invite entry that a real invitee can complete unaided"
-    },
-    {
       "id": "socialpulse",
       "label": "SocialPulse",
       "group": "Social",
@@ -519,25 +354,25 @@
       "purpose": "Listing Guardian: keep live listings compliant and correct"
     },
     {
-      "id": "beta-ops",
-      "label": "Tester Dashboard",
-      "group": "Beta Operations",
+      "id": "beta-support",
+      "label": "Support",
+      "group": "Private Beta",
       "kind": "onboarding",
-      "route": "/beta-ops",
-      "impact": 0.4,
+      "route": "/beta#support",
+      "impact": 0.5,
       "bar": 85.0,
-      "score": 74.7,
+      "score": 77.0,
       "meets_bar": false,
-      "weakest": "complete",
-      "gap": 4.1,
+      "weakest": "measured",
+      "gap": 4.0,
       "dimensions": {
         "works": {
           "score": 100.0,
-          "evidence": "76 test id(s) prove it"
+          "evidence": "17 test id(s) prove it"
         },
         "correct": {
           "score": 100.0,
-          "evidence": "76 test id(s) prove behaviour; this service produces no seller-facing artefact, so tests are the evidence"
+          "evidence": "17 test id(s) prove behaviour; this service produces no seller-facing artefact, so tests are the evidence"
         },
         "seller": {
           "score": null,
@@ -545,29 +380,33 @@
           "evidence": "this service does not produce a seller-facing artefact, so there is nothing to score"
         },
         "complete": {
-          "score": 0.0,
-          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
+          "score": 100.0,
+          "evidence": "1/1 declared Bojo tools wired: submit_support_ticket"
         },
         "usable": {
           "score": 100.0,
           "evidence": "no readiness finding names this service"
         },
         "measured": {
-          "score": 100.0,
-          "evidence": "route /beta-ops -> northstar-os-ui\\src\\pages\\admin\\Overview.jsx; app p95 3.4 ms"
+          "score": 0.0,
+          "evidence": "route '/beta#support' is not registered in the UI"
         },
         "contract": {
           "score": 0.0,
-          "evidence": "permission_denied: HTTP 403 - role_operator_lacks_platform_admin"
+          "evidence": "no_primary_action: registry records no actions for this service"
         }
       },
       "scenarios": [
         {
-          "text": "see who is active and what broke",
+          "text": "an invitee signs up without help",
+          "tag": "backed"
+        },
+        {
+          "text": "a tester reports a bug and sees it acknowledged",
           "tag": "backed"
         }
       ],
-      "purpose": "the tester dashboard: who is in, what they did, what broke"
+      "purpose": "support inside the beta without a human in the loop"
     },
     {
       "id": "hub",
@@ -1290,6 +1129,167 @@
         }
       ],
       "purpose": "keyword research and SEO workbench"
+    },
+    {
+      "id": "beta",
+      "label": "Onboarding & Plan",
+      "group": "Private Beta",
+      "kind": "onboarding",
+      "route": "/beta",
+      "impact": 0.9,
+      "bar": 85.0,
+      "score": 88.5,
+      "meets_bar": false,
+      "weakest": "contract",
+      "gap": 0.0,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "17 test id(s) prove it"
+        },
+        "correct": {
+          "score": 100.0,
+          "evidence": "17 test id(s) prove behaviour; this service produces no seller-facing artefact, so tests are the evidence"
+        },
+        "seller": {
+          "score": null,
+          "not_applicable": true,
+          "evidence": "this service does not produce a seller-facing artefact, so there is nothing to score"
+        },
+        "complete": {
+          "score": 100.0,
+          "evidence": "1/1 declared Bojo tools wired: onboarding_status"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 100.0,
+          "evidence": "route /beta -> northstar-os-ui\\src\\pages\\public\\BetaLanding.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 0.0,
+          "evidence": "no_primary_action: registry records no actions for this service"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "an invitee signs up without help",
+          "tag": "backed"
+        },
+        {
+          "text": "a tester reports a bug and sees it acknowledged",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "onboarding and plan selection for a private beta seller"
+    },
+    {
+      "id": "beta-signup",
+      "label": "Invite entry",
+      "group": "Private Beta",
+      "kind": "onboarding",
+      "route": "/beta-signup",
+      "impact": 0.8,
+      "bar": 85.0,
+      "score": 88.5,
+      "meets_bar": false,
+      "weakest": "contract",
+      "gap": 0.0,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "17 test id(s) prove it"
+        },
+        "correct": {
+          "score": 100.0,
+          "evidence": "17 test id(s) prove behaviour; this service produces no seller-facing artefact, so tests are the evidence"
+        },
+        "seller": {
+          "score": null,
+          "not_applicable": true,
+          "evidence": "this service does not produce a seller-facing artefact, so there is nothing to score"
+        },
+        "complete": {
+          "score": 100.0,
+          "evidence": "1/1 declared Bojo tools wired: redeem_invite"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 100.0,
+          "evidence": "route /beta-signup -> northstar-os-ui\\src\\pages\\roomAdapters.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 0.0,
+          "evidence": "permission_denied: HTTP 403 - signup is not available at this time"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "an invitee signs up without help",
+          "tag": "backed"
+        },
+        {
+          "text": "a tester reports a bug and sees it acknowledged",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "invite entry that a real invitee can complete unaided"
+    },
+    {
+      "id": "beta-ops",
+      "label": "Tester Dashboard",
+      "group": "Beta Operations",
+      "kind": "onboarding",
+      "route": "/beta-ops",
+      "impact": 0.4,
+      "bar": 85.0,
+      "score": 88.5,
+      "meets_bar": false,
+      "weakest": "contract",
+      "gap": 0.0,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "76 test id(s) prove it"
+        },
+        "correct": {
+          "score": 100.0,
+          "evidence": "76 test id(s) prove behaviour; this service produces no seller-facing artefact, so tests are the evidence"
+        },
+        "seller": {
+          "score": null,
+          "not_applicable": true,
+          "evidence": "this service does not produce a seller-facing artefact, so there is nothing to score"
+        },
+        "complete": {
+          "score": 100.0,
+          "evidence": "1/1 declared Bojo tools wired: beta_cohort"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 100.0,
+          "evidence": "route /beta-ops -> northstar-os-ui\\src\\pages\\admin\\Overview.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 0.0,
+          "evidence": "permission_denied: HTTP 403 - role_operator_lacks_platform_admin"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "see who is active and what broke",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "the tester dashboard: who is in, what they did, what broke"
     },
     {
       "id": "design-studio",

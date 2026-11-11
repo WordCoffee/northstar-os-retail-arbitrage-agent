@@ -37,7 +37,7 @@ import uuid
 from datetime import datetime, timezone
 from typing import Any, Callable, Dict, Iterable, List, Optional
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
@@ -197,6 +197,7 @@ def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content
                       events: Optional[Any] = None,
                       cancel_event: Optional[threading.Event] = None,
                       tools_enabled: Optional[bool] = None,
+                      identity: Optional[Dict[str, Any]] = None,
                       options: Optional[Dict[str, Any]] = None):
     """Sync generator of SSE frames for one turn (tool loop included).
 
@@ -512,6 +513,10 @@ def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content
                     # U8: the canvas the operator has open, if any. The
                     # canvas_edit tool refuses rather than guessing when absent.
                     "canvas": (options or {}).get("canvas"),
+                    # The verified session behind this turn. Foundation-backed
+                    # tools authorise from this record and re-check the role in
+                    # the membership table; a tool argument can never set it.
+                    "identity": identity,
                 }
                 box: Dict[str, Any] = {}
                 args_payload = call.get("obj_args") if call.get("obj_args") is not None else call.get("raw_args")
@@ -1162,8 +1167,28 @@ def fork_session(sid: str, body: ForkIn, acct: str = Depends(studio_account)):
     return out
 
 
+async def chat_identity(request: Request) -> Dict[str, Any]:
+    """The verified session for one chat turn: organization scope + the user.
+
+    ``studio_account`` returns only the organization, which is enough to scope
+    the chat store but not to authorise a Foundation action (a support ticket is
+    attributed to a user, and the tester dashboard needs a real role). One
+    ``require_session`` resolution here yields both, so a tool sees exactly the
+    identity the HTTP routes see. No weaker fallback is added, and the role is
+    still re-read from the membership table by the tool itself.
+    """
+    from auth_deps import require_session
+
+    user = await require_session(request)
+    org = user.get("tenant_id") or user.get("id")
+    if not org:
+        raise HTTPException(status_code=401, detail="Session has no resolved organization")
+    return {"account_id": str(org), "user": user}
+
+
 @router.post("/sessions/{sid}/turns")
-def create_turn(sid: str, body: TurnIn, acct: str = Depends(studio_account)):
+def create_turn(sid: str, body: TurnIn, chat: Dict[str, Any] = Depends(chat_identity)):
+    acct = chat["account_id"]
     db = get_northstar_db()
     session = db.chat.sessions.get_by_id(sid, account_id=acct)
     if not session:
@@ -1179,6 +1204,7 @@ def create_turn(sid: str, body: TurnIn, acct: str = Depends(studio_account)):
         db, acct, session, body.content,
         think=_think_level(body.think, body.thinking, body.content,
                            len(body.attachments), body.mode), model=body.model,
+        identity=chat["user"],
         options={"media": body.media, "thinking": body.thinking,
                  "style": body.style, "mode": body.mode,
                  "attachments": body.attachments, "canvas": body.canvas,

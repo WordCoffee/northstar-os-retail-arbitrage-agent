@@ -199,7 +199,9 @@
       "route": "/beta",
       "scene": "default",
       "theme": "account",
-      "tools": [],
+      "tools": [
+        "onboarding_status"
+      ],
       "entitlementKey": "studio.beta",
       "source": "nav"
     },
@@ -211,7 +213,9 @@
       "route": "/beta#support",
       "scene": "default",
       "theme": "account",
-      "tools": [],
+      "tools": [
+        "submit_support_ticket"
+      ],
       "entitlementKey": "studio.beta-support",
       "source": "nav"
     },
@@ -223,7 +227,9 @@
       "route": "/beta-signup",
       "scene": "default",
       "theme": "account",
-      "tools": [],
+      "tools": [
+        "redeem_invite"
+      ],
       "entitlementKey": "studio.beta-signup",
       "source": "nav"
     },
@@ -235,7 +241,9 @@
       "route": "/beta-ops",
       "scene": "default",
       "theme": "account",
-      "tools": [],
+      "tools": [
+        "beta_cohort"
+      ],
       "entitlementKey": "studio.beta-ops",
       "source": "nav"
     },

@@ -81,7 +81,8 @@ FOCUS_MODES: List[Dict[str, Any]] = [
         "id": "operate",
         "label": "Operate",
         "blurb": "Inventory, profitability, monitoring and account health.",
-        "tools": ["system_status", "build_utility"],
+        "tools": ["system_status", "build_utility", "onboarding_status",
+                  "submit_support_ticket", "redeem_invite", "beta_cohort"],
         "requires": None,
         "suggestions": [
             "Give me a portfolio posture summary — what is known vs unknown.",

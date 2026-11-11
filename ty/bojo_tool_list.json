@@ -1,9 +1,9 @@
 {
   "schema": "northstar.bojo_tool_list.v1",
   "generated_from": "ty/service_registry.json",
-  "count": 44,
+  "count": 48,
   "totals": {
-    "wired": 44,
+    "wired": 48,
     "declared": 0,
     "unclaimed": 4
   },
@@ -24,6 +24,13 @@
       "service": "design-studio",
       "also_used_by": [],
       "reason": "chat_tools.TOOLS['apply_label'] composites the operator's real logo and copy onto a rendered pouch plate - the studio's finishing step."
+    },
+    {
+      "name": "beta_cohort",
+      "status": "wired",
+      "service": "beta-ops",
+      "also_used_by": [],
+      "reason": "chat_tools.TOOLS['beta_cohort'] reads the tester dashboard through TesterDashboard.list_orgs; platform-admin only, checked against the membership table."
     },
     {
       "name": "build_dieline",
@@ -170,6 +177,13 @@
       "reason": "chat_tools.TOOLS['offer_recommendation'] is the declared listing-pricing tool for this service; it prices an offer rather than writing copy."
     },
     {
+      "name": "onboarding_status",
+      "status": "wired",
+      "service": "beta",
+      "also_used_by": [],
+      "reason": "chat_tools.TOOLS['onboarding_status'] reports this organization's beta onboarding checklist, the step it still owes and its plan, from SupportService.onboarding_status + PlanUsageService.view."
+    },
+    {
       "name": "optimize_listing",
       "status": "wired",
       "service": "listings",
@@ -230,6 +244,13 @@
       "reason": "chat_tools.TOOLS['ppc_plan'] turns ad reports into a validated change plan."
     },
     {
+      "name": "redeem_invite",
+      "status": "wired",
+      "service": "beta-signup",
+      "also_used_by": [],
+      "reason": "chat_tools.TOOLS['redeem_invite'] redeems an invite code through InviteService.signup, the service behind POST /api/v1/foundation/signup, with the route's non-revealing denial."
+    },
+    {
       "name": "scan_products",
       "status": "wired",
       "service": "product-finder",
@@ -279,6 +300,13 @@
       "service": "hub",
       "also_used_by": [],
       "reason": "chat_tools.TOOLS['service_catalog'] lists every service area and the tool that handles it - hub's own map of the suite."
+    },
+    {
+      "name": "submit_support_ticket",
+      "status": "wired",
+      "service": "beta-support",
+      "also_used_by": [],
+      "reason": "chat_tools.TOOLS['submit_support_ticket'] files a ticket on this organization's beta support queue through SupportService.submit_ticket - the same queue the support route reads."
     },
     {
       "name": "system_status",
@@ -449,9 +477,21 @@
       "unclaimed_here": [
         "purpose_command"
       ]
+    },
+    {
+      "id": "beta",
+      "label": "Private Beta",
+      "tools": [
+        "onboarding_status",
+        "submit_support_ticket",
+        "redeem_invite",
+        "beta_cohort"
+      ],
+      "unclaimed_here": []
     }
   ],
   "bojo_domain_registry": [
+    "beta_cohort",
     "build_dieline",
     "catalog_pull",
     "compose_listing",
@@ -459,8 +499,11 @@
     "hub_status",
     "margin_report",
     "offer_recommendation",
+    "onboarding_status",
     "plan_campaign",
+    "redeem_invite",
     "scan_products",
+    "submit_support_ticket",
     "track_keywords",
     "watch_competitor"
   ]

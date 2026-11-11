@@ -1,6 +1,6 @@
 # Target spec — what production-ready means, per service
 
-Derived 2026-11-11T17:33:49+00:00 from `state/director/services.json`, 7465 measured test ids and 1 readiness findings. **Scores are measured, never asserted**: a dimension with no artefact scores 0 and says why.
+Derived 2026-11-11T18:02:03+00:00 from `state/director/services.json`, 7465 measured test ids and 1 readiness findings. **Scores are measured, never asserted**: a dimension with no artefact scores 0 and says why.
 
 Bar: **85 on every dimension** (not an average). A service is at the bar only when its weakest dimension clears it. Impact weight is what a paying seller needs first; gap = impact x (bar - score).
 
@@ -9,13 +9,10 @@ Bar: **85 on every dimension** (not an average). A service is at the bar only wh
 | OfferChisel (`offerchisel`) | 67.0 | seller | no | 16.2 | 0.9 |
 | The Town Crier (`towncrier`) | 55.0 | seller | no | 13.5 | 0.45 |
 | AdPilot (`adpilot`) | 67.0 | seller | no | 12.6 | 0.7 |
-| Support (`beta-support`) | 63.2 | complete | no | 10.9 | 0.5 |
-| Onboarding & Plan (`beta`) | 74.7 | complete | no | 9.3 | 0.9 |
-| Invite entry (`beta-signup`) | 74.7 | complete | no | 8.2 | 0.8 |
 | SocialPulse (`socialpulse`) | 67.0 | seller | no | 8.1 | 0.45 |
 | SourceScout (`product-finder`) | 77.0 | seller | no | 7.2 | 0.9 |
 | Listing Guardian (`listings`) | 77.0 | seller | no | 7.2 | 0.9 |
-| Tester Dashboard (`beta-ops`) | 74.7 | complete | no | 4.1 | 0.4 |
+| Support (`beta-support`) | 77.0 | measured | no | 4.0 | 0.5 |
 | Operations Hub (`hub`) | 100.0 | works | yes | 0.0 | 0.85 |
 | The Ledger (`ledger`) | 86.2 | complete | no | 0.0 | 0.8 |
 | Prospector (`prospector`) | 100.0 | works | yes | 0.0 | 0.9 |
@@ -29,6 +26,9 @@ Bar: **85 on every dimension** (not an average). A service is at the bar only wh
 | Operations Hub (`foundation`) | 86.2 | complete | no | 0.0 | 0.7 |
 | Jobs & Schedules (`jobs`) | 86.2 | complete | no | 0.0 | 0.4 |
 | Keywords & SEO (`keywords`) | 86.2 | complete | no | 0.0 | 0.6 |
+| Onboarding & Plan (`beta`) | 88.5 | contract | no | 0.0 | 0.9 |
+| Invite entry (`beta-signup`) | 88.5 | contract | no | 0.0 | 0.8 |
+| Tester Dashboard (`beta-ops`) | 88.5 | contract | no | 0.0 | 0.4 |
 | Design Studio (`design-studio`) | 89.5 | correct | no | 0.0 | 0.95 |
 | Golden Goose (`golden-goose`) | 89.4 | correct | no | 0.0 | 0.95 |
 | Keyword Tracker (`keyword-tracker`) | 100.0 | works | yes | 0.0 | 0.6 |
@@ -107,69 +107,6 @@ Seller scenarios:
 - `backed` — cut the keywords that only cost money
 - `backed` — show me what the campaign did last week
 
-## Support (`beta-support`)
-
-support inside the beta without a human in the loop.
-
-- route `/beta#support`, group Private Beta, kind onboarding
-- **score 63.2 / bar 85** (impact 0.5, gap 10.9)
-
-| dimension | score | weight | evidence |
-|---|---|---|---|
-| works | 100.0 | 0.23 | 17 test id(s) prove it |
-| correct | 100.0 | 0.25 | 17 test id(s) prove behaviour; this service produces no seller-facing artefact, so tests are the evidence |
-| seller | None | 0.13 | this service does not produce a seller-facing artefact, so there is nothing to score |
-| complete | 0.0 | 0.12 | no Bojo tool declared, so Bojo cannot drive it |
-| usable | 100.0 | 0.07 | no readiness finding names this service |
-| measured | 0.0 | 0.1 | route '/beta#support' is not registered in the UI |
-| contract | 0.0 | 0.1 | no_primary_action: registry records no actions for this service |
-
-Seller scenarios:
-- `backed` — an invitee signs up without help
-- `backed` — a tester reports a bug and sees it acknowledged
-
-## Onboarding & Plan (`beta`)
-
-onboarding and plan selection for a private beta seller.
-
-- route `/beta`, group Private Beta, kind onboarding
-- **score 74.7 / bar 85** (impact 0.9, gap 9.3)
-
-| dimension | score | weight | evidence |
-|---|---|---|---|
-| works | 100.0 | 0.23 | 17 test id(s) prove it |
-| correct | 100.0 | 0.25 | 17 test id(s) prove behaviour; this service produces no seller-facing artefact, so tests are the evidence |
-| seller | None | 0.13 | this service does not produce a seller-facing artefact, so there is nothing to score |
-| complete | 0.0 | 0.12 | no Bojo tool declared, so Bojo cannot drive it |
-| usable | 100.0 | 0.07 | no readiness finding names this service |
-| measured | 100.0 | 0.1 | route /beta -> northstar-os-ui\src\pages\public\BetaLanding.jsx; app p95 3.4 ms |
-| contract | 0.0 | 0.1 | no_primary_action: registry records no actions for this service |
-
-Seller scenarios:
-- `backed` — an invitee signs up without help
-- `backed` — a tester reports a bug and sees it acknowledged
-
-## Invite entry (`beta-signup`)
-
-invite entry that a real invitee can complete unaided.
-
-- route `/beta-signup`, group Private Beta, kind onboarding
-- **score 74.7 / bar 85** (impact 0.8, gap 8.2)
-
-| dimension | score | weight | evidence |
-|---|---|---|---|
-| works | 100.0 | 0.23 | 17 test id(s) prove it |
-| correct | 100.0 | 0.25 | 17 test id(s) prove behaviour; this service produces no seller-facing artefact, so tests are the evidence |
-| seller | None | 0.13 | this service does not produce a seller-facing artefact, so there is nothing to score |
-| complete | 0.0 | 0.12 | no Bojo tool declared, so Bojo cannot drive it |
-| usable | 100.0 | 0.07 | no readiness finding names this service |
-| measured | 100.0 | 0.1 | route /beta-signup -> northstar-os-ui\src\pages\roomAdapters.jsx; app p95 3.4 ms |
-| contract | 0.0 | 0.1 | permission_denied: HTTP 403 - signup is not available at this time |
-
-Seller scenarios:
-- `backed` — an invitee signs up without help
-- `backed` — a tester reports a bug and sees it acknowledged
-
 ## SocialPulse (`socialpulse`)
 
 schedule and judge social posts against a brand voice.
@@ -235,25 +172,26 @@ Seller scenarios:
 - `backed` — rewrite the bullets for a different audience
 - `backed` — fix the listing that lost its buy box
 
-## Tester Dashboard (`beta-ops`)
+## Support (`beta-support`)
 
-the tester dashboard: who is in, what they did, what broke.
+support inside the beta without a human in the loop.
 
-- route `/beta-ops`, group Beta Operations, kind onboarding
-- **score 74.7 / bar 85** (impact 0.4, gap 4.1)
+- route `/beta#support`, group Private Beta, kind onboarding
+- **score 77.0 / bar 85** (impact 0.5, gap 4.0)
 
 | dimension | score | weight | evidence |
 |---|---|---|---|
-| works | 100.0 | 0.23 | 76 test id(s) prove it |
-| correct | 100.0 | 0.25 | 76 test id(s) prove behaviour; this service produces no seller-facing artefact, so tests are the evidence |
+| works | 100.0 | 0.23 | 17 test id(s) prove it |
+| correct | 100.0 | 0.25 | 17 test id(s) prove behaviour; this service produces no seller-facing artefact, so tests are the evidence |
 | seller | None | 0.13 | this service does not produce a seller-facing artefact, so there is nothing to score |
-| complete | 0.0 | 0.12 | no Bojo tool declared, so Bojo cannot drive it |
+| complete | 100.0 | 0.12 | 1/1 declared Bojo tools wired: submit_support_ticket |
 | usable | 100.0 | 0.07 | no readiness finding names this service |
-| measured | 100.0 | 0.1 | route /beta-ops -> northstar-os-ui\src\pages\admin\Overview.jsx; app p95 3.4 ms |
-| contract | 0.0 | 0.1 | permission_denied: HTTP 403 - role_operator_lacks_platform_admin |
+| measured | 0.0 | 0.1 | route '/beta#support' is not registered in the UI |
+| contract | 0.0 | 0.1 | no_primary_action: registry records no actions for this service |
 
 Seller scenarios:
-- `backed` — see who is active and what broke
+- `backed` — an invitee signs up without help
+- `backed` — a tester reports a bug and sees it acknowledged
 
 ## Operations Hub (`hub`)
 
@@ -529,6 +467,68 @@ keyword research and SEO workbench.
 
 Seller scenarios:
 - `backed` — the work survives a reload and tells me when it failed
+
+## Onboarding & Plan (`beta`)
+
+onboarding and plan selection for a private beta seller.
+
+- route `/beta`, group Private Beta, kind onboarding
+- **score 88.5 / bar 85** (impact 0.9, gap 0.0)
+
+| dimension | score | weight | evidence |
+|---|---|---|---|
+| works | 100.0 | 0.23 | 17 test id(s) prove it |
+| correct | 100.0 | 0.25 | 17 test id(s) prove behaviour; this service produces no seller-facing artefact, so tests are the evidence |
+| seller | None | 0.13 | this service does not produce a seller-facing artefact, so there is nothing to score |
+| complete | 100.0 | 0.12 | 1/1 declared Bojo tools wired: onboarding_status |
+| usable | 100.0 | 0.07 | no readiness finding names this service |
+| measured | 100.0 | 0.1 | route /beta -> northstar-os-ui\src\pages\public\BetaLanding.jsx; app p95 3.4 ms |
+| contract | 0.0 | 0.1 | no_primary_action: registry records no actions for this service |
+
+Seller scenarios:
+- `backed` — an invitee signs up without help
+- `backed` — a tester reports a bug and sees it acknowledged
+
+## Invite entry (`beta-signup`)
+
+invite entry that a real invitee can complete unaided.
+
+- route `/beta-signup`, group Private Beta, kind onboarding
+- **score 88.5 / bar 85** (impact 0.8, gap 0.0)
+
+| dimension | score | weight | evidence |
+|---|---|---|---|
+| works | 100.0 | 0.23 | 17 test id(s) prove it |
+| correct | 100.0 | 0.25 | 17 test id(s) prove behaviour; this service produces no seller-facing artefact, so tests are the evidence |
+| seller | None | 0.13 | this service does not produce a seller-facing artefact, so there is nothing to score |
+| complete | 100.0 | 0.12 | 1/1 declared Bojo tools wired: redeem_invite |
+| usable | 100.0 | 0.07 | no readiness finding names this service |
+| measured | 100.0 | 0.1 | route /beta-signup -> northstar-os-ui\src\pages\roomAdapters.jsx; app p95 3.4 ms |
+| contract | 0.0 | 0.1 | permission_denied: HTTP 403 - signup is not available at this time |
+
+Seller scenarios:
+- `backed` — an invitee signs up without help
+- `backed` — a tester reports a bug and sees it acknowledged
+
+## Tester Dashboard (`beta-ops`)
+
+the tester dashboard: who is in, what they did, what broke.
+
+- route `/beta-ops`, group Beta Operations, kind onboarding
+- **score 88.5 / bar 85** (impact 0.4, gap 0.0)
+
+| dimension | score | weight | evidence |
+|---|---|---|---|
+| works | 100.0 | 0.23 | 76 test id(s) prove it |
+| correct | 100.0 | 0.25 | 76 test id(s) prove behaviour; this service produces no seller-facing artefact, so tests are the evidence |
+| seller | None | 0.13 | this service does not produce a seller-facing artefact, so there is nothing to score |
+| complete | 100.0 | 0.12 | 1/1 declared Bojo tools wired: beta_cohort |
+| usable | 100.0 | 0.07 | no readiness finding names this service |
+| measured | 100.0 | 0.1 | route /beta-ops -> northstar-os-ui\src\pages\admin\Overview.jsx; app p95 3.4 ms |
+| contract | 0.0 | 0.1 | permission_denied: HTTP 403 - role_operator_lacks_platform_admin |
+
+Seller scenarios:
+- `backed` — see who is active and what broke
 
 ## Design Studio (`design-studio`)
 

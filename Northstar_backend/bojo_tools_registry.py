@@ -19,6 +19,7 @@ _MODULES = (
     "bojo_tools.competitors",
     "bojo_tools.economics",
     "bojo_tools.campaigns",
+    "bojo_tools.foundation_ops",
     "bojo_tools_ops",
 )
 

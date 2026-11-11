@@ -1401,9 +1401,9 @@
       ],
       "actions": [],
       "bojo_tool": {
-        "name": "none",
-        "status": "none",
-        "reason": "A public landing page; no chat tool and no API call is involved."
+        "name": "onboarding_status",
+        "status": "wired",
+        "reason": "chat_tools.TOOLS['onboarding_status'] reports this organization's beta onboarding checklist, the step it still owes and its plan, from SupportService.onboarding_status + PlanUsageService.view."
       },
       "also_declares": [],
       "has_controls": false,
@@ -1416,7 +1416,9 @@
         "backend": [
           "Northstar_backend/main.py:353"
         ],
-        "declared_tools": [],
+        "declared_tools": [
+          "onboarding_status"
+        ],
         "confidence": "medium",
         "latest_attempt_blocked": "no Chrome window found",
         "controls": [
@@ -1445,9 +1447,9 @@
       ],
       "actions": [],
       "bojo_tool": {
-        "name": "none",
-        "status": "none",
-        "reason": "A static section of the landing page; ticket handling lives in the customer Support room."
+        "name": "submit_support_ticket",
+        "status": "wired",
+        "reason": "chat_tools.TOOLS['submit_support_ticket'] files a ticket on this organization's beta support queue through SupportService.submit_ticket - the same queue the support route reads."
       },
       "also_declares": [],
       "has_controls": false,
@@ -1460,7 +1462,9 @@
         "backend": [
           "Northstar_backend/main.py:353"
         ],
-        "declared_tools": [],
+        "declared_tools": [
+          "submit_support_ticket"
+        ],
         "confidence": "high",
         "latest_attempt_blocked": "no Chrome window found",
         "controls": [
@@ -1514,9 +1518,9 @@
         }
       ],
       "bojo_tool": {
-        "name": "none",
-        "status": "none",
-        "reason": "Account creation is a foundation write with no chat-tool equivalent."
+        "name": "redeem_invite",
+        "status": "wired",
+        "reason": "chat_tools.TOOLS['redeem_invite'] redeems an invite code through InviteService.signup, the service behind POST /api/v1/foundation/signup, with the route's non-revealing denial."
       },
       "also_declares": [],
       "has_controls": true,
@@ -1529,7 +1533,9 @@
         "backend": [
           "Northstar_backend/foundation/api/router.py:1756"
         ],
-        "declared_tools": [],
+        "declared_tools": [
+          "redeem_invite"
+        ],
         "confidence": "high",
         "latest_attempt_blocked": "no Chrome window found",
         "controls": [
@@ -1588,9 +1594,9 @@
         }
       ],
       "bojo_tool": {
-        "name": "none",
-        "status": "none",
-        "reason": "Beta operations is an admin read surface; no chat tool covers accounts or orgs."
+        "name": "beta_cohort",
+        "status": "wired",
+        "reason": "chat_tools.TOOLS['beta_cohort'] reads the tester dashboard through TesterDashboard.list_orgs; platform-admin only, checked against the membership table."
       },
       "also_declares": [],
       "has_controls": false,
@@ -1604,7 +1610,9 @@
           "Northstar_backend/foundation/api/router.py:2025",
           "Northstar_backend/noncreative_reads.py:402"
         ],
-        "declared_tools": [],
+        "declared_tools": [
+          "beta_cohort"
+        ],
         "confidence": "high",
         "latest_attempt_blocked": "no Chrome window found",
         "controls": [

@@ -1649,6 +1649,11 @@ SERVICES = [
      "tools": ["system_status", "improvement_status", "service_catalog",
                "purpose_command", "plan_project"],
      "can": "report engine health, coverage and gaps, list its own skills, plan a project"},
+    {"id": "beta", "label": "Private Beta",
+     "tools": ["onboarding_status", "submit_support_ticket", "redeem_invite",
+               "beta_cohort"],
+     "can": ("read the beta onboarding checklist and plan, file a support ticket, "
+             "redeem an invite code, and read the tester cohort (platform admin only)")},
 ]
 
 
@@ -2688,6 +2693,57 @@ def _t_bojo_domain(name: str):
     return handler
 
 
+def _t_bojo_domain_ctx(name: str):
+    """Adapter: a domain tool that needs the verified chat session.
+
+    Identity never travels through the model's arguments — it is read from
+    ``ctx``, which the turn builds from the session — so a tool cannot be talked
+    into acting as another organization. Tool schemas therefore carry no identity
+    field, and anything the model does send under one is dropped by validation.
+    """
+
+    def handler(args: Dict[str, Any], ctx: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        from bojo_tools_registry import call  # noqa: PLC0415 - keeps import cost lazy
+
+        payload = {key: value for key, value in (args or {}).items()
+                   if not str(key).startswith("_")}
+        payload["ctx"] = ctx or {}
+        result = call(name, **payload)
+        data = result.get("data")
+        summary = _summarise(name, data) if result.get("ok") else ""
+        if not result.get("ok"):
+            summary = str(result.get("reason") or f"{name} failed.")
+        return {"ok": bool(result.get("ok")), "summary": summary[:400],
+                "error": "" if result.get("ok") else str(result.get("reason") or "")[:400],
+                "data": data, "assets": []}
+
+    return handler
+
+
+def _summarise(name: str, data: Any) -> str:
+    """One honest line per beta tool; no number the payload does not carry."""
+    payload = data if isinstance(data, dict) else {}
+    if name == "onboarding_status":
+        steps = payload.get("onboarding") or {}
+        done = sum(1 for value in (steps.get("checklist") or {}).values() if value)
+        plan = payload.get("plan") or {}
+        plan_info = plan.get("plan")
+        tier = plan_info.get("tier") if isinstance(plan_info, dict) else plan_info
+        return (f"Onboarding {done}/{len(steps.get('steps') or [])} steps complete"
+                f" (next: {steps.get('next_step') or 'none'}); plan {tier or 'unknown'}.")
+    if name == "submit_support_ticket":
+        return (f"Ticket {payload.get('reference_id')} filed as "
+                f"{payload.get('severity')} {payload.get('category')}.")
+    if name == "redeem_invite":
+        return (f"Account {payload.get('user_id')} created in "
+                f"{payload.get('organization_id')} as {payload.get('role')}.")
+    if name == "beta_cohort":
+        return (f"{payload.get('organizations')} organization(s), "
+                f"{payload.get('open_tickets')} open ticket(s), "
+                f"{payload.get('blocker_tickets')} blocker(s).")
+    return f"{name} returned {len(payload)} field(s)."
+
+
 #: Bojo tools implemented by domain modules (see `bojo_tools_registry`). A service is only
 #: drivable by Bojo when its tool is here AND the module behind it exists — which is exactly
 #: what the scorecard's `complete` dimension measures.
@@ -2740,6 +2796,49 @@ TOOLS.update({
             "disk_path": {"type": "string"},
         }, "required": []},
         "handler": _t_bojo_domain("hub_status"),
+    },
+    "onboarding_status": {
+        "description": ("Report this organization's private-beta onboarding checklist, the "
+                        "next step it still owes, and its plan (tier, limits, usage) from "
+                        "the Foundation store. Reads only; it never completes a step."),
+        "parameters": {"type": "object", "properties": {}, "required": []},
+        "handler": _t_bojo_domain_ctx("onboarding_status"),
+    },
+    "submit_support_ticket": {
+        "description": ("File one ticket on this organization's beta support queue and "
+                        "return its reference id. The queue is the same one the beta "
+                        "support room shows; no attachments and no secrets."),
+        "parameters": {"type": "object", "properties": {
+            "category": {"type": "string", "enum": [
+                "bug", "onboarding", "usability", "data_quality",
+                "billing_test_mode", "feature_request", "other"]},
+            "severity": {"type": "string", "enum": ["blocker", "high", "medium", "low"]},
+            "subject": {"type": "string", "minLength": 3},
+            "description": {"type": "string", "minLength": 3},
+        }, "required": ["category", "severity", "subject", "description"]},
+        "handler": _t_bojo_domain_ctx("submit_support_ticket"),
+    },
+    "redeem_invite": {
+        "description": ("Create the invitee's beta account from an invite code, exactly as "
+                        "the signup route does. A bad code, a revoked or used invite and a "
+                        "mismatched email all give the same non-revealing denial."),
+        "parameters": {"type": "object", "properties": {
+            "email": {"type": "string", "minLength": 3},
+            "invite_code": {"type": "string", "minLength": 6},
+            "display_name": {"type": "string"},
+        }, "required": ["email", "invite_code"]},
+        "handler": _t_bojo_domain_ctx("redeem_invite"),
+    },
+    "beta_cohort": {
+        "description": ("Read the beta tester cohort: organizations, lifecycle state, plan, "
+                        "usage and open tickets, optionally filtered. Platform-admin only, "
+                        "enforced from the membership table."),
+        "parameters": {"type": "object", "properties": {
+            "lifecycle_state": {"type": "string"},
+            "tier": {"type": "string"},
+            "limit": {"type": "integer", "minimum": 1, "maximum": 200},
+        }, "required": []},
+        "handler": _t_bojo_domain_ctx("beta_cohort"),
     },
 })
 
