@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-11T17:15:09+00:00",
+  "updated_at": "2026-11-11T17:32:37+00:00",
   "cycle": 3,
   "unit_in_flight": "",
   "unit_order": [
@@ -2048,7 +2048,7 @@
       "id": "block5-production-hardening",
       "unit": "U",
       "title": "Production hardening: bundle assertion, config checklist, redaction, health/readiness, backup-restore, rate limits, error pages, perf budgets, a11y gate, credit gate",
-      "status": "queued",
+      "status": "merged",
       "owner": "",
       "write_paths": [
         "Northstar_backend/",
@@ -2062,9 +2062,9 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": "docs/PRODUCTION_READINESS.md (30 rows, a command per row, doc checked against assertion ids) + production_assert.py (12 checks, --json/--only/--strict, 12 pass 0 fail 10 advisory, exit 0) + production_health.py (/readyz, 503 when not ready, probes exempt from the rate limiter) + sqlite_backup.py (VACUUM INTO, manifest, verify, restore; 6 stores/60034 rows, 2 restored). Measured: 78 hashed assets 0 maps, 3300 files scanned, 30/min+429. --strict still fails on 7 .env keys and the compose healthcheck, registered in the doc. Fresh-checkout run of 8 suites: 124 passed 2 skipped. reports/ty/lane_block5.md; tag ty-dir-block5-hardening",
       "created_at": "2026-11-11T07:35:10+00:00",
-      "updated_at": "2026-11-11T07:35:10+00:00",
+      "updated_at": "2026-11-11T17:32:37+00:00",
       "rank": 11
     },
     {

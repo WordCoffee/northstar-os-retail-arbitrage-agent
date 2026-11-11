@@ -49,6 +49,46 @@ no visible browser and Playwright headless on `127.0.0.1` only; no GPU work; no 
 verdict on the merged tree. If a lane leaves the tree red, its work waits — the tree on `main`
 stays green.
 
+## Position, 2026-11-11 cycle 28 — production hardening merged, and a fresh checkout is now green
+
+Unit report: `reports/ty/lane_block5.md`. Tag `ty-dir-block5-hardening`. Lane A of four.
+
+| # | job | result |
+|---|---|---|
+| 1 | `block5-production-hardening` (rank 11) — the release question had no answer the repo could prove | **merged.** `docs/PRODUCTION_READINESS.md` (30 rows, a runnable command per row, and the document is itself checked against the assertion ids), `production_assert.py` (12 checks, `--json/--only/--strict`, **12 pass / 0 fail / 0 skip / 10 advisory, exit 0**), `/readyz` + `/health/readyz` (503 when not ready, probes exempt from the rate limiter), `sqlite_backup.py` (VACUUM INTO → manifest → verify → restore; **6 stores / 60,034 rows backed up, 2 restored**) |
+
+**Measured:** 78 hashed assets and 0 source maps in the built UI; 3,300 files secret-scanned;
+rate limit 30/min with 429 headers on the probe paths excluded. `--strict` still fails, on
+purpose, on **7 `.env.example` keys and the compose `readyz`+`api` healthcheck** — outside
+that unit's manifest, so they are registered in the doc with their exact lines.
+
+**Four defects found while integrating, every one of them real:**
+
+1. **A fresh checkout was broken.** `d8717ec3` committed `cli.py` importing
+   `from . import services`, but `services.py` and `stray_report.py` were never added; block3
+   likewise left `sync-workspaces.mjs` out. The director had staged hand-written path lists
+   instead of each lane's manifest. **Rule from now on: add the lane's directories, then
+   review the diff.**
+2. **Citation repair must be the last step.** The registry citations were repaired while
+   block5's `main.py` edits were still uncommitted, so they matched the worktree and not HEAD.
+   Re-run after the code lands — verified on a fresh worktree.
+3. **`sqlite_backup` froze `REPO_ROOT` into four default arguments**, so its own CLI ignored a
+   patched root and always read the live repo. Defaults are `None` and resolve at call time.
+4. **Five tests passed only because this machine has gitignored state** (a built `dist/`, the
+   live foundation store). The readiness rule tests now patch every check and vary one; the
+   "ready in this tree" test skips **with the named failing checks** instead of asserting a 200
+   the tree cannot give.
+
+**Verified on a fresh `git worktree` of HEAD: 124 passed, 2 skipped** across registry,
+production-assert, health, sqlite-backup, rate-limits, seller-services, queue and launcher-lease.
+
+**Secrets gate:** block5's assertion module builds fake key/token/JWT literals on purpose to
+prove the redactor removes them. Registered in `.gitleaks.toml` (path+regex scoped) and in
+`.secret_scan_allowlist.json` (fingerprint-exact, 4 entries, reviewed 2026-11-11).
+
+**Next:** lanes E (a11y + scorecard scroll) and F (seller sample depth) are in flight;
+`block7-verification` runs on the merged tree after them.
+
 ## Position, 2026-11-11 cycle 27 — block3 workspaces merged, and two red tests turned out to be real
 
 Unit reports: `reports/ty/lane_block3.md` (tag `ty-dir-block3-workspaces`), and the registry
