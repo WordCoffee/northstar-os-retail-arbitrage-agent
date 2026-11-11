@@ -439,3 +439,27 @@ come back the moment the lease is released.
 Note: the same task is also the most likely source of the browser pages you asked me to stop
 on 2026-11-11 03:48, since the `tys` lane is the one permitted to delegate to a browser lane.
 `state/vision/PAUSE` is still in place.
+
+---
+
+## 2026-11-11 11:56 â€” one elevated action, so bare `pytest` works again
+
+`C:\Users\T2Hol\AppData\Local\Temp\pytest-of-T2Hol` is owned by another principal (an
+elevated run created it) and cannot be read, written or deleted from a normal session:
+`Access is denied`, and even `Get-Acl` reports *unauthorized operation*.
+
+Effect: **any pytest test that uses `tmp_path` fails** with `PermissionError: [WinError 5]`
+unless it is given `--basetemp`. The block7 verifier measured the readiness suite at
+**8 passed / 21 errors** as issued and **29 passed** with `--basetemp`. The tests are fine;
+the shared temp root is not. Documented in `docs/PRODUCTION_READINESS.md` Â§4a, and every
+lane this session has been passing `--basetemp`.
+
+**One action, from an elevated terminal:**
+
+```
+takeown /f "%LOCALAPPDATA%\Temp\pytest-of-T2Hol" /r /d y
+icacls "%LOCALAPPDATA%\Temp\pytest-of-T2Hol" /grant "%USERNAME%":F /T
+rmdir /s /q "%LOCALAPPDATA%\Temp\pytest-of-T2Hol"
+```
+
+After that the flag is optional. Nothing else in the queue depends on it.

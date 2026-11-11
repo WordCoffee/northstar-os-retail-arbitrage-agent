@@ -49,6 +49,32 @@ no visible browser and Playwright headless on `127.0.0.1` only; no GPU work; no 
 verdict on the merged tree. If a lane leaves the tree red, its work waits — the tree on `main`
 stays green.
 
+## Position, 2026-11-11 cycle 31 — verification said 3 of 7 failed, and all three are now closed
+
+Unit report: `reports/ty/verify_block7_20261111.md`. Tag `ty-dir-rollback-guard`. Independent
+session, read-only.
+
+**4 AGREE, 3 FAILED.** The three failures were the useful part:
+
+| # | finding | fix |
+|---|---|---|
+| 1 (worst) | **four units that changed code today had no `rollback/pre-*` tag** (block3, block4, block5, ui-defects) plus untagged `149ca718` — and a previous verifier had already caught the same omission for D-026/D-027, so the countermeasure had not stuck | **29 restore points created retroactively at the exact parent commits**, and `tools/release/check_rollback_tags.py` + `test_rollback_tags.py` now enforce the rule mechanically. **42 unit tags, 0 gaps.** Measured by commit, not by name: name-matching reported 39 of 41 gaps; the truth was 23 |
+| 2 | the readiness suite fails **as issued** — `8 passed, 21 errors`, `PermissionError` on `Temp\pytest-of-T2Hol` — so `--basetemp` was mandatory and undocumented | documented in `docs/PRODUCTION_READINESS.md` **§4a**; the directory is owned by another principal and needs one elevated action (filed in `needs_you.md`). With the flag: **29 passed** |
+| 3 | `git status` was not reports-only: `dev-start.pids.json` untracked and unignored | ignored — dev-stack runtime state, not source |
+
+**Where the verifier found the tree better than claimed:** the fresh-worktree run gave
+**129 passed / 2 skipped**, not the 124 I reported — the claim was understated, not overstated.
+
+**Still true from the same pass:** production assertion 12/0/10 exit 0; seller depth 21 scored
+/ 19 passed with design-studio's 96.2 **unblended** (it would read 96.7 if blended); registry
+boundaries hold; GG-002 and GG-003 recorded as findings rather than deleted.
+
+**Next:** `fix-beta-complete` (lane G, four services at `complete` 0.0) is the only lane still
+running; then the queue is `fix-product-finder-wiring`, `fix-seller-offer-caption`,
+`fix-golden-goose-scoring`, `fix-chat-composer-spec`, `retire-goldengoose-alias`,
+`fix-po006-stray-dashes`, `ux-0610-live-verify` (needs a live desktop) and the two owner-gated
+reference jobs.
+
 ## Position, 2026-11-11 cycle 30 — three services left the below-bar list, and the rest of the zeros are real
 
 Unit reports: `reports/ty/lane_ui_defects.md` (tag `ty-dir-ui-defects`),

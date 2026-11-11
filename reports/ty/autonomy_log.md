@@ -52,3 +52,4 @@ One line per cycle: workstream, role, cycle, score before/after, tag, tokens.
 2026-11-11T11:06Z | director | cycle 27 | block3_workspaces + registry_citations | e2e 56/56 both viewports; registry 19/19 | tag ty-dir-block3-workspaces | tokens n/a (owner session)
 2026-11-11T11:32Z | director | cycle 28 | block5_hardening + fresh-checkout fixes | assert 12/12 exit 0; fresh worktree 124 passed 2 skipped | tag ty-dir-block5-hardening | tokens n/a (owner session)
 2026-11-11T11:44Z | director | cycle 30 | ui_defects + seller_depth | seller 21 scored/19 passed; 19 of 29 at bar | tags ty-dir-ui-defects, ty-dir-seller-depth | tokens n/a (owner session)
+2026-11-11T11:57Z | director | cycle 31 | block7_verification + rollback guard | verifier 4 agree 3 failed, all closed; 42 unit tags 0 rollback gaps | tag ty-dir-rollback-guard | tokens n/a (owner session)

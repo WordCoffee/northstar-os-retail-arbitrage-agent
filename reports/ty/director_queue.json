@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-11T17:43:51+00:00",
+  "updated_at": "2026-11-11T17:57:10+00:00",
   "cycle": 3,
   "unit_in_flight": "",
   "unit_order": [
@@ -2201,7 +2201,7 @@
       "id": "block7-verification",
       "unit": "U",
       "title": "Verifier reproduces every headline number; visual regression gate on the final shell",
-      "status": "queued",
+      "status": "merged",
       "owner": "",
       "write_paths": [
         "reports/ty/",
@@ -2214,9 +2214,9 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": "Independent session, read-only. 4 AGREE (production assertion 12/0/10, seller depth 21 scored/19 passed with design-studio 96.2 unblended, scorecard counts, registry boundaries) and 3 FAILED, all now closed: (1) no rollback tags for block3/block4/block5/ui-defects/149ca718 - 29 restore points created retroactively at the exact parents and a commit-matching checker + test now enforce it (42 unit tags, 0 gaps); (2) readiness suite fails as issued because this machine's shared pytest temp root is owned by another principal - documented in docs/PRODUCTION_READINESS.md 4a, one elevated owner action filed; (3) dev-start.pids.json was untracked and unignored - now ignored. Fresh worktree at HEAD: 129 passed 2 skipped. reports/ty/verify_block7_20261111.md; tag ty-dir-rollback-guard",
       "created_at": "2026-11-11T07:35:10+00:00",
-      "updated_at": "2026-11-11T07:35:10+00:00",
+      "updated_at": "2026-11-11T17:57:10+00:00",
       "rank": 13
     },
     {
