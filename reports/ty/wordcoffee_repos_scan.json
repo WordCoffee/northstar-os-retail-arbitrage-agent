@@ -1,0 +1,259 @@
+{
+  "scanned_at": "2026-11-11T01:05:17+00:00",
+  "owner": "WordCoffee",
+  "repos": [
+    {
+      "name": "word-coffee",
+      "private": false,
+      "size_kb": 12464,
+      "pushed_at": "2026-03-08T16:16:24Z",
+      "default_branch": "main",
+      "cloned": true,
+      "files_total": 38,
+      "files_scanned": 13,
+      "github_pages": {
+        "hosted": true,
+        "url": "https://wordcoffee.github.io/word-coffee/",
+        "cname": "www.word-coffee.com",
+        "source": "CNAME/folder (api budget spent)"
+      },
+      "counts": {
+        "private_key_header": 0,
+        "github_token": 0,
+        "aws_key_id": 0,
+        "slack_token": 0,
+        "stripe_key": 0,
+        "generic_secret": 0,
+        "credential_url": 0,
+        "email": 0,
+        "phone": 0
+      },
+      "recommendation": "Candidate for private: a large public site; business content, no credential shapes found."
+    },
+    {
+      "name": "Word-coffee.co",
+      "private": false,
+      "size_kb": 1553,
+      "pushed_at": "2025-06-14T22:19:57Z",
+      "default_branch": "main",
+      "cloned": true,
+      "files_total": 144,
+      "files_scanned": 47,
+      "github_pages": {
+        "hosted": true,
+        "url": "https://wordcoffee.github.io/Word-coffee.co/",
+        "cname": null,
+        "source": "repo metadata has_pages"
+      },
+      "counts": {
+        "private_key_header": 0,
+        "github_token": 0,
+        "aws_key_id": 0,
+        "slack_token": 0,
+        "stripe_key": 0,
+        "generic_secret": 0,
+        "credential_url": 0,
+        "email": 2,
+        "phone": 0
+      },
+      "recommendation": "Can stay public: Pages site, no credential shapes found in tracked text."
+    },
+    {
+      "name": "Word-coffee-website",
+      "private": false,
+      "size_kb": 86,
+      "pushed_at": "2026-02-28T04:59:12Z",
+      "default_branch": "main",
+      "cloned": true,
+      "files_total": 8,
+      "files_scanned": 8,
+      "github_pages": {
+        "hosted": true,
+        "url": "https://wordcoffee.github.io/Word-coffee-website/",
+        "cname": null,
+        "source": "repo metadata has_pages"
+      },
+      "counts": {
+        "private_key_header": 0,
+        "github_token": 0,
+        "aws_key_id": 0,
+        "slack_token": 0,
+        "stripe_key": 0,
+        "generic_secret": 0,
+        "credential_url": 0,
+        "email": 0,
+        "phone": 0
+      },
+      "recommendation": "Can stay public: Pages site, no credential shapes found in tracked text."
+    },
+    {
+      "name": "house-finder",
+      "private": false,
+      "size_kb": 77,
+      "pushed_at": "2026-05-25T20:27:44Z",
+      "default_branch": "main",
+      "cloned": true,
+      "files_total": 5,
+      "files_scanned": 5,
+      "github_pages": {
+        "hosted": true,
+        "url": "https://wordcoffee.github.io/house-finder/",
+        "cname": null,
+        "source": "repo metadata has_pages"
+      },
+      "counts": {
+        "private_key_header": 0,
+        "github_token": 0,
+        "aws_key_id": 0,
+        "slack_token": 0,
+        "stripe_key": 0,
+        "generic_secret": 12,
+        "credential_url": 0,
+        "email": 0,
+        "phone": 0
+      },
+      "recommendation": "Make private now: 12 sensitive-string shape(s) in tracked text on a public remote."
+    },
+    {
+      "name": "WordCoffee.co",
+      "private": false,
+      "size_kb": 17,
+      "pushed_at": "2025-06-13T21:54:32Z",
+      "default_branch": "main",
+      "cloned": true,
+      "files_total": 4,
+      "files_scanned": 4,
+      "github_pages": {
+        "hosted": true,
+        "url": "https://wordcoffee.github.io/WordCoffee.co/",
+        "cname": null,
+        "source": "repo metadata has_pages"
+      },
+      "counts": {
+        "private_key_header": 0,
+        "github_token": 0,
+        "aws_key_id": 0,
+        "slack_token": 0,
+        "stripe_key": 0,
+        "generic_secret": 0,
+        "credential_url": 0,
+        "email": 0,
+        "phone": 0
+      },
+      "recommendation": "Can stay public: Pages site, no credential shapes found in tracked text."
+    },
+    {
+      "name": "Amazon-Ads-Bid-Adjustment-Calc",
+      "private": false,
+      "size_kb": 4,
+      "pushed_at": "2026-07-13T00:27:29Z",
+      "default_branch": "main",
+      "cloned": true,
+      "files_total": 2,
+      "files_scanned": 2,
+      "github_pages": {
+        "hosted": true,
+        "url": "https://wordcoffee.github.io/Amazon-Ads-Bid-Adjustment-Calc/",
+        "cname": null,
+        "source": "repo metadata has_pages"
+      },
+      "counts": {
+        "private_key_header": 0,
+        "github_token": 0,
+        "aws_key_id": 0,
+        "slack_token": 0,
+        "stripe_key": 0,
+        "generic_secret": 0,
+        "credential_url": 0,
+        "email": 0,
+        "phone": 0
+      },
+      "recommendation": "Can stay public: Pages site, no credential shapes found in tracked text."
+    },
+    {
+      "name": "WordCoffee",
+      "private": false,
+      "size_kb": 2,
+      "pushed_at": "2025-04-28T04:53:28Z",
+      "default_branch": "main",
+      "cloned": true,
+      "files_total": 1,
+      "files_scanned": 0,
+      "github_pages": {
+        "hosted": false,
+        "url": null,
+        "cname": null,
+        "source": "repo metadata has_pages"
+      },
+      "counts": {
+        "private_key_header": 0,
+        "github_token": 0,
+        "aws_key_id": 0,
+        "slack_token": 0,
+        "stripe_key": 0,
+        "generic_secret": 0,
+        "credential_url": 0,
+        "email": 0,
+        "phone": 0
+      },
+      "recommendation": "Can stay public: no Pages site, no credential shapes found in tracked text."
+    },
+    {
+      "name": "Wordcoffee-website",
+      "private": false,
+      "size_kb": 0,
+      "pushed_at": "2025-05-02T14:29:20Z",
+      "default_branch": "main",
+      "cloned": false,
+      "files_total": 0,
+      "files_scanned": 0,
+      "github_pages": {
+        "hosted": false,
+        "url": null,
+        "cname": null,
+        "source": "repo metadata has_pages"
+      },
+      "counts": {
+        "private_key_header": 0,
+        "github_token": 0,
+        "aws_key_id": 0,
+        "slack_token": 0,
+        "stripe_key": 0,
+        "generic_secret": 0,
+        "credential_url": 0,
+        "email": 0,
+        "phone": 0
+      },
+      "recommendation": "Near-empty public repo: make private or delete; nothing is served."
+    },
+    {
+      "name": "wordcoffee.github.io",
+      "private": false,
+      "size_kb": 0,
+      "pushed_at": "2025-05-02T14:01:21Z",
+      "default_branch": "main",
+      "cloned": true,
+      "files_total": 1,
+      "files_scanned": 1,
+      "github_pages": {
+        "hosted": true,
+        "url": "https://wordcoffee.github.io/wordcoffee.github.io/",
+        "cname": null,
+        "source": "repo metadata has_pages"
+      },
+      "counts": {
+        "private_key_header": 0,
+        "github_token": 0,
+        "aws_key_id": 0,
+        "slack_token": 0,
+        "stripe_key": 0,
+        "generic_secret": 0,
+        "credential_url": 0,
+        "email": 0,
+        "phone": 0
+      },
+      "recommendation": "Can stay public: Pages site, no credential shapes found in tracked text."
+    }
+  ],
+  "note": "counts only; no value, line or filename is recorded"
+}

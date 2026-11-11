@@ -1,0 +1,48 @@
+{
+  "ref": "ef9cad1d",
+  "sha": "ef9cad1dfdc9333ba0f97626a2a7aca51209aab5",
+  "branch": "main",
+  "config": ".gitleaks.toml (fixed; parse-checked)",
+  "max_target_megabytes": 0,
+  "large_files_included_gt_1mb": 8,
+  "tracked_files": 3816,
+  "bytes_scanned": 116137899,
+  "findings": 5,
+  "by_file": {
+    "FirstNorthstarautomationchat.md": 4,
+    "autothink-ui-chat-export.md": 1
+  },
+  "rules": {
+    "generic-api-key": 4,
+    "github-pat": 1
+  },
+  "detail": [
+    {
+      "file": "FirstNorthstarautomationchat.md",
+      "line": 1143,
+      "rule": "generic-api-key"
+    },
+    {
+      "file": "FirstNorthstarautomationchat.md",
+      "line": 1148,
+      "rule": "generic-api-key"
+    },
+    {
+      "file": "FirstNorthstarautomationchat.md",
+      "line": 1291,
+      "rule": "generic-api-key"
+    },
+    {
+      "file": "FirstNorthstarautomationchat.md",
+      "line": 1296,
+      "rule": "generic-api-key"
+    },
+    {
+      "file": "autothink-ui-chat-export.md",
+      "line": 7852,
+      "rule": "github-pat"
+    }
+  ],
+  "verdict": "5 real findings, all three credentials, both files still on main at ef9cad1d. Large-file scanning changed nothing: the same 116.14 MB was scanned with a 0 MB cap, and no finding lives in a large file.",
+  "supersedes": "reports/ty/main_rescan_ef9cad1d.json (same result, no max-target cap recorded)"
+}
