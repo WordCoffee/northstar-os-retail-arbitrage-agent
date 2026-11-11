@@ -24,6 +24,41 @@ interrupted through the server API (`POST /api/session/<id>/interrupt`) rather t
 killing processes. **No lane may navigate, click, type or walk pages until the owner lifts
 it.** Delete `state/vision/PAUSE` only on the owner's word — never to make a check pass.
 
+## Position, 2026-11-11 cycle 24 — box art prints for a kettle and a drill, and reference depth is blocked on a source
+
+Unit reports: `reports/ty/pack03_boxart_forms.md` (tag `ty-dir-pack-03-boxart`) and
+`reports/ty/reference_backfill_blocked.md`.
+
+| # | job | result |
+|---|---|---|
+| 1 | `pack-03-boxart-forms` — ST-012 (small appliance) and ST-028 (tool) declared no `product_line`, so `design_for_brief` refused them by name; once wired they were refused **again** for asking the model for the lettering (no `label_mode: warp`, no `body_prompt`) | **merged.** Two box-art designs on the proven `gift_box` carton form: `t2-kettle-box` (180 × 260 mm) and `t2-drill-box` (170 × 240 mm), claims block empty, `DRAFT · VERIFY BEFORE PRINT` on every panel |
+| 2 | `reference-review-backfill` — `pet_product` 1, `small_appliance` 1, `tool` 2 usable references against a bar of 3 | **blocked on the image source, filed.** Openverse's free tier answers product queries with 1024×683 crops, so the 800 px gate refuses every row (+0 kept, 33 refused); `--min-side 700` still refuses 683; `size=large` 504s on the gateway (tried, reverted) |
+
+**Box art measured: 2 selected, 2 scored, 2 passed, mean 100.0, 0 refused** (drawn plate).
+
+**The measurement that changed the design:** the first drill panel was landscape and the
+renderer **rotated** the artwork to fit the carton's portrait face — the aspect survived, the
+words did not. The panel is portrait now and the print is upright.
+
+**The four reference rows that did get through were opened and refused:** a glassblowing
+class and a museum glass display, both accepted by the topic gate because their tags say
+"tool". `ty/reference_review.json` now holds 38 verdicts. **One action closes the block**
+(`reports/ty/needs_you.md`): an Openverse client key, or your word on storefront sourcing.
+
+**Filed: D-027** — every design without its own motif gets the shared three-oval default, so
+a drill carton carries three ovals. Queued `design-motifs`, rank 6.
+
+**Also fixed:** `test_reference_checks`' composite fixture predated D-020's weight split, so a
+row with `background` failing and no `matte_residue` refunded half the failure (61.1 against
+an assertion of < 60). The fixture now carries both halves, as a real row does.
+
+**Tests:** 8 in `test_boxart_form.py` (written first), 35 in the apparel/boxart/package group,
+15 in reference checks after the fixture fix.
+
+**Next, in rank order:** `design-motifs` (D-027, rank 6) → `block3-workspaces` →
+`block4-seller-tests` → `block5-production-hardening` → `block7-verification` → D-019.
+`reference-review-backfill` is parked on the owner action above and does not block.
+
 ## Position, 2026-11-11 cycle 23 — one colour cut can no longer pass as a clean picture, and apparel prints
 
 Unit reports: `reports/ty/d026_fullgen_silhouette.md` (tag `ty-dir-d026-silhouette`) and

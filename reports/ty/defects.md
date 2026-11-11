@@ -499,3 +499,20 @@ artefact was overwritten by this run's `--out-dir`, so the difference cannot be 
 from disk and is recorded as unexplained rather than smoothed. Both numbers pass the 0.5 %
 limit. `reports/ty/d024_real_residue.md`.
 
+
+## D-027 - a design cannot choose its motif, so every box carries three ovals (open 2026-11-11)
+
+Found by pack-03. `brand_art._spec` sets `motif="bean"` for any design that does not
+declare one, and no design does. On a coffee pouch or a mushroom label the bean motif is at
+least a plant; on a drill carton it is three ovals under the copy, and on a kettle carton the
+same. It is the one decorative element the renderer draws inside the panel, so a missing
+motif is not cosmetic - it is the only illustration on the pack.
+
+Measured: both pack-03 artefacts (`renders/pack03/ST-012/product_front.png`,
+`renders/pack03/ST-028/product_front.png`) carry three ovals. Neither design declares a
+motif key.
+
+Fix shape: `motif` is already read from the design (`_spec`), so a design that declares one
+wins. What is missing is (a) a small library of drawn motifs (tool, appliance, garment,
+bottle) and (b) a refusal when a form that needs one has none, so a pack never ships with a
+loaner illustration. Queued as `design-motifs`, rank 6.

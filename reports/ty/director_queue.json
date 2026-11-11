@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-11T10:44:32+00:00",
+  "updated_at": "2026-11-11T10:55:40+00:00",
   "cycle": 3,
   "unit_in_flight": "",
   "unit_order": [
@@ -1709,7 +1709,7 @@
       "id": "pack-03-boxart-forms",
       "unit": "D4",
       "title": "Box-art forms: small appliance carton art and tool blister card, so 11 more briefs are renderable",
-      "status": "queued",
+      "status": "merged",
       "owner": "",
       "write_paths": [
         "Northstar_backend/brand_art.py",
@@ -1725,9 +1725,9 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": "2 box-art designs on the gift_box form, briefs wired with label_mode warp + body_prompt. Drawn pass: 2 selected, 2 scored, 2 passed, 100.0, 0 refused. Landscape drill panel rotated by the renderer, so it is portrait now. 8 tests. D-027 filed (motif is the shared three-oval default). reports/ty/pack03_boxart_forms.md; tag ty-dir-pack-03-boxart",
       "created_at": "2026-11-11T06:06:41+00:00",
-      "updated_at": "2026-11-11T06:06:41+00:00",
+      "updated_at": "2026-11-11T10:55:15+00:00",
       "rank": 6
     },
     {
@@ -1753,6 +1753,28 @@
       "evidence": "",
       "created_at": "2026-11-11T07:35:10+00:00",
       "updated_at": "2026-11-11T07:35:10+00:00",
+      "rank": 6
+    },
+    {
+      "id": "design-motifs",
+      "unit": "D9",
+      "title": "design-motifs: a design picks its own drawn motif, and a pack that needs one never gets a loaner",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "Northstar_backend/brand_art.py",
+        "Northstar_backend/test_boxart_form.py"
+      ],
+      "branch": "ty/design-motifs",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-11T10:55:40+00:00",
+      "updated_at": "2026-11-11T10:55:40+00:00",
       "rank": 6
     },
     {
