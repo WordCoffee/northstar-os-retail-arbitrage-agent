@@ -52,6 +52,7 @@ CREATE TABLE IF NOT EXISTS jobs (
     score_before REAL,
     score_after REAL,
     evidence TEXT NOT NULL DEFAULT '',
+    rank INTEGER NOT NULL DEFAULT 0,
     created_at TEXT NOT NULL,
     updated_at TEXT NOT NULL
 );
@@ -63,6 +64,14 @@ CREATE TABLE IF NOT EXISTS events (
 );
 CREATE INDEX IF NOT EXISTS jobs_status ON jobs(status);
 """
+
+#: Columns added after the first schema shipped. A live store is migrated in place on
+#: connect; a fresh one gets them from SCHEMA. `rank` was used by `set_rank()` and by the
+#: mirror's ordering for a day while existing only in the hand-migrated live database,
+#: so any fresh store (a test, a new machine, a rebuilt one) raised "no such column: rank".
+MIGRATIONS = (
+    ("rank", "ALTER TABLE jobs ADD COLUMN rank INTEGER NOT NULL DEFAULT 0"),
+)
 
 RUNNING = ("claimed", "running", "ready")
 
@@ -84,7 +93,20 @@ def _connect(db: Optional[Path] = None) -> sqlite3.Connection:
     conn = sqlite3.connect(str(path), timeout=10, isolation_level=None)
     conn.row_factory = sqlite3.Row
     conn.executescript(SCHEMA)
+    _migrate(conn)
     return conn
+
+
+def _migrate(conn: sqlite3.Connection) -> List[str]:
+    """Add the columns SCHEMA gained after a store was created. Idempotent."""
+    have = {row["name"] for row in conn.execute("PRAGMA table_info(jobs)").fetchall()}
+    added: List[str] = []
+    for column, statement in MIGRATIONS:
+        if column in have:
+            continue
+        conn.execute(statement)
+        added.append(column)
+    return added
 
 
 def _norm(path: str) -> str:
@@ -326,19 +348,113 @@ def mirror(db: Optional[Path] = None, mirror_path: Optional[Path] = None) -> Dic
     The queue is a *ranked* list, so the mirror is ordered by `rank` first (lower runs
     first), then by creation time. Insertion order alone made "the next job" depend on when
     a row happened to be added, which is not a ranking.
+
+    **Jobs that exist only in the mirror are kept, not deleted.** The mirror is what a
+    resume reads, so a job written there by a hand edit (or by a writer that died before
+    the store was updated) is real work; dropping it because the store never heard of it
+    is silent loss on the resume path. They travel in `mirror_only_jobs` until
+    `import_mirror()` adopts them.
     """
     path = Path(mirror_path or MIRROR)
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, ValueError):
         data = {"units": {}, "jobs": []}
+    previous = [row for row in (data.get("jobs") or []) if isinstance(row, dict)]
     rows = jobs(db=db)
     rows.sort(key=lambda row: (int(row.get("rank") or 0), row.get("created_at") or ""))
-    data["jobs"] = rows
+    known = {row["id"] for row in rows}
+    orphans: List[Dict[str, Any]] = []
+    for row in previous:
+        jid = str(row.get("id") or "")
+        if jid and jid not in known and not any(o.get("id") == jid for o in orphans):
+            orphans.append(row)
+    data["jobs"] = rows + orphans
+    data["mirror_only_jobs"] = [str(row.get("id")) for row in orphans]
     data["updated_at"] = _now()
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    return {"ok": True, "jobs": len(data["jobs"])}
+    return {"ok": True, "jobs": len(rows), "mirror_only": len(orphans),
+            "mirror_only_jobs": data["mirror_only_jobs"]}
+
+
+def import_mirror(*, db: Optional[Path] = None,
+                  mirror_path: Optional[Path] = None) -> Dict[str, Any]:
+    """Adopt the mirror's jobs into the store: insert the missing, update the changed.
+
+    The failure this repairs was measured on 2026-11-11: the store held 35 jobs while the
+    resume mirror held 41, and `mirror()` rewrote the JSON from the store — so four jobs
+    (the only record of work in flight) were deleted by the next status write. The mirror
+    is read on every resume, so the two must never disagree silently.
+    """
+    path = Path(mirror_path or MIRROR)
+    data = json.loads(path.read_text(encoding="utf-8"))
+    rows = [row for row in (data.get("jobs") or []) if isinstance(row, dict)]
+    conn = _connect(db)
+    inserted: List[str] = []
+    updated: List[str] = []
+    unchanged: List[str] = []
+    try:
+        for row in rows:
+            jid = str(row.get("id") or "").strip()
+            if not jid:
+                continue
+            values = {
+                "unit": str(row.get("unit") or "U"),
+                "title": str(row.get("title") or jid),
+                "status": str(row.get("status") or "queued"),
+                "owner": str(row.get("owner") or ""),
+                "write_paths": json.dumps(list(row.get("write_paths") or [])),
+                "branch": str(row.get("branch") or f"ty/{jid}"),
+                "worktree": str(row.get("worktree") or ""),
+                "rollback_tag": str(row.get("rollback_tag") or ""),
+                "acceptance": json.dumps(list(row.get("acceptance") or [])),
+                "tokens": int(row.get("tokens") or 0),
+                "score_before": row.get("score_before"),
+                "score_after": row.get("score_after"),
+                "evidence": (json.dumps(row.get("evidence"), ensure_ascii=False)
+                             if isinstance(row.get("evidence"), (list, dict))
+                             else str(row.get("evidence") or "")),
+                "rank": int(row.get("rank") or 0),
+            }
+            existing = conn.execute("SELECT * FROM jobs WHERE id=?", (jid,)).fetchone()
+            if existing is None:
+                conn.execute(
+                    "INSERT INTO jobs(id, unit, title, status, owner, write_paths, branch,"
+                    " worktree, rollback_tag, acceptance, tokens, score_before, score_after,"
+                    " evidence, rank, created_at, updated_at)"
+                    " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                    (jid, values["unit"], values["title"], values["status"], values["owner"],
+                     values["write_paths"], values["branch"], values["worktree"],
+                     values["rollback_tag"], values["acceptance"], values["tokens"],
+                     values["score_before"], values["score_after"], values["evidence"],
+                     values["rank"], str(row.get("created_at") or _now()), _now()))
+                _event(conn, jid, "imported", "from mirror")
+                inserted.append(jid)
+                continue
+            merged = {**dict(existing), **values}
+            changed = any(str(dict(existing).get(key)) != str(value)
+                          for key, value in values.items())
+            if not changed:
+                unchanged.append(jid)
+                continue
+            conn.execute(
+                "UPDATE jobs SET unit=?, title=?, status=?, owner=?, write_paths=?, branch=?,"
+                " worktree=?, rollback_tag=?, acceptance=?, tokens=?, score_before=?,"
+                " score_after=?, evidence=?, rank=?, updated_at=? WHERE id=?",
+                (merged["unit"], merged["title"], merged["status"], merged["owner"],
+                 merged["write_paths"], merged["branch"], merged["worktree"],
+                 merged["rollback_tag"], merged["acceptance"], merged["tokens"],
+                 merged["score_before"], merged["score_after"], merged["evidence"],
+                 merged["rank"], _now(), jid))
+            _event(conn, jid, "imported", "mirror status/fields updated")
+            updated.append(jid)
+        conn.commit()
+    finally:
+        conn.close()
+    written = mirror(db=db, mirror_path=path)
+    return {"ok": True, "inserted": inserted, "updated": updated,
+            "unchanged": len(unchanged), "mirror_only": written["mirror_only"]}
 
 
 def set_rank(job_id: str, rank: int, *, db: Optional[Path] = None) -> Dict[str, Any]:
@@ -499,8 +615,18 @@ def main(argv: Optional[List[str]] = None) -> int:
     parser.add_argument("--merge")
     parser.add_argument("--gates", default="")
     parser.add_argument("--into", default=STAGING)
+    parser.add_argument("--import-mirror", action="store_true",
+                        help="adopt jobs that exist only in reports/ty/director_queue.json")
+    parser.add_argument("--mirror", action="store_true",
+                        help="rewrite the readable mirror from the store")
     args = parser.parse_args(argv)
 
+    if args.import_mirror:
+        print(json.dumps(import_mirror(), indent=2))
+        return 0
+    if args.mirror:
+        print(json.dumps(mirror(), indent=2))
+        return 0
     if args.add:
         print(json.dumps(add_job(unit=args.unit, title=args.title,
                                  write_paths=[p for p in args.paths.split(",") if p],

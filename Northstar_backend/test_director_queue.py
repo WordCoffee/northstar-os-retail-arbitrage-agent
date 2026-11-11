@@ -242,3 +242,59 @@ def test_a_builder_gets_its_own_worktree(repo):
     names = [Path(row["worktree"]).name for row in DQ.worktrees()]
     assert "builder-1" in names
     assert DQ.worktree_remove("builder-1", force=True)["ok"] is True
+
+
+# ------------------------------------- mirror/store divergence (measured 2026-11-11)
+def _mirror_payload(jobs):
+    return {"units": {"D3": {"status": "done"}}, "jobs": jobs}
+
+
+def test_the_mirror_never_deletes_a_job_the_store_missed(repo):
+    """The readable mirror is what a resume reads: a job only there is real work.
+
+    Measured: the store held 35 jobs, the mirror 41, and `mirror()` rewrote the JSON
+    from the store, so four in-flight jobs were deleted by the next status write.
+    """
+    _job(repo, "known", ["pkg/"])
+    payload = json.loads(DQ.MIRROR.read_text(encoding="utf-8"))
+    payload["jobs"].append({"id": "only-in-mirror", "unit": "U",
+                            "title": "hand-added while the writer was down",
+                            "status": "queued", "write_paths": ["reports/ty/"]})
+    DQ.MIRROR.write_text(json.dumps(payload), encoding="utf-8")
+
+    written = DQ.mirror()
+
+    assert written["mirror_only"] == 1
+    assert written["mirror_only_jobs"] == ["only-in-mirror"]
+    after = json.loads(DQ.MIRROR.read_text(encoding="utf-8"))
+    ids = [row["id"] for row in after["jobs"]]
+    assert "only-in-mirror" in ids, "a mirror-only job must survive the rewrite"
+    assert DQ.job("only-in-mirror") is None, "it is not in the store until it is imported"
+
+
+def test_import_mirror_adopts_missing_jobs_and_refreshes_changed_ones(repo):
+    _job(repo, "stale", ["pkg/"])
+    DQ.set_status("stale", "queued")
+    payload = json.loads(DQ.MIRROR.read_text(encoding="utf-8"))
+    for row in payload["jobs"]:
+        if row["id"] == "stale":
+            row["status"] = "merged"
+            row["evidence"] = "merged under the gates"
+    payload["jobs"].append({"id": "adopted", "unit": "U", "title": "imported job",
+                            "status": "queued", "write_paths": ["ty/"], "rank": 1,
+                            "note": "carried over from the mirror"})
+    DQ.MIRROR.write_text(json.dumps(payload), encoding="utf-8")
+
+    out = DQ.import_mirror()
+
+    assert out["inserted"] == ["adopted"]
+    assert out["updated"] == ["stale"]
+    assert out["mirror_only"] == 0
+    assert DQ.job("adopted")["status"] == "queued"
+    assert DQ.job("adopted")["rank"] == 1
+    assert DQ.job("stale")["status"] == "merged"
+    assert "gates" in DQ.job("stale")["evidence"]
+    # and the mirror now agrees with the store
+    after = json.loads(DQ.MIRROR.read_text(encoding="utf-8"))
+    assert after["mirror_only_jobs"] == []
+    assert {row["id"] for row in after["jobs"]} == {"stale", "adopted"}

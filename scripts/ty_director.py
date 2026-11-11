@@ -288,16 +288,98 @@ def queue_depth() -> Dict[str, Any]:
             "cycle": data.get("cycle")}
 
 
+def _stream_path() -> Path:
+    return LOG.parent / "ty_director_stream.jsonl"
+
+
+def _error_text(node: Any) -> Optional[str]:
+    """The readable message out of an opencode error part, whatever shape it arrived in."""
+    seen = 0
+    while isinstance(node, dict) and seen < 4:
+        for key in ("message", "data", "error", "name"):
+            if key not in node:
+                continue
+            value = node[key]
+            if isinstance(value, str) and value.strip():
+                if key == "name" and isinstance(node.get("data"), dict):
+                    continue
+                return value.strip()[:300]
+            if isinstance(value, dict):
+                node = value
+                break
+        else:
+            break
+        seen += 1
+    return None
+
+
+def stream_health(tail_bytes: int = 65536) -> Dict[str, Any]:
+    """The last thing the lane said. An error line is a red heartbeat, not a short turn.
+
+    D-010: `opencode run --agent director` failed 73 times in a row with
+    ``Agent not found: "director"`` and nothing read the stream, so the scheduled task
+    reported ``Running`` and the heartbeat said ``ram_paused`` for a day while no
+    director lane existed at all. This is a file read: it spends no tokens.
+    """
+    path = _stream_path()
+    try:
+        size = path.stat().st_size
+    except OSError:
+        return {"last_type": None, "error": None, "bytes": 0, "lines": 0}
+    try:
+        with path.open("rb") as handle:
+            if size > tail_bytes:
+                handle.seek(size - tail_bytes)
+            chunk = handle.read().decode("utf-8", errors="replace")
+    except OSError as exc:  # noqa: BLE001 - a probe must not stop the loop
+        return {"last_type": None, "error": f"{type(exc).__name__}: {exc}", "bytes": size,
+                "lines": 0}
+    lines = [line for line in chunk.splitlines() if line.strip()]
+    last_type: Optional[str] = None
+    last_error: Optional[str] = None
+    for line in reversed(lines):
+        try:
+            row = json.loads(line)
+        except ValueError:
+            continue
+        last_type = str(row.get("type") or "") or None
+        if last_type == "error":
+            blob = row.get("error") or row.get("part") or row
+            last_error = (_error_text(blob) if isinstance(blob, (dict, str))
+                          else None) or json.dumps(blob, ensure_ascii=False)[:300]
+        break
+    return {"last_type": last_type, "error": last_error, "bytes": size,
+            "lines": len(lines)}
+
+
+def death_note(record: Dict[str, Any]) -> str:
+    """Why the last session ended, in the launcher's own words.
+
+    A lane that cannot start is not a short productive turn. Reading the stream is the
+    difference between "the session ended" (true, uninformative, looked healthy for a
+    day) and "the session died on a lane error: Agent not found: director".
+    """
+    health = stream_health()
+    pid = record.get("pid")
+    if health.get("last_type") == "error":
+        return f"session {pid} died on a lane error: {health.get('error')}"
+    if _stream_size() > int(record.get("stream_bytes") or 0):
+        return f"session {pid} ended after output; launcher restarting"
+    return f"session {pid} gone; launcher restarting"
+
+
 def heartbeat(state: str, **extra: Any) -> Dict[str, Any]:
+    stream = stream_health()
+    red = bool(state == "error" or stream.get("last_type") == "error")
     payload = {
-        "at": _now(), "state": state, "pid": os.getpid(),
+        "at": _now(), "state": state, "pid": os.getpid(), "red": red,
         "tokens_today": tokens_today(), "token_cap": TOKEN_CAP,
         "cap_reached": tokens_today() >= TOKEN_CAP * CAP_FRACTION,
         "cloud_workers": count_workers(), "caps": caps(),
         "disk_free_gb": disk_free_gb(), "queue": queue_depth(),
         "ram": ram_status(who="ty_director:heartbeat"),
         "gpu_lock": _read(GPU_LOCK, {}), "pause": PAUSE.exists(), "stop": STOP.exists(),
-        "replan": replan_signal(),
+        "replan": replan_signal(), "stream": stream,
         **extra,
     }
     _write(HEARTBEAT, payload)
@@ -331,7 +413,7 @@ def start_director() -> Optional[int]:
         lane = os.environ.get("TY_DIRECTOR_AGENT", "director")
         cmd = [exe, "run", "--agent", lane, "--format", "json", "--auto"]
     LOG.parent.mkdir(parents=True, exist_ok=True)
-    stream = LOG.parent / "ty_director_stream.jsonl"
+    stream = _stream_path()
     handle = stream.open("a", encoding="utf-8")
     try:
         proc = subprocess.Popen(cmd, cwd=str(ROOT), stdin=subprocess.PIPE,
@@ -351,7 +433,7 @@ def start_director() -> Optional[int]:
 
 
 def _stream_size() -> int:
-    path = LOG.parent / "ty_director_stream.jsonl"
+    path = _stream_path()
     try:
         return path.stat().st_size
     except OSError:
@@ -431,6 +513,7 @@ def tick(start: bool = False) -> Dict[str, Any]:
 
 def status() -> int:
     live = find_director()
+    stream = stream_health()
     payload = {
         "director": live.get("ProcessId") if live else None,
         "workers": count_workers(), "caps": caps(),
@@ -438,6 +521,7 @@ def status() -> int:
         "disk_free_gb": disk_free_gb(), "queue": queue_depth(),
         "pause": PAUSE.exists(), "stop": STOP.exists(),
         "ram": ram_status(who="ty_director:status"),
+        "stream": stream, "red": stream.get("last_type") == "error",
         "heartbeat": _read(HEARTBEAT, {}),
     }
     print(json.dumps(payload, indent=2))
@@ -497,7 +581,10 @@ def main(argv: Optional[List[str]] = None) -> int:
             record = _read(PID_FILE, {})
             if not noted_dead:
                 if record.get("pid"):
-                    crash_note(f"session {record.get('pid')} gone; launcher restarting")
+                    reason_text = death_note(record)
+                    crash_note(reason_text)
+                    if stream_health().get("last_type") == "error":
+                        log(f"lane error: {stream_health().get('error')}")
                 noted_dead = True
             # A crash is a short life **with no output**. A turn that did anything at
             # all wrote to the stream, and a short productive turn must not be

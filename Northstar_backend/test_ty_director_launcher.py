@@ -172,6 +172,69 @@ def test_a_crash_note_is_appended_with_its_reason(root):
     assert text.count("launcher:") == 1
 
 
+# ------------------------------------------- D-010: a lane error must look red, not healthy
+def _stream(lines, *, monkeypatch=None):
+    path = D.LOG.parent / "ty_director_stream.jsonl"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(json.dumps(row) for row in lines) + "\n", encoding="utf-8")
+    return path
+
+
+def test_the_heartbeat_is_red_when_the_streams_last_line_is_an_error(root, monkeypatch):
+    monkeypatch.setattr(D, "_processes", lambda: [])
+    _stream([{"type": "step_finish", "part": {}},
+             {"type": "error", "error": {"name": "UnknownError",
+                                         "data": {"message": 'Agent not found: "director"'}}}])
+
+    payload = D.tick(start=False)
+
+    assert payload["red"] is True
+    assert payload["stream"]["last_type"] == "error"
+    assert "Agent not found" in payload["stream"]["error"]
+    assert D.HEARTBEAT.exists()
+    assert json.loads(D.HEARTBEAT.read_text(encoding="utf-8"))["red"] is True
+
+
+def test_a_healthy_stream_is_not_red(root, monkeypatch):
+    monkeypatch.setattr(D, "_processes", lambda: [])
+    _stream([{"type": "step_start", "part": {}},
+             {"type": "step_finish", "part": {"reason": "tool-calls"}}])
+
+    payload = D.tick(start=False)
+
+    assert payload["red"] is False
+    assert payload["stream"]["last_type"] == "step_finish"
+
+
+def test_no_stream_at_all_is_not_red(root, monkeypatch):
+    monkeypatch.setattr(D, "_processes", lambda: [])
+    payload = D.tick(start=False)
+    assert payload["red"] is False
+    assert payload["stream"]["last_type"] is None
+
+
+def test_the_death_note_names_the_lane_error_instead_of_a_generic_crash(root):
+    _stream([{"type": "error", "error": {"name": "UnknownError",
+                                         "data": {"message": 'Agent not found: "director"'}}}])
+
+    note = D.death_note({"pid": 8864, "stream_bytes": 0})
+
+    assert "lane error" in note
+    assert 'Agent not found: "director"' in note
+    assert "8864" in note
+
+
+def test_the_death_note_distinguishes_a_productive_end_from_a_silent_death(root):
+    _stream([{"type": "step_finish", "part": {}}])
+
+    after_output = D.death_note({"pid": 12, "stream_bytes": 0})
+    silent = D.death_note({"pid": 12, "stream_bytes": D._stream_size()})
+
+    assert "after output" in after_output
+    assert "after output" not in silent
+    assert "gone" in silent
+
+
 def test_the_launcher_never_stacks_two_directors(root, monkeypatch):
     """A live session is reported, not started again."""
     monkeypatch.setattr(D, "DIRECTOR_MARKER", "MARK-Y")
