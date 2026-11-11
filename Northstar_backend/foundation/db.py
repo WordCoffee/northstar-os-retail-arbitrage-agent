@@ -708,6 +708,9 @@ class FoundationDB:
             fd, tmp = tempfile.mkstemp(prefix="ns_foundation_", suffix=".db")
             os.close(fd)
             path = tmp
+            # Register the moment the file exists, before sqlite opens it: if the
+            # connect or the schema step raises, exit still leaves nothing behind.
+            atexit.register(_remove_quietly, path)
         self.path = path
         self._owns_path = owns_path
         # One connection, one lock: every statement is serialized (see
@@ -718,9 +721,6 @@ class FoundationDB:
         self.conn.row_factory = sqlite3.Row
         self.conn.execute("PRAGMA foreign_keys=ON")
         self.conn.execute("PRAGMA busy_timeout=5000")
-        if owns_path:
-            # Belt and braces: a process that forgets to close() still leaves nothing behind.
-            atexit.register(_remove_quietly, path)
         if schema:
             self.ensure_schema()
 

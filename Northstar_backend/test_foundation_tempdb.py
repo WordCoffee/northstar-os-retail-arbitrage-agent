@@ -31,6 +31,45 @@ def test_a_supplied_path_survives_close(tmp_path):
     assert explicit.is_file(), "a caller-supplied path is not ours to delete"
 
 
+def test_an_auto_path_is_registered_for_removal_at_exit(monkeypatch):
+    # "belt and braces": a store nobody closes must still register its own file for exit cleanup
+    import atexit
+
+    registered = []
+
+    def spy(fn, *args, **kwargs):
+        registered.append((fn, args, kwargs))
+        return fn
+
+    monkeypatch.setattr(atexit, "register", spy)
+    db = FoundationDB(schema=False)
+    path = Path(db.path)
+    matches = [entry for entry in registered if entry[1] == (db.path,)]
+    assert matches, "the created temp file must be registered for removal at interpreter exit"
+    hook = matches[0][0]
+    assert path.is_file()
+    db.conn.close()  # release the SQLite handle WITHOUT going through close()
+    assert path.is_file(), "closing the connection must not be the thing that removes the file"
+    hook(db.path)  # exactly what the interpreter would run at exit
+    assert not path.exists(), "the registered exit hook must remove the created file"
+
+
+def test_a_supplied_path_is_never_registered_or_removed(tmp_path, monkeypatch):
+    import atexit
+
+    explicit = tmp_path / "kept.db"
+    registered = []
+    monkeypatch.setattr(
+        atexit, "register",
+        lambda fn, *args, **kwargs: registered.append((fn, args, kwargs)),
+    )
+    db = FoundationDB(str(explicit), schema=False)
+    db.close()
+    assert explicit.is_file(), "a caller-supplied path is not ours to delete"
+    assert [e for e in registered if str(explicit) in e[1]] == [], (
+        "a caller-supplied path must never be registered for removal")
+
+
 def test_many_stores_leave_nothing_behind(tmp_path, monkeypatch):
     # point the temp prefix at a private directory so the assertion is about THIS test's files
     import tempfile
