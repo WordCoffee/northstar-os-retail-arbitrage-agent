@@ -222,6 +222,19 @@ as a normal short turn, and the stream file is not read by anything.
 heartbeat red when the stream's last line is an error, so this can never again look healthy for a
 day.
 
+## D-011 — a lease takeover has a race window of one heartbeat (2026-11-11)
+
+**Measured:** stopping a live auto director (pid 26000) at 06:09Z and writing the lease at 06:10Z
+left a window in which the launcher ticked and started a second director (pid 8620, 01:05 local).
+Two directors then ran for the rest of the block. Nothing was lost: all work was committed and the
+tree was clean at the end, but the window is real and it is the exact thing the one-director rule
+exists to prevent.
+
+**Fix:** write the lease **before** stopping the other session, and have `start_director()` refuse
+when a lease pid is already alive and is not its own child. A one-line guard in `tick()` closes the
+window completely.
+
+
 **Closed 2026-11-11:** `scripts/ty_director.py::stream_health` reads the last line of the stream and
 sets `heartbeat.red`; `death_note()` names a lane error instead of "session gone". 243 error lines
 were already on disk when it was written. Five new tests in `test_ty_director_launcher.py`.

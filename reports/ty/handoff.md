@@ -233,8 +233,16 @@ is a one-line addition; the proof is a launcher tick that reports `running` with
 (`ses_e36f86943ffe7yUb1Q7ErT5EXg`, pid 26000). That session was live and mid-tool-call, so it was
 **stopped at 06:09Z** to enforce one-director-per-queue, and the lease was written to the opencode
 service that serves this owner-initiated session. Its uncommitted work was preserved in commit
-`c0d6f3e1` (brand_art/mockup_compositor/product_picture + a cylinder-form test, 24 tests green) and
+`80ad1659` (brand_art/mockup_compositor/product_picture + a cylinder-form test, 24 tests green) and
 its queue entries (D-012, D-016, D-017/018, packaging forms) were kept and re-ranked.
+
+**Defect found in the takeover itself (D-011).** The launcher ticked between the kill and the lease
+write and started a **second** director (pid 8620, 01:05 local). It ran alongside this session for
+the rest of the block. Nothing was lost — every change is committed and the tree is clean — but the
+sequence "kill, then write the lease" has a race window of up to one heartbeat. The correct order is
+**write the lease first, then stop the other session**; `scripts/ty_director.py` should also refuse to
+start when another session already holds the lease. The lease is released at the end of this block so
+the surviving director continues at rank 1.
 
 **Block 1 — D-008 measured.** `reports/ty/block1_measure.md`.
 12 prompt-only briefs re-rendered with all 12 render seeds pinned to the previous proof.
