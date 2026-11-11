@@ -10,6 +10,34 @@ A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.m
 > and `reports/ty/handoff.md`, then continue from the first unfinished unit. No
 > questions, no reports between cycles. Idle means re-plan.
 
+## Position, 2026-11-11 cycle 17 — packaging is a real lane, and the app's own gate blocks six of eight
+
+Unit report: `reports/ty/sel04_packaging.md`. Tag `ty-dir-sel-04-packaging`.
+
+| # | job | result |
+|---|---|---|
+| 1 | `sel-04-packaging` — packaging was never exercised: the app owns a dieline engine (`design_studio_print`: geometry gate, layered SVG, PDF) and `package_readiness`, and no seller brief asked for packaging | **merged as a real lane.** 8 briefs over 4 templates (`doypack`, `tuck_end`, `rsc_box`, `sleeve`), 7 mechanical checks, a gap file, and `python -m tools.seller_tester packaging` |
+
+**Measured: 8 scored, 2 passed, 6 failed, mean 78.6.** The two doypacks are 100.0. The six
+cartons/sleeves fail `layers` + `readiness` for one reason: **`build_carton` emits no `safe`
+layer**, and `package_readiness.REQUIRED_LAYERS` is `("trim", "fold", "safe")`, so the app's
+own retail-readiness gate refuses every carton and sleeve it prints — in its own words,
+*"dieline is missing its 'safe' layer"*. Filed **D-023**, queued rank 1 as
+`fix-carton-safe-layer`.
+
+**The checks are mechanical, so no judge is involved:** sheet mm, panels (doypack named
+faces; carton body widths + glue + both bleeds spanning the sheet), bleed, safe, the four
+layer kinds, the PDF page in points, and the app's readiness verdict.
+
+**Tests:** 9 in `test_seller_packaging.py`, including the geometry gate refusing a
+`rsc_box` with flaps deeper than its body **by name** (`tab_deeper_than_body`) and writing
+no file.
+
+**Next, in rank order:** `fix-carton-safe-layer` (D-023) → `d022-real-rerender` →
+`pack-02-apparel-flat-print` → `reference-depth` → `pack-03-boxart-forms` →
+`block3-workspaces` → `block4-seller-tests` → `block5-production-hardening` →
+`block7-verification` → D-019.
+
 ## Position, 2026-11-11 cycle 16 — a main image is composed without the composite's own shadow
 
 Unit report: `reports/ty/d022_fullgen_white_composite.md`. Tag `ty-dir-fix-fullgen-white-composite`.
@@ -1171,3 +1199,5 @@ that, re-score and re-plan again. Empty queue means re-plan, never idle.
 - 2026-11-11T05:14:38+00:00 launcher: director session ended (session 26360 gone; launcher restarting).
 
 - 2026-11-11T07:05:17+00:00 launcher: director session ended (session 21024 gone; launcher restarting).
+
+- 2026-11-11T09:40:08+00:00 launcher: director session ended (session 25952 ended after output; launcher restarting).
