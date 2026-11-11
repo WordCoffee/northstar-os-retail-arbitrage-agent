@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-11T17:32:37+00:00",
+  "updated_at": "2026-11-11T17:43:51+00:00",
   "cycle": 3,
   "unit_in_flight": "",
   "unit_order": [
@@ -996,7 +996,7 @@
       "id": "fix-ux-scorecard-scroll",
       "unit": "U",
       "title": "ux_scorecard chat-scroll check fails on the current shell",
-      "status": "queued",
+      "status": "merged",
       "owner": "",
       "write_paths": [
         "tests/e2e/ux_scorecard.spec.ts",
@@ -1009,9 +1009,9 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": "The gate was stale (demanded scrollTop 0 of a resumed 4-turn transcript) AND hid a real defect: after New chat a 15991->377px shrink left the phone greeting 72px above the fold, now zeroed in ChatSurface.jsx:504-517. Gate asserts pinned-to-bottom for transcripts and scrollTop 0 + greeting visible for the empty state via the product's own New chat. ux_scorecard 12 passed. reports/ty/lane_ui_defects.md",
       "created_at": "2026-11-11T17:06:27+00:00",
-      "updated_at": "2026-11-11T17:06:27+00:00",
+      "updated_at": "2026-11-11T17:42:25+00:00",
       "rank": 0
     },
     {
@@ -1035,6 +1035,94 @@
       "evidence": "tools/registry/repair_citations.py recomputes every action citation from backend_index (21 rewritten, 0 unresolved, --check idempotent); build.expected_doc() merges generated keys with hand-authored blocks so regeneration cannot delete scene_workspaces; 19 tests green (3 new). tag none; commit 149ca718",
       "created_at": "2026-11-11T17:06:35+00:00",
       "updated_at": "2026-11-11T17:06:35+00:00",
+      "rank": 0
+    },
+    {
+      "id": "fix-product-finder-wiring",
+      "unit": "U",
+      "title": "product-finder declares scan_products with zero backend actions; towncrier declares no tool at all",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "ty/services.json",
+        "ty/service_registry.json",
+        "Northstar_backend"
+      ],
+      "branch": "ty/fix-product-finder-wiring",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-11T17:43:51+00:00",
+      "updated_at": "2026-11-11T17:43:51+00:00",
+      "rank": 0
+    },
+    {
+      "id": "fix-seller-offer-caption",
+      "unit": "D9",
+      "title": "seller scorer for copy services: offerchisel, socialpulse, towncrier have output nobody can score",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "tools/seller_tester/",
+        "ty/seller_briefs.json"
+      ],
+      "branch": "ty/fix-seller-offer-caption",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-11T17:43:51+00:00",
+      "updated_at": "2026-11-11T17:43:51+00:00",
+      "rank": 0
+    },
+    {
+      "id": "fix-chat-composer-spec",
+      "unit": "U",
+      "title": "chat_composer_stability waits for chat-input on /ui/design-studio, which renders no chat surface",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "tests/e2e/chat_composer_stability.spec.ts"
+      ],
+      "branch": "ty/fix-chat-composer-spec",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-11T17:43:51+00:00",
+      "updated_at": "2026-11-11T17:43:51+00:00",
+      "rank": 0
+    },
+    {
+      "id": "fix-golden-goose-scoring",
+      "unit": "D9",
+      "title": "golden-goose scoring: GG-002 brand-owner offer tiers MEDIUM not HARD BLOCK; GG-003 ranked best_asin fails the size filter",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "Northstar_backend/agents/golden_goose_finder",
+        "ty/service_registry.json"
+      ],
+      "branch": "ty/fix-golden-goose-scoring",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-11T17:43:51+00:00",
+      "updated_at": "2026-11-11T17:43:51+00:00",
       "rank": 0
     },
     {
@@ -1895,7 +1983,7 @@
       "id": "fix-tabbar-a11y",
       "unit": "U",
       "title": "TabBar .wst-list fails aria-required-children (a11y)",
-      "status": "queued",
+      "status": "merged",
       "owner": "",
       "write_paths": [
         "northstar-os-ui/src/shell/TabBar.jsx"
@@ -1907,9 +1995,9 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": "TabBar keeps the tabs pattern; the close affordance is pointer-only (aria-hidden, tabindex=-1) with an announced Delete-key path via aria-describedby; .wst-hint contrast 4.34 -> 5.9:1. tabbar_a11y 6 passed (chromium-desktop+mobile), workspaces 56 passed, test:ui 231/231, build 0. reports/ty/lane_ui_defects.md; tag ty-dir-ui-defects",
       "created_at": "2026-11-11T17:06:27+00:00",
-      "updated_at": "2026-11-11T17:06:35+00:00",
+      "updated_at": "2026-11-11T17:42:25+00:00",
       "rank": 7
     },
     {

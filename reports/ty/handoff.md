@@ -49,6 +49,39 @@ no visible browser and Playwright headless on `127.0.0.1` only; no GPU work; no 
 verdict on the merged tree. If a lane leaves the tree red, its work waits — the tree on `main`
 stays green.
 
+## Position, 2026-11-11 cycle 30 — three services left the below-bar list, and the rest of the zeros are real
+
+Unit reports: `reports/ty/lane_ui_defects.md` (tag `ty-dir-ui-defects`),
+`reports/ty/lane_services.md` (tag `ty-dir-seller-depth`), and
+`reports/ty/attribution_check_20261111.md` (read-only).
+
+| # | job | result |
+|---|---|---|
+| 1 | `fix-tabbar-a11y` + `fix-ux-scorecard-scroll` (lane E) | **merged.** The tab strip stays a real tablist; the × is a pointer-only affordance with an announced Delete-key path; `.wst-hint` contrast 4.34 → 5.9:1. And the stale scroll gate was hiding a real defect: after New chat a 15,991 → 377 px shrink left the phone greeting 72 px above the fold |
+| 2 | seller sample depth (lane F) | **merged.** Briefs 5 → **21** across the four paths (listing 6, ppc 5, golden_goose 5, research 5). `services` → **21 scored, 19 passed, 0 refused, network: none** |
+| 3 | attribution check (director, read-only) | **the remaining seller zeros are honest.** `listings` is a health surface (listingforge owns the composer); `product-finder` declares `scan_products` with **zero backend actions**; `adpilot` reads bulksheets and its own ad copy is unscored |
+
+**Score movement, measured through `ty/scorecards.json`:** listingforge **77.0 → 90.0**
+(seller 100.0, 6 briefs), goldengoose **77.0 → 89.4** (95.6, 5), golden-goose **77.0 → 89.4**
+(declared alias, same tool and purpose, scored from the same path and says so). Seller zeros
+**9 → 6**. Portfolio: **19 at or above the bar, 10 below** (was 16 / 13).
+
+**The two failures were kept, not deleted to lift a mean:** GG-002 — a brand-owner /
+`is_amazon_seller` offer is tiered MEDIUM although the documented rule is a HARD BLOCK
+(`_assign_tier` only gates HIGH); GG-003 — the 90 oz blender that fails the size filter is
+ranked first and named `best_asin` over the only all-filters-pass row.
+
+**Never-mix proven:** design-studio keeps 96.2 over 32 pictures while its five PPC
+service-path rows sit beside it unblended; three pictures plus three briefs scores nothing.
+
+**New defects queued:** `fix-product-finder-wiring` (tool with no action; towncrier declares
+none at all), `fix-seller-offer-caption` (copy services have output nobody can score),
+`fix-golden-goose-scoring` (GG-002/GG-003), `fix-chat-composer-spec` (stale spec pointing at
+`/ui/design-studio` for a composer that lives at `/ui/creative-studio`).
+
+**Next:** `block7-verification` is running on the merged tree (independent session);
+`fix-beta-complete` (lane G, four services with `complete` 0.0) is running beside it.
+
 ## Position, 2026-11-11 cycle 28 — production hardening merged, and a fresh checkout is now green
 
 Unit report: `reports/ty/lane_block5.md`. Tag `ty-dir-block5-hardening`. Lane A of four.
