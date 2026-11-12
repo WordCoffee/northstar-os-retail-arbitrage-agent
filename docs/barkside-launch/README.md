@@ -1,7 +1,7 @@
 # BARKSIDE BBQ Co. — launch pack
 
-**Status:** formulation + brand platform ready to take to the supplier. Nothing sent, nothing bought, no listing touched.
-**Date:** 2026-11-12
+**Status:** formulation + brand platform ready to take to the supplier. Nothing sent, nothing bought, no listing touched.<br>
+**Date:** 2026-11-12<br>
 **Scope:** 3 blends, 80 g resealable pouches, low sodium.
 
 > **What this pack is not.** The `a.co` link you sent was not opened. Amazon is a standing
