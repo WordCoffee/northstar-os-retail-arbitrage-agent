@@ -111,3 +111,41 @@ export function findCandidate(payload, asin) {
   if (!wanted) return null
   return payload.evaluated.find(c => String(c && c.asin || '').toUpperCase() === wanted) || null
 }
+
+// ── The research log (G1) ──────────────────────────────────────────────────
+// A lookup used to live in React state, so a reload started the work over. These two calls make
+// the research persist: what the seller looked at, what the cache actually returned, and when.
+// The row is copied, never recomputed — "no cached observation" is stored as the fact it is.
+export async function saveResearch(body) {
+  const res = await fetch('/api/products/research', {
+    method: 'POST',
+    credentials: 'include',
+    headers: headers(),
+    body: JSON.stringify(body || {}),
+  })
+  if (!res.ok) {
+    const { code, message, status } = await readError(res)
+    const err = new Error(message)
+    err.code = code
+    err.status = status
+    throw err
+  }
+  const payload = await res.json()
+  // The API answers under the bff/v1 envelope; accept both shapes so a future un-enveloped
+  // response does not silently store nothing.
+  return payload && payload.contract === 'bff/v1' ? payload.data : payload
+}
+
+export async function listResearch() {
+  const res = await fetch('/api/products/research', { credentials: 'include', headers: headers() })
+  if (!res.ok) {
+    const { code, message, status } = await readError(res)
+    const err = new Error(message)
+    err.code = code
+    err.status = status
+    throw err
+  }
+  const payload = await res.json()
+  const data = payload && payload.contract === 'bff/v1' ? payload.data : payload
+  return Array.isArray(data && data.items) ? data.items : []
+}

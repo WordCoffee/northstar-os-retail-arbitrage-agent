@@ -2,7 +2,7 @@ import { PageLayout, DataTable, DataNotice } from '../../components/Shared.jsx'
 import RoomTabs from '../../components/RoomTabs.jsx'
 import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import { useCallback, useRef, useState, useEffect } from 'react'
-import { fetchFinderCandidates, findCandidate, candidateToRow } from '../../lib/productFinderApi.js'
+import { fetchFinderCandidates, findCandidate, candidateToRow, saveResearch, listResearch } from '../../lib/productFinderApi.js'
 
 const TABS = [
   { id: 'lookup', label: 'Lookup' },
@@ -86,7 +86,40 @@ export default function ProductFinder() {
   const [products, setProducts] = useState(PRODUCTS)
   const [newAsin, setNewAsin] = useState('')
   const [lookup, setLookup] = useState({ state: 'idle', message: '', code: '' })
+  const [saved, setSaved] = useState([])
+  const [saveState, setSaveState] = useState({ state: 'idle', message: '' })
   const inFlight = useRef(null)
+
+  // The research log survives a reload, so the workbench resumes instead of restarting.
+  useEffect(() => {
+    let alive = true
+    listResearch().then(rows => { if (alive) setSaved(rows) }).catch(() => { /* a log read must not block the page */ })
+    return () => { alive = false }
+  }, [])
+
+  const saveCurrent = async () => {
+    const asin = String(primary.asin || '').trim().toUpperCase()
+    if (!/^B0[A-Z0-9]{8}$/.test(asin)) {
+      setSaveState({ state: 'error', message: 'A lookup is needed before saving.' })
+      return
+    }
+    setSaveState({ state: 'saving', message: '' })
+    try {
+      const observed = lookup.state === 'found'
+      const payload = {
+        asin,
+        status: observed ? 'observed' : 'no_observation',
+        note: lookup.message || '',
+        row: observed ? primary : { asin, title: primary.title, status: primary.status },
+      }
+      const result = await saveResearch(payload)
+      const rows = await listResearch()
+      setSaved(rows)
+      setSaveState({ state: 'saved', message: `${asin} saved ${result && result.research ? 'to the research log' : ''}`.trim() })
+    } catch (err) {
+      setSaveState({ state: 'error', message: err.message || 'The research log refused the write.' })
+    }
+  }
 
   // One request path for both the ASIN add and the ?asin= deep link. The row is
   // built from the candidate the backend returned; a miss or a refusal is
@@ -190,6 +223,36 @@ export default function ProductFinder() {
             <div className="text-low" style={{ fontSize: 11, marginTop: 6 }}>
               A row is rendered only from a cached observation the backend returned — nothing is invented.
             </div>
+            {saveState.state !== 'idle' && saveState.message && (
+              <div className={saveState.state === 'error' ? 'alert alert-error' : 'alert'}
+                role="status" data-testid="pf-save-state" style={{ marginTop: 10 }}>
+                <div className="alert-text">{saveState.message}</div>
+              </div>
+            )}
+          </div>
+
+          <div className="card" style={{ marginBottom: 14 }} data-testid="pf-saved-research">
+            <div className="card-head">
+              <h3 className="card-title">Saved research</h3>
+              <span className="pill pill-muted">{saved.length} saved</span>
+            </div>
+            {saved.length === 0 ? (
+              <p style={{ fontSize: 13 }} data-testid="pf-saved-empty">
+                Nothing saved yet. A saved lookup survives a reload; a miss is saved as
+                “no cached observation” rather than dropped.
+              </p>
+            ) : (
+              <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
+                {saved.map(item => (
+                  <li key={item.asin} data-testid={`pf-saved-${item.asin}`}
+                    style={{ display: 'flex', gap: 10, alignItems: 'baseline', padding: '6px 0', borderBottom: '1px solid var(--line, #e6e1d6)' }}>
+                    <strong style={{ fontFamily: 'var(--font-mono, monospace)' }}>{item.asin}</strong>
+                    <span className="pill pill-muted">{item.status}</span>
+                    <span className="text-low" style={{ fontSize: 11 }}>{String(item.saved_at || '').replace('T', ' ').slice(0, 19)}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
 
           {lookup.state === 'error' && (
@@ -234,6 +297,10 @@ export default function ProductFinder() {
                 </div>
               </div>
               <div className="inline-flex" style={{ gap: 8, alignSelf: 'center' }}>
+                <button className="btn btn-sm" data-testid="pf-save-research"
+                  onClick={saveCurrent} disabled={saveState.state === 'saving'}>
+                  {saveState.state === 'saving' ? 'Saving…' : 'Save to research'}
+                </button>
                 <button className="btn btn-sm" onClick={() => navigate(`/product-finder/${primary.asin}`)}>Open in Product Set</button>
                 <button className="btn btn-sm btn-ghost" title="Hand off this product to the Commerce Ops workflow queue" onClick={() => navigate('/commerce-ops')}>Send to Commerce Ops</button>
               </div>

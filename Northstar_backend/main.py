@@ -2968,6 +2968,59 @@ def product_finder_route(
 
 
 # =============================================================================
+# Research log (G1, 2026-11-13) -- what the seller looked up, and what was observed.
+# Product Finder's lookup lived in React state: a reload started the work over, which is the
+# "no query -> persist -> read" half of the launch gate. These routes copy what the client saw;
+# they never compute a metric, and "no_observation" is a stored fact rather than a failure.
+# =============================================================================
+
+@app.post("/api/products/research")
+def research_save_route(body: dict):
+    from research_store import save_item
+
+    asin = str(body.get("asin") or "").strip()
+    if not asin:
+        raise HTTPException(status_code=400, detail={"code": "asin_required",
+                                                     "message": "an ASIN is required"})
+    try:
+        record = save_item(body)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail={"code": "invalid_research",
+                                                     "message": str(exc)})
+    return {"research": record, "persisted": True}
+
+
+@app.get("/api/products/research")
+def research_list_route(limit: int = 200):
+    from research_store import list_items
+
+    items = list_items()
+    return {"items": items[:limit], "count": len(items),
+            "note": "client-observed rows only; UNKNOWN stays UNKNOWN"}
+
+
+@app.get("/api/products/research/{asin}")
+def research_get_route(asin: str):
+    from research_store import get_item
+
+    record = get_item(asin)
+    if not record:
+        raise HTTPException(status_code=404, detail={"code": "not_found",
+                                                     "message": f"no research record for {asin}"})
+    return {"research": record}
+
+
+@app.delete("/api/products/research/{asin}")
+def research_delete_route(asin: str):
+    from research_store import delete_item
+
+    if not delete_item(asin):
+        raise HTTPException(status_code=404, detail={"code": "not_found",
+                                                     "message": f"no research record for {asin}"})
+    return {"deleted": True, "asin": asin.strip().upper()}
+
+
+# =============================================================================
 # Foundation (Phase 1B) — ADDITIVE, versioned namespace /api/v1/foundation/*
 # Shared P0 foundation: organizations/identity, canonical product identity,
 # provenance, provider registry, jobs, usage (shadow mode), audit, approvals.
