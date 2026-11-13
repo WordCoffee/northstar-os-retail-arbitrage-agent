@@ -288,6 +288,40 @@ def queue_depth() -> Dict[str, Any]:
             "cycle": data.get("cycle")}
 
 
+def vision_status() -> Dict[str, Any]:
+    """The eyes' state, read-only. A vision fault must never stop the launcher."""
+    try:
+        sys.path.insert(0, str(ROOT / "tools"))
+        import director_vision  # noqa: PLC0415
+
+        return director_vision.status()
+    except Exception as exc:  # noqa: BLE001
+        return {"error": f"{type(exc).__name__}: {exc}", "allowed": False}
+
+
+def vision_tick(interval_s: int = 3600) -> Optional[Dict[str, Any]]:
+    """Run the route probe at most once per interval, and only when the eyes may act.
+
+    This is the whole wiring between the canonical loop and Ty's Vision: the launcher owns the
+    clock, the probe owns the measurement, and a paused or locked desktop is a named refusal
+    rather than a silent skip.
+    """
+    try:
+        sys.path.insert(0, str(ROOT / "tools"))
+        import director_vision  # noqa: PLC0415
+
+        state = director_vision.status()
+        if not state.get("allowed"):
+            return None
+        age = state.get("last_probe_age_s")
+        if age is not None and age < interval_s:
+            return None
+        return director_vision.probe()
+    except Exception as exc:  # noqa: BLE001 - the loop must survive a vision fault
+        log(f"vision probe skipped: {type(exc).__name__}: {exc}")
+        return None
+
+
 def _stream_path() -> Path:
     return LOG.parent / "ty_director_stream.jsonl"
 
@@ -380,6 +414,7 @@ def heartbeat(state: str, **extra: Any) -> Dict[str, Any]:
         "ram": ram_status(who="ty_director:heartbeat"),
         "gpu_lock": _read(GPU_LOCK, {}), "pause": PAUSE.exists(), "stop": STOP.exists(),
         "replan": replan_signal(), "stream": stream,
+        "vision": vision_status(),
         **extra,
     }
     _write(HEARTBEAT, payload)
@@ -594,6 +629,12 @@ def main(argv: Optional[List[str]] = None) -> int:
         live = find_director()
         if live:
             heartbeat("running", director_pid=live.get("ProcessId"))
+            # The eyes, on the launcher's clock: at most hourly, and only when the desktop is
+            # unlocked and the owner has not paused browser work. A refusal is a named reason.
+            probe = vision_tick()
+            if probe is not None:
+                log(f"vision probe: {probe.get('state')} "
+                    f"({probe.get('rendered')}/{probe.get('total')} rendered)")
             noted_dead = False
         else:
             # The RAM gate is consulted only here - after "no session is running" -

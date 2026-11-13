@@ -199,9 +199,24 @@ def replan() -> Dict[str, Any]:
     Called when the queue is empty. It re-derives from the measurements. If it still
     cannot produce work, that is a defect and it is written down - silently doing
     nothing is what the work order forbids.
+
+    Ty's Vision is consulted first: a route that still opens the generic shell is a gap the
+    scorecards cannot see, and the eyes are the only instrument that measures it.
     """
     data = scores()
     rows = rank(data)
+    vision = _vision_bundle()
+    if vision:
+        queue = _queue()
+        result = queue.add_job(unit=vision["unit"], title=vision["title"],
+                               write_paths=vision["write_paths"], acceptance=[])
+        if result.get("ok"):
+            queue.set_status(result["id"], "queued", evidence=vision["why"])
+            return {"ok": True, "reason": "replanned_from_vision",
+                    "added": [{"id": result["id"], "services": vision["services"],
+                               "points": vision["points"]}],
+                    "refused": [], "detail": "a route that renders the shell is not a place"}
+        _defect(f"vision bundle could not be enqueued: {result.get('reason')}")
     if not rows:
         return {"ok": True, "reason": "no_gaps",
                 "detail": f"all {len(data.get('services') or [])} services are at the bar"}
@@ -216,6 +231,17 @@ def replan() -> Dict[str, Any]:
         return {"ok": False, "reason": "enqueue_failed", **result}
     return {"ok": True, "reason": "replanned", **result,
             "detail": f"{len(rows)} service(s) below the bar"}
+
+
+def _vision_bundle() -> Optional[Dict[str, Any]]:
+    """The route truth Ty's Vision measured, as a bundle. Absent or stale means no bundle."""
+    try:
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        import director_vision  # noqa: PLC0415
+
+        return director_vision.queue_hint()
+    except Exception:  # noqa: BLE001 - a missing eye must not stop a re-plan
+        return None
 
 
 def main(argv: Optional[List[str]] = None) -> int:
