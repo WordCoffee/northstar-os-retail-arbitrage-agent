@@ -550,3 +550,49 @@ presented as the product's own rule.
 one). Then the caps and fixtures change together and the score is re-run. Nothing is blocked: the
 current score (6 fixtures, 5 passed, mean 98.1) is published with the assumption named.
 
+---
+
+## G1-LIST-2. The composer key works; the provider withdrew the verified model (2026-11-13)
+
+The key is present and the provider is armed — `GET /api/v1/reasoning/models` reports
+`credential_env=OPENCODE_GO_API_KEY`, `configured=true`, `enable_env=OPENCODE_GO_ENABLED`,
+`enabled=true`, `armed=true`. **No credential value was read or printed.** The gate no longer
+refuses for absence.
+
+The compose then failed at the provider. Measured once through the product's own adapter, on
+the repository's only verified model (`step-5-preview-free`):
+
+```
+status=error
+http_status=400
+error=HTTP 400
+body={"error":{"type":"server_error","message":"Upstream request failed: Model is unavailable."}}
+```
+
+`GET https://opencode.ai/zen/go/v1/models` answers **200** (the key is accepted), and the
+catalog no longer contains `step-5-preview-free`. It now lists:
+
+| id | price / 1M in | price / 1M out | repo has verified it? |
+|---|---|---|---|
+| `step-5-preview` | $1.00 | $2.70 | no — and it is **paid** |
+| `beam-free` | $0 | $0 | no |
+| `longcat-2.5-free` | $0 | $0 | no |
+| `iceman-contributor-free` | $0 | $0 | no |
+
+The adapter refuses to substitute an unverified model by design, so G1 Listings stops at
+compose. `tests/e2e/g1_listings_persist.spec.ts` is in the tree: its gate test is green, and
+its compose/persist/read-back test is opt-in via `G1_LISTINGS_LIVE=1` until a verified model
+exists. The failed attempt's container row was deleted; the tenant store is back to 0 records,
+so **no stub listing exists**.
+
+**One action, either one closes it:**
+
+1. **Restore `step-5-preview-free`** on the OpenCode Go account/catalog, or
+2. **Say the word to adopt a verified free replacement** from the list above. I will then run
+   one real completion on that model, record it as the verified runtime default, update the
+   model card and pricing line in `docs/HOSTED_REASONING.md`, and re-run G1 Listings — compose,
+   persist, desktop Chromium + iPhone 12 WebKit read-back.
+
+I will **not** select `step-5-preview` or any other paid model without a separate, explicit
+spend approval. Nothing else in the queue is blocked by this.
+

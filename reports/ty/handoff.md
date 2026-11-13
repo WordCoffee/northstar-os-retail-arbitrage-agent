@@ -10,6 +10,31 @@ A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.m
 > and `reports/ty/handoff.md`, then continue from the first unfinished unit. No
 > questions, no reports between cycles. Idle means re-plan.
 
+## Position, 2026-11-13 — G1 Listings is blocked at the provider, and the key is not the reason
+
+The owner restarted the stack (`scripts/dev-start.ps1`): `/health` ok, UI 200. The composer
+credential gate is **confirmed by name only** — `GET /api/v1/reasoning/models` →
+`OPENCODE_GO_API_KEY configured=true`, `OPENCODE_GO_ENABLED enabled=true`, `armed=true`. No
+credential value was read, printed or written.
+
+`g1-listings` ran its real click path (create row in the tenant store → facts → **Generate
+proposal**) and the provider refused the compose:
+
+```
+HTTP 400 {"error":{"type":"server_error","message":"Upstream request failed: Model is unavailable."}}
+```
+
+`step-5-preview-free` — the repository's only verified model — is **gone from the provider's
+catalog** (the catalog GET answers 200, so the key is accepted). The adapter refuses to
+substitute an unverified model, and the paid `step-5-preview` was not selected. **Nothing was
+persisted; the container row was deleted and the tenant store is back to 0 records — no stub
+listing.** `tests/e2e/g1_listings_persist.spec.ts` holds the gate test (green) and the
+compose/persist/read-back test (opt-in `G1_LISTINGS_LIVE=1`). Queue: `g1-listings` **blocked**.
+Owner action: `needs_you.md` **G1-LIST-2** — restore the free model or authorise a verified
+free replacement. Report: `reports/ty/g1_listings_20261113.md`.
+
+Soak, quiet-window waiter, `state/vision/PAUSE` and `state/security/keys_rotated.json` untouched.
+
 ## Owner instruction, 2026-11-11 03:48 local — no browser pages
 
 The owner, verbatim: *"stop the broswer from ope8101/ui/beta-ops"* / *"please stop opening
