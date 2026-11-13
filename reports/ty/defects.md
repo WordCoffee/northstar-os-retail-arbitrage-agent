@@ -312,10 +312,19 @@ ring") — are objects the model drew into the **scene**, which `_generate_cut_a
 keeps as the background for a free/scene brief. On a flat brief the background is a
 white canvas, so nothing survives there.
 
-**Not yet done:** a free background must be filled or inpainted around the placed
-product, or the scene rejected when it carries geometry outside the product's
-columns. Until then the honest count is 10 of 12 clean, and it is stated in
-`reports/ty/label_conform.md`.
+**Closed 2026-11-13 by the rule this entry asked for.** `Northstar_backend/scene_cleanup.py`
+finds ink that sits outside the product's box (a pixel counts as ink when it differs from the
+field's median colour by more than 24 levels) and fills each connected component with the **median
+colour of its own ring** — deterministic, no model, no GPU. It refuses two cases rather than
+painting over them: a component whose ring is not uniform within 18 levels (a textured photograph
+would smear) is left in place and named, and a scene where stray ink exceeds 3 % of the frame is
+kept and reported. Wired into `_generate_cut_and_compose` right after `place_product`, recorded as
+`stray_geometry` on the generation record. 4 tests: a clean scene is a no-op, two marks are filled
+on a flat field while the product is untouched, a textured field is reported not smeared, and a
+mostly-stray scene is not repainted.
+
+**Still owed:** the 10-of-12 count can only move by re-rendering PO-006 and PO-007, which needs
+the render lane; the record now carries what was filled so the next pass can prove it.
 
 ## D-018 — a white product on a white canvas defeats the fill instrument (closed 2026-11-11)
 

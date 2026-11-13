@@ -1113,6 +1113,20 @@ class CompositeGenerator:
                               # pool (measured 2026-11-11: 10.2-25.6 % of the frame on eight
                               # published artefacts). A free/scene brief keeps its shadow.
                               shadow=not flat(brief))
+            # D-019: the model paints into the SCENE — a wire, a dashed rule, a ring — and a free
+            # background keeps it. Fill what sits outside the product's box with the field's own
+            # colour, and record what could not be filled instead of smearing it.
+            try:
+                import scene_cleanup  # noqa: PLC0415
+
+                cleaned, stray = scene_cleanup.fill_stray(placed["bytes"],
+                                                          tuple(placed["product_box"]))
+                if stray.get("filled") or stray.get("found_pixels"):
+                    placed = dict(placed)
+                    placed["bytes"] = cleaned
+                    record["stray_geometry"] = stray
+            except Exception as exc:  # noqa: BLE001 - a cleanup failure must not lose the render
+                record["stray_geometry"] = {"error": f"{type(exc).__name__}: {exc}"}
             if str(brief.get("label_mode") or "") == "warp":
                 # The body was drawn without lettering; the label is composed and warped on here, so
                 # the copy is readable by construction rather than by luck.

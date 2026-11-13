@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-13T10:12:29+00:00",
+  "updated_at": "2026-11-13T18:22:58+00:00",
   "cycle": 3,
   "unit_in_flight": "",
   "unit_order": [
@@ -2063,7 +2063,7 @@
       "id": "fix-po006-stray-dashes",
       "unit": "D9",
       "title": "D-019 (PO-006): four detached dashes survive inside the recorded silhouette",
-      "status": "queued",
+      "status": "merged",
       "owner": "",
       "write_paths": [
         "Northstar_backend/product_composite.py",
@@ -2076,10 +2076,16 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": [
+        "Northstar_backend/scene_cleanup.py",
+        "Northstar_backend/test_scene_cleanup.py",
+        "tools/seller_tester/generators.py",
+        "reports/ty/defects.md"
+      ],
       "created_at": "2026-11-11T17:06:27+00:00",
       "updated_at": "2026-11-11T17:06:35+00:00",
-      "rank": 3
+      "rank": 3,
+      "note": "Stray ink outside the product box is filled with its ring's median colour; a textured ring or a mostly-stray scene is kept and reported. 4 tests; wired into the prompt-only compose path and recorded as stray_geometry."
     },
     {
       "id": "ux-08-scene",
