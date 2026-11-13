@@ -903,6 +903,25 @@ are true. No bar was changed. `fix-label-conform` is rank 1.
 39 tuning, disjoint image split. **Depth is thin — 1 to 3 reviewed images per category** — and is
 rank 5 (`reference-depth`). Neck Nirvana stays unscorable.
 
+## DECISION, 2026-11-13 — one canonical loop, Vision wired into it
+
+`reports/ty/canonical_loop_decision.md` (one page) settles it:
+
+- **Director is canonical.** It is the only owner of `director_queue.json`, the only merger, the only
+  launcher. Tys Assistant may not write the queue or merge; it runs bounded campaigns on work orders
+  and its results land as evidence. Vision has no queue and never will.
+- **Vision is the director's eyes**, wired in three places, all committed:
+  `tools/director_vision.py` (probe + refusal + `queue_hint`), `scripts/ty_director.py` (heartbeat
+  carries the eyes' state and probes at most hourly), `tools/director_gaps.replan()` (a shell-rendering
+  route becomes a queue bundle). 7 tests; 34 across the director suites.
+
+**V3 is gated, not skipped.** `tools/vision/v3_gate.py` runs V3 twice on the UIA backend with the
+9222 route deliberately unused; it exits 3 with a named reason while `state/vision/PAUSE` exists.
+`tools/vision/v3_then_soak.py` (pid 3056, five-minute checks, no model calls) runs V3 the moment the
+gate opens, then starts `tools/soak.py` for 24 hours: merged units, restarts, minimum free RAM with
+the governor's verdict, and needs_you sections. **One owner action starts the sequence: delete
+`state/vision/PAUSE`.** Nothing else is pending on you for this order.
+
 ## LAUNCH PUSH (Nov 11, later block) — G1 for Golden Goose: 3 gates → 4
 
 **Lease:** held by the owner session (pid 540, the opencode process serving this session); no second

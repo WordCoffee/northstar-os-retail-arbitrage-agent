@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-11T18:04:02+00:00",
+  "updated_at": "2026-11-13T05:24:58+00:00",
   "cycle": 3,
   "unit_in_flight": "",
   "unit_order": [
@@ -1058,7 +1058,7 @@
       "evidence": "",
       "created_at": "2026-11-11T17:43:51+00:00",
       "updated_at": "2026-11-11T17:43:51+00:00",
-      "rank": 6
+      "rank": 7
     },
     {
       "id": "fix-seller-offer-caption",
@@ -1080,7 +1080,7 @@
       "evidence": "",
       "created_at": "2026-11-11T17:43:51+00:00",
       "updated_at": "2026-11-11T17:43:51+00:00",
-      "rank": 7
+      "rank": 8
     },
     {
       "id": "fix-chat-composer-spec",
@@ -1101,7 +1101,7 @@
       "evidence": "",
       "created_at": "2026-11-11T17:43:51+00:00",
       "updated_at": "2026-11-11T17:43:51+00:00",
-      "rank": 8
+      "rank": 9
     },
     {
       "id": "fix-golden-goose-scoring",
@@ -1123,7 +1123,7 @@
       "evidence": "",
       "created_at": "2026-11-11T17:43:51+00:00",
       "updated_at": "2026-11-11T17:43:51+00:00",
-      "rank": 9
+      "rank": 10
     },
     {
       "id": "fix-beta-complete",
@@ -2064,7 +2064,7 @@
       "evidence": "",
       "created_at": "2026-11-11T17:06:27+00:00",
       "updated_at": "2026-11-11T17:06:35+00:00",
-      "rank": 4
+      "rank": 5
     },
     {
       "id": "ux-08-scene",
@@ -2109,7 +2109,7 @@
       "evidence": "",
       "created_at": "2026-11-11T17:15:09+00:00",
       "updated_at": "2026-11-11T17:15:09+00:00",
-      "rank": 5
+      "rank": 6
     },
     {
       "id": "ux-09-design-studio-canvas",
@@ -2342,7 +2342,7 @@
       "id": "g1-research",
       "title": "G1: research query persists and reads back (product-finder)",
       "status": "queued",
-      "rank": 1,
+      "rank": 2,
       "write_paths": [
         "Northstar_backend/",
         "northstar-os-ui/src/",
@@ -2353,7 +2353,7 @@
       "id": "g1-design-studio",
       "title": "G1: generate a picture through the UI, persist, read back",
       "status": "queued",
-      "rank": 2,
+      "rank": 3,
       "write_paths": [
         "northstar-os-ui/src/",
         "Northstar_backend/",
@@ -2364,11 +2364,40 @@
       "id": "g1-listings",
       "title": "G1: compose and persist a listing through the UI",
       "status": "queued",
-      "rank": 3,
+      "rank": 4,
       "write_paths": [
         "northstar-os-ui/src/",
         "Northstar_backend/",
         "tests/e2e/"
+      ]
+    },
+    {
+      "id": "canonical-loop-decision",
+      "title": "One canonical loop (director), Tys as operator tool, Vision wired in",
+      "status": "merged",
+      "rank": 0,
+      "evidence": [
+        "reports/ty/canonical_loop_decision.md",
+        "tools/director_vision.py",
+        "scripts/ty_director.py",
+        "tools/director_gaps.py",
+        "Northstar_backend/test_director_vision.py"
+      ]
+    },
+    {
+      "id": "v3-uia-twice",
+      "title": "V3 on the UIA backend twice (9222 skipped), then 24h soak",
+      "status": "queued",
+      "rank": 1,
+      "write_paths": [
+        "reports/ty/",
+        "state/soak.json"
+      ],
+      "blocked_on": "state/vision/PAUSE (owner action); watcher pid 3056 runs it on removal",
+      "evidence": [
+        "tools/vision/v3_gate.py",
+        "tools/vision/v3_then_soak.py",
+        "tools/soak.py"
       ]
     }
   ],
