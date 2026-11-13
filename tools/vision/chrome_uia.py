@@ -242,6 +242,11 @@ class ChromeUIA:
         return False
 
     def _keys(self, sequence: str, *, expect_foreground: bool = True) -> Dict[str, Any]:
+        from .browse_guard import may_browse  # noqa: PLC0415
+
+        allowed, reason = may_browse("uia")
+        if not allowed:
+            return {"ok": False, "refused": True, "reason": reason}
         if expect_foreground and foreground_hwnd() != int(self.hwnd):
             return {"ok": False, "refused": True,
                     "reason": "foreground is not the Chrome window; refusing to type"}
@@ -286,6 +291,13 @@ class ChromeUIA:
         A single-page app keeps one document title, so a title change is not a navigation
         signal. The verified signal is: the title changed **or** the pixels changed.
         """
+        from .browse_guard import may_browse  # noqa: PLC0415
+
+        allowed, reason = may_browse("uia", url)
+        if not allowed:
+            # The owner's pause is a hard stop for this kind of browsing. Returning a refusal
+            # instead of raising keeps every caller's contract, and the reason names the rule.
+            return {"ok": False, "refused": True, "reason": reason}
         verdict = risk.evaluate({"kind": "navigate", "url": url}, url=url)
         if not verdict["allow"]:
             return {"ok": False, "refused": True, **verdict}

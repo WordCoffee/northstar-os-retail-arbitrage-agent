@@ -240,6 +240,19 @@ def main(argv: Optional[List[str]] = None) -> int:
     parser.add_argument("--routes", default="", help="comma-separated service ids")
     parser.add_argument("--out", default="", help="write JSON here instead of stdout")
     args = parser.parse_args(argv)
+    # The lane that opened Chrome Profiles 1 and 4 was this walk, run by the unlock watcher with
+    # no check on the owner's pause. It refuses now, before touching a window, and says so.
+    from tools.vision.browse_guard import may_browse  # noqa: PLC0415
+
+    allowed, reason = may_browse("uia")
+    if not allowed:
+        result = {"ok": False, "state": "refused", "reason": reason,
+                  "walked": 0, "note": "no window was touched"}
+        blob = json.dumps(result, indent=2, sort_keys=False)
+        if args.out:
+            Path(args.out).write_text(blob, encoding="utf-8")
+        print(blob)
+        return 3
     ids = [part.strip() for part in args.routes.split(",") if part.strip()]
     result = walk(ids or None)
     blob = json.dumps(result, indent=2, sort_keys=False)

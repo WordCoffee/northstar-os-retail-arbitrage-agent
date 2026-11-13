@@ -106,9 +106,11 @@ def tick(state: Dict[str, Any]) -> Dict[str, Any]:
         handoff = HANDOFF.read_text(encoding="utf-8", errors="replace")
     except OSError:
         handoff = ""
-    state["restarts"] = _count_markers(handoff, "launcher: director session ended")
+    state["restarts"] = max(0, _count_markers(handoff, "launcher: director session ended")
+                            - int(state.get("restarts_baseline") or 0))
     state["commits"] = git_commits(state["started_at"])
-    state["needs_you_sections"] = owner_interventions()
+    state["needs_you_sections"] = max(
+        0, owner_interventions() - int(state.get("needs_you_baseline") or 0))
     state["vision_paused"] = PAUSE_VISION.exists()
     state["last_sample"] = {"at": now(), **sample,
                             "queue": _queue_depth(),
@@ -198,9 +200,16 @@ def main(argv=None) -> int:
 
     state = _read(STATE, {})
     if not state.get("started_at"):
+        try:
+            handoff_text = HANDOFF.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            handoff_text = ""
         state = {"started_at": now(), "hours": ns.hours, "commits": [], "samples": 0,
                  "restarts": 0, "ram_pauses": 0, "min_free_gb": None,
-                 "needs_you_sections": owner_interventions()}
+                 "restarts_baseline": _count_markers(handoff_text,
+                                                     "launcher: director session ended"),
+                 "needs_you_baseline": owner_interventions(),
+                 "needs_you_sections": 0}
         _write(state)
 
     deadline = (datetime.fromisoformat(state["started_at"]).timestamp()
