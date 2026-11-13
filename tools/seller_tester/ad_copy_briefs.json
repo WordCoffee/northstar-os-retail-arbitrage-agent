@@ -1,0 +1,62 @@
+{
+  "version": 2,
+  "note": "AdPilot's own ad copy is scored here, not borrowed from design-studio's ads path. Each recorded_answer is a fixture of the room's own output shape (HEADLINE:/BODY:/CTA: per variant) because a hosted call is a gated action; the checks are the app's deterministic rules, never a model verdict. AD-006 is a real failure class (the room returned two variants) and is kept in the population rather than dropped.",
+  "service": "adpilot",
+  "ad_copy": [
+    {
+      "id": "AD-001",
+      "brand": "Mogra Organics",
+      "product": "Organic Lion's Mane Mushroom Powder",
+      "facts": ["6 oz", "170 g", "lion's mane"],
+      "headline_cap": 60,
+      "body_cap": 150,
+      "recorded_answer": "HEADLINE: Mogra Organics Lion's Mane Powder, 6 oz\nBODY: Organic lion's mane mushroom powder in a 6 oz pouch. Stir into coffee or tea.\nCTA: Shop Mogra Organics\nHEADLINE: Lion's Mane Mushroom Powder by Mogra Organics\nBODY: A 6 oz pouch of organic lion's mane powder for your morning cup.\nCTA: Add to cart\nHEADLINE: Mogra Organics Daily Lion's Mane, 170 g\nBODY: Organic lion's mane powder, 170 g, ready for coffee, tea or a smoothie.\nCTA: Buy now"
+    },
+    {
+      "id": "AD-002",
+      "brand": "Word Coffee",
+      "product": "Word Coffee For Mom Affirmation Cards",
+      "facts": ["53 cards"],
+      "headline_cap": 60,
+      "body_cap": 150,
+      "recorded_answer": "HEADLINE: Word Coffee For Mom, 53 Affirmation Cards\nBODY: A 53 card deck of daily affirmations, made to sit on a desk or nightstand.\nCTA: Shop Word Coffee\nHEADLINE: Word Coffee Affirmation Cards for Mom\nBODY: 53 cards, one for every morning of the season, in a keepsake box.\nCTA: See the deck\nHEADLINE: For Mom: Word Coffee Daily Affirmations\nBODY: A 53 card set of affirmations from Word Coffee, with a display stand.\nCTA: Gift it"
+    },
+    {
+      "id": "AD-003",
+      "brand": "Mogra Organics",
+      "product": "Organic Shiitake Mushroom Powder",
+      "facts": ["4 oz", "113 g", "shiitake"],
+      "headline_cap": 60,
+      "body_cap": 150,
+      "recorded_answer": "HEADLINE: Mogra Organics Shiitake Powder, 4 oz\nBODY: Organic shiitake mushroom powder, 4 oz, for soups, stocks and sauces.\nCTA: Shop Mogra Organics\nHEADLINE: Organic Shiitake Mushroom Powder, 113 g\nBODY: A 113 g pouch of organic shiitake powder to deepen any broth.\nCTA: Add to cart\nHEADLINE: Mogra Organics Shiitake, 4 oz Pouch\nBODY: Shiitake mushroom powder, 4 oz, ground fine and ready to cook with.\nCTA: Buy now"
+    },
+    {
+      "id": "AD-004",
+      "brand": "Word Coffee",
+      "product": "Word Coffee Modern Woman Mug",
+      "facts": ["11 oz", "ceramic"],
+      "headline_cap": 60,
+      "body_cap": 150,
+      "recorded_answer": "HEADLINE: Word Coffee Modern Woman Ceramic Mug\nBODY: An 11 oz ceramic mug with the Word Coffee mark, made for a long morning.\nCTA: Shop Word Coffee\nHEADLINE: Word Coffee 11 oz Ceramic Mug\nBODY: 11 oz of ceramic, dishwasher safe, with the Word Coffee wordmark.\nCTA: Add to cart\nHEADLINE: The Modern Woman Mug by Word Coffee\nBODY: A ceramic mug for your desk, your kitchen or a gift that gets used.\nCTA: Buy now"
+    },
+    {
+      "id": "AD-005",
+      "brand": "Mogra Organics",
+      "product": "Mogra Organics Lion's Mane Capsules",
+      "facts": ["90 capsules", "500 mg"],
+      "headline_cap": 60,
+      "body_cap": 150,
+      "recorded_answer": "HEADLINE: Mogra Organics Lion's Mane, 90 Capsules\nBODY: 90 capsules of lion's mane, 500 mg each, in a sealed bottle.\nCTA: Shop Mogra Organics\nHEADLINE: Lion's Mane 500 mg Capsules, 90 Count\nBODY: 500 mg per capsule, 90 in the bottle, from Mogra Organics.\nCTA: Add to cart\nHEADLINE: Mogra Organics Daily Lion's Mane Capsules\nBODY: 90 capsules, 500 mg, taken with water alongside your morning routine.\nCTA: Buy now"
+    },
+    {
+      "id": "AD-006",
+      "brand": "Word Coffee",
+      "product": "Word Coffee Gift Set",
+      "facts": ["2 mugs"],
+      "headline_cap": 60,
+      "body_cap": 150,
+      "failure_class": "the room returned two variants instead of three",
+      "recorded_answer": "HEADLINE: Word Coffee Two Mug Gift Set\nBODY: Two Word Coffee mugs boxed together for a gift that gets used daily.\nCTA: Shop Word Coffee\nHEADLINE: Word Coffee Gift Set, 2 Mugs\nBODY: A pair of Word Coffee mugs in a gift box, ready to wrap.\nCTA: Add to cart"
+    }
+  ]
+}

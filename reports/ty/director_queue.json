@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-13T08:46:24+00:00",
+  "updated_at": "2026-11-13T10:12:29+00:00",
   "cycle": 3,
   "unit_in_flight": "",
   "unit_order": [
@@ -2474,14 +2474,23 @@
     {
       "id": "ppc-g2-ad-copy",
       "title": "PPC G2: score adpilot's own ad copy (deterministic checks + claims lint, 5 outputs)",
-      "status": "queued",
+      "status": "merged",
       "rank": 1,
       "write_paths": [
         "tools/seller_tester/copy.py",
         "ty/seller_scores.json",
         "Northstar_backend/test_seller_copy_paths.py"
       ],
-      "acceptance": "adpilot appears in seller_scores.json with a measured pass rate over >=5 outputs; the score comes from adpilot's surface, not design-studio's."
+      "acceptance": "adpilot appears in seller_scores.json with a measured pass rate over >=5 outputs; the score comes from adpilot's surface, not design-studio's.",
+      "evidence": [
+        "tools/seller_tester/ad_copy.py",
+        "tools/seller_tester/ad_copy_briefs.json",
+        "tools/seller_tester/ad_copy_run.py",
+        "Northstar_backend/test_ad_copy_scorer.py",
+        "state/seller/ad_copy_proof.json",
+        "ty/seller_scores.json"
+      ],
+      "note": "adpilot's own ad copy scored on 6 recorded fixtures: 5 passed, mean 98.1, with AD-006 (two variants) kept in the population as a real failure. 9 tests, including a negative control per check."
     }
   ],
   "service_scores": {},

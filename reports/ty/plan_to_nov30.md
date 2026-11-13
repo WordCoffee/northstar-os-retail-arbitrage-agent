@@ -36,7 +36,7 @@ owner action away from being buildable, and nothing else about them is blocked.
 | Nov 14 | quiet window render lands → Design Studio **G1 generation**; Golden Goose G5 verifier | +1 or +2 | 15–16 |
 | Nov 15 | Research G2*: seller briefs + scored outputs on the research surface | +1 | 14–15 |
 | Nov 16 | Research G5 verifier run; Golden Goose final G5 confirmation | 0–1 | 13–15 |
-| Nov 17 | PPC G2: score adpilot's own ad copy (5 outputs, deterministic checks + claims lint) | +1 | 12–14 |
+| Nov 17 | ~~PPC G2~~ **done Nov 13** (6 fixtures, 5 passed, mean 98.1) — the day goes to PPC's G4 badges and the G5 sweep | +1 | 12–14 |
 | Nov 18 | PPC G4: probe-derived badges on the primary action; PPC G5 | +2 | 10–12 |
 | Nov 19 | Design Studio G4 **if the key lands**: compose path end to end | +1 | 9–11 |
 | Nov 20 | Product pictures G1 read-back through the same surface (shared with DS) | 0–1 | 9–11 |
