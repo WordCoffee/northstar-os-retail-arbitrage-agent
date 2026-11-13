@@ -538,3 +538,15 @@ copy, which means it is **not** an off-machine backup yet.
 I cannot do steps 2–3: they need a destination and a passphrase, and both are yours. Nothing is
 blocked by this; the working copy and the local bundle stay as they are until you move it.
 
+## PPC-2. Confirm the ad type the ad-copy caps assume (2026-11-13)
+
+The AdPilot ad-copy score uses **60-character headlines and 150-character bodies**, which I took to
+be **Amazon Sponsored Products** limits. Sponsored Brands and Sponsored Display use different caps
+and different placements, so this is recorded as an assumption (`tools/seller_tester/ad_copy.py`
+→ `ASSUMED_AD_TYPE`, and `tools/seller_tester/ad_copy_briefs.json` → `assumed_ad_type`) rather than
+presented as the product's own rule.
+
+**One action:** confirm the ad type (Sponsored Products, Sponsored Brands, Display, or more than
+one). Then the caps and fixtures change together and the score is re-run. Nothing is blocked: the
+current score (6 fixtures, 5 passed, mean 98.1) is published with the assumption named.
+

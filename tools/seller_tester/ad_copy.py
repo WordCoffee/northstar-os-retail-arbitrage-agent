@@ -34,6 +34,13 @@ from .copy import (  # noqa: F401 - the helpers are shared with the other copy r
     _unsourced_numbers,
 )
 
+#: ASSUMED AD TYPE — the caps in this module (headline 60, body 150) are **Sponsored Products**
+#: limits as the author understood them. Sponsored Brands and Sponsored Display use different caps
+#: and placements, so this is recorded as an assumption and flagged for the owner rather than
+#: presented as the product's own rule. If the owner confirms a different ad type, the caps and the
+#: fixtures change together, and the score is re-run.
+ASSUMED_AD_TYPE = "Sponsored Products"
+
 BRIEFS = Path(__file__).resolve().parent / "ad_copy_briefs.json"
 DEFAULT_HEADLINE_CAP = 60
 DEFAULT_BODY_CAP = 150

@@ -1,0 +1,18 @@
+﻿[dry-run] soak file says it ends at 2026-11-13T18:03:56+00:00; waitingà
+18:03:59 waited 122.1s for the fake soak end
+18:03:56 waiter up
+18:03:56 soak reported ended at 2026-11-13T18:03:56+00:00
+18:03:56 window open; cap 30 minutes
+18:03:56 builders paused (C:\Users\T2Hol\AppData\Local\Temp\quiet_dry_7qrixiom\PAUSE_BUILDERS)
+18:03:57 residents unloaded: ['(dry-run: nothing unloaded)']
+18:03:58 free RAM 3.39 GB, VRAM 15634 MB
+18:03:58 engine: True (0.0s)
+18:03:59 render: ok=True asset=dry-run-asset-0001 1024x1024 in 1.0s
+18:03:59 restore: builders unpaused, ComfyUI stopped if this window started it
+18:03:59 window closed in 2.1s (within the cap)
+
+[dry-run] state    : C:\Users\T2Hol\AppData\Local\Temp\quiet_dry_7qrixiom\quiet_window.json
+[dry-run] report   : written beside the state
+[dry-run] soak end : 2026-11-13T18:03:56+00:00
+[dry-run] render   : {"ok": true, "seconds": 1.0, "dry_run": true, "asset": {"id": "dry-run-asset-0001", "name": "quiet-window-dry-run", "asset_type": "image", "mime_type": "image/png", "width": 1024, "height": 1024, "path": null}}
+[dry-run] in cap   : True (2.1s)

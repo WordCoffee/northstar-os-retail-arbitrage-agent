@@ -26,10 +26,11 @@ import argparse
 import json
 import subprocess
 import sys
+import tempfile
 import time
 import urllib.error
 import urllib.request
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Dict, Optional
 
@@ -161,8 +162,13 @@ def tick(wait: bool) -> Dict[str, Any]:
     ends, and only then does the 30-minute clock start. A cap that included the wait would abandon
     the window before it began, which is what the first version did.
     """
-    state: Dict[str, Any] = {"started_at": now(), "cap_s": CAP_S, "steps": {}}
+    state: Dict[str, Any] = {"started_at": now(), "cap_s": CAP_S, "steps": {}, "log": []}
 
+    def note(line: str) -> None:
+        stamp = datetime.now(timezone.utc).strftime("%H:%M:%S")
+        state["log"].append(f"{stamp} {line}")
+
+    note("waiter up")
     if wait:
         wait_deadline = time.time() + 48 * 3600
         while time.time() < wait_deadline:
@@ -170,18 +176,23 @@ def tick(wait: bool) -> Dict[str, Any]:
                 soak = json.loads(SOAK.read_text(encoding="utf-8"))
             except (OSError, ValueError):
                 soak = {}
-            if soak.get("ended_at"):
-                state["soak_ended_at"] = soak["ended_at"]
+            ended = soak.get("ended_at")
+            if ended:
+                state["soak_ended_at"] = ended
+                note(f"soak reported ended at {ended}")
                 break
+            note("soak still running; checking again in 5 minutes")
             time.sleep(300)
         else:
             state["steps"]["wait"] = {"ok": False,
                                       "reason": "the soak did not end within 48 hours"}
+            note("gave up waiting for the soak")
             return state
 
     started = time.time()
     deadline = started + CAP_S
     state["window_started_at"] = now()
+    note(f"window open; cap {CAP_S // 60} minutes")
 
     def remaining() -> float:
         return max(0.0, deadline - time.time())
@@ -189,42 +200,63 @@ def tick(wait: bool) -> Dict[str, Any]:
     PAUSE_BUILDERS.parent.mkdir(parents=True, exist_ok=True)
     PAUSE_BUILDERS.write_text(f"quiet window {state['started_at']}: one render, builders paused\n",
                               encoding="utf-8")
-    state["steps"]["pause_builders"] = {"ok": True, "path": str(PAUSE_BUILDERS.relative_to(ROOT))}
+    try:
+        shown = str(PAUSE_BUILDERS.relative_to(ROOT))
+    except ValueError:
+        shown = str(PAUSE_BUILDERS)
+    state["steps"]["pause_builders"] = {"ok": True, "path": shown}
+    note(f"builders paused ({shown})")
     state["ram_before"] = ram()
     state["vram_before"] = vram()
 
     try:
         state["steps"]["unload"] = unload_residents()
+        note(f"residents unloaded: {state['steps']['unload'].get('ollama')}")
         state["ram_after_unload"] = ram()
         state["vram_after_unload"] = vram()
+        note(f"free RAM {state['ram_after_unload'].get('free_gb')} GB, "
+             f"VRAM {state['vram_after_unload'].get('free_mb')} MB")
 
         if remaining() < 120:
             state["steps"]["start_comfyui"] = {"ok": False,
                                                "reason": "less than two minutes of the cap left"}
+            note("engine: refused, under two minutes of the cap left")
         else:
             state["steps"]["start_comfyui"] = start_comfyui(
                 timeout_s=int(min(300, remaining() - 60)))
+            note(f"engine: {state['steps']['start_comfyui'].get('ok')} "
+                 f"({state['steps']['start_comfyui'].get('seconds')}s)")
 
         if not state["steps"]["start_comfyui"].get("ok"):
             state["steps"]["render"] = {"ok": False,
                                         "reason": "engine never came up; nothing rendered"}
+            note("render: not attempted")
         elif remaining() < 60:
             state["steps"]["render"] = {"ok": False,
                                         "reason": "the 30-minute cap left no time to render"}
+            note("render: refused, under a minute of the cap left")
         else:
             state["steps"]["render"] = render(
                 "A 6 oz stand-up pouch of organic lion's mane mushroom powder on a plain white "
                 "background, studio lighting, no text",
                 timeout_s=int(remaining() - 30))
+            asset = (state["steps"]["render"].get("asset") or {})
+            note(f"render: ok={state['steps']['render'].get('ok')} "
+                 f"asset={asset.get('id')} {asset.get('width')}x{asset.get('height')} "
+                 f"in {state['steps']['render'].get('seconds')}s")
     except Exception as exc:  # noqa: BLE001 - the window must still restore
         state["steps"]["error"] = f"{type(exc).__name__}: {exc}"
+        note(f"error: {type(exc).__name__}: {exc}")
     finally:
         state["steps"]["restore"] = restore()
+        note("restore: builders unpaused, ComfyUI stopped if this window started it")
         state["ram_after"] = ram()
         state["vram_after"] = vram()
         state["ended_at"] = now()
         state["elapsed_s"] = round(time.time() - started, 1)
         state["within_cap"] = state["elapsed_s"] <= CAP_S
+        note(f"window closed in {state['elapsed_s']}s "
+             f"({'within' if state['within_cap'] else 'OVER'} the cap)")
         STATE.parent.mkdir(parents=True, exist_ok=True)
         STATE.write_text(json.dumps(state, indent=2) + "\n", encoding="utf-8")
         write_report(state)
@@ -281,6 +313,8 @@ def main(argv=None) -> int:
     parser.add_argument("--status", action="store_true")
     parser.add_argument("--now", action="store_true")
     parser.add_argument("--wait", action="store_true")
+    parser.add_argument("--dry-run", action="store_true",
+                        help="fake soak end two minutes away, mocked engine and render, temp state")
     ns = parser.parse_args(argv)
     if ns.status:
         try:
@@ -289,10 +323,74 @@ def main(argv=None) -> int:
             state = {"state": "not run"}
         print(json.dumps(state, indent=2)[:3000])
         return 0
+
+    if ns.dry_run:
+        return _dry_run()
+
     state = tick(wait=ns.wait and not ns.now)
     print(json.dumps({k: v for k, v in state.items() if k != "steps"}, indent=2))
     print("render:", json.dumps(state.get("steps", {}).get("render", {}))[:400])
     return 0
+
+
+def _dry_run() -> int:
+    """Prove the sequence without a GPU: a soak that ends in two minutes, a mocked render.
+
+    Everything that touches the machine for real is redirected into a temp directory, so a dry run
+    cannot pause builders, unload a model or start an engine. The wait is real: the window opens
+    when the fake soak's end time passes, which is what the dry run is demonstrating.
+    """
+    global SOAK, STATE, PAUSE_BUILDERS, start_comfyui, render, unload_residents, restore
+
+    temp = Path(tempfile.mkdtemp(prefix="quiet_dry_"))
+    SOAK = temp / "soak.json"
+    STATE = temp / "quiet_window.json"
+    PAUSE_BUILDERS = temp / "PAUSE_BUILDERS"
+    ends = datetime.now(timezone.utc) + timedelta(minutes=2)
+    SOAK.write_text(json.dumps({"started_at": now(), "hours": 0.034,
+                                "ended_at": ends.isoformat(timespec="seconds")}), encoding="utf-8")
+
+    def fake_unload():
+        return {"ollama": ["(dry-run: nothing unloaded)"], "comfyui_stopped": False,
+                "dry_run": True}
+
+    def fake_start(timeout_s: int = 300):
+        return {"ok": True, "seconds": 0.0, "dry_run": True,
+                "note": "mocked: no engine was started"}
+
+    def fake_render(brief: str, *, timeout_s: int = 1800):
+        time.sleep(1)
+        return {"ok": True, "seconds": 1.0, "dry_run": True,
+                "asset": {"id": "dry-run-asset-0001", "name": "quiet-window-dry-run",
+                          "asset_type": "image", "mime_type": "image/png",
+                          "width": 1024, "height": 1024, "path": None}}
+
+    def fake_restore():
+        PAUSE_BUILDERS.unlink(missing_ok=True)
+        return {"ok": True, "builders_unpaused": True, "comfyui_running": False,
+                "dry_run": True}
+
+    unload_residents, start_comfyui, render, restore = (fake_unload, fake_start, fake_render,
+                                                        fake_restore)
+    # Wait until the fake soak's end passes, so the dry run exercises the wait loop honestly.
+    print(f"[dry-run] soak file says it ends at {ends.isoformat(timespec='seconds')}; waiting…")
+    waited_from = time.time()
+    while datetime.now(timezone.utc) < ends:
+        time.sleep(5)
+
+    state = tick(wait=True)
+    state["dry_run"] = True
+    state.setdefault("log", []).insert(0,
+        f"{datetime.now(timezone.utc).strftime('%H:%M:%S')} waited "
+        f"{round(time.time() - waited_from, 1)}s for the fake soak end")
+    STATE.write_text(json.dumps(state, indent=2) + "\n", encoding="utf-8")
+    print("\n".join(state.get("log") or []))
+    print(f"\n[dry-run] state    : {STATE}")
+    print("[dry-run] report   : written beside the state")
+    print(f"[dry-run] soak end : {state.get('soak_ended_at')}")
+    print(f"[dry-run] render   : {json.dumps(state.get('steps', {}).get('render', {}))[:300]}")
+    print(f"[dry-run] in cap   : {state.get('within_cap')} ({state.get('elapsed_s')}s)")
+    return 0 if state.get("within_cap") else 1
 
 
 if __name__ == "__main__":

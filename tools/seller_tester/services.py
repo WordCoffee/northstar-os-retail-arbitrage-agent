@@ -433,6 +433,32 @@ def _ppc_steps(client: Any, brief: Dict[str, Any], work_dir: Path,
         if bulk.is_file() and hashlib.sha256(bulk.read_bytes()).hexdigest() == f1["checksum"]
         else _bad("bulk_file_on_disk", "the downloaded change file is not on disk intact"))
 
+    # ── the output itself: format, reconciliation, budget ────────────────────
+    # The download being the written bytes is not enough. A file the seller cannot open, that
+    # silently re-typed other rows, or that bids past their cap is a failed deliverable.
+    try:
+        import amazon_file_parsers as _parsers  # noqa: PLC0415
+
+        from . import ppc_output_check as _ppc_check  # noqa: PLC0415
+
+        written = _parsers.parse_upload(str(f1["filename"]), dl.content)
+        source_parsed = _parsers.parse_upload(str(brief.get("filename") or "bulk.xlsx"), content)
+        approved = {int(expect["row_index"]): {"bid": expect["after_bid"]}}
+        max_bid = float(brief.get("max_bid") or 0)
+        checks["output_format_conforms"] = _ppc_check.check_format(
+            written, source_parsed, _parsers.ADS_REQUIRED, min_rows=1)
+        checks["reconciles_with_source"] = _ppc_check.reconcile(
+            source_parsed, written, approved)
+        if max_bid > 0:
+            checks["bids_within_caps"] = _ppc_check.bids_within_caps(written, max_bid=max_bid)
+        else:
+            checks["bids_within_caps"] = _skip(
+                "bids_within_caps",
+                "this brief declares no max_bid, so there is no cap to hold the output to")
+    except Exception as exc:  # noqa: BLE001 - a checker failure is a recorded refusal
+        checks["output_format_conforms"] = _bad(
+            "output_format_conforms", f"the output could not be checked: {type(exc).__name__}: {exc}")
+
     scored = score_checks(checks)
     return {"path": "ppc", "brief_id": brief.get("id"), "artefact": str(bulk),
             "upload_id": uid, "change_file": f1["filename"],

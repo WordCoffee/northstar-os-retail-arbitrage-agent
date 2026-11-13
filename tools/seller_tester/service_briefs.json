@@ -449,7 +449,8 @@
         "before_bid": "1.10",
         "after_bid": "0.90",
         "reason": "raise the bid on the converting term"
-      }
+      },
+      "max_bid": 2.0
     },
     {
       "id": "PPC-002",
@@ -644,7 +645,8 @@
         "before_bid": "1.85",
         "after_bid": "1.20",
         "reason": "cut a discovery bid that spends without converting; the money moves to Body Oil Core"
-      }
+      },
+      "max_bid": 2.5
     },
     {
       "id": "PPC-003",
@@ -769,7 +771,8 @@
         "before_bid": "0.55",
         "after_bid": "0.75",
         "reason": "raise the gift-set term only; the paused ad group keeps its bids untouched"
-      }
+      },
+      "max_bid": 1.75
     },
     {
       "id": "PPC-004",
@@ -908,7 +911,8 @@
         "before_bid": "2.00",
         "after_bid": "1.60",
         "reason": "the pack-size term is at the top of the useful range; bring it back under the target cost per click"
-      }
+      },
+      "max_bid": 3.0
     },
     {
       "id": "PPC-005",
@@ -1061,7 +1065,8 @@
         "before_bid": "0.30",
         "after_bid": "0.45",
         "reason": "the last row in the sheet is the only exact-match long-tail term and it is underbid"
-      }
+      },
+      "max_bid": 2.0
     }
   ],
   "golden_goose": [
