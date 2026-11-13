@@ -156,7 +156,12 @@ export default function CanvasWorkspace({ onNavigateSection }) {
   // ── U8: what Bojo is told about this canvas ──────────────────────────────
   // Published only when the description actually changes: the shell re-renders
   // on every publish, and a keystroke must not re-render the whole dock.
-  const canvasView = useMemo(() => describeCanvas(doc, { selected, assets }), [doc, selected, assets])
+  const canvasView = useMemo(() => {
+    const view = describeCanvas(doc, { selected, assets })
+    // The chat turn carries this view, so Bojo reads the design this tab has open — by id, not by
+    // "whatever was saved most recently in the account".
+    return view ? { ...view, projectId: projectId || undefined } : view
+  }, [doc, selected, assets, projectId])
   const viewKey = useMemo(() => (canvasView ? JSON.stringify(canvasView) : ''), [canvasView])
   const publishCanvas = workspace && workspace.publishCanvas
 

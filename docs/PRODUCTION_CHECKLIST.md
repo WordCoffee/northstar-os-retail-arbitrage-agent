@@ -2,6 +2,14 @@
 
 One line per item; a box is ticked only with a command or a screenshot behind it.
 
+## Pre-launch gate: rotation complete
+
+- [ ] **Rotation complete** — the three committed credentials are rotated and the old ones revoked,
+  the repository is private, and `state/security/keys_rotated.json` exists with no key values in it.
+  Full owner steps: `reports/ty/rotation_runbook.md`. **This is a pre-launch gate only**: no
+  development or staging work waits on it, and `tools/keys_rotated_watch.py` runs the retirement,
+  the gitleaks gate and the promotion dry-run automatically when the marker appears.
+
 ## Model provider and billing must be the product's own (2026-11-13)
 
 - [ ] **The product has its own model provider account, separate from the development key.**

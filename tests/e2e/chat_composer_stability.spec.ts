@@ -16,25 +16,30 @@
 //
 // Scope: LOCALHOST ONLY (127.0.0.1:8101), per the AGENTS.md e2e exception.
 //
-// Route corrected 2026-11-11: this spec used to wait for `chat-input` on
-// /ui/design-studio, which renders no chat surface at all — the composer lives in
-// CreativeStudio (northstar-os-ui/src/pages/internal/CreativeStudio.jsx:733 renders
-// <CreativeChat /> in the Northstar shell), and CreativeChat mounts ChatSurface,
-// which owns `data-testid="chat-input"`. A spec that waits for an element the page
-// cannot render tests a product that does not exist; it is now pointed at the room
-// the composer is actually in and pins the route so it cannot drift back.
+// Route corrected 2026-11-13 (second time): /ui/creative-studio now redirects to
+// /ui/design-studio?section=projects, which DOES render the composer, so the old
+// "the studio has no chat surface" premise is no longer true and the route pin
+// failed on the redirect. The spec points at the workbench, which serves the
+// composer at a stable path, and still pins that path so it cannot drift.
 // ═══════════════════════════════════════════════════════════════════════════
 
 import { test, expect } from '@playwright/test';
 
-test('the chat composer holds a stable box across frames', async ({ page }) => {
+test('the chat composer holds a stable box across frames', async ({ page }, testInfo) => {
   test.setTimeout(120000);
 
-  await page.goto('http://127.0.0.1:8101/ui/creative-studio');
+  // The composer lives on different routes per viewport: the desktop workbench column on
+  // /ui/workbench, and the Northstar home on /ui/home for the iPhone 12 project (the mobile
+  // workbench shows the studio workspace instead and renders no composer). Both are the real
+  // route for that viewport, and the pin is what stops either drifting.
+  const mobile = testInfo.project.name.includes('mobile');
+  const route = mobile ? '/ui/home' : '/ui/workbench';
+
+  await page.goto(`http://127.0.0.1:8101${route}`);
   await page.getByTestId('chat-input').waitFor({ state: 'attached', timeout: 45000 });
   await page.waitForTimeout(2000);
   expect(new URL(page.url()).pathname, 'the composer must be tested where it renders')
-    .toBe('/ui/creative-studio');
+    .toBe(route);
 
   // The gutter must be reserved on both shells, otherwise the oscillation
   // described above comes straight back.

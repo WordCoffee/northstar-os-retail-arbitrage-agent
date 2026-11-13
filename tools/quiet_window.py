@@ -41,6 +41,8 @@ REPORTS = ROOT / "reports" / "ty"
 OLLAMA = "http://127.0.0.1:11434"
 COMFY = "http://127.0.0.1:8188"
 API = "http://127.0.0.1:8000"
+#: Hard cap for the whole window: a hung render must not leave builders paused overnight.
+CAP_S = 30 * 60
 
 
 def now() -> str:
@@ -133,12 +135,13 @@ def start_comfyui(timeout_s: int = 300) -> Dict[str, Any]:
     return {"ok": False, "reason": f"ComfyUI did not answer /system_stats within {timeout_s}s"}
 
 
-def render(brief: str) -> Dict[str, Any]:
+def render(brief: str, *, timeout_s: int = 1800) -> Dict[str, Any]:
     body = {"kind": "image", "brief": brief, "width": 1024, "height": 1024,
             "text_safe": True, "tier": "draft"}
     started = time.time()
     try:
-        payload = _json(f"{API}/api/design-studio/generate", method="POST", body=body, timeout=1800)
+        payload = _json(f"{API}/api/design-studio/generate", method="POST", body=body,
+                        timeout=max(30, int(timeout_s)))
     except urllib.error.HTTPError as exc:
         detail = exc.read().decode("utf-8", "replace")[:400]
         return {"ok": False, "status": exc.code, "reason": detail}
@@ -152,9 +155,19 @@ def render(brief: str) -> Dict[str, Any]:
 
 
 def tick(wait: bool) -> Dict[str, Any]:
-    state: Dict[str, Any] = {"started_at": now(), "steps": {}}
+    """One quiet window. Hard-capped at 30 minutes, with restore in a `finally`.
+
+    The cap is a promise to the machine: if a render hangs, the window ends and the builders come
+    back. That is why `restore()` is in the `finally` and not at the end of the happy path.
+    """
+    started = time.time()
+    deadline = started + CAP_S
+    state: Dict[str, Any] = {"started_at": now(), "cap_s": CAP_S, "steps": {}}
+
+    def remaining() -> float:
+        return max(0.0, deadline - time.time())
+
     if wait:
-        deadline = time.time() + 30 * 3600
         while time.time() < deadline:
             try:
                 soak = json.loads(SOAK.read_text(encoding="utf-8"))
@@ -165,7 +178,7 @@ def tick(wait: bool) -> Dict[str, Any]:
                 break
             time.sleep(300)
         else:
-            state["steps"]["wait"] = {"ok": False, "reason": "soak did not end within 30h"}
+            state["steps"]["wait"] = {"ok": False, "reason": "soak did not end within the cap"}
             return state
 
     PAUSE_BUILDERS.parent.mkdir(parents=True, exist_ok=True)
@@ -175,25 +188,41 @@ def tick(wait: bool) -> Dict[str, Any]:
     state["ram_before"] = ram()
     state["vram_before"] = vram()
 
-    state["steps"]["unload"] = unload_residents()
-    state["ram_after_unload"] = ram()
-    state["vram_after_unload"] = vram()
+    try:
+        state["steps"]["unload"] = unload_residents()
+        state["ram_after_unload"] = ram()
+        state["vram_after_unload"] = vram()
 
-    state["steps"]["start_comfyui"] = start_comfyui()
-    if state["steps"]["start_comfyui"].get("ok"):
-        state["steps"]["render"] = render(
-            "A 6 oz stand-up pouch of organic lion's mane mushroom powder on a plain white "
-            "background, studio lighting, no text")
-    else:
-        state["steps"]["render"] = {"ok": False, "reason": "engine never came up"}
+        if remaining() < 120:
+            state["steps"]["start_comfyui"] = {"ok": False,
+                                               "reason": "less than two minutes of the cap left"}
+        else:
+            state["steps"]["start_comfyui"] = start_comfyui(
+                timeout_s=int(min(300, remaining() - 60)))
 
-    state["steps"]["restore"] = restore()
-    state["ram_after"] = ram()
-    state["vram_after"] = vram()
-    state["ended_at"] = now()
-    STATE.parent.mkdir(parents=True, exist_ok=True)
-    STATE.write_text(json.dumps(state, indent=2) + "\n", encoding="utf-8")
-    write_report(state)
+        if not state["steps"]["start_comfyui"].get("ok"):
+            state["steps"]["render"] = {"ok": False,
+                                        "reason": "engine never came up; nothing rendered"}
+        elif remaining() < 60:
+            state["steps"]["render"] = {"ok": False,
+                                        "reason": "the 30-minute cap left no time to render"}
+        else:
+            state["steps"]["render"] = render(
+                "A 6 oz stand-up pouch of organic lion's mane mushroom powder on a plain white "
+                "background, studio lighting, no text",
+                timeout_s=int(remaining() - 30))
+    except Exception as exc:  # noqa: BLE001 - the window must still restore
+        state["steps"]["error"] = f"{type(exc).__name__}: {exc}"
+    finally:
+        state["steps"]["restore"] = restore()
+        state["ram_after"] = ram()
+        state["vram_after"] = vram()
+        state["ended_at"] = now()
+        state["elapsed_s"] = round(time.time() - started, 1)
+        state["within_cap"] = state["elapsed_s"] <= CAP_S
+        STATE.parent.mkdir(parents=True, exist_ok=True)
+        STATE.write_text(json.dumps(state, indent=2) + "\n", encoding="utf-8")
+        write_report(state)
     return state
 
 

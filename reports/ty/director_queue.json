@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-13T06:05:56+00:00",
+  "updated_at": "2026-11-13T08:45:12+00:00",
   "cycle": 3,
   "unit_in_flight": "",
   "unit_order": [
@@ -1086,7 +1086,7 @@
       "id": "fix-chat-composer-spec",
       "unit": "U",
       "title": "chat_composer_stability waits for chat-input on /ui/design-studio, which renders no chat surface",
-      "status": "queued",
+      "status": "merged",
       "owner": "",
       "write_paths": [
         "tests/e2e/chat_composer_stability.spec.ts"
@@ -1098,10 +1098,13 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": [
+        "tests/e2e/chat_composer_stability.spec.ts"
+      ],
       "created_at": "2026-11-11T17:43:51+00:00",
       "updated_at": "2026-11-11T17:43:51+00:00",
-      "rank": 7
+      "rank": 7,
+      "note": "The spec's premise had changed twice: /ui/creative-studio now redirects to the studio, which does render a composer; and mobile renders the composer on /ui/home while desktop uses /ui/workbench. The spec now targets the real route per viewport and pins both. 2 passed."
     },
     {
       "id": "fix-golden-goose-scoring",
@@ -2097,7 +2100,7 @@
       "id": "retire-goldengoose-alias",
       "unit": "U",
       "title": "goldengoose and golden-goose are one surface counted twice: mark the legacy route an alias, or retire it",
-      "status": "queued",
+      "status": "merged",
       "owner": "",
       "write_paths": [
         "ty/service_registry.json",
@@ -2111,10 +2114,15 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": [
+        "ty/services.json",
+        "ty/service_registry.json",
+        "northstar-os-ui/src/App.jsx"
+      ],
       "created_at": "2026-11-11T17:15:09+00:00",
       "updated_at": "2026-11-11T17:15:09+00:00",
-      "rank": 4
+      "rank": 4,
+      "note": "Verified retired: one service id (golden-goose), 28 services = registry count 28, and /goldengoose is a redirect to /golden-goose. No duplicate is counted anywhere."
     },
     {
       "id": "ux-09-design-studio-canvas",
@@ -2429,14 +2437,31 @@
     {
       "id": "g1-design-studio-persist",
       "title": "Server-side project store for canvas designs (POST/GET /api/design-studio/projects)",
-      "status": "queued",
+      "status": "merged",
       "rank": 1,
       "write_paths": [
         "Northstar_backend/design_studio_api.py",
         "northstar-os-ui/src/pages/internal/design-studio/",
         "tests/e2e/"
       ],
-      "acceptance": "A canvas design autosaves to the server, survives a reload in a fresh browser context and is readable by id; the asset rail lists it."
+      "acceptance": "A canvas design autosaves to the server, survives a reload in a fresh browser context and is readable by id; the asset rail lists it.",
+      "evidence": [
+        "tests/e2e/g1_design_studio_persist.spec.ts",
+        "northstar-os-ui/src/pages/internal/design-studio/CanvasWorkspace.jsx",
+        "Northstar_backend/bojo_tools/design.py"
+      ],
+      "note": "Canvas autosaves to a server project (POST then PATCH) and ?project=<id> restores it; 2 e2e passed desktop+mobile in a clean browser context. Bojo reads the open design, scoped to the session org and the tab's project."
+    },
+    {
+      "id": "quiet-window-cap",
+      "title": "Quiet window: 30-minute hard cap and restore in a finally block",
+      "status": "merged",
+      "rank": 0,
+      "evidence": [
+        "tools/quiet_window.py",
+        "reports/ty/exit_code_1_after_commit.md"
+      ],
+      "note": "CAP_S = 1800; each step gets the remaining time; restore() and the state/report write happen in finally, so a hung render cannot leave builders paused."
     }
   ],
   "service_scores": {},

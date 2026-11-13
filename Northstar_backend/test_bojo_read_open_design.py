@@ -52,7 +52,7 @@ def _project(metadata):
 def test_the_open_design_is_read_with_layers_and_text(monkeypatch):
     row = _project(json.dumps({"design": DESIGN}))
     monkeypatch.setattr(data_layer, "get_northstar_db", lambda: _DB([row]))
-    out = design_tools.read_open_design()
+    out = design_tools.read_open_design(account_id="org-t2")
     assert out["ok"] is True
     assert out["data"]["project_id"] == "proj-1"
     assert out["data"]["size"] == {"width": 1080, "height": 1080}
@@ -65,22 +65,22 @@ def test_the_open_design_is_read_with_layers_and_text(monkeypatch):
 def test_metadata_may_arrive_as_a_dict(monkeypatch):
     row = _project({"design": DESIGN})
     monkeypatch.setattr(data_layer, "get_northstar_db", lambda: _DB([row]))
-    out = design_tools.read_open_design()
+    out = design_tools.read_open_design(account_id="org-t2")
     assert out["ok"] is True
     assert out["data"]["text_count"] == 1
 
 
 def test_nothing_saved_is_a_named_refusal_not_an_empty_design(monkeypatch):
     monkeypatch.setattr(data_layer, "get_northstar_db", lambda: _DB([]))
-    out = design_tools.read_open_design()
+    out = design_tools.read_open_design(account_id="org-t2")
     assert out["ok"] is False
-    assert "nothing open to read" in out["reason"]
+    assert "no canvas design" in out["reason"]
 
 
 def test_a_broken_metadata_blob_does_not_raise(monkeypatch):
     row = _project("{not json")
     monkeypatch.setattr(data_layer, "get_northstar_db", lambda: _DB([row]))
-    out = design_tools.read_open_design()
+    out = design_tools.read_open_design(account_id="org-t2")
     assert out["ok"] is True  # the project exists; only the payload was unreadable
     assert out["data"]["layers"] == []
 

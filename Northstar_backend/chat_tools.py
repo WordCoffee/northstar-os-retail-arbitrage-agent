@@ -1851,9 +1851,26 @@ def _bojo_handler(domain_tool: str):
     """
 
     def handler(args, ctx=None) -> dict:  # noqa: ANN001 - the chat spec's own signature
+        import inspect  # noqa: PLC0415
+
         import bojo_tools_registry  # noqa: PLC0415
 
         payload = dict(args or {})
+        # Session-scoped context, never a tool argument: the account that owns the data and the
+        # project the open tab is showing. Injected only when the handler declares the parameter,
+        # so a tool cannot silently lose its scope and read the wrong tenant.
+        if isinstance(ctx, dict):
+            target = bojo_tools_registry.tools().get(domain_tool)
+            try:
+                params = inspect.signature(target).parameters if target else {}
+            except (TypeError, ValueError):
+                params = {}
+            if "account_id" in params:
+                # The session wins, always. A tool argument naming another account is ignored.
+                payload["account_id"] = ctx.get("account_id")
+            if "project_id" in params and payload.get("project_id") is None:
+                canvas = ctx.get("canvas") if isinstance(ctx.get("canvas"), dict) else {}
+                payload["project_id"] = ctx.get("project_id") or canvas.get("projectId")
         result = bojo_tools_registry.call(domain_tool, **payload)
         if not isinstance(result, dict):
             return {"ok": False, "summary": f"{domain_tool} returned no result",
@@ -1961,10 +1978,18 @@ _BOJO_SPECS = {
     "read_open_design": {
         "description": (
             "Read the design the seller has open in Design Studio: its name, canvas size, layer "
-            "list and the text it carries. The newest saved canvas project is the open one, and the "
-            "answer names the project id it read."
+            "list and the text it carries. It reads the open tab's project when the tab has "
+            "published one, otherwise the newest canvas design in the signed-in organisation; it "
+            "never reads another account's design."
         ),
-        "parameters": {"type": "object", "properties": {}, "required": []},
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "project_id": {"type": "string", "maxLength": 80,
+                               "description": "the design's id; omit to read the open tab's"},
+            },
+            "required": [],
+        },
     },
     "track_keywords": {
         "description": (
