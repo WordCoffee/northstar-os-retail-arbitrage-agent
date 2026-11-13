@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-13T08:45:12+00:00",
+  "updated_at": "2026-11-13T08:46:24+00:00",
   "cycle": 3,
   "unit_in_flight": "",
   "unit_order": [
@@ -1041,7 +1041,7 @@
       "id": "fix-product-finder-wiring",
       "unit": "U",
       "title": "product-finder declares scan_products with zero backend actions; towncrier declares no tool at all",
-      "status": "queued",
+      "status": "merged",
       "owner": "",
       "write_paths": [
         "ty/services.json",
@@ -1055,16 +1055,20 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": [
+        "ty/service_registry.json",
+        "Northstar_backend/bojo_tools/sourcing_extra.py"
+      ],
       "created_at": "2026-11-11T17:43:51+00:00",
       "updated_at": "2026-11-11T17:43:51+00:00",
-      "rank": 5
+      "rank": 5,
+      "note": "Verified resolved: the registry now records a real action for product-finder (GET /api/products/finder, main.py:2901) and scan_products answers with its own reason ('no candidates ... no live request made') instead of refusing for lack of a backend."
     },
     {
       "id": "fix-seller-offer-caption",
       "unit": "D9",
       "title": "seller scorer for copy services: offerchisel, socialpulse, towncrier have output nobody can score",
-      "status": "queued",
+      "status": "merged",
       "owner": "",
       "write_paths": [
         "tools/seller_tester/",
@@ -1077,10 +1081,14 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": [
+        "tools/seller_tester/copy.py",
+        "ty/seller_scores.json"
+      ],
       "created_at": "2026-11-11T17:43:51+00:00",
       "updated_at": "2026-11-11T17:43:51+00:00",
-      "rank": 6
+      "rank": 6,
+      "note": "Verified resolved: copy.py exposes run_offer_copy / run_social_caption, and seller_scores.json carries offerchisel, socialpulse and towncrier. The remaining copy gap is adpilot, which has no seller score yet - that is PPC's G2, tracked on its own."
     },
     {
       "id": "fix-chat-composer-spec",
@@ -1126,7 +1134,7 @@
       "evidence": "",
       "created_at": "2026-11-11T17:43:51+00:00",
       "updated_at": "2026-11-11T17:43:51+00:00",
-      "rank": 8
+      "rank": 4
     },
     {
       "id": "fix-beta-complete",
@@ -2462,6 +2470,18 @@
         "reports/ty/exit_code_1_after_commit.md"
       ],
       "note": "CAP_S = 1800; each step gets the remaining time; restore() and the state/report write happen in finally, so a hung render cannot leave builders paused."
+    },
+    {
+      "id": "ppc-g2-ad-copy",
+      "title": "PPC G2: score adpilot's own ad copy (deterministic checks + claims lint, 5 outputs)",
+      "status": "queued",
+      "rank": 1,
+      "write_paths": [
+        "tools/seller_tester/copy.py",
+        "ty/seller_scores.json",
+        "Northstar_backend/test_seller_copy_paths.py"
+      ],
+      "acceptance": "adpilot appears in seller_scores.json with a measured pass rate over >=5 outputs; the score comes from adpilot's surface, not design-studio's."
     }
   ],
   "service_scores": {},
