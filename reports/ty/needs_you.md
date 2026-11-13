@@ -518,3 +518,23 @@ Contract, exactly as `docs/HOSTED_REASONING.md` records it:
 
 Until then Listings G1 is **blocked on this one action**, and every other queue item continues.
 
+## SEC-2. Take a copy of the staging bundle off this machine — encrypt it first (2026-11-13)
+
+The bundle is a full copy of `staging` at `b238a076` and it contains the two chat exports, so it
+carries the same three credentials as the public history. It sits on the same disk as the working
+copy, which means it is **not** an off-machine backup yet.
+
+**Exact action, in this order:**
+
+1. Encrypt it on this machine (7-Zip is installed; AES-256 with a passphrase you keep offline):
+   `& "C:\Program Files\7-Zip\7z.exe" a -t7z -mhe=on -mx=9 "C:\Users\T2Hol\Northstar-backups\staging-20261113.7z" "C:\Users\T2Hol\Northstar-backups\bundles\staging-20261113.bundle"`
+2. Copy the `.7z` to a second location that is not this disk (external drive, or your own private
+   cloud). Do **not** put it in a public repo or a shared folder.
+3. Verify by decrypting once on the destination and running
+   `git bundle verify` — it must say *"records a complete history"*.
+4. Record the SHA256 of the `.7z` somewhere only you can read (the bundle's own hash is in
+   `reports/ty/staging_bundle_20261113.md`).
+
+I cannot do steps 2–3: they need a destination and a passphrase, and both are yours. Nothing is
+blocked by this; the working copy and the local bundle stay as they are until you move it.
+

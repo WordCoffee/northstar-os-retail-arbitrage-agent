@@ -1958,6 +1958,14 @@ _BOJO_SPECS = {
             "required": [],
         },
     },
+    "read_open_design": {
+        "description": (
+            "Read the design the seller has open in Design Studio: its name, canvas size, layer "
+            "list and the text it carries. The newest saved canvas project is the open one, and the "
+            "answer names the project id it read."
+        ),
+        "parameters": {"type": "object", "properties": {}, "required": []},
+    },
     "track_keywords": {
         "description": (
             "Score a listing's keyword coverage against a brand SEO profile. Reports coverage "

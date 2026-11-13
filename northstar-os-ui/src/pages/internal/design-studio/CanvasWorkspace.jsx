@@ -48,6 +48,7 @@ import { useWorkspaceOptional } from '../../../shell/WorkspaceTabs.jsx'
 const ZOOM_MIN = 0.2
 const ZOOM_MAX = 4
 const AUTOSAVE_MS = 400
+const PROJECT_KEY = 'ns-design-project-id'
 
 function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)) }
 
@@ -135,6 +136,13 @@ export default function CanvasWorkspace({ onNavigateSection }) {
   const [saveState, setSaveState] = useState(
     restored ? `Restored from ${new Date(restored.savedAt).toLocaleString()}` : 'Not saved yet',
   )
+  // Server-side project id. The canvas used to autosave only into localStorage, so a design was
+  // readable back on this browser and nowhere else. The id is kept in storage so a reload reuses
+  // the same project row instead of creating a new one every time.
+  const [projectId, setProjectId] = useState(() => {
+    try { return localStorage.getItem(PROJECT_KEY) || '' } catch { return '' }
+  })
+  const projectIdRef = useRef(projectId)
 
   const type = useMemo(() => resolveContentType(doc.contentType), [doc.contentType])
   const selectedLayer = doc.layers.find((l) => l.id === selected) || null
@@ -180,13 +188,43 @@ export default function CanvasWorkspace({ onNavigateSection }) {
     return () => { cancelled = true }
   }, [assets])
 
+  // ── server persistence ───────────────────────────────────────────────────
+  const saveToServer = useCallback(async (serialised, name) => {
+    const id = projectIdRef.current
+    const url = id ? `/api/design-studio/projects/${id}` : '/api/design-studio/projects'
+    const body = id
+      ? { metadata: { design: serialised, savedAt: Date.now() } }
+      : { name: name || 'Canvas design', section: 'canvas',
+          metadata: { design: serialised, savedAt: Date.now() } }
+    try {
+      const res = await fetch(url, {
+        method: id ? 'PATCH' : 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      })
+      if (!res.ok) return
+      const payload = await res.json()
+      const data = payload && payload.contract === 'bff/v1' ? payload.data : payload
+      const newId = (data && data.project && data.project.id) || (data && data.id)
+      if (newId && !projectIdRef.current) {
+        projectIdRef.current = newId
+        try { localStorage.setItem(PROJECT_KEY, newId) } catch { /* storage is optional */ }
+        setProjectId(newId)
+      }
+    } catch {
+      /* offline or refused: the local autosave already happened */
+    }
+  }, [])
+
   // ── autosave ─────────────────────────────────────────────────────────────
   useEffect(() => {
     if (!dirtyRef.current) return undefined
     const t = setTimeout(() => {
       const { ok, oversized } = assetsWithinBudget(assets)
+      const serialised = serialiseDesign(doc, assets)
       try {
-        localStorage.setItem(DESIGN_STORE_KEY, serialiseDesign(doc, assets))
+        localStorage.setItem(DESIGN_STORE_KEY, serialised)
         dirtyRef.current = false
         setSaveState(ok
           ? `Saved ${new Date().toLocaleTimeString()}`
@@ -194,9 +232,42 @@ export default function CanvasWorkspace({ onNavigateSection }) {
       } catch {
         setSaveState('Autosave unavailable in this browser')
       }
+      // The local write is the fast path; the server write is what makes the design readable
+      // anywhere else. It is best-effort: a failed server save must not lose the local one.
+      void saveToServer(serialised, doc.name)
     }, AUTOSAVE_MS)
     return () => clearTimeout(t)
-  }, [doc, assets])
+  }, [doc, assets, saveToServer])
+
+  // Opening /ui/design-studio?project=<id> restores that design from the server.
+  useEffect(() => {
+    let alive = true
+    const want = new URLSearchParams(window.location.search).get('project')
+    if (!want) return undefined
+    ;(async () => {
+      try {
+        const res = await fetch(`/api/design-studio/projects/${want}`, { credentials: 'include' })
+        if (!res.ok) return
+        const payload = await res.json()
+        const data = payload && payload.contract === 'bff/v1' ? payload.data : payload
+        const meta = data && data.project ? data.project.metadata : null
+        const parsedMeta = typeof meta === 'string' ? JSON.parse(meta) : meta
+        const raw = parsedMeta && parsedMeta.design
+        if (!raw) return
+        const parsed = parseDesign(typeof raw === 'string' ? raw : JSON.stringify(raw), { ttlMs: 0 })
+        if (!parsed || !alive) return
+        setHistory(initHistory(parsed.doc))
+        setAssets(parsed.assets || [])
+        projectIdRef.current = want
+        try { localStorage.setItem(PROJECT_KEY, want) } catch { /* storage is optional */ }
+        setProjectId(want)
+        setSaveState(`Loaded from the server ${new Date().toLocaleTimeString()}`)
+      } catch {
+        /* a missing project leaves the local design in place */
+      }
+    })()
+    return () => { alive = false }
+  }, [])
 
   // ── document mutation ────────────────────────────────────────────────────
   const applyDoc = useCallback((next) => {
@@ -867,6 +938,9 @@ export default function CanvasWorkspace({ onNavigateSection }) {
 
       <div className="cw-status" data-testid="cw-status">
         <span data-testid="cw-save-state">{saveState}</span>
+        <span data-testid="ds-project-id" style={{ marginLeft: 8, opacity: 0.7 }}>
+          {projectId ? `project ${projectId.slice(0, 8)}` : 'not saved to the server yet'}
+        </span>
         <span className="cw-status-sep">·</span>
         <span>{doc.layers.length} layer{doc.layers.length === 1 ? '' : 's'}</span>
         <span className="cw-status-sep">·</span>
