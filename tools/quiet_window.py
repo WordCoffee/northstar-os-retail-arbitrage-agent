@@ -157,18 +157,15 @@ def render(brief: str, *, timeout_s: int = 1800) -> Dict[str, Any]:
 def tick(wait: bool) -> Dict[str, Any]:
     """One quiet window. Hard-capped at 30 minutes, with restore in a `finally`.
 
-    The cap is a promise to the machine: if a render hangs, the window ends and the builders come
-    back. That is why `restore()` is in the `finally` and not at the end of the happy path.
+    The cap covers the **window**, not the waiting: the waiter may sit for a day until the soak
+    ends, and only then does the 30-minute clock start. A cap that included the wait would abandon
+    the window before it began, which is what the first version did.
     """
-    started = time.time()
-    deadline = started + CAP_S
     state: Dict[str, Any] = {"started_at": now(), "cap_s": CAP_S, "steps": {}}
 
-    def remaining() -> float:
-        return max(0.0, deadline - time.time())
-
     if wait:
-        while time.time() < deadline:
+        wait_deadline = time.time() + 48 * 3600
+        while time.time() < wait_deadline:
             try:
                 soak = json.loads(SOAK.read_text(encoding="utf-8"))
             except (OSError, ValueError):
@@ -178,8 +175,16 @@ def tick(wait: bool) -> Dict[str, Any]:
                 break
             time.sleep(300)
         else:
-            state["steps"]["wait"] = {"ok": False, "reason": "soak did not end within the cap"}
+            state["steps"]["wait"] = {"ok": False,
+                                      "reason": "the soak did not end within 48 hours"}
             return state
+
+    started = time.time()
+    deadline = started + CAP_S
+    state["window_started_at"] = now()
+
+    def remaining() -> float:
+        return max(0.0, deadline - time.time())
 
     PAUSE_BUILDERS.parent.mkdir(parents=True, exist_ok=True)
     PAUSE_BUILDERS.write_text(f"quiet window {state['started_at']}: one render, builders paused\n",
