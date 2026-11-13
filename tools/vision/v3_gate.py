@@ -89,13 +89,29 @@ def main(argv=None) -> int:
 
     reason = blocked()
     if ns.status:
-        print(json.dumps({"at": _now(), "would_run": not reason, "blocked_reason": reason},
-                         indent=2))
+        from tools.vision.profile6 import recorded  # noqa: PLC0415
+
+        print(json.dumps({"at": _now(), "would_run": not reason, "blocked_reason": reason,
+                          "profile6_window": recorded()}, indent=2))
         return 0 if not reason else EXIT_BLOCKED
     if reason:
         print(json.dumps({"at": _now(), "state": "refused", "reason": reason,
                           "note": "V3 was not run; a refusal is a result and is recorded as one"},
                          indent=2))
+        return EXIT_BLOCKED
+
+    # A dedicated window first, recorded by HWND: parity must not type into whatever Chrome window
+    # happens to be focused (the 2026-11-11 Profiles 1/4 incident).
+    from tools.vision import profile6  # noqa: PLC0415
+
+    window = profile6.launch(ns.base)
+    if not window.get("ok"):
+        payload = {"at": _now(), "state": "refused", "reason": window.get("reason"),
+                   "note": "no Profile 6 window could be recorded, so V3 did not start"}
+        OUT_DIR.mkdir(parents=True, exist_ok=True)
+        out = OUT_DIR / f"v3_uia_{datetime.now().strftime('%Y%m%d')}.json"
+        out.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+        print(json.dumps(payload, indent=2))
         return EXIT_BLOCKED
 
     runs = [run_once(1, base=ns.base), run_once(2, base=ns.base)]

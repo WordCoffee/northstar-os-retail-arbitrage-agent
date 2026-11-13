@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-13T05:51:47+00:00",
+  "updated_at": "2026-11-13T06:01:41+00:00",
   "cycle": 3,
   "unit_in_flight": "",
   "unit_order": [
@@ -1647,7 +1647,7 @@
       "id": "sel-02-design-studio",
       "unit": "D12",
       "title": "Design Studio output quality: move the 16.7 mean on real product pictures",
-      "status": "reported",
+      "status": "on-staging",
       "owner": "",
       "write_paths": [
         "tools/seller_tester",
@@ -1664,7 +1664,8 @@
       "evidence": "[\"reports/ty/sel02_design_studio.md\", \"reports/ty/sel02_explained.md\"]",
       "created_at": "2026-11-08T21:21:18+00:00",
       "updated_at": "2026-11-11T02:43:16+00:00",
-      "rank": 4
+      "rank": 4,
+      "note": " Marked on-staging 2026-11-13: the work is in the staging history, not on main (main is 1,385 commits behind and the gitleaks hook still refuses the public-history findings). Evidence: reports/ty/reported_jobs_status.json"
     },
     {
       "id": "sel-refs-designs",
@@ -1720,7 +1721,7 @@
       "id": "sel-03-aplus",
       "unit": "D12",
       "title": "A+ content modules: briefs, real renders, scored like a seller would",
-      "status": "reported",
+      "status": "on-staging",
       "owner": "",
       "write_paths": [
         "ty/seller_briefs.json",
@@ -1736,7 +1737,8 @@
       "evidence": "[\"reports/ty/sel03_aplus.md\"]",
       "created_at": "2026-11-08T21:21:18+00:00",
       "updated_at": "2026-11-11T02:43:16+00:00",
-      "rank": 5
+      "rank": 5,
+      "note": " Marked on-staging 2026-11-13: the work is in the staging history, not on main (main is 1,385 commits behind and the gitleaks hook still refuses the public-history findings). Evidence: reports/ty/reported_jobs_status.json"
     },
     {
       "id": "sel-04-packaging",
@@ -1937,7 +1939,7 @@
       "id": "ux-06-shell",
       "unit": "U",
       "title": "Shell chrome on every service route: top nav, side nav and workspace outlet, with the DevBanner in the shell rather than only on sign-in",
-      "status": "reported",
+      "status": "on-staging",
       "owner": "",
       "write_paths": [
         "northstar-os-ui/src/shell",
@@ -1953,7 +1955,8 @@
       "evidence": "[\"reports/ty/ux06_shell.md\"]",
       "created_at": "2026-11-09T03:16:49+00:00",
       "updated_at": "2026-11-11T02:43:16+00:00",
-      "rank": 7
+      "rank": 7,
+      "note": " Marked on-staging 2026-11-13: the work is in the staging history, not on main (main is 1,385 commits behind and the gitleaks hook still refuses the public-history findings). Evidence: reports/ty/reported_jobs_status.json"
     },
     {
       "id": "fix-bundle-units",
@@ -2027,7 +2030,7 @@
       "id": "ux-07-tabs",
       "unit": "U",
       "title": "Workspace tab bar: tabs keep state across switching and the shell tells Bojo which tab is open and a summary of its state",
-      "status": "reported",
+      "status": "on-staging",
       "owner": "",
       "write_paths": [
         "northstar-os-ui/src/shell"
@@ -2042,7 +2045,8 @@
       "evidence": "[\"reports/ty/ux07_tabs.md\", \"reports/ty/ux07b_tab_context.md\"]",
       "created_at": "2026-11-09T03:16:49+00:00",
       "updated_at": "2026-11-11T02:43:16+00:00",
-      "rank": 8
+      "rank": 8,
+      "note": " Marked on-staging 2026-11-13: the work is in the staging history, not on main (main is 1,385 commits behind and the gitleaks hook still refuses the public-history findings). Evidence: reports/ty/reported_jobs_status.json"
     },
     {
       "id": "fix-po006-stray-dashes",
@@ -2070,7 +2074,7 @@
       "id": "ux-08-scene",
       "unit": "U",
       "title": "Scene engine wired to the shell: exactly one scene loaded per service, unloaded on switch, still-frame fallback when WebGL is unavailable, reduced-motion honoured",
-      "status": "reported",
+      "status": "on-staging",
       "owner": "",
       "write_paths": [
         "northstar-os-ui/src/scenes",
@@ -2086,7 +2090,8 @@
       "evidence": "[\"reports/ty/ux08_scene.md\"]",
       "created_at": "2026-11-09T03:16:49+00:00",
       "updated_at": "2026-11-11T02:43:16+00:00",
-      "rank": 9
+      "rank": 9,
+      "note": " Marked on-staging 2026-11-13: the work is in the staging history, not on main (main is 1,385 commits behind and the gitleaks hook still refuses the public-history findings). Evidence: reports/ty/reported_jobs_status.json"
     },
     {
       "id": "retire-goldengoose-alias",
@@ -2115,7 +2120,7 @@
       "id": "ux-09-design-studio-canvas",
       "unit": "U",
       "title": "Design Studio canvas workspace: content-type selector, tool rail, canvas with text/image/shapes/layers/snap/zoom/undo/autosave, properties and layers panel, PNG+PDF export, wired to the asset dashboard and dielines",
-      "status": "reported",
+      "status": "on-staging",
       "owner": "",
       "write_paths": [
         "northstar-os-ui/src/rooms",
@@ -2132,13 +2137,14 @@
       "evidence": "[\"reports/ty/ux09_canvas.md\"]",
       "created_at": "2026-11-09T03:35:26+00:00",
       "updated_at": "2026-11-11T02:43:16+00:00",
-      "rank": 10
+      "rank": 10,
+      "note": " Marked on-staging 2026-11-13: the work is in the staging history, not on main (main is 1,385 commits behind and the gitleaks hook still refuses the public-history findings). Evidence: reports/ty/reported_jobs_status.json"
     },
     {
       "id": "tool-scan-products",
       "unit": "D12",
       "title": "Implement the scan_products handler so Product Finder can drive the catalogue from Bojo",
-      "status": "reported",
+      "status": "on-staging",
       "owner": "",
       "write_paths": [
         "Northstar_backend"
@@ -2153,7 +2159,8 @@
       "evidence": "[\"reports/ty/reg03_handlers_built.md\"]",
       "created_at": "2026-11-09T06:40:09+00:00",
       "updated_at": "2026-11-11T02:43:16+00:00",
-      "rank": 11
+      "rank": 11,
+      "note": " Marked on-staging 2026-11-13: the work is in the staging history, not on main (main is 1,385 commits behind and the gitleaks hook still refuses the public-history findings). Evidence: reports/ty/reported_jobs_status.json"
     },
     {
       "id": "block5-production-hardening",
@@ -2182,7 +2189,7 @@
       "id": "tool-compose-listing",
       "unit": "D12",
       "title": "Implement the compose_listing handler so ListingForge can compose a listing from Bojo",
-      "status": "reported",
+      "status": "on-staging",
       "owner": "",
       "write_paths": [
         "Northstar_backend"
@@ -2197,13 +2204,14 @@
       "evidence": "[\"reports/ty/reg03_handlers_built.md\"]",
       "created_at": "2026-11-09T06:40:09+00:00",
       "updated_at": "2026-11-11T02:43:16+00:00",
-      "rank": 12
+      "rank": 12,
+      "note": " Marked on-staging 2026-11-13: the work is in the staging history, not on main (main is 1,385 commits behind and the gitleaks hook still refuses the public-history findings). Evidence: reports/ty/reported_jobs_status.json"
     },
     {
       "id": "tool-build-dieline",
       "unit": "D12",
       "title": "Implement the build_dieline handler so Design Studio can produce a dieline from Bojo",
-      "status": "reported",
+      "status": "on-staging",
       "owner": "",
       "write_paths": [
         "Northstar_backend"
@@ -2218,7 +2226,8 @@
       "evidence": "[\"reports/ty/reg03_handlers_built.md\"]",
       "created_at": "2026-11-09T06:40:09+00:00",
       "updated_at": "2026-11-11T02:43:16+00:00",
-      "rank": 13
+      "rank": 13,
+      "note": " Marked on-staging 2026-11-13: the work is in the staging history, not on main (main is 1,385 commits behind and the gitleaks hook still refuses the public-history findings). Evidence: reports/ty/reported_jobs_status.json"
     },
     {
       "id": "block7-verification",
@@ -2246,7 +2255,7 @@
       "id": "tool-track-keywords",
       "unit": "D12",
       "title": "Implement the track_keywords handler so Keyword Tracker can track from Bojo",
-      "status": "reported",
+      "status": "on-staging",
       "owner": "",
       "write_paths": [
         "Northstar_backend"
@@ -2261,13 +2270,14 @@
       "evidence": "[\"reports/ty/reg03_handlers_built.md\"]",
       "created_at": "2026-11-09T06:40:09+00:00",
       "updated_at": "2026-11-11T02:43:16+00:00",
-      "rank": 14
+      "rank": 14,
+      "note": " Marked on-staging 2026-11-13: the work is in the staging history, not on main (main is 1,385 commits behind and the gitleaks hook still refuses the public-history findings). Evidence: reports/ty/reported_jobs_status.json"
     },
     {
       "id": "tool-watch-competitor",
       "unit": "D12",
       "title": "Implement the watch_competitor handler so Competitor Monitor can watch from Bojo",
-      "status": "reported",
+      "status": "on-staging",
       "owner": "",
       "write_paths": [
         "Northstar_backend"
@@ -2282,13 +2292,14 @@
       "evidence": "[\"reports/ty/reg03_handlers_built.md\"]",
       "created_at": "2026-11-09T06:40:09+00:00",
       "updated_at": "2026-11-11T02:43:16+00:00",
-      "rank": 15
+      "rank": 15,
+      "note": " Marked on-staging 2026-11-13: the work is in the staging history, not on main (main is 1,385 commits behind and the gitleaks hook still refuses the public-history findings). Evidence: reports/ty/reported_jobs_status.json"
     },
     {
       "id": "tool-margin-report",
       "unit": "D12",
       "title": "Implement the margin_report handler so Profitability can report from Bojo",
-      "status": "reported",
+      "status": "on-staging",
       "owner": "",
       "write_paths": [
         "Northstar_backend"
@@ -2303,13 +2314,14 @@
       "evidence": "[\"reports/ty/reg03_handlers_built.md\"]",
       "created_at": "2026-11-09T06:40:09+00:00",
       "updated_at": "2026-11-11T02:43:16+00:00",
-      "rank": 16
+      "rank": 16,
+      "note": " Marked on-staging 2026-11-13: the work is in the staging history, not on main (main is 1,385 commits behind and the gitleaks hook still refuses the public-history findings). Evidence: reports/ty/reported_jobs_status.json"
     },
     {
       "id": "tool-plan-campaign",
       "unit": "D12",
       "title": "Implement the plan_campaign handler so AdPilot can plan from Bojo",
-      "status": "reported",
+      "status": "on-staging",
       "owner": "",
       "write_paths": [
         "Northstar_backend"
@@ -2324,7 +2336,8 @@
       "evidence": "[\"reports/ty/reg03_handlers_built.md\"]",
       "created_at": "2026-11-09T06:40:09+00:00",
       "updated_at": "2026-11-11T02:43:16+00:00",
-      "rank": 17
+      "rank": 17,
+      "note": " Marked on-staging 2026-11-13: the work is in the staging history, not on main (main is 1,385 commits behind and the gitleaks hook still refuses the public-history findings). Evidence: reports/ty/reported_jobs_status.json"
     },
     {
       "id": "g1-golden-goose",

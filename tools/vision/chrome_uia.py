@@ -243,10 +243,16 @@ class ChromeUIA:
 
     def _keys(self, sequence: str, *, expect_foreground: bool = True) -> Dict[str, Any]:
         from .browse_guard import may_browse  # noqa: PLC0415
+        from .profile6 import check_foreground  # noqa: PLC0415
 
         allowed, reason = may_browse("uia")
         if not allowed:
             return {"ok": False, "refused": True, "reason": reason}
+        # One window, recorded. A decoy Chrome window is a different HWND, so it fails here even
+        # though it has the same process name and looks identical.
+        allowed_window, window_reason = check_foreground(int(self.hwnd))
+        if not allowed_window:
+            return {"ok": False, "refused": True, "reason": window_reason}
         if expect_foreground and foreground_hwnd() != int(self.hwnd):
             return {"ok": False, "refused": True,
                     "reason": "foreground is not the Chrome window; refusing to type"}

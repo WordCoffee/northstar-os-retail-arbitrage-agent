@@ -1028,7 +1028,7 @@ python tools/ty_unlock_checks.py
 
 It runs the live walk over every route, applies it to the registry, then runs V3 (ten-task parity
 twice) and V9 (dogfood), and refuses by name while the desktop is locked — which it is right now
-(`foreground is 'Windows Default Lock Screen'`). `--status` answers the question without running
+(`foreground is [title redacted]`). `--status` answers the question without running
 anything.
 
 ## In flight

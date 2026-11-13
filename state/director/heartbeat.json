@@ -1,0 +1,152 @@
+{
+  "at": "2026-11-13T05:42:47+00:00",
+  "state": "blocked",
+  "pid": 13816,
+  "red": false,
+  "tokens_today": 0,
+  "token_cap": 3000000,
+  "cap_reached": false,
+  "cloud_workers": 0,
+  "caps": {
+    "cloud_workers": 4,
+    "local_heavy": 1,
+    "source": "D1 measured: 4 concurrent `opencode run` sessions all succeeded (see reports/ty/director_probe.md)",
+    "gpu": {
+      "gpu": "NVIDIA GeForce RTX 5080 Laptop GPU",
+      "total_mb": 16303,
+      "free_idle_mb": 16003,
+      "role_budgets_gb": {
+        "bojo": 3.5,
+        "router": 3.5,
+        "coder": 7.0,
+        "vision": 6.5,
+        "gui_grounding": 6.5,
+        "embeddings": 2.5,
+        "image_flux": 12.0,
+        "image_t2i": 12.0
+      },
+      "target_frac": [
+        0.8,
+        0.9
+      ],
+      "ceiling_frac": 0.92,
+      "reserve_gb": 1.0,
+      "ram_floor_gb": 2.0,
+      "manager": "tools/gpu_budget.py"
+    },
+    "ollama": {
+      "device": "GPU (CUDA0)",
+      "measured": "2026-11-07",
+      "reason": "OLLAMA_LLM_LIBRARY=cpu and OLLAMA_NUM_GPU=0 were pinned in the User scope; bojo:latest also baked PARAMETER num_gpu 0. Pins cleared, Bojo rebuilt as bojo:latest (old one quarantined as bojo:cpu-quarantine). Discovery now: library=CUDA compute=12.0 name=CUDA0.",
+      "measured_roles": {
+        "bojo": {
+          "model": "bojo:latest",
+          "processor": "100% GPU",
+          "vram_gb": 3.07,
+          "ram_free_gb": 6.2
+        },
+        "coder": {
+          "model": "qwen3:8b",
+          "processor": "100% GPU",
+          "vram_gb": 6.63,
+          "ram_free_gb": 6.2
+        },
+        "vision": {
+          "model": "qwen2.5vl:7b",
+          "processor": "100% GPU",
+          "vram_gb": 7.41,
+          "ram_free_gb": 6.41
+        },
+        "embeddings": {
+          "model": "qwen3-embedding:0.6b",
+          "processor": "100% GPU",
+          "vram_gb": 2.08,
+          "ram_free_gb": 6.55
+        }
+      },
+      "idle": "15.63 GB VRAM free, 7.23 GB RAM free",
+      "concurrency_rule": "OLLAMA_MAX_LOADED_MODELS=1 remains: bojo+vision together measure 10.48 GB, but a two-model soak must pass before raising it."
+    },
+    "vision_dependencies": {
+      "installed": [
+        "PIL"
+      ],
+      "missing": [
+        "mss",
+        "dxcam",
+        "uiautomation",
+        "comtypes",
+        "pywinauto",
+        "pyautogui",
+        "pynput"
+      ],
+      "owner": "D6 installs them (pre-approved) and logs each in provenance.csv"
+    },
+    "report": "reports/ty/d7_gpu_diagnosis.md",
+    "vision": {
+      "model": "llava:7b",
+      "why": "measured: qwen2.5vl:7b and moondream are degenerate on this box; llava returns valid JSON naming the correct app",
+      "vram_gb": 5.19,
+      "device": "100% GPU",
+      "companion_rule": "COMPANIONS[vision]=bojo (embeddings evicted to give the encoder working memory)",
+      "frame_max_width": 1280,
+      "report": "reports/ty/d7_vision_benchmark.md"
+    }
+  },
+  "disk_free_gb": 170.46,
+  "queue": {
+    "units_pending": 0,
+    "next": null,
+    "jobs": 103,
+    "cycle": 3
+  },
+  "ram": {
+    "at": "2026-11-13T05:42:48+00:00",
+    "free_gb": 2.58,
+    "max_builders": 4,
+    "paused": false,
+    "reason": "free RAM 2.58 GB >= 2.0 GB: up to 4 builders",
+    "readings": {
+      "psutil_gb": 2.61,
+      "win32_gb": 2.58
+    },
+    "disagreement": false,
+    "disagreement_pct": 1.1,
+    "who": "ty_director:heartbeat",
+    "event": "status",
+    "daily_min": {
+      "date": "2026-11-12",
+      "at": "2026-11-13T05:42:48+00:00",
+      "min_gb": 2.14,
+      "samples": 8
+    }
+  },
+  "gpu_lock": {},
+  "pause": true,
+  "stop": false,
+  "replan": {
+    "needed": false,
+    "open_jobs": 6
+  },
+  "stream": {
+    "last_type": "step_finish",
+    "error": null,
+    "bytes": 16885691,
+    "lines": 32
+  },
+  "vision": {
+    "at": "2026-11-13T05:42:48+00:00",
+    "pause": true,
+    "allowed": false,
+    "blocked_reason": "state/vision/PAUSE is present: the owner has paused browser work",
+    "foreground_process": "[title redacted]",
+    "last_probe_at": "2026-11-13T05:41:12+00:00",
+    "last_probe_age_s": 96.3,
+    "fresh": true,
+    "last_state": "refused",
+    "rendered": null,
+    "total": null,
+    "shell_routes": []
+  },
+  "reason": "PAUSE file present"
+}

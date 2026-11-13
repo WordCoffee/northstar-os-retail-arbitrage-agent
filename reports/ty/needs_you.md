@@ -463,3 +463,58 @@ rmdir /s /q "%LOCALAPPDATA%\Temp\pytest-of-T2Hol"
 ```
 
 After that the flag is optional. Nothing else in the queue depends on it.
+
+## LIST-1. The composer key: which service, what it costs, and the exact steps (2026-11-13)
+
+Asked for by the launch gate for **Listings** (G4). `compose_listing` and the other hosted-reasoning
+calls refuse today because the credential is absent. **I have not entered, created or read any
+credential; this is the one action, in full.**
+
+### Which service it is for
+
+The key is for **OpenCode Go** — the hosted-reasoning provider behind these services, not "Amazon"
+and not a marketplace API:
+
+| service | what uses the key |
+|---|---|
+| **ListingForge / Listings** (`compose_listing`) | composes a listing draft from supplied facts |
+| AdPilot (ad-copy proposals) | proposes ad copy from supplied product facts |
+| Spreadsheet Lab | hosted analysis of an uploaded sheet |
+| AutothinK | reasoning runs |
+
+Contract, exactly as `docs/HOSTED_REASONING.md` records it:
+
+| item | value |
+|---|---|
+| credential env var | `OPENCODE_GO_API_KEY` |
+| enable flag | `OPENCODE_GO_ENABLED=1` |
+| base URL | `https://opencode.ai/zen/go/v1` |
+| provider id | `opencode-go` |
+| model ids | bare (e.g. `step-5-preview-free`, `deepseek-v4.1-flash`) |
+
+### What it costs
+
+- The configured default for non-creative work is **`step-5-preview-free`**, which this repo records
+  as **Free** (proven with a real completion, 2026-10-08). On that model the composer path costs
+  **$0** while OpenCode Go keeps it free.
+- Any model beyond the free one is billed by the provider. **I will not quote a number I cannot
+  verify from this machine** — the provider's pricing page is the only source, and reading it is a
+  purchase-adjacent action I do not take. If you enable the key and want a paid model, set the
+  per-run budget yourself; the app records spend but does not spend on its own.
+
+### Exact setup steps (yours to run)
+
+1. Create/sign in to an **OpenCode Go** account and generate an API key for the *Go* surface
+   (not the generic pay-as-you-go route — they bill differently and the free models are refused
+   there).
+2. Put it in the repo `.env` as one line: `OPENCODE_GO_API_KEY=<your key>` — **do not paste it in
+   chat, and do not write it into any file under `reports/`.**
+3. Add `OPENCODE_GO_ENABLED=1` to the same `.env`.
+4. Restart the backend through `scripts/launch_alpha.ps1 -Restart` (a bare uvicorn loses the env;
+   that is a recorded incident, not a preference).
+5. Tell me it is set. I will then run the Listings G1 path — compose a listing through the UI,
+   confirm it persists, and read it back — and report the result. I will never print the key.
+6. When you are done testing, remove the line and restart; the gate returns to refusing by name.
+
+Until then Listings G1 is **blocked on this one action**, and every other queue item continues.
+

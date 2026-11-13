@@ -90,21 +90,26 @@ def foreground() -> Dict[str, Any]:
 
 
 def blocked_reason() -> Optional[str]:
-    """Why the eyes may not act right now, or None when they may."""
+    """Why the eyes may not act right now, or None when they may.
+
+    The message never carries the window title. A title can be a private tab, a customer's name or
+    a mailbox — the heartbeat is written to a file that outlives the moment, so it records the
+    process name and the verdict only.
+    """
     if PAUSE.exists():
         return "state/vision/PAUSE is present: the owner has paused browser work"
     window = foreground()
     title = str(window.get("title") or "")
     process = str(window.get("process") or window.get("process_name") or "")
     if "lock" in process.lower() or "lock screen" in title.lower():
-        return f"desktop is locked (foreground {title!r} / {process!r})"
+        return f"desktop is locked (process {process or 'unknown'})"
     if window.get("error"):
         return f"foreground could not be read: {window['error']}"
     return None
 
 
 def status() -> Dict[str, Any]:
-    """Read-only. This is what a heartbeat calls; it never acts."""
+    """Read-only. This is what a heartbeat calls; it never acts and never records a title."""
     state = _read(STATE, {})
     probe_at = state.get("at")
     age = None
@@ -113,12 +118,16 @@ def status() -> Dict[str, Any]:
             age = round(time.time() - datetime.fromisoformat(probe_at).timestamp(), 1)
         except (TypeError, ValueError):
             age = None
+    reason = blocked_reason()
+    window = foreground()
     return {
         "at": _now(),
         "pause": PAUSE.exists(),
-        "allowed": blocked_reason() is None,
-        "blocked_reason": blocked_reason(),
-        "foreground": foreground().get("title"),
+        "allowed": reason is None,
+        "blocked": reason is not None,
+        "blocked_reason": reason,
+        # process name only; the title is deliberately not read out
+        "foreground_process": (window.get("process") or "") or None,
         "last_probe_at": probe_at,
         "last_probe_age_s": age,
         "fresh": bool(age is not None and age < FRESH_S),
