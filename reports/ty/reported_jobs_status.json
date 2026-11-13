@@ -1,0 +1,95 @@
+{
+  "branches": {
+    "staging": "abba11e82da6",
+    "main": "ef9cad1dfdc9",
+    "origin/main": "61a023cac04c"
+  },
+  "reported": [
+    {
+      "id": "sel-02-design-studio",
+      "tags": [],
+      "commits": [],
+      "on": []
+    },
+    {
+      "id": "sel-03-aplus",
+      "tags": [],
+      "commits": [],
+      "on": []
+    },
+    {
+      "id": "ux-06-shell",
+      "tags": [],
+      "commits": [],
+      "on": []
+    },
+    {
+      "id": "ux-07-tabs",
+      "tags": [],
+      "commits": [],
+      "on": []
+    },
+    {
+      "id": "ux-08-scene",
+      "tags": [],
+      "commits": [
+        "3cc68689 merge ty/ux-08-scene"
+      ],
+      "on": [
+        "staging @ 3cc68689"
+      ]
+    },
+    {
+      "id": "ux-09-design-studio-canvas",
+      "tags": [],
+      "commits": [
+        "1eb093c4 merge ty/ux-09-design-studio-canvas"
+      ],
+      "on": [
+        "staging @ 1eb093c4"
+      ]
+    },
+    {
+      "id": "tool-scan-products",
+      "tags": [],
+      "commits": [],
+      "on": []
+    },
+    {
+      "id": "tool-compose-listing",
+      "tags": [],
+      "commits": [],
+      "on": []
+    },
+    {
+      "id": "tool-build-dieline",
+      "tags": [],
+      "commits": [],
+      "on": []
+    },
+    {
+      "id": "tool-track-keywords",
+      "tags": [],
+      "commits": [],
+      "on": []
+    },
+    {
+      "id": "tool-watch-competitor",
+      "tags": [],
+      "commits": [],
+      "on": []
+    },
+    {
+      "id": "tool-margin-report",
+      "tags": [],
+      "commits": [],
+      "on": []
+    },
+    {
+      "id": "tool-plan-campaign",
+      "tags": [],
+      "commits": [],
+      "on": []
+    }
+  ]
+}

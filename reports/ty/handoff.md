@@ -903,6 +903,24 @@ are true. No bar was changed. `fix-label-conform` is rank 1.
 39 tuning, disjoint image split. **Depth is thin — 1 to 3 reviewed images per category** — and is
 rank 5 (`reference-depth`). Neck Nirvana stays unscorable.
 
+## SOAK + GUARD + G1 RESEARCH, 2026-11-13
+
+- **Soak started now, decoupled from V3.** `state/soak.json` began 2026-11-13T05:51:47+00:00 for 24 h: merged units,
+  restarts (delta from a baseline, not the 248 historical lines), minimum free RAM with the
+  governor's verdict, and `needs_you` sections. V3 stays in the queue as **blocked** and never holds
+  a worker slot.
+- **The lane that opened Profiles 1 and 4, named:** `tools/unlock_watch.py` →
+  `tools/ty_unlock_checks.py` → `tools/registry/vision_walk.py` → `tools/vision/chrome_uia.py`. It
+  fired at 09:16:21Z and 09:36:36Z on 2026-11-11 and typed the route list into whichever Chrome
+  window held focus. Guard: `tools/vision/browse_guard.py` — while PAUSE exists, only headless
+  Playwright on loopback may browse; UIA, CDP and headed Playwright are refused, and `vision_walk`
+  exits 3 with "no window was touched". 8 tests.
+- **G1 research done:** `/api/products/research` persists one record per ASIN
+  (`research_store.py`), Product Finder saves and reloads it, 2 e2e (desktop + iPhone 12) and 7 store
+  tests. Research gates 2 → 3.
+- **Next:** `g1-design-studio` (needs the GPU render lane) and `g1-listings` (needs the composer key,
+  owner-gated), then the six fix units.
+
 ## DECISION, 2026-11-13 — one canonical loop, Vision wired into it
 
 `reports/ty/canonical_loop_decision.md` (one page) settles it:

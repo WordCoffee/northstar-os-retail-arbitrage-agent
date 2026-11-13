@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-13T05:43:05+00:00",
+  "updated_at": "2026-11-13T05:51:47+00:00",
   "cycle": 3,
   "unit_in_flight": "",
   "unit_order": [
@@ -2341,13 +2341,20 @@
     {
       "id": "g1-research",
       "title": "G1: research query persists and reads back (product-finder)",
-      "status": "queued",
+      "status": "merged",
       "rank": 1,
       "write_paths": [
         "Northstar_backend/",
         "northstar-os-ui/src/",
         "tests/e2e/"
-      ]
+      ],
+      "evidence": [
+        "Northstar_backend/research_store.py",
+        "Northstar_backend/test_research_store.py",
+        "tests/e2e/g1_research_persist.spec.ts",
+        "northstar-os-ui/src/pages/internal/ProductFinder.jsx"
+      ],
+      "note": "POST/GET/DELETE /api/products/research persists one record per ASIN; the page saves and reloads it. 2 e2e passed desktop+mobile, 7 store tests. Gates for research: 2 -> 3."
     },
     {
       "id": "g1-design-studio",
