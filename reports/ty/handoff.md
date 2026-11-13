@@ -903,6 +903,28 @@ are true. No bar was changed. `fix-label-conform` is rank 1.
 39 tuning, disjoint image split. **Depth is thin — 1 to 3 reviewed images per category** — and is
 rank 5 (`reference-depth`). Neck Nirvana stays unscorable.
 
+## PERSISTENCE + BOJO + QUIET WINDOW, 2026-11-13
+
+- **G1 Design Studio, persistence half is proven.** The canvas now saves to the studio's own project
+  store (`POST /projects` first save, `PATCH /projects/{id}` after) and `?project=<id>` restores it
+  from the server. `g1_design_studio_persist.spec.ts` edits the canvas, reads the row through the
+  API, then opens it in a **fresh browser context** and asserts the design came back — 2 passed
+  (desktop + iPhone 12). The *generation* half stays blocked on free RAM + a ComfyUI start.
+- **Bojo can read the open design.** `bojo_tools/design.py` → `read_open_design`: newest canvas
+  project, its size, layer list, text, and the project id it read. Offered by the chat surface; 5
+  tests; answers "nothing open to read" rather than an empty design.
+- **Quiet window armed.** `tools/quiet_window.py --wait` (pid 18476): on the soak's `ended_at` it
+  pauses builders, records RAM/VRAM, unloads every Ollama resident + ComfyUI, starts one ComfyUI,
+  renders one 1024² image through `/api/design-studio/generate`, restores, and writes
+  `reports/ty/quiet_window_<stamp>.md`.
+- **Owner items:** `needs_you` SEC-2 (encrypt the bundle with 7-Zip AES-256 and take it off the
+  machine), and `docs/PRODUCTION_CHECKLIST.md` now requires the product's **own** model provider and
+  billing, separate from the development key.
+- **Digest 2026-11-13** carries the core-six launch table: 0 of 6 launch-ready, 17 days left.
+
+Test count for the touched areas: **48 passed** (bojo-tool, director-vision, redaction, profile6,
+research store, stage guard) plus the 2 e2e.
+
 ## SOAK + GUARD + G1 RESEARCH, 2026-11-13
 
 - **Soak started now, decoupled from V3.** `state/soak.json` began 2026-11-13T05:51:47+00:00 for 24 h: merged units,
