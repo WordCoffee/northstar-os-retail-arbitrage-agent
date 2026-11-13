@@ -259,7 +259,12 @@ def tick(wait: bool) -> Dict[str, Any]:
              f"({'within' if state['within_cap'] else 'OVER'} the cap)")
         STATE.parent.mkdir(parents=True, exist_ok=True)
         STATE.write_text(json.dumps(state, indent=2) + "\n", encoding="utf-8")
-        write_report(state)
+        # A dry run writes its report beside its temp state, never into reports/ty where a reader
+        # could mistake a mocked render for a real quiet window.
+        if state.get("dry_run"):
+            write_report(state, directory=STATE.parent)
+        else:
+            write_report(state)
     return state
 
 
@@ -274,7 +279,7 @@ def restore() -> Dict[str, Any]:
             "comfyui_running": _reachable(f"{COMFY}/system_stats")}
 
 
-def write_report(state: Dict[str, Any]) -> Path:
+def write_report(state: Dict[str, Any], *, directory: Optional[Path] = None) -> Path:
     render_step = (state.get("steps") or {}).get("render") or {}
     asset = render_step.get("asset") or {}
     lines = [
@@ -303,7 +308,10 @@ def write_report(state: Dict[str, Any]) -> Path:
     if not render_step.get("ok"):
         lines += ["## Why the render did not produce an asset", "",
                   f"```\n{str(render_step.get('reason') or render_step)[:1200]}\n```", ""]
-    path = REPORTS / f"quiet_window_{datetime.now().strftime('%Y%m%d_%H%M')}.md"
+    target = Path(directory) if directory else REPORTS
+    target.mkdir(parents=True, exist_ok=True)
+    prefix = "quiet_window_dryrun" if state.get("dry_run") else "quiet_window"
+    path = target / f"{prefix}_{datetime.now().strftime('%Y%m%d_%H%M')}.md"
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
     return path
 
