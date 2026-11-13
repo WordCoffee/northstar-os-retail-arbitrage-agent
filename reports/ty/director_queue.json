@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-13T06:01:41+00:00",
+  "updated_at": "2026-11-13T06:05:56+00:00",
   "cycle": 3,
   "unit_in_flight": "",
   "unit_order": [
@@ -1058,7 +1058,7 @@
       "evidence": "",
       "created_at": "2026-11-11T17:43:51+00:00",
       "updated_at": "2026-11-11T17:43:51+00:00",
-      "rank": 6
+      "rank": 5
     },
     {
       "id": "fix-seller-offer-caption",
@@ -1080,7 +1080,7 @@
       "evidence": "",
       "created_at": "2026-11-11T17:43:51+00:00",
       "updated_at": "2026-11-11T17:43:51+00:00",
-      "rank": 7
+      "rank": 6
     },
     {
       "id": "fix-chat-composer-spec",
@@ -1101,7 +1101,7 @@
       "evidence": "",
       "created_at": "2026-11-11T17:43:51+00:00",
       "updated_at": "2026-11-11T17:43:51+00:00",
-      "rank": 8
+      "rank": 7
     },
     {
       "id": "fix-golden-goose-scoring",
@@ -1123,7 +1123,7 @@
       "evidence": "",
       "created_at": "2026-11-11T17:43:51+00:00",
       "updated_at": "2026-11-11T17:43:51+00:00",
-      "rank": 9
+      "rank": 8
     },
     {
       "id": "fix-beta-complete",
@@ -2068,7 +2068,7 @@
       "evidence": "",
       "created_at": "2026-11-11T17:06:27+00:00",
       "updated_at": "2026-11-11T17:06:35+00:00",
-      "rank": 4
+      "rank": 3
     },
     {
       "id": "ux-08-scene",
@@ -2114,7 +2114,7 @@
       "evidence": "",
       "created_at": "2026-11-11T17:15:09+00:00",
       "updated_at": "2026-11-11T17:15:09+00:00",
-      "rank": 5
+      "rank": 4
     },
     {
       "id": "ux-09-design-studio-canvas",
@@ -2372,19 +2372,24 @@
     {
       "id": "g1-design-studio",
       "title": "G1: generate a picture through the UI, persist, read back",
-      "status": "queued",
+      "status": "blocked",
       "rank": 2,
       "write_paths": [
         "northstar-os-ui/src/",
         "Northstar_backend/",
         "tests/e2e/"
-      ]
+      ],
+      "blocked_on": "render lane: ComfyUI unreachable + 3.03 GB free RAM against a 3.0 GB floor",
+      "evidence": [
+        "reports/ty/g1_design_studio_status.md"
+      ],
+      "note": "Measured refusal, not an attempt. Unblock: free ~1.5 GB RAM, tools/start_comfyui.ps1."
     },
     {
       "id": "g1-listings",
       "title": "G1: compose and persist a listing through the UI",
       "status": "queued",
-      "rank": 3,
+      "rank": 2,
       "write_paths": [
         "northstar-os-ui/src/",
         "Northstar_backend/",
@@ -2420,6 +2425,18 @@
         "tools/soak.py"
       ],
       "note": "Kept in the queue as a blocked item. It is measured separately from the launch work: the soak runs now, V3 runs when the owner removes PAUSE, and no other job waits on it."
+    },
+    {
+      "id": "g1-design-studio-persist",
+      "title": "Server-side project store for canvas designs (POST/GET /api/design-studio/projects)",
+      "status": "queued",
+      "rank": 1,
+      "write_paths": [
+        "Northstar_backend/design_studio_api.py",
+        "northstar-os-ui/src/pages/internal/design-studio/",
+        "tests/e2e/"
+      ],
+      "acceptance": "A canvas design autosaves to the server, survives a reload in a fresh browser context and is readable by id; the asset rail lists it."
     }
   ],
   "service_scores": {},
