@@ -137,3 +137,17 @@ def test_the_spec_is_written_from_the_measurement(world):
     assert "Scores are measured, never asserted" in text
     assert "At the bar today: **0 of 2**" in text
     assert "Repo-wide findings (not charged to any service)" in text
+
+
+def test_json_writes_and_prints_the_score_map(world):
+    """--json changes the printed output only; the documented write still happens."""
+    assert S.main(["--json"]) == 0
+    assert S.SCORES.exists()
+    assert S.SPEC.exists()
+
+
+def test_no_write_measures_without_touching_the_files(world):
+    """The measurement-only command the docstring promised, without breaking --json."""
+    assert S.main(["--no-write"]) == 0
+    assert not S.SCORES.exists()
+    assert not S.SPEC.exists()

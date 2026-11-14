@@ -12,7 +12,8 @@ scores. Rubric scenarios are tagged `backed` (an artefact exercises it) or `assu
 (nobody has proved it yet) exactly as PATCH 1 item 1 requires.
 
     python tools/scorecards.py                 # measure + write the spec
-    python tools/scorecards.py --json          # measurement only
+    python tools/scorecards.py --json          # same write, print only the score map
+    python tools/scorecards.py --no-write      # measurement only; neither file is touched
 """
 from __future__ import annotations
 
@@ -464,13 +465,18 @@ def render(result: Dict[str, Any]) -> str:
 
 def main(argv: Optional[List[str]] = None) -> int:
     parser = argparse.ArgumentParser(description="Service scorecards")
-    parser.add_argument("--json", action="store_true")
+    parser.add_argument("--json", action="store_true",
+                        help="print only the score map; both files are still written")
+    parser.add_argument("--no-write", action="store_true",
+                        help="measure and print without touching ty/scorecards.json or "
+                             "ty/TARGET_SPEC.md")
     ns = parser.parse_args(argv)
 
     result = measure()
-    SCORES.parent.mkdir(parents=True, exist_ok=True)
-    SCORES.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
-    SPEC.write_text(render(result), encoding="utf-8")
+    if not ns.no_write:
+        SCORES.parent.mkdir(parents=True, exist_ok=True)
+        SCORES.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
+        SPEC.write_text(render(result), encoding="utf-8")
     if ns.json:
         print(json.dumps({row["id"]: row["score"] for row in result["services"]},
                          indent=2))

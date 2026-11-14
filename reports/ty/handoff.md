@@ -38,7 +38,10 @@ Report: `reports/ty/scorecard_refresh_20261113.md`.
 
 **Filed, not fixed:** `tools/scorecards.py --json` is documented "measurement only" but writes
 both files (lines 472–473) — queued as `fix-scorecards-json-write` at rank 3. It is how this
-refresh was accidentally applied before the diff was taken.
+refresh was accidentally applied before the diff was taken. **Closed in the follow-up unit:**
+`--json` still writes and now says so (an existing workflow depends on it) and `--no-write` is
+the measurement-only command; 59 scorecard tests pass, and `--no-write` leaves `git status ty/`
+empty. Report: `reports/ty/scorecards_no_write_20261114.md`.
 
 **Also fixed while resuming:** `director_queue.mirror()` used to rebuild every row from the
 store, so fields with no column (`blocked_on`, `note`) vanished on the 2026-11-13 import. It
