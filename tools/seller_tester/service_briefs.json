@@ -22,6 +22,12 @@
       "why": "the path calls bojo_tools.sourcing.golden_goose_scan, which is the golden_goose_scan tool. ty/services.json now carries ONE Golden Goose: 'golden-goose' at /golden-goose. The legacy 'goldengoose' id is an alias of it (the route redirects), so the sample is owned by the real service and the alias adds no second sample.",
       "alias_note": "the alias is declared here, not inferred: it adds no brief and no sample, it resolves the retired id to the one service that produces the artefact."
     },
+    "scan": {
+      "service": "product-finder",
+      "population": "service-path",
+      "why": "bojo_tools.sourcing_extra.scan_products is Product Finder's declared tool (ty/services.json tools: [scan_products]). The scanner is injected with a recorded candidate cache because a live search is a gated, paid action; the term filter, the caller's limit, the cache provenance and the refusal-by-name are the app's own code, and the scan computes no economics - the check that it added no field says so.",
+      "recorded_answer": "the candidate cache is a fixture: a live search is a gated, paid action. Nothing in this path contacts Amazon."
+    },
     "research": {
       "service": null,
       "population": null,
@@ -1401,6 +1407,67 @@
         "rejected_asin": "B0GG5004",
         "first_asin": "B0GG5002"
       }
+    }
+  ],
+  "scan": [
+    {
+      "id": "SCAN-001",
+      "query": "ceramic mug",
+      "limit": 50,
+      "cache_status": "fresh",
+      "candidates": [
+        {"asin": "B0SCAN0001", "name": "Ceramic Mug 12 oz Speckled", "brand": "Harbor Home", "category": "Kitchen & Dining", "product_url": "https://example.invalid/dp/B0SCAN0001", "price": 18.0, "rating": 4.6, "reviews": 212},
+        {"asin": "B0SCAN0002", "name": "Ceramic Mug Set of 2 Matte", "brand": "Harbor Home", "category": "Kitchen & Dining", "product_url": "https://example.invalid/dp/B0SCAN0002", "price": 32.0, "rating": 4.4, "reviews": 88},
+        {"asin": "B0SCAN0003", "name": "Stoneware Mug Large", "brand": "Kiln Works", "category": "Kitchen & Dining", "product_url": "https://example.invalid/dp/B0SCAN0003", "price": 21.5, "rating": 4.7, "reviews": 140}
+      ],
+      "expect": {"min_rows": 2, "must_exclude": ["B0SCAN0003"]}
+    },
+    {
+      "id": "SCAN-002",
+      "query": "titanium spork",
+      "keywords": ["camping"],
+      "limit": 50,
+      "cache_status": "stale",
+      "candidates": [
+        {"asin": "B0SCAN0004", "name": "Titanium Spork Ultralight", "brand": "Trail Kit", "category": "Outdoor Recreation", "product_url": "https://example.invalid/dp/B0SCAN0004", "price": 12.0, "rating": 4.8, "reviews": 531},
+        {"asin": "B0SCAN0005", "name": "Camping Utensil Set 4 Piece", "brand": "Trail Kit", "category": "Outdoor Recreation", "product_url": "https://example.invalid/dp/B0SCAN0005", "price": 19.0, "rating": 4.3, "reviews": 97},
+        {"asin": "B0SCAN0006", "name": "Stainless Steel Fork", "brand": "Table Line", "category": "Kitchen & Dining", "product_url": "https://example.invalid/dp/B0SCAN0006", "price": 6.0, "rating": 4.5, "reviews": 44}
+      ],
+      "expect": {"min_rows": 2, "must_exclude": ["B0SCAN0006"]}
+    },
+    {
+      "id": "SCAN-003",
+      "query": "bamboo cutting board",
+      "limit": 1,
+      "cache_status": "fresh",
+      "candidates": [
+        {"asin": "B0SCAN0007", "name": "Bamboo Cutting Board Large", "brand": "Grove Goods", "category": "Kitchen & Dining", "product_url": "https://example.invalid/dp/B0SCAN0007", "price": 25.0, "rating": 4.6, "reviews": 301},
+        {"asin": "B0SCAN0008", "name": "Bamboo Cutting Board Set of 3", "brand": "Grove Goods", "category": "Kitchen & Dining", "product_url": "https://example.invalid/dp/B0SCAN0008", "price": 38.0, "rating": 4.4, "reviews": 120},
+        {"asin": "B0SCAN0009", "name": "Bamboo Cutting Board with Juice Groove", "brand": "Grove Goods", "category": "Kitchen & Dining", "product_url": "https://example.invalid/dp/B0SCAN0009", "price": 29.0, "rating": 4.7, "reviews": 265}
+      ],
+      "expect": {"min_rows": 1}
+    },
+    {
+      "id": "SCAN-004",
+      "query": "insulated water bottle",
+      "limit": 50,
+      "cache_status": "stale",
+      "candidates": [
+        {"asin": "B0SCAN0010", "name": "Insulated Water Bottle 32 oz", "brand": "Cold Peak", "category": "Sports & Outdoors", "product_url": "https://example.invalid/dp/B0SCAN0010", "price": 27.0, "rating": 4.7, "reviews": 812},
+        {"asin": "B0SCAN0011", "name": "Insulated Water Bottle 24 oz", "brand": "Cold Peak", "category": "Sports & Outdoors", "product_url": "https://example.invalid/dp/B0SCAN0011", "price": 23.0, "rating": 4.5, "reviews": 233},
+        {"asin": "B0SCAN0012", "name": "Glass Water Carafe", "brand": "Table Line", "category": "Kitchen & Dining", "product_url": "https://example.invalid/dp/B0SCAN0012", "price": 20.0, "rating": 4.2, "reviews": 61}
+      ],
+      "expect": {"min_rows": 2, "must_exclude": ["B0SCAN0012"]}
+    },
+    {
+      "id": "SCAN-005",
+      "query": "unobtainium billet",
+      "limit": 50,
+      "cache_status": "missing",
+      "candidates": [
+        {"asin": "B0SCAN0013", "name": "Stainless Bolt M8", "brand": "Fastener Co", "category": "Industrial", "product_url": "https://example.invalid/dp/B0SCAN0013", "price": 3.5, "rating": 4.1, "reviews": 12}
+      ],
+      "expect": {"refusal": true}
     }
   ],
   "research": [

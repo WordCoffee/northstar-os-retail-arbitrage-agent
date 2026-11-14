@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-14T01:33:47+00:00",
+  "at": "2026-11-14T03:05:18+00:00",
   "bar": 85.0,
   "weights": {
     "works": 0.23,
@@ -13,64 +13,6 @@
   "test_ids": 7465,
   "scan_findings": 1,
   "services": [
-    {
-      "id": "product-finder",
-      "label": "SourceScout",
-      "group": "Sourcing",
-      "kind": "workspace",
-      "route": "/product-finder",
-      "impact": 0.9,
-      "bar": 85.0,
-      "score": 77.0,
-      "meets_bar": false,
-      "weakest": "seller",
-      "gap": 7.2,
-      "dimensions": {
-        "works": {
-          "score": 100.0,
-          "evidence": "25 test id(s) prove it"
-        },
-        "correct": {
-          "score": 60.0,
-          "evidence": "25 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
-        },
-        "seller": {
-          "score": 0.0,
-          "evidence": "no Seller-Tester output scored for this service"
-        },
-        "complete": {
-          "score": 100.0,
-          "evidence": "1/1 declared Bojo tools wired: scan_products"
-        },
-        "usable": {
-          "score": 100.0,
-          "evidence": "no readiness finding names this service"
-        },
-        "measured": {
-          "score": 100.0,
-          "evidence": "route /product-finder -> northstar-os-ui\\src\\pages\\internal\\ProductFinder.jsx; app p95 3.4 ms"
-        },
-        "contract": {
-          "score": 100.0,
-          "evidence": "GET /api/products/finder -> 200; 89 row(s) under 'evaluated'"
-        }
-      },
-      "scenarios": [
-        {
-          "text": "find a product in a category I have never sold",
-          "tag": "backed"
-        },
-        {
-          "text": "compare landed cost across three suppliers",
-          "tag": "backed"
-        },
-        {
-          "text": "tell me the margin at my fee tier",
-          "tag": "backed"
-        }
-      ],
-      "purpose": "SourceScout: match a product idea to suppliers and landed cost"
-    },
     {
       "id": "listings",
       "label": "Listing Guardian",
@@ -1290,6 +1232,64 @@
         }
       ],
       "purpose": "product pictures in any seller situation, and A+ content, from a prompt, stored references, or uploads - Canva-grade to use"
+    },
+    {
+      "id": "product-finder",
+      "label": "SourceScout",
+      "group": "Sourcing",
+      "kind": "workspace",
+      "route": "/product-finder",
+      "impact": 0.9,
+      "bar": 85.0,
+      "score": 90.0,
+      "meets_bar": false,
+      "weakest": "correct",
+      "gap": 0.0,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "25 test id(s) prove it"
+        },
+        "correct": {
+          "score": 60.0,
+          "evidence": "25 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+        },
+        "seller": {
+          "score": 100.0,
+          "evidence": "5 Seller-Tester service-path outputs (population: service-path; paths scan), mean 100.0, 5 passed"
+        },
+        "complete": {
+          "score": 100.0,
+          "evidence": "1/1 declared Bojo tools wired: scan_products"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 100.0,
+          "evidence": "route /product-finder -> northstar-os-ui\\src\\pages\\internal\\ProductFinder.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 100.0,
+          "evidence": "GET /api/products/finder -> 200; 89 row(s) under 'evaluated'"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "find a product in a category I have never sold",
+          "tag": "backed"
+        },
+        {
+          "text": "compare landed cost across three suppliers",
+          "tag": "backed"
+        },
+        {
+          "text": "tell me the margin at my fee tier",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "SourceScout: match a product idea to suppliers and landed cost"
     },
     {
       "id": "golden-goose",

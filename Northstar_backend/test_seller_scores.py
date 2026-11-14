@@ -62,6 +62,21 @@ def test_a_full_sample_is_the_measured_mean():
     assert "30 Seller-Tester outputs" in verdict["evidence"]
 
 
+def test_a_rebuild_keeps_adpilots_ad_copy_row():
+    """Measured 2026-11-13: a `--write` rebuild dropped the 98.1 row it had not produced."""
+    proof = {"mean": 98.1, "scored": 6, "passed": 5, "at": "2026-11-13T10:11:42+00:00"}
+    built = seller_scores.build(ad_copy=proof)
+    row = built["services"]["adpilot"]
+    assert row["mean"] == 98.1
+    assert row["scored"] == 6 and row["passed"] == 5
+    assert row["path"] == "ad_copy"
+    assert row["population"] == "service-path"
+    # It is not a generated row, so it cannot enter the generated totals.
+    generated = [r for r in built["services"].values() if r.get("population") == "generated"]
+    if "pass" in built:
+        assert built["pass"]["scored"] == sum(r["scored"] for r in generated)
+
+
 def test_a_service_path_row_in_the_services_block_is_labelled_as_such():
     # adpilot's ad_copy score lives in the services block but is a service-path row.
     # The evidence must name the population the row declares, not call it a picture.

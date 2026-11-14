@@ -19,6 +19,11 @@ different kind, and each has one path a seller actually walks:
 * **golden_goose** — a product-discovery scan through `bojo_tools.sourcing.
   golden_goose_scan`, which runs the real fee stack (`calculate_breakdown_economics`)
   and the real scorer (`score_batch`). Candidates are fixture rows, not a crawl.
+* **scan** — Product Finder's own declared tool, `bojo_tools.sourcing_extra.
+  scan_products`, driven with a recorded candidate cache. A live search is a gated,
+  paid action, so the scanner is injected: the app's own term filter, the caller's
+  limit, the cache provenance it reports and its refusal-by-name are what is judged.
+  The tool computes no economics, and the check that it added no field says so.
 * **research** — a research query through `research_graph.research`: deconstruct ->
   traverse -> cross-validate -> synthesise, against a local corpus. The searcher is
   injected with the fixture corpus, so the graph's own counting (corroboration,
@@ -63,7 +68,7 @@ from .copy import (  # noqa: E402 - the copy rooms' three paths
     run_social_caption,
 )
 
-PATHS = ("listing", "ppc", "golden_goose", "research",
+PATHS = ("listing", "ppc", "golden_goose", "scan", "research",
          "offer_copy", "caption", "social_caption")
 
 RECORDED_PROVIDER_NOTE = (
@@ -670,10 +675,149 @@ def run_research(brief: Dict[str, Any], *, work_dir: Path) -> Dict[str, Any]:
             "summary": summary, "checks": checks, **scored}
 
 
+# ── scan (Product Finder) ───────────────────────────────────────────────────
+
+class _RecordedScanner:
+    """The scanner dependency, replayed from the brief. No network, no Amazon.
+
+    ``scan_products`` only asks this object for the cache and its provenance; a live
+    search is a gated, paid action, so this scanner refuses to make one and counts any
+    attempt. ``live_gate.live_enabled`` is False, which is what the tool reports.
+    """
+
+    def __init__(self, candidates: Sequence[Dict[str, Any]], cache_status: str) -> None:
+        self._candidates = [dict(row) for row in candidates]
+        self._cache_status = cache_status
+        self.live_calls = 0
+        self.live_gate = self
+
+    def cache_meta(self) -> Dict[str, Any]:
+        return {"cache_status": self._cache_status, "rows": len(self._candidates)}
+
+    def load_cached_candidates(self) -> List[Dict[str, Any]]:
+        return [dict(row) for row in self._candidates]
+
+    def search_products(self, **kwargs: Any) -> List[Dict[str, Any]]:
+        self.live_calls += 1
+        raise AssertionError("the seller pass must never make a live search")
+
+    def live_enabled(self) -> bool:
+        return False
+
+
+def run_scan(brief: Dict[str, Any], *, work_dir: Path) -> Dict[str, Any]:
+    """Score Product Finder's own ``scan_products`` on a recorded candidate cache."""
+    _backend()
+    from bojo_tools.sourcing_extra import _matches, scan_products  # noqa: PLC0415
+
+    expect = brief.get("expect") or {}
+    limit = int(brief.get("limit") or 50)
+    declared_cache = str(brief.get("cache_status") or "fresh")
+    scanner = _RecordedScanner(list(brief.get("candidates") or []), declared_cache)
+    result = scan_products(
+        query=str(brief.get("query") or ""),
+        keywords=list(brief.get("keywords") or []),
+        limit=limit,
+        live=False,
+        scanner=scanner,
+    )
+    checks: Dict[str, Dict[str, Any]] = {}
+
+    if expect.get("refusal"):
+        reason = str(result.get("reason") or "")
+        checks["refusal_is_named"] = (
+            _ok("refusal_is_named", reason=reason)
+            if not result.get("ok") and "no candidates" in reason else
+            _bad("refusal_is_named",
+                 f"the scan did not refuse by name: ok={result.get('ok')} reason={reason!r}"))
+        checks["refusal_reports_the_cache"] = (
+            _ok("refusal_reports_the_cache", expected=f"cache={declared_cache}")
+            if f"cache={declared_cache}" in reason else
+            _bad("refusal_reports_the_cache",
+                 f"the refusal does not name the cache state {declared_cache!r}: {reason!r}"))
+        checks["no_live_request"] = (
+            _ok("no_live_request", live_calls=scanner.live_calls)
+            if scanner.live_calls == 0 else
+            _bad("no_live_request", f"{scanner.live_calls} live search(es) were attempted"))
+    else:
+        data = result.get("data") or {}
+        rows = list(data.get("candidates") or [])
+        terms = list(data.get("keywords") or [])
+        want = int(expect.get("min_rows") or 1)
+        checks["scan_returned_rows"] = (
+            _ok("scan_returned_rows", rows=len(rows), need=want)
+            if result.get("ok") and len(rows) >= want else
+            _bad("scan_returned_rows",
+                 f"ok={result.get('ok')} rows={len(rows)} need={want} "
+                 f"reason={result.get('reason')!r}"))
+        checks["every_candidate_matches_the_query"] = (
+            _ok("every_candidate_matches_the_query", terms=terms, rows=len(rows))
+            if terms and rows and all(_matches(row, terms) for row in rows) else
+            _bad("every_candidate_matches_the_query",
+                 "a returned row shares no term with the query, or no term was returned"))
+        checks["respects_limit"] = (
+            _ok("respects_limit", limit=limit, rows=len(rows))
+            if len(rows) <= limit else
+            _bad("respects_limit", f"{len(rows)} row(s) returned for a limit of {limit}"))
+        checks["cache_provenance_reported"] = (
+            _ok("cache_provenance_reported", cache=(data.get("cache") or {}).get("cache_status"))
+            if str((data.get("cache") or {}).get("cache_status")) == declared_cache else
+            _bad("cache_provenance_reported",
+                 f"the tool reported {(data.get('cache') or {}).get('cache_status')!r}, "
+                 f"the cache declares {declared_cache!r}"))
+        checks["source_is_the_cache"] = (
+            _ok("source_is_the_cache", source=data.get("source"), live_calls=scanner.live_calls)
+            if data.get("source") == "cache" and data.get("live_requested") is False
+            and scanner.live_calls == 0 else
+            _bad("source_is_the_cache",
+                 f"source={data.get('source')!r} live_requested={data.get('live_requested')!r} "
+                 f"live_calls={scanner.live_calls}"))
+        # Product Finder ranks candidates; it does not price them. The tool's own note says
+        # economics belong to golden_goose_scan. A field the cache did not carry is invented.
+        supplied = {str(row.get("asin")): row for row in (brief.get("candidates") or [])}
+        added: List[str] = []
+        for row in rows:
+            known = supplied.get(str(row.get("asin")))
+            if known is None:
+                added.append(f"unknown row {row.get('asin')!r}")
+                continue
+            extra = sorted(set(row.keys()) - set(known.keys()))
+            if extra:
+                added.append(f"{row.get('asin')}: {extra}")
+        checks["no_invented_fields"] = (
+            _ok("no_invented_fields", rows=len(rows))
+            if not added else
+            _bad("no_invented_fields",
+                 "the scan added fields or rows the cache did not carry: " + "; ".join(added)))
+        must_exclude = [str(asin) for asin in (expect.get("must_exclude") or [])]
+        if must_exclude:
+            present = sorted({str(row.get("asin")) for row in rows} & set(must_exclude))
+            checks["declared_non_match_excluded"] = (
+                _ok("declared_non_match_excluded", excluded=must_exclude)
+                if not present else
+                _bad("declared_non_match_excluded",
+                     f"a row sharing no term with the query was returned: {present}"))
+        else:
+            checks["declared_non_match_excluded"] = _skip(
+                "declared_non_match_excluded",
+                "the brief declares no non-matching candidate to exclude")
+
+    work_dir.mkdir(parents=True, exist_ok=True)
+    target = work_dir / f"{brief.get('id')}.json"
+    target.write_text(json.dumps({"brief": brief.get("id"),
+                                  "scanner": "recorded candidate cache",
+                                  "result": result},
+                                 indent=2, ensure_ascii=False), encoding="utf-8")
+    scored = score_checks(checks)
+    return {"path": "scan", "brief_id": brief.get("id"), "artefact": str(target),
+            "checks": checks, **scored}
+
+
 # ── the pass ─────────────────────────────────────────────────────────────────
 
 RUNNERS = {"listing": run_listing, "ppc": run_ppc,
-           "golden_goose": run_golden_goose, "research": run_research,
+           "golden_goose": run_golden_goose, "scan": run_scan,
+           "research": run_research,
            "offer_copy": run_offer_copy, "caption": run_caption,
            "social_caption": run_social_caption}
 
@@ -763,7 +907,7 @@ def run_pass(*, fixtures: Optional[str | Path] = None, only: Optional[str] = Non
 __all__ = ["DEFAULT_FIXTURES", "DEFAULT_OUT", "DEFAULT_WORK_DIR", "PATHS",
            "RECORDED_PROVIDER_NOTE", "RUNNERS", "ServiceRefused", "load_attribution",
            "load_fixtures", "parse_only", "run_golden_goose", "run_listing", "run_pass",
-           "run_ppc", "run_research", "score_checks"]
+           "run_ppc", "run_research", "run_scan", "score_checks"]
 
 
 

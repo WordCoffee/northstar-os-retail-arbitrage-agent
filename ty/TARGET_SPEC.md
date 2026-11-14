@@ -1,12 +1,11 @@
 # Target spec — what production-ready means, per service
 
-Derived 2026-11-14T01:33:47+00:00 from `state/director/services.json`, 7465 measured test ids and 1 readiness findings. **Scores are measured, never asserted**: a dimension with no artefact scores 0 and says why.
+Derived 2026-11-14T03:05:18+00:00 from `state/director/services.json`, 7465 measured test ids and 1 readiness findings. **Scores are measured, never asserted**: a dimension with no artefact scores 0 and says why.
 
 Bar: **85 on every dimension** (not an average). A service is at the bar only when its weakest dimension clears it. Impact weight is what a paying seller needs first; gap = impact x (bar - score).
 
 | service | score | weakest | at bar | gap | impact |
 |---|---|---|---|---|---|
-| SourceScout (`product-finder`) | 77.0 | seller | no | 7.2 | 0.9 |
 | Listing Guardian (`listings`) | 77.0 | seller | no | 7.2 | 0.9 |
 | OfferChisel (`offerchisel`) | 79.5 | contract | no | 5.0 | 0.9 |
 | Support (`beta-support`) | 77.0 | measured | no | 4.0 | 0.5 |
@@ -29,6 +28,7 @@ Bar: **85 on every dimension** (not an average). A service is at the bar only wh
 | Invite entry (`beta-signup`) | 88.5 | contract | no | 0.0 | 0.8 |
 | Tester Dashboard (`beta-ops`) | 88.5 | contract | no | 0.0 | 0.4 |
 | Design Studio (`design-studio`) | 89.5 | correct | no | 0.0 | 0.95 |
+| SourceScout (`product-finder`) | 90.0 | correct | no | 0.0 | 0.9 |
 | Golden Goose (`golden-goose`) | 90.0 | correct | no | 0.0 | 0.95 |
 | Keyword Tracker (`keyword-tracker`) | 100.0 | works | yes | 0.0 | 0.6 |
 | Competitor Monitor (`competitor-monitor`) | 88.5 | contract | no | 0.0 | 0.5 |
@@ -40,28 +40,6 @@ At the bar today: **4 of 28**.
 Repo-wide findings (not charged to any service):
 
 - dead-module at `northstar-os-ui/src/lib/serviceGate.js`
-
-## SourceScout (`product-finder`)
-
-SourceScout: match a product idea to suppliers and landed cost.
-
-- route `/product-finder`, group Sourcing, kind workspace
-- **score 77.0 / bar 85** (impact 0.9, gap 7.2)
-
-| dimension | score | weight | evidence |
-|---|---|---|---|
-| works | 100.0 | 0.23 | 25 test id(s) prove it |
-| correct | 60.0 | 0.25 | 25 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
-| seller | 0.0 | 0.13 | no Seller-Tester output scored for this service |
-| complete | 100.0 | 0.12 | 1/1 declared Bojo tools wired: scan_products |
-| usable | 100.0 | 0.07 | no readiness finding names this service |
-| measured | 100.0 | 0.1 | route /product-finder -> northstar-os-ui\src\pages\internal\ProductFinder.jsx; app p95 3.4 ms |
-| contract | 100.0 | 0.1 | GET /api/products/finder -> 200; 89 row(s) under 'evaluated' |
-
-Seller scenarios:
-- `backed` — find a product in a category I have never sold
-- `backed` — compare landed cost across three suppliers
-- `backed` — tell me the margin at my fee tier
 
 ## Listing Guardian (`listings`)
 
@@ -528,6 +506,28 @@ Seller scenarios:
 - `backed` — white-background main image from a phone photo
 - `backed` — lifestyle scene with a scale reference
 - `backed` — an A+ module set that matches the brand
+
+## SourceScout (`product-finder`)
+
+SourceScout: match a product idea to suppliers and landed cost.
+
+- route `/product-finder`, group Sourcing, kind workspace
+- **score 90.0 / bar 85** (impact 0.9, gap 0.0)
+
+| dimension | score | weight | evidence |
+|---|---|---|---|
+| works | 100.0 | 0.23 | 25 test id(s) prove it |
+| correct | 60.0 | 0.25 | 25 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
+| seller | 100.0 | 0.13 | 5 Seller-Tester service-path outputs (population: service-path; paths scan), mean 100.0, 5 passed |
+| complete | 100.0 | 0.12 | 1/1 declared Bojo tools wired: scan_products |
+| usable | 100.0 | 0.07 | no readiness finding names this service |
+| measured | 100.0 | 0.1 | route /product-finder -> northstar-os-ui\src\pages\internal\ProductFinder.jsx; app p95 3.4 ms |
+| contract | 100.0 | 0.1 | GET /api/products/finder -> 200; 89 row(s) under 'evaluated' |
+
+Seller scenarios:
+- `backed` — find a product in a category I have never sold
+- `backed` — compare landed cost across three suppliers
+- `backed` — tell me the margin at my fee tier
 
 ## Golden Goose (`golden-goose`)
 

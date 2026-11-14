@@ -59,7 +59,7 @@ def test_each_path_names_the_one_service_that_produces_it():
     #: `social_caption` runs social_pulse.generate_caption, and neither is a Bojo
     #: tool — their `why` says so rather than borrowing a tool they do not run.
     tool = {"listing": "compose_listing", "golden_goose": "golden_goose_scan",
-            "caption": "write_content"}
+            "scan": "scan_products", "caption": "write_content"}
     assert set(attribution) == set(svc.PATHS), "every path must be attributed or declared unowned"
     for name in svc.PATHS:
         entry = attribution[name]
@@ -196,6 +196,94 @@ def test_the_golden_goose_control_a_wrong_first_place_fails(tmp_path):
     row = svc.run_golden_goose(brief, work_dir=tmp_path / "gg")
     assert row["passed"] is False
     assert "best_row_is_first" in row["failed_checks"]
+
+
+# ── scan (Product Finder) ────────────────────────────────────────────────────
+
+def _scan_payload(rows, *, ok=True, source="cache", cache="fresh",
+                  live_requested=False, reason=None):
+    return {
+        "ok": ok,
+        "tool": "scan_products",
+        "reason": reason,
+        "data": {
+            "query": "ceramic mug",
+            "keywords": ["ceramic mug"],
+            "match_all": True,
+            "live_requested": live_requested,
+            "source": source,
+            "cache": {"cache_status": cache},
+            "count": len(rows),
+            "candidates": rows,
+            "search_error": None,
+            "note": "fixture",
+        },
+    }
+
+
+def test_the_scan_path_scores_product_finders_own_tool_offline(tmp_path):
+    summary = svc.run_pass(only="scan", out_path=tmp_path / "proof.json",
+                           work_dir=tmp_path / "work")
+    assert summary["paths"]["scan"]["scored"] == 5
+    assert summary["paths"]["scan"]["passed"] == 5
+    assert summary["paths"]["scan"]["mean_score"] == 100.0
+    assert summary["paths"]["scan"]["service"] == "product-finder"
+    assert "none" in summary["network"]
+    # The refusal brief is a scored check, not a refusal of the pass.
+    assert summary["refused"] == 0
+
+
+def test_the_scan_control_each_check_can_fail(tmp_path, monkeypatch):
+    """A green suite that cannot show a red check proves nothing. One control per check."""
+    import bojo_tools.sourcing_extra as sx  # noqa: PLC0415
+
+    base = json.loads(json.dumps(svc.load_fixtures()["scan"][0]))
+    matched = base["candidates"][:2]
+    stray = base["candidates"][2]
+
+    def run(brief, payload):
+        monkeypatch.setattr(sx, "scan_products", lambda **kwargs: payload)
+        return svc.run_scan(brief, work_dir=tmp_path / "scan")
+
+    row = run(base, _scan_payload(matched, ok=False, reason="boom"))
+    assert "scan_returned_rows" in row["failed_checks"]
+
+    row = run(base, _scan_payload(matched + [stray]))
+    assert "every_candidate_matches_the_query" in row["failed_checks"]
+
+    limited = json.loads(json.dumps(base))
+    limited["limit"] = 1
+    row = run(limited, _scan_payload(matched))
+    assert "respects_limit" in row["failed_checks"]
+
+    row = run(base, _scan_payload(matched, cache="stale"))
+    assert "cache_provenance_reported" in row["failed_checks"]
+
+    row = run(base, _scan_payload(matched, source="live", live_requested=True))
+    assert "source_is_the_cache" in row["failed_checks"]
+
+    invented = [dict(matched[0]), dict(matched[1])]
+    invented[0]["margin"] = 12.5
+    row = run(base, _scan_payload(invented))
+    assert "no_invented_fields" in row["failed_checks"]
+    assert "margin" in row["checks"]["no_invented_fields"]["detail"]
+
+    row = run(base, _scan_payload(matched + [stray]))
+    assert "declared_non_match_excluded" in row["failed_checks"]
+
+
+def test_the_scan_refusal_must_be_named_and_report_its_cache(tmp_path, monkeypatch):
+    import bojo_tools.sourcing_extra as sx  # noqa: PLC0415
+
+    brief = next(b for b in svc.load_fixtures()["scan"] if b["expect"].get("refusal"))
+    monkeypatch.setattr(
+        sx, "scan_products",
+        lambda **kwargs: {"ok": False, "tool": "scan_products",
+                          "reason": "the scanner fell over"})
+    row = svc.run_scan(brief, work_dir=tmp_path / "scan")
+    assert row["passed"] is False
+    assert "refusal_is_named" in row["failed_checks"]
+    assert "refusal_reports_the_cache" in row["failed_checks"]
 
 
 # ── research ────────────────────────────────────────────────────────────────

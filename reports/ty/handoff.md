@@ -10,6 +10,40 @@ A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.m
 > and `reports/ty/handoff.md`, then continue from the first unfinished unit. No
 > questions, no reports between cycles. Idle means re-plan.
 
+## Position, 2026-11-14 (UTC) — Product Finder earns its own seller score through `scan_products`
+
+The next ranked gap after the AdPilot refresh was **7.2, tied** between `listings` and
+`product-finder`. Listings' zero is honest (its product belongs to ListingForge), so the unit
+was Product Finder's **G2\*** — its own seller score, on its own surface.
+
+**The research sample is still unowned, on purpose:** nothing in `ty/services.json`, the
+backend or the UI calls `research_graph.research`, so attributing the 5/5 research pass to
+Product Finder would have invented an owner. Product Finder does declare **`scan_products`**,
+and that is what was scored.
+
+**New `scan` service path** (5 recorded-cache briefs, injected scanner — a live search is a
+gated paid action): checks are the app's own — term filter (`_matches`), caller's limit,
+cache provenance, `source=cache` with **zero live calls**, **no invented fields** (the scan
+computes no economics; that is Golden Goose's job), declared non-match excluded; the refusal
+brief must be named, report its cache and make no live call. **One control per check** proves
+it can fail. Attribution declares `product-finder`; the registry test pins
+`scan → scan_products`.
+
+**Measured:** scan **5 scored / 5 passed / mean 100.0 / 0 refused**; full services pass
+**41 / 35 / 0**, network none. Scorecard: product-finder **77.0 → 90.0**, seller **0.0 → 100.0**,
+gap **7.2 → 0.0**, weakest `seller → correct`; **only that row changed** of 28. `correct`
+stays 60 by the artefact rule, so the service leaves the gap list but is **not** at bar on
+every dimension. Report: `reports/ty/product_finder_g2_scan_20261114.md`.
+
+**Regression found and fixed in the same pass:** `seller_scores.py --write` **deleted
+AdPilot's 98.1 ad-copy row**, which `ad_copy_run.py` publishes separately — the previous
+unit's number survived exactly one rebuild. `build()` now folds
+`state/seller/ad_copy_proof.json` (disk is never read when sources are injected) and the
+generated totals are summed over **generated** rows only. AdPilot is back at 98.1; Design
+Studio's 32/32 generated pass is untouched. **81 tests pass.** The only ranked gap left is
+`listings` 7.2 (honest zero). Soak, quiet-window waiter and `state/vision/PAUSE` untouched;
+no Amazon, spend, GPU, browser or credential access.
+
 ## Position, 2026-11-14 (UTC) — the top-ranked gap was stale; AdPilot's seller score reaches the scorecard
 
 `python tools/director_gaps.py --rank` named **adpilot gap 12.6** (seller 0.0) as the largest

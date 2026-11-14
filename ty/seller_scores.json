@@ -23,7 +23,7 @@
       "note": "adpilot's own ad copy; a kept failure (AD-006, two variants) is in the population"
     }
   },
-  "at": "2026-11-13T10:11:42+00:00",
+  "at": "2026-11-14T03:05:14+00:00",
   "service_path": {
     "population": "service-path",
     "source": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\seller\\services_proof.json",
@@ -50,6 +50,12 @@
         "population": "service-path",
         "why": "the path calls bojo_tools.sourcing.golden_goose_scan, which is the golden_goose_scan tool. ty/services.json now carries ONE Golden Goose: 'golden-goose' at /golden-goose. The legacy 'goldengoose' id is an alias of it (the route redirects), so the sample is owned by the real service and the alias adds no second sample.",
         "alias_note": "the alias is declared here, not inferred: it adds no brief and no sample, it resolves the retired id to the one service that produces the artefact."
+      },
+      "scan": {
+        "service": "product-finder",
+        "population": "service-path",
+        "why": "bojo_tools.sourcing_extra.scan_products is Product Finder's declared tool (ty/services.json tools: [scan_products]). The scanner is injected with a recorded candidate cache because a live search is a gated, paid action; the term filter, the caller's limit, the cache provenance and the refusal-by-name are the app's own code, and the scan computes no economics - the check that it added no field says so.",
+        "recorded_answer": "the candidate cache is a fixture: a live search is a gated, paid action. Nothing in this path contacts Amazon."
       },
       "research": {
         "service": null,
@@ -84,7 +90,7 @@
         "paths": [
           "listing"
         ],
-        "at": "2026-11-11T13:34:09"
+        "at": "2026-11-13T21:00:29"
       },
       "design-studio": {
         "population": "service-path",
@@ -94,7 +100,7 @@
         "paths": [
           "ppc"
         ],
-        "at": "2026-11-11T13:34:09"
+        "at": "2026-11-13T21:00:29"
       },
       "golden-goose": {
         "population": "service-path",
@@ -104,7 +110,17 @@
         "paths": [
           "golden_goose"
         ],
-        "at": "2026-11-11T13:34:09"
+        "at": "2026-11-13T21:00:29"
+      },
+      "product-finder": {
+        "population": "service-path",
+        "mean": 100.0,
+        "scored": 5,
+        "passed": 5,
+        "paths": [
+          "scan"
+        ],
+        "at": "2026-11-13T21:00:29"
       },
       "offerchisel": {
         "population": "service-path",
@@ -114,7 +130,7 @@
         "paths": [
           "offer_copy"
         ],
-        "at": "2026-11-11T13:34:09"
+        "at": "2026-11-13T21:00:29"
       },
       "towncrier": {
         "population": "service-path",
@@ -124,7 +140,7 @@
         "paths": [
           "caption"
         ],
-        "at": "2026-11-11T13:34:09"
+        "at": "2026-11-13T21:00:29"
       },
       "socialpulse": {
         "population": "service-path",
@@ -134,7 +150,7 @@
         "paths": [
           "social_caption"
         ],
-        "at": "2026-11-11T13:34:09"
+        "at": "2026-11-13T21:00:29"
       }
     },
     "paths": {
@@ -156,6 +172,13 @@
         "scored": 5,
         "passed": 5,
         "service": "golden-goose",
+        "mean": 100.0,
+        "why_unattributed": null
+      },
+      "scan": {
+        "scored": 5,
+        "passed": 5,
+        "service": "product-finder",
         "mean": 100.0,
         "why_unattributed": null
       },
@@ -192,13 +215,13 @@
       "research"
     ],
     "refused": [],
-    "at": "2026-11-11T13:34:09",
+    "at": "2026-11-13T21:00:29",
     "command": "python -m tools.seller_tester services",
     "pass": {
       "population": "service-path",
-      "scored": 31,
-      "passed": 25,
-      "paths_measured": 7
+      "scored": 36,
+      "passed": 30,
+      "paths_measured": 8
     }
   },
   "pipeline": {
@@ -222,9 +245,9 @@
     },
     "service_path": {
       "population": "service-path",
-      "scored": 31,
-      "passed": 25,
-      "paths_measured": 7
+      "scored": 36,
+      "passed": 30,
+      "paths_measured": 8
     }
   },
   "ceiling": {

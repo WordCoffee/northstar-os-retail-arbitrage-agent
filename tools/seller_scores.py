@@ -57,6 +57,8 @@ PRODUCT_JUDGED = ROOT / "state" / "seller" / "product_proof_judged.json"
 PRODUCT_CATALOG = ROOT / "state" / "seller" / "product_catalog.json"
 #: The non-image service paths (`python -m tools.seller_tester services`).
 SERVICE_PROOF = ROOT / "state" / "seller" / "services_proof.json"
+#: AdPilot's own ad-copy sample, written by `tools/seller_tester/ad_copy_run.py`.
+AD_COPY_PROOF = ROOT / "state" / "seller" / "ad_copy_proof.json"
 #: Where the service paths declare which service each one belongs to.
 SERVICE_BRIEFS = ROOT / "tools" / "seller_tester" / "service_briefs.json"
 MIN_SCORED = 5
@@ -309,6 +311,32 @@ def _rows(data: Dict[str, Any]) -> List[Dict[str, Any]]:
     return [row for row in rows if isinstance(row, dict)]
 
 
+def _read_ad_copy_proof(path: Optional[Path] = None) -> Optional[Dict[str, Any]]:
+    """AdPilot's ad-copy proof, or None when it has not been run on this machine."""
+    try:
+        data = json.loads(Path(path or AD_COPY_PROOF).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    if not isinstance(data, dict) or not int(data.get("scored") or 0):
+        return None
+    return data
+
+
+def _ad_copy_service_row(proof: Dict[str, Any]) -> Dict[str, Any]:
+    """The published row for AdPilot's own ad-copy sample (one population, never blended)."""
+    return {
+        "mean": float(proof.get("mean") or 0.0),
+        "scored": int(proof.get("scored") or 0),
+        "passed": int(proof.get("passed") or 0),
+        "at": str(proof.get("at") or _now()),
+        "population": SERVICE_POPULATION,
+        "path": "ad_copy",
+        "proof": "state/seller/ad_copy_proof.json",
+        "note": ("adpilot's own ad copy; a kept failure (AD-006, two variants) is in "
+                 "the population"),
+    }
+
+
 def _bucket() -> Dict[str, Any]:
     return {"scores": [], "passed": 0}
 
@@ -324,7 +352,8 @@ def build(*, summary: Optional[Dict[str, Any]] = None,
           composite: Optional[Dict[str, Any]] = None,
           briefs: Any = None,
           product: Optional[Dict[str, Any]] = None,
-          service_proof: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+          service_proof: Optional[Dict[str, Any]] = None,
+          ad_copy: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     """Aggregate passes into a published generated mean plus replay context.
 
     `product` is the app-path pass (`python -m tools.seller_tester product`); when it
@@ -337,8 +366,15 @@ def build(*, summary: Optional[Dict[str, Any]] = None,
     hermetic result instead of whatever happens to be on this machine.
     """
     sources = _sources(summary, composite, product)
+    injected = any(source is not None for source in (summary, composite, product))
+    copy_proof = ad_copy
+    if copy_proof is None and not injected:
+        copy_proof = _read_ad_copy_proof()
     if not sources:
-        return {"services": {}, "reason": "no seller-tester pass on disk", "at": _now()}
+        services: Dict[str, Dict[str, Any]] = {}
+        if copy_proof:
+            services["adpilot"] = _ad_copy_service_row(copy_proof)
+        return {"services": services, "reason": "no seller-tester pass on disk", "at": _now()}
 
     mapping = brief_services(briefs)
     buckets: Dict[str, Dict[str, Dict[str, Any]]] = {}
@@ -379,10 +415,19 @@ def build(*, summary: Optional[Dict[str, Any]] = None,
                 "artefact(s) are context only and are not the pipeline's output")
         services[service] = row
 
-    made_total = sum(row["scored"] for row in services.values())
-    made_passed = sum(row["passed"] for row in services.values())
-    replay_total = sum(row["replay"]["scored"] for row in services.values())
-    replay_passed = sum(row["replay"]["passed"] for row in services.values())
+    # AdPilot's ad-copy sample is a service-path population that another command writes
+    # (tools/seller_tester/ad_copy_run.py). Reading it here keeps a rebuild from deleting
+    # it: on 2026-11-13 a `--write` dropped the 98.1 row three hours after it was published.
+    # Injected sources mean a hermetic call, and then the disk is not consulted.
+    if copy_proof:
+        services["adpilot"] = _ad_copy_service_row(copy_proof)
+
+    generated_rows = [row for row in services.values()
+                      if row.get("population") == "generated"]
+    made_total = sum(row["scored"] for row in generated_rows)
+    made_passed = sum(row["passed"] for row in generated_rows)
+    replay_total = sum((row.get("replay") or {}).get("scored", 0) for row in generated_rows)
+    replay_passed = sum((row.get("replay") or {}).get("passed", 0) for row in generated_rows)
     made_scores = [value for name, split in buckets.items()
                    for value in split["generated"]["scores"]]
     replay_scores = [value for name, split in buckets.items()
