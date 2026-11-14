@@ -36,13 +36,36 @@ def _service(sid: str) -> dict:
     raise AssertionError(f"no registry service {sid!r}")
 
 
-def test_registry_has_the_29_services():
+def test_registry_has_the_28_services():
     services = cc.registry_services()
-    assert len(services) == 29
-    assert len({s["id"] for s in services}) == 29
+    assert len(services) == 28
+    assert len({s["id"] for s in services}) == 28
 
 
-def test_external_paid_actions_are_never_selected():
+def test_a_partial_probe_does_not_overwrite_the_published_artefact(tmp_path, monkeypatch):
+    """Measured 2026-11-14: `--service adpilot` rewrote the shared file with one row.
+
+    The published contract is the whole registry; a one-service measurement with no explicit
+    --out must leave it alone.
+    """
+    shared = tmp_path / "service_contracts.json"
+    shared.write_text(json.dumps({"services": [{"id": "keep-me"}]}), encoding="utf-8")
+    monkeypatch.setattr(cc, "OUT", shared)
+    monkeypatch.setattr(cc, "run", lambda **kwargs: {
+        "services": [{"id": "adpilot", "verdict": "pass", "reason": ""}],
+        "count": 1, "passed": 1, "persisted": 1, "gaps": 0,
+    })
+
+    assert cc.main(["--service", "adpilot", "--json"]) == 0
+    kept = json.loads(shared.read_text(encoding="utf-8"))
+    assert kept["services"] == [{"id": "keep-me"}]
+
+    assert cc.main(["--json"]) == 0
+    written = json.loads(shared.read_text(encoding="utf-8"))
+    assert written["services"][0]["id"] == "adpilot"
+
+
+
     for sid in ("offerchisel", "towncrier", "autothink", "adpilot", "listingforge"):
         primary, skipped, _ = cc.select_primary(_service(sid))
         if primary is not None:
@@ -68,11 +91,18 @@ def test_primary_is_highest_effect_provable_action():
     assert primary["endpoint"] == "/api/v1/foundation/entitlements"
 
 
-def test_product_finder_override_is_used_only_because_registry_is_empty():
+def test_product_finder_contract_comes_from_the_registry_not_an_override():
+    """The override existed only while the registry entry had no actions.
+
+    `fix-product-finder-wiring` added the finder read to `ty/services.json`, so the override was
+    removed rather than left shadowing the source of truth.
+    """
     primary, _, _ = cc.select_primary(_service("product-finder"))
     assert primary["endpoint"] == "/api/products/finder"
     assert primary["effect"] == "read"
-    assert _service("product-finder")["actions"] == []
+    assert "product-finder" not in cc.OVERRIDES
+    declared = [a["endpoint"] for a in _service("product-finder")["actions"]]
+    assert "/api/products/finder" in declared
 
 
 def test_services_without_actions_are_gaps_not_passes():
@@ -112,8 +142,8 @@ def test_end_to_end_contract_run_on_a_fresh_backend(tmp_path, monkeypatch):
 
     result = cc.run(mode="in_process", db_dir=tmp_path)
 
-    assert result["count"] == 29
-    assert len(result["services"]) == 29
+    assert result["count"] == 28
+    assert len(result["services"]) == 28
     rows = {row["id"]: row for row in result["services"]}
     assert set(rows) == {s["id"] for s in cc.registry_services()}
 

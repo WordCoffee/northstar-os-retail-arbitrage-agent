@@ -80,20 +80,10 @@ SKIP_REASONS = {
     ),
 }
 
-#: The product-finder registry entry has `actions: []` (reg-01 finding, and the
-#: registry files are read-only for this task). The endpoint exists on disk and
-#: the page was wired to it on 2026-11-09, so the contract names it here rather
-#: than reporting a gap that is no longer true.
+#: The product-finder registry entry used to have `actions: []`. It now declares the
+#: finder read (`fix-product-finder-wiring`, 2026-11-11), so that override was removed
+#: rather than left shadowing the registry it was written to compensate for.
 OVERRIDES: Dict[str, Dict[str, Any]] = {
-    "product-finder": {
-        "name": "score cached candidates",
-        "effect": "read",
-        "endpoint": "/api/products/finder",
-        "method": "GET",
-        "source": "Northstar_backend/main.py:2875",
-        "note": ("ty/service_registry.json actions[] is empty; the endpoint is "
-                 "verified on disk and ProductFinder.jsx now calls it"),
-    },
     # AdPilot's registry entry lists three reads and one external action, so its contract could
     # never show a *persisted* primary action: there was nothing to persist into (adpilot `contract`
     # = 0, `complete` = 0). A campaign plan is the thing a seller returns to, so it is saved as a
@@ -635,7 +625,10 @@ def main(argv: Optional[List[str]] = None) -> int:
                         help="fresh TestClient with a temp DB instead of live HTTP")
     parser.add_argument("--json", action="store_true")
     parser.add_argument("--service", default=None)
-    parser.add_argument("--out", default=str(OUT))
+    parser.add_argument("--out", default=None,
+                        help=("artefact path; defaults to state/contracts/service_contracts.json "
+                              "for a full probe. A --service probe writes nothing unless --out is "
+                              "given: a one-service measurement must not overwrite the published set"))
     parser.add_argument("--db-dir", default=None)
     ns = parser.parse_args(argv)
 
@@ -643,7 +636,9 @@ def main(argv: Optional[List[str]] = None) -> int:
     result = run(mode=mode,
                  db_dir=Path(ns.db_dir) if ns.db_dir else None,
                  only=ns.service)
-    path = write(result, Path(ns.out))
+    path = None
+    if ns.out or not ns.service:
+        path = write(result, Path(ns.out or OUT))
     if ns.json:
         print(json.dumps(result, indent=2))
     else:
@@ -652,7 +647,8 @@ def main(argv: Optional[List[str]] = None) -> int:
             "passed": result["passed"],
             "persisted": result["persisted"],
             "gaps": result["gaps"],
-            "artefact": str(path),
+            "artefact": str(path) if path else None,
+            "partial_probe_not_written": path is None,
             "failed": [{"id": row["id"], "verdict": row["verdict"],
                         "reason": row["reason"]}
                        for row in result["services"]

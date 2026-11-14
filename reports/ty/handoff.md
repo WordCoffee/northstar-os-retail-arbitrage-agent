@@ -10,6 +10,33 @@ A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.m
 > and `reports/ty/handoff.md`, then continue from the first unfinished unit. No
 > questions, no reports between cycles. Idle means re-plan.
 
+## Position, 2026-11-14 (later) — PPC G4 met; AdPilot's action is a proved, persisted contract
+
+`g1-golden-goose` G5 closed this morning (5/5). The next build item was PPC G4, and it turned
+out to be **stale measurement, not missing code**: `state/contracts/service_contracts.json` was
+generated 2026-11-09 and predated the `adpilot` override that names a durable write. Regenerated
+live: **28 services, 20 pass / 5 persisted / 3 gaps**; AdPilot's primary action is
+**POST `/api/v1/foundation/jobs-durable` → 201**, read back by id → pass. So **contract 0 → 100,
+score 79.8 → 89.8, gap 3.6 → 0.0; only that row changed of 28**; ≥85 is now 23 of 28 and the top
+ranked gap is `listings` 7.2 alone. Report: `reports/ty/ppc_g4_contract_20261114.md`.
+
+**Two hazards found and fixed in the same unit.** `contract_check.py --service X` used to
+overwrite the shared artefact with one row (it did, mid-unit; the full live probe restored it) —
+a partial probe now writes nothing without `--out`, test pinned. And the product-finder override
+was removed: the registry now declares the finder read, so the override outlived its reason.
+Three stale tests reconciled (29 → 28 services, override premise, e2e counts); **12 pass**.
+
+**The backend died twice today** (connection refused; the dev supervisor had died with it). The
+stack is now supervised by `scripts/dev-start.ps1`, launched detached through WMI with the media
+lane off (RAM): backend **21864**, UI **29708**, `/health` ok, pids recorded. Watch for the
+same failure in any later session: if `/health` refuses, restart the supervised stack — do not
+start a bare detached uvicorn, it did not survive.
+
+**Next:** the G5 sweep (Research, PPC, Listings) with one independent verifier session,
+sequential to respect the RAM floor; then the 13 `on-staging` claims audit (running in a
+read-only lane). Design Studio generation stays blocked on the render lane **and the owner's
+word**; Vision stays behind `state/vision/PAUSE`; Soak/waiter untouched.
+
 ## Position, 2026-11-14 — Golden Goose is the first service at all five gates
 
 Independent verifier session (not the author), HEAD `e060503d`, read-only:

@@ -1,12 +1,12 @@
 {
   "schema": "contracts/v1",
-  "generated": "2026-11-09T06:44:25+00:00",
+  "generated": "2026-11-14T12:01:30+00:00",
   "mode": "live",
   "base_url": "http://127.0.0.1:8000",
   "rule": "primary action must reach a mounted endpoint, return a substantive payload, and (write) read back through another endpoint",
-  "count": 29,
+  "count": 28,
   "passed": 20,
-  "persisted": 4,
+  "persisted": 5,
   "gaps": 3,
   "services": [
     {
@@ -44,21 +44,6 @@
       "label": "Prospector",
       "group": "Sourcing",
       "primary_action": "run / read scanner",
-      "endpoint": "/api/kirkland/scanner",
-      "method": "GET",
-      "effect": "read",
-      "status": 200,
-      "persisted": null,
-      "evidence": "89 row(s) under 'products'",
-      "verdict": "pass",
-      "reason": "",
-      "skipped_actions": []
-    },
-    {
-      "id": "goldengoose",
-      "label": "Golden Goose",
-      "group": "Sourcing",
-      "primary_action": "read scanner",
       "endpoint": "/api/kirkland/scanner",
       "method": "GET",
       "effect": "read",
@@ -212,7 +197,7 @@
     },
     {
       "id": "foundation",
-      "label": "Operations Hub",
+      "label": "Foundation",
       "group": "Internal",
       "primary_action": "read providers",
       "endpoint": "/api/v1/foundation/providers",
@@ -235,7 +220,7 @@
       "effect": "write",
       "status": 201,
       "persisted": true,
-      "evidence": "1 row(s) under 'runs'; read back 76b3213b-5c1d-41ee-9442-63dbbcbec094 via /api/v1/foundation/jobs-durable/76b3213b-5c1d-41ee-9442-63dbbcbec094",
+      "evidence": "1 row(s) under 'runs'; read back f996a628-cce9-4b4d-b4ef-2e83e9e84835 via /api/v1/foundation/jobs-durable/f996a628-cce9-4b4d-b4ef-2e83e9e84835",
       "verdict": "pass",
       "reason": "",
       "skipped_actions": []
@@ -250,7 +235,7 @@
       "effect": "write",
       "status": 202,
       "persisted": true,
-      "evidence": "5 measured field(s) (job_id,state,source_file_id,file_name,status,executes_in_worker); read back 965ed449-f2a8-4324-a6af-f5dd80721707 via /api/v1/foundation/jobs-durable/965ed449-f2a8-4324-a6af-f5dd80721707",
+      "evidence": "5 measured field(s) (job_id,state,source_file_id,file_name,status,executes_in_worker); read back fb1c597d-b748-44c1-b115-29ecf460aa03 via /api/v1/foundation/jobs-durable/fb1c597d-b748-44c1-b115-29ecf460aa03",
       "verdict": "pass",
       "reason": "",
       "skipped_actions": []
@@ -325,7 +310,7 @@
       "effect": "write",
       "status": 200,
       "persisted": true,
-      "evidence": "10 measured field(s) (id,asset,file_url); read back 78fbb038-e23f-4323-95e8-5b7912410382 via /api/design-studio/assets",
+      "evidence": "10 measured field(s) (id,asset,file_url); read back 50bd4e14-2530-4d85-989e-15ebfacc873b via /api/design-studio/assets",
       "verdict": "pass",
       "reason": "",
       "skipped_actions": []
@@ -334,7 +319,7 @@
       "id": "product-finder",
       "label": "SourceScout",
       "group": "Sourcing",
-      "primary_action": "score cached candidates",
+      "primary_action": "read scored candidates",
       "endpoint": "/api/products/finder",
       "method": "GET",
       "effect": "read",
@@ -355,7 +340,7 @@
       "effect": "read",
       "status": 200,
       "persisted": null,
-      "evidence": "17 measured field(s) (item_id,decision,resale_score)",
+      "evidence": "18 measured field(s) (item_id,decision,resale_score,persisted,note)",
       "verdict": "pass",
       "reason": "",
       "skipped_actions": [
@@ -422,7 +407,7 @@
       "effect": "write",
       "status": 200,
       "persisted": true,
-      "evidence": "6 measured field(s) (id,record); read back adad0461-16cd-4966-a146-69d94d9f9097 via /api/design-studio/listing-records",
+      "evidence": "6 measured field(s) (id,record); read back a033bdf6-a7c8-4b74-9f80-3f983f217deb via /api/design-studio/listing-records",
       "verdict": "pass",
       "reason": "",
       "skipped_actions": []
@@ -431,23 +416,16 @@
       "id": "adpilot",
       "label": "AdPilot",
       "group": "Advertising",
-      "primary_action": "list imported ad files",
-      "endpoint": "/api/design-studio/amazon-files",
-      "method": "GET",
-      "effect": "read",
-      "status": 200,
-      "persisted": null,
-      "evidence": "payload has no measured rows or fields (keys: uploads,note)",
-      "verdict": "empty_payload",
-      "reason": "payload has no measured rows or fields (keys: uploads,note)",
-      "skipped_actions": [
-        {
-          "name": "request ad copy",
-          "endpoint": "/api/v1/reasoning/ad-copy-proposal",
-          "effect": "external",
-          "why": "standing gate (a): this route spends paid model credits, so the contract never calls it"
-        }
-      ]
+      "primary_action": "save a campaign plan",
+      "endpoint": "/api/v1/foundation/jobs-durable",
+      "method": "POST",
+      "effect": "write",
+      "status": 201,
+      "persisted": true,
+      "evidence": "1 row(s) under 'runs'; read back e18ff0c8-1c88-427c-a1b1-a64a71548a68 via /api/v1/foundation/jobs-durable/e18ff0c8-1c88-427c-a1b1-a64a71548a68",
+      "verdict": "pass",
+      "reason": "",
+      "skipped_actions": []
     },
     {
       "id": "socialpulse",

@@ -1,6 +1,6 @@
 # Target spec — what production-ready means, per service
 
-Derived 2026-11-14T03:05:18+00:00 from `state/director/services.json`, 7465 measured test ids and 1 readiness findings. **Scores are measured, never asserted**: a dimension with no artefact scores 0 and says why.
+Derived 2026-11-14T12:01:31+00:00 from `state/director/services.json`, 7465 measured test ids and 1 readiness findings. **Scores are measured, never asserted**: a dimension with no artefact scores 0 and says why.
 
 Bar: **85 on every dimension** (not an average). A service is at the bar only when its weakest dimension clears it. Impact weight is what a paying seller needs first; gap = impact x (bar - score).
 
@@ -9,7 +9,6 @@ Bar: **85 on every dimension** (not an average). A service is at the bar only wh
 | Listing Guardian (`listings`) | 77.0 | seller | no | 7.2 | 0.9 |
 | OfferChisel (`offerchisel`) | 79.5 | contract | no | 5.0 | 0.9 |
 | Support (`beta-support`) | 77.0 | measured | no | 4.0 | 0.5 |
-| AdPilot (`adpilot`) | 79.8 | contract | no | 3.6 | 0.7 |
 | The Town Crier (`towncrier`) | 79.0 | contract | no | 2.7 | 0.45 |
 | SocialPulse (`socialpulse`) | 79.7 | contract | no | 2.4 | 0.45 |
 | Operations Hub (`hub`) | 100.0 | works | yes | 0.0 | 0.85 |
@@ -33,6 +32,7 @@ Bar: **85 on every dimension** (not an average). A service is at the bar only wh
 | Keyword Tracker (`keyword-tracker`) | 100.0 | works | yes | 0.0 | 0.6 |
 | Competitor Monitor (`competitor-monitor`) | 88.5 | contract | no | 0.0 | 0.5 |
 | ListingForge (`listingforge`) | 90.0 | correct | no | 0.0 | 0.85 |
+| AdPilot (`adpilot`) | 89.8 | correct | no | 0.0 | 0.7 |
 | Profitability (`profitability`) | 100.0 | works | yes | 0.0 | 0.75 |
 
 At the bar today: **4 of 28**.
@@ -105,28 +105,6 @@ support inside the beta without a human in the loop.
 Seller scenarios:
 - `backed` — an invitee signs up without help
 - `backed` — a tester reports a bug and sees it acknowledged
-
-## AdPilot (`adpilot`)
-
-campaign control: budget, bids, and the report behind them.
-
-- route `/adpilot`, group Advertising, kind workspace
-- **score 79.8 / bar 85** (impact 0.7, gap 3.6)
-
-| dimension | score | weight | evidence |
-|---|---|---|---|
-| works | 100.0 | 0.23 | 13 test id(s) prove it |
-| correct | 60.0 | 0.25 | 13 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
-| seller | 98.1 | 0.13 | 6 Seller-Tester service-path outputs (population: service-path; path ad_copy), mean 98.1, 5 passed |
-| complete | 100.0 | 0.12 | 1/1 declared Bojo tools wired: plan_campaign |
-| usable | 100.0 | 0.07 | no readiness finding names this service |
-| measured | 100.0 | 0.1 | route /adpilot -> northstar-os-ui\src\pages\internal\AdPilot.jsx; app p95 3.4 ms |
-| contract | 0.0 | 0.1 | empty_payload: payload has no measured rows or fields (keys: uploads,note) |
-
-Seller scenarios:
-- `backed` — hold ROAS while doubling spend on the winner
-- `backed` — cut the keywords that only cost money
-- `backed` — show me what the campaign did last week
 
 ## The Town Crier (`towncrier`)
 
@@ -398,7 +376,7 @@ long-running work that survives a reload and reports honestly.
 | complete | 0.0 | 0.12 | no Bojo tool declared, so Bojo cannot drive it |
 | usable | 100.0 | 0.07 | no readiness finding names this service |
 | measured | 100.0 | 0.1 | route /jobs -> northstar-os-ui\src\pages\roomAdapters.jsx; app p95 3.4 ms |
-| contract | 100.0 | 0.1 | POST /api/v1/foundation/jobs-durable -> 201; 1 row(s) under 'runs'; read back 76b3213b-5c1d-41ee-9442-63dbbcbec094 via /api/v1/foundation/jobs-durable/76b3213b-5c1d-41ee-9442-63dbbcbec094 |
+| contract | 100.0 | 0.1 | POST /api/v1/foundation/jobs-durable -> 201; 1 row(s) under 'runs'; read back f996a628-cce9-4b4d-b4ef-2e83e9e84835 via /api/v1/foundation/jobs-durable/f996a628-cce9-4b4d-b4ef-2e83e9e84835 |
 
 Seller scenarios:
 - `backed` — the work survives a reload and tells me when it failed
@@ -418,7 +396,7 @@ keyword research and SEO workbench.
 | complete | 0.0 | 0.12 | no Bojo tool declared, so Bojo cannot drive it |
 | usable | 100.0 | 0.07 | no readiness finding names this service |
 | measured | 100.0 | 0.1 | route /keywords -> northstar-os-ui\src\pages\roomAdapters.jsx; app p95 3.4 ms |
-| contract | 100.0 | 0.1 | POST /api/v1/foundation/keywords/imports -> 202; 5 measured field(s) (job_id,state,source_file_id,file_name,status,executes_in_worker); read back 965ed449-f2a8-4324-a6af-f5dd80721707 via /api/v1/foundation/jobs-durable/965ed449-f2a8-4324-a6af-f5dd80721707 |
+| contract | 100.0 | 0.1 | POST /api/v1/foundation/keywords/imports -> 202; 5 measured field(s) (job_id,state,source_file_id,file_name,status,executes_in_worker); read back fb1c597d-b748-44c1-b115-29ecf460aa03 via /api/v1/foundation/jobs-durable/fb1c597d-b748-44c1-b115-29ecf460aa03 |
 
 Seller scenarios:
 - `backed` — the work survives a reload and tells me when it failed
@@ -500,7 +478,7 @@ product pictures in any seller situation, and A+ content, from a prompt, stored 
 | complete | 100.0 | 0.12 | 3/3 declared Bojo tools wired: build_dieline, generate_image, list_templates |
 | usable | 100.0 | 0.07 | no readiness finding names this service |
 | measured | 100.0 | 0.1 | route /design-studio -> northstar-os-ui\src\pages\internal\DesignStudio.jsx; app p95 3.4 ms |
-| contract | 100.0 | 0.1 | POST /api/design-studio/assets/upload -> 200; 10 measured field(s) (id,asset,file_url); read back 78fbb038-e23f-4323-95e8-5b7912410382 via /api/design-studio/assets |
+| contract | 100.0 | 0.1 | POST /api/design-studio/assets/upload -> 200; 10 measured field(s) (id,asset,file_url); read back 50bd4e14-2530-4d85-989e-15ebfacc873b via /api/design-studio/assets |
 
 Seller scenarios:
 - `backed` — white-background main image from a phone photo
@@ -544,7 +522,7 @@ the high-margin finder: score an opportunity and say why.
 | complete | 100.0 | 0.12 | 1/1 declared Bojo tools wired: golden_goose_scan |
 | usable | 100.0 | 0.07 | no readiness finding names this service |
 | measured | 100.0 | 0.1 | route /golden-goose -> northstar-os-ui\src\pages\internal\GoldenGoose.jsx; app p95 3.4 ms |
-| contract | 100.0 | 0.1 | POST /api/v1/foundation/golden-goose/evaluate -> 200; 17 measured field(s) (item_id,decision,resale_score) |
+| contract | 100.0 | 0.1 | POST /api/v1/foundation/golden-goose/evaluate -> 200; 18 measured field(s) (item_id,decision,resale_score,persisted,note) |
 
 Seller scenarios:
 - `backed` — find a product in a category I have never sold
@@ -610,12 +588,34 @@ create and version listings with the copy that converts.
 | complete | 100.0 | 0.12 | 1/1 declared Bojo tools wired: compose_listing |
 | usable | 100.0 | 0.07 | no readiness finding names this service |
 | measured | 100.0 | 0.1 | route /listingforge -> northstar-os-ui\src\pages\internal\ListingForge.jsx; app p95 3.4 ms |
-| contract | 100.0 | 0.1 | POST /api/design-studio/listing-records -> 200; 6 measured field(s) (id,record); read back adad0461-16cd-4966-a146-69d94d9f9097 via /api/design-studio/listing-records |
+| contract | 100.0 | 0.1 | POST /api/design-studio/listing-records -> 200; 6 measured field(s) (id,record); read back a033bdf6-a7c8-4b74-9f80-3f983f217deb via /api/design-studio/listing-records |
 
 Seller scenarios:
 - `backed` — turn this product into a listing that will not be suppressed
 - `backed` — rewrite the bullets for a different audience
 - `backed` — fix the listing that lost its buy box
+
+## AdPilot (`adpilot`)
+
+campaign control: budget, bids, and the report behind them.
+
+- route `/adpilot`, group Advertising, kind workspace
+- **score 89.8 / bar 85** (impact 0.7, gap 0.0)
+
+| dimension | score | weight | evidence |
+|---|---|---|---|
+| works | 100.0 | 0.23 | 13 test id(s) prove it |
+| correct | 60.0 | 0.25 | 13 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
+| seller | 98.1 | 0.13 | 6 Seller-Tester service-path outputs (population: service-path; path ad_copy), mean 98.1, 5 passed |
+| complete | 100.0 | 0.12 | 1/1 declared Bojo tools wired: plan_campaign |
+| usable | 100.0 | 0.07 | no readiness finding names this service |
+| measured | 100.0 | 0.1 | route /adpilot -> northstar-os-ui\src\pages\internal\AdPilot.jsx; app p95 3.4 ms |
+| contract | 100.0 | 0.1 | POST /api/v1/foundation/jobs-durable -> 201; 1 row(s) under 'runs'; read back e18ff0c8-1c88-427c-a1b1-a64a71548a68 via /api/v1/foundation/jobs-durable/e18ff0c8-1c88-427c-a1b1-a64a71548a68 |
+
+Seller scenarios:
+- `backed` — hold ROAS while doubling spend on the winner
+- `backed` — cut the keywords that only cost money
+- `backed` — show me what the campaign did last week
 
 ## Profitability (`profitability`)
 

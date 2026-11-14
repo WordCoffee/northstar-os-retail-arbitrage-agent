@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-14T03:05:18+00:00",
+  "at": "2026-11-14T12:01:31+00:00",
   "bar": 85.0,
   "weights": {
     "works": 0.23,
@@ -183,64 +183,6 @@
         }
       ],
       "purpose": "support inside the beta without a human in the loop"
-    },
-    {
-      "id": "adpilot",
-      "label": "AdPilot",
-      "group": "Advertising",
-      "kind": "workspace",
-      "route": "/adpilot",
-      "impact": 0.7,
-      "bar": 85.0,
-      "score": 79.8,
-      "meets_bar": false,
-      "weakest": "contract",
-      "gap": 3.6,
-      "dimensions": {
-        "works": {
-          "score": 100.0,
-          "evidence": "13 test id(s) prove it"
-        },
-        "correct": {
-          "score": 60.0,
-          "evidence": "13 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
-        },
-        "seller": {
-          "score": 98.1,
-          "evidence": "6 Seller-Tester service-path outputs (population: service-path; path ad_copy), mean 98.1, 5 passed"
-        },
-        "complete": {
-          "score": 100.0,
-          "evidence": "1/1 declared Bojo tools wired: plan_campaign"
-        },
-        "usable": {
-          "score": 100.0,
-          "evidence": "no readiness finding names this service"
-        },
-        "measured": {
-          "score": 100.0,
-          "evidence": "route /adpilot -> northstar-os-ui\\src\\pages\\internal\\AdPilot.jsx; app p95 3.4 ms"
-        },
-        "contract": {
-          "score": 0.0,
-          "evidence": "empty_payload: payload has no measured rows or fields (keys: uploads,note)"
-        }
-      },
-      "scenarios": [
-        {
-          "text": "hold ROAS while doubling spend on the winner",
-          "tag": "backed"
-        },
-        {
-          "text": "cut the keywords that only cost money",
-          "tag": "backed"
-        },
-        {
-          "text": "show me what the campaign did last week",
-          "tag": "backed"
-        }
-      ],
-      "purpose": "campaign control: budget, bids, and the report behind them"
     },
     {
       "id": "towncrier",
@@ -952,7 +894,7 @@
         },
         "contract": {
           "score": 100.0,
-          "evidence": "POST /api/v1/foundation/jobs-durable -> 201; 1 row(s) under 'runs'; read back 76b3213b-5c1d-41ee-9442-63dbbcbec094 via /api/v1/foundation/jobs-durable/76b3213b-5c1d-41ee-9442-63dbbcbec094"
+          "evidence": "POST /api/v1/foundation/jobs-durable -> 201; 1 row(s) under 'runs'; read back f996a628-cce9-4b4d-b4ef-2e83e9e84835 via /api/v1/foundation/jobs-durable/f996a628-cce9-4b4d-b4ef-2e83e9e84835"
         }
       },
       "scenarios": [
@@ -1003,7 +945,7 @@
         },
         "contract": {
           "score": 100.0,
-          "evidence": "POST /api/v1/foundation/keywords/imports -> 202; 5 measured field(s) (job_id,state,source_file_id,file_name,status,executes_in_worker); read back 965ed449-f2a8-4324-a6af-f5dd80721707 via /api/v1/foundation/jobs-durable/965ed449-f2a8-4324-a6af-f5dd80721707"
+          "evidence": "POST /api/v1/foundation/keywords/imports -> 202; 5 measured field(s) (job_id,state,source_file_id,file_name,status,executes_in_worker); read back fb1c597d-b748-44c1-b115-29ecf460aa03 via /api/v1/foundation/jobs-durable/fb1c597d-b748-44c1-b115-29ecf460aa03"
         }
       },
       "scenarios": [
@@ -1214,7 +1156,7 @@
         },
         "contract": {
           "score": 100.0,
-          "evidence": "POST /api/design-studio/assets/upload -> 200; 10 measured field(s) (id,asset,file_url); read back 78fbb038-e23f-4323-95e8-5b7912410382 via /api/design-studio/assets"
+          "evidence": "POST /api/design-studio/assets/upload -> 200; 10 measured field(s) (id,asset,file_url); read back 50bd4e14-2530-4d85-989e-15ebfacc873b via /api/design-studio/assets"
         }
       },
       "scenarios": [
@@ -1330,7 +1272,7 @@
         },
         "contract": {
           "score": 100.0,
-          "evidence": "POST /api/v1/foundation/golden-goose/evaluate -> 200; 17 measured field(s) (item_id,decision,resale_score)"
+          "evidence": "POST /api/v1/foundation/golden-goose/evaluate -> 200; 18 measured field(s) (item_id,decision,resale_score,persisted,note)"
         }
       },
       "scenarios": [
@@ -1506,7 +1448,7 @@
         },
         "contract": {
           "score": 100.0,
-          "evidence": "POST /api/design-studio/listing-records -> 200; 6 measured field(s) (id,record); read back adad0461-16cd-4966-a146-69d94d9f9097 via /api/design-studio/listing-records"
+          "evidence": "POST /api/design-studio/listing-records -> 200; 6 measured field(s) (id,record); read back a033bdf6-a7c8-4b74-9f80-3f983f217deb via /api/design-studio/listing-records"
         }
       },
       "scenarios": [
@@ -1524,6 +1466,64 @@
         }
       ],
       "purpose": "create and version listings with the copy that converts"
+    },
+    {
+      "id": "adpilot",
+      "label": "AdPilot",
+      "group": "Advertising",
+      "kind": "workspace",
+      "route": "/adpilot",
+      "impact": 0.7,
+      "bar": 85.0,
+      "score": 89.8,
+      "meets_bar": false,
+      "weakest": "correct",
+      "gap": 0.0,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "13 test id(s) prove it"
+        },
+        "correct": {
+          "score": 60.0,
+          "evidence": "13 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+        },
+        "seller": {
+          "score": 98.1,
+          "evidence": "6 Seller-Tester service-path outputs (population: service-path; path ad_copy), mean 98.1, 5 passed"
+        },
+        "complete": {
+          "score": 100.0,
+          "evidence": "1/1 declared Bojo tools wired: plan_campaign"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 100.0,
+          "evidence": "route /adpilot -> northstar-os-ui\\src\\pages\\internal\\AdPilot.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 100.0,
+          "evidence": "POST /api/v1/foundation/jobs-durable -> 201; 1 row(s) under 'runs'; read back e18ff0c8-1c88-427c-a1b1-a64a71548a68 via /api/v1/foundation/jobs-durable/e18ff0c8-1c88-427c-a1b1-a64a71548a68"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "hold ROAS while doubling spend on the winner",
+          "tag": "backed"
+        },
+        {
+          "text": "cut the keywords that only cost money",
+          "tag": "backed"
+        },
+        {
+          "text": "show me what the campaign did last week",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "campaign control: budget, bids, and the report behind them"
     },
     {
       "id": "profitability",
