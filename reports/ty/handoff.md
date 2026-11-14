@@ -10,6 +10,40 @@ A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.m
 > and `reports/ty/handoff.md`, then continue from the first unfinished unit. No
 > questions, no reports between cycles. Idle means re-plan.
 
+## Position, 2026-11-14 (close-out) — the last two queued units are closed
+
+**`ppc-g1-clickpath`** — `tests/e2e/ppc_primary_action.spec.ts` now drives the real browser
+path, not just the mount: app sample `sp_bulksheet.xlsx` → upload → **K300 bid 1.10** →
+**Propose** → **Approve** → **Write** (`Round-trip: PASS — only the approved change(s) differ`,
+original unmodified) → **Download captured, > 1,000 bytes**. Desktop **1 passed (4.2 s)**,
+iPhone 12/WebKit **1 passed (6.4 s)**, both after the restart **2 passed (8.5 s)**. **PPC's
+G1 API-only caveat is removed**; the API proof (sha256 round trip) stands beside it.
+Report: `reports/ty/ppc_g1_clickpath_20261114.md`.
+
+**`fix-margin-report-alias-hint`** — `margin_report` and the registry share an 18-entry alias
+table (`price`, `cost`, `cogs`, `unit_cost`, `referral_fee`, `referral_pct`, `fba_fee`,
+`shipping`, `freight`, `prep`, `ads`, `qty` …). A rename never rescales or invents a value;
+`referral_fee` is an amount, a percentage is `referral_pct`/`referral_rate`; a canonical key
+wins over its alias and every rename is listed in `aliased_inputs`. Real-engine proof:
+`{price, cost, referral_fee, fba_fee, ads, provenance}` → **profit 11.24**, no refusal.
+Registry parity is test-pinned. Report: `reports/ty/margin_report_aliases_20261114.md`.
+
+**The registry maintenance blocker behind it is fixed too:** `repair_citations` kept stale
+`evidence.backend` refs (only action sources were rebuilt), so `build` refused. It now keeps
+only refs that resolve (plus the `/ui` mount), test pinned. **49 citations rewritten, 0
+unresolved**; tool list regenerated (48 wired, 5 unclaimed incl. `read_open_design`);
+`build --check` and `repair_citations --check` both exit 0.
+
+**Tests:** `test_bojo_tools_economics` **13**, +`test_chat_tools_handlers` **25**,
+`test_service_registry` **23** — all pass. The stack was restarted onto the code (backend
+**23832**, UI **28820**, supervised, media lane off).
+
+**Only owner-gated work remains in the queue:** Design Studio / Product pictures G1 generation
+(render lane + the owner's word), Listings G2 (a product decision), Vision/V3 behind
+`state/vision/PAUSE`, and the SEC/DIR items in `needs_you.md`. Soak, quiet-window waiter and
+PAUSE untouched. **The queue lease was released** (`state/director/director.pid` named a dead
+pid 540 from 2026-11-11; the file is cleared so the launcher can take the queue).
+
 ## Position, 2026-11-14 (evening) — three of six are launch-ready
 
 One independent session verified **Research, PPC and Listings** on HEAD `2a0dbba4`

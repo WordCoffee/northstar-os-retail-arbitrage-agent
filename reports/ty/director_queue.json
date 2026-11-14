@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-14T12:26:49+00:00",
+  "updated_at": "2026-11-14T22:11:53+00:00",
   "cycle": 3,
   "unit_in_flight": "",
   "unit_order": [
@@ -1894,7 +1894,7 @@
       "id": "ppc-g1-clickpath",
       "unit": "U",
       "title": "PPC G1: drive upload -> approve -> download in the browser (the API path is proved; the e2e only mounts the panel)",
-      "status": "queued",
+      "status": "merged",
       "owner": "",
       "write_paths": [
         "northstar-os-ui/src/pages/internal/AdPilot.jsx",
@@ -1907,9 +1907,9 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": "the e2e now drives the real browser path on the live stack: app sample sp_bulksheet.xlsx -> upload (af-file) -> row K300 bid 1.10 -> Propose (af-propose) -> Approve (af-approve-*) -> Write (af-write) -> af-write-result Round-trip PASS, original unmodified -> af-download download captured and >1000 bytes. npx playwright test tests/e2e/ppc_primary_action.spec.ts --project=chromium-desktop --project=chromium-mobile -> 2 passed (8.5s) on the restarted stack (backend 23832, UI 28820). G1's API-only caveat is removed; no Amazon, no spend.",
       "created_at": "2026-11-14T12:26:48+00:00",
-      "updated_at": "2026-11-14T12:26:49+00:00",
+      "updated_at": "2026-11-14T22:11:53+00:00",
       "rank": 3
     },
     {
@@ -2034,7 +2034,7 @@
       "id": "fix-margin-report-alias-hint",
       "unit": "U",
       "title": "margin_report reports referral_fee as ignored instead of naming referral_fee_amount/rate",
-      "status": "queued",
+      "status": "merged",
       "owner": "",
       "write_paths": [
         "Northstar_backend/bojo_tools/economics.py",
@@ -2047,9 +2047,9 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": "margin_report now renames 18 operator shorthands onto the engine's canonical inputs (price/cost/cogs/referral_fee/referral_pct/fba_fee/shipping/qty ...), never rescaling or inventing a value; a canonical key wins over its alias and aliased_inputs reports each rename. ty/service_registry.json profitability carries the same table + note, and a test pins the two equal. Real-engine check: {price 34.99, cost 12, referral_fee 5.25, fba_fee 5.5, ads 1, provenance} -> ok, profit 11.24, COMPLETE_ESTIMATED (no refusal). Found and fixed the registry maintenance blocker: repair_citations rebuilt evidence only from action sources and kept stale refs, so build/check refused; it now keeps only refs that resolve (plus the /ui mount). 49 citations repaired, 0 unresolved; tool list regenerated (48 wired, 5 unclaimed incl. read_open_design). Tests: test_bojo_tools_economics 13, +chat handlers 25, test_service_registry 23 passed.",
       "created_at": "2026-11-14T12:23:49+00:00",
-      "updated_at": "2026-11-14T12:23:49+00:00",
+      "updated_at": "2026-11-14T22:11:53+00:00",
       "rank": 4
     },
     {

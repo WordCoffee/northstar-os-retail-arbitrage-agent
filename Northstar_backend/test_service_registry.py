@@ -390,3 +390,37 @@ def test_a_missing_or_corrupt_file_is_not_a_reason_to_fail(tmp_path):
     broken = tmp_path / "broken.json"
     broken.write_text("{not json", encoding="utf-8")
     assert build.expected_doc(broken, {"a": 1}) == {"a": 1}
+
+
+def test_repair_drops_stale_evidence_refs_and_keeps_valid_ones(monkeypatch):
+    """Measured 2026-11-14: action citations were repaired but stale evidence refs survived.
+
+    `check_evidence` then refused to write, so the tool list stayed stale. The repair now keeps
+    only refs that still resolve (plus the documented /ui mount).
+    """
+    from tools.registry import repair_citations as rc
+
+    class Route:
+        ref = "Northstar_backend/main.py:100"
+
+    monkeypatch.setattr(rc.backend_index, "routes", lambda: [Route()])
+    monkeypatch.setattr(rc.backend_index, "find", lambda method, endpoint, routes: Route())
+
+    data = {"services": [{
+        "id": "svc",
+        "actions": [{"method": "GET", "endpoint": "/x",
+                     "source": "Northstar_backend/main.py:1"}],
+        "evidence": {"backend": [
+            "Northstar_backend/main.py:1",
+            "Northstar_backend/old.py:9",
+            "Northstar_backend/main.py:353",
+        ]},
+    }]}
+
+    out, rewrites, unresolved = rc.repair(data)
+
+    assert out["services"][0]["evidence"]["backend"] == [
+        "Northstar_backend/main.py:100",
+        "Northstar_backend/main.py:353",
+    ]
+    assert rewrites and not unresolved

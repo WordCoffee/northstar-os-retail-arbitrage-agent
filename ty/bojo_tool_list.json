@@ -5,7 +5,7 @@
   "totals": {
     "wired": 48,
     "declared": 0,
-    "unclaimed": 4
+    "unclaimed": 5
   },
   "tools": [
     {
@@ -360,7 +360,8 @@
     "corpus_drift",
     "corpus_search",
     "corpus_vector_search",
-    "purpose_command"
+    "purpose_command",
+    "read_open_design"
   ],
   "chat_service_areas": [
     {
@@ -497,6 +498,7 @@
     "offer_recommendation",
     "onboarding_status",
     "plan_campaign",
+    "read_open_design",
     "redeem_invite",
     "scan_products",
     "submit_support_ticket",

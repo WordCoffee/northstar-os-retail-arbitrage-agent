@@ -28,12 +28,15 @@ if str(ROOT) not in sys.path:
 from tools.registry import backend_index  # noqa: E402
 
 PATH = ROOT / "ty" / "service_registry.json"
-CITATION_PREFIXES = ("Northstar_backend/main.py", "Northstar_backend/design_studio_print.py")
 
 
 def repair(data: dict) -> tuple[dict, list[str], list[str]]:
     """Return (registry, rewrites, unresolved). Pure: it mutates a copy the caller owns."""
     routes = backend_index.routes()
+    #: A citation is valid only if it is a route decorator or the documented /ui mount. Keeping
+    #: a ref that no longer resolves is what left `check_evidence` red after the actions were
+    #: repaired on 2026-11-14: the stale lines survived in `evidence.backend`.
+    valid = {route.ref for route in routes} | {"Northstar_backend/main.py:353"}
     rewrites: list[str] = []
     unresolved: list[str] = []
 
@@ -54,7 +57,7 @@ def repair(data: dict) -> tuple[dict, list[str], list[str]]:
         existing = list(evidence.get("backend") or [])
         if not sources:
             continue
-        kept = [c for c in existing if not c.startswith(CITATION_PREFIXES)]
+        kept = [c for c in existing if c in valid]
         rebuilt = sorted(set(sources + kept))
         if rebuilt != existing:
             evidence["backend"] = rebuilt

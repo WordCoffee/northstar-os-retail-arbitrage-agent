@@ -87,6 +87,82 @@ def test_margin_report_injected_compute_is_used():
     assert seen == {"selling_price": 34.99, "acquisition_cost": 12.0}
 
 
+def test_margin_report_resolves_operator_shorthand():
+    """Measured 2026-11-14: `{cost, price}` refused, and a bare `referral_fee` was dropped."""
+    seen = {}
+
+    class FakeEngine:
+        @staticmethod
+        def engine(inp):
+            seen["selling_price"] = inp.selling_price
+            seen["acquisition_cost"] = inp.acquisition_cost
+            seen["referral_fee_amount"] = inp.referral_fee_amount
+            return FakeOutput({"contribution_profit_after_ads": "9.99",
+                               "readiness": "COMPLETE_ESTIMATED",
+                               "missing_inputs": []})
+
+    result = margin_report({"price": 24.0, "cost": 8.5, "referral_fee": 3.6},
+                           compute=FakeEngine.engine)
+
+    assert result["ok"] is True
+    assert result["data"]["aliased_inputs"] == [
+        {"from": "price", "to": "selling_price"},
+        {"from": "cost", "to": "acquisition_cost"},
+        {"from": "referral_fee", "to": "referral_fee_amount"},
+    ]
+    assert seen == {"selling_price": 24.0, "acquisition_cost": 8.5,
+                    "referral_fee_amount": 3.6}
+    assert result["data"]["ignored_inputs"] == []
+    assert result["data"]["aliased_inputs"]
+
+
+def test_a_canonical_input_wins_over_its_alias():
+    seen = {}
+
+    class FakeEngine:
+        @staticmethod
+        def engine(inp):
+            seen["selling_price"] = inp.selling_price
+            seen["acquisition_cost"] = inp.acquisition_cost
+            return FakeOutput({"contribution_profit_after_ads": "9.99",
+                               "readiness": "COMPLETE_ESTIMATED",
+                               "missing_inputs": []})
+
+    result = margin_report({"selling_price": 24.0, "price": 20.0, "cost": 8.5},
+                           compute=FakeEngine.engine)
+
+    assert result["ok"] is True
+    assert seen["selling_price"] == 24.0
+    assert result["data"]["ignored_inputs"] == ["price"]
+    assert result["data"]["aliased_inputs"] == [{"from": "cost", "to": "acquisition_cost"}]
+
+
+def test_shorthand_computes_a_real_margin_without_refusal():
+    """The whole point: `{price, cost, referral_fee, fba_fee, ads}` must compute, not refuse."""
+    result = margin_report({"price": 34.99, "cost": 12.0, "referral_fee": 5.25,
+                            "fba_fee": 5.50, "ads": 1.0,
+                            "provenance": "user_supplied"})
+    assert result["ok"] is True, result
+    payload = result["data"]["economics"]
+    assert payload["contribution_profit_after_ads"] == "11.24"
+    assert result["data"]["readiness"] == "COMPLETE_ESTIMATED"
+    assert {row["from"] for row in result["data"]["aliased_inputs"]} == {
+        "price", "cost", "referral_fee", "fba_fee", "ads"}
+
+
+def test_registry_alias_hints_match_the_handler():
+    """The registry's hints are not decoration: they must be the handler's own table."""
+    from pathlib import Path
+
+    registry = json.loads(
+        (Path(__file__).resolve().parents[1] / "ty" / "service_registry.json")
+        .read_text(encoding="utf-8")
+    )
+    row = next(s for s in registry["services"] if s["id"] == "profitability")
+    assert row["input_aliases"] == econ.INPUT_ALIASES
+    assert "aliased_inputs" in row["input_aliases_note"]
+
+
 def test_margin_report_drops_and_names_unknown_fields():
     result = margin_report({**GOOD_INPUTS, "listing_optimizer_thing": "ignored"})
 

@@ -458,7 +458,7 @@
           "effect": "read",
           "endpoint": "/api/v1/foundation/economics/compute",
           "method": "POST",
-          "source": "Northstar_backend/foundation/api/router.py:1461",
+          "source": "Northstar_backend/foundation/api/router.py:1485",
           "note": "pure computation; no record is written"
         }
       ],
@@ -482,7 +482,7 @@
         "vision": "live",
         "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: The Auctioneer | controls (shell chrome included): Search the Northstar Index, Operator, 90%, 100%, 115%, 130%",
         "backend": [
-          "Northstar_backend/foundation/api/router.py:1461"
+          "Northstar_backend/foundation/api/router.py:1485"
         ],
         "declared_tools": [],
         "confidence": "high",
@@ -802,14 +802,14 @@
           "effect": "read",
           "endpoint": "/api/v1/foundation/entitlements",
           "method": "GET",
-          "source": "Northstar_backend/foundation/api/router.py:1693"
+          "source": "Northstar_backend/foundation/api/router.py:1717"
         },
         {
           "name": "read plan usage",
           "effect": "read",
           "endpoint": "/api/v1/foundation/plan-usage",
           "method": "GET",
-          "source": "Northstar_backend/foundation/api/router.py:1809"
+          "source": "Northstar_backend/foundation/api/router.py:1833"
         }
       ],
       "bojo_tool": {
@@ -827,7 +827,8 @@
         "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS — Retail Arbitrage Suite - Google Chrome",
         "backend": [
           "Northstar_backend/foundation/api/router.py:1693",
-          "Northstar_backend/foundation/api/router.py:1809"
+          "Northstar_backend/foundation/api/router.py:1717",
+          "Northstar_backend/foundation/api/router.py:1833"
         ],
         "declared_tools": [],
         "confidence": "medium",
@@ -864,84 +865,84 @@
           "effect": "read",
           "endpoint": "/api/v1/foundation/providers",
           "method": "GET",
-          "source": "Northstar_backend/foundation/api/router.py:755"
+          "source": "Northstar_backend/foundation/api/router.py:779"
         },
         {
           "name": "read marketplaces",
           "effect": "read",
           "endpoint": "/api/v1/foundation/marketplaces",
           "method": "GET",
-          "source": "Northstar_backend/foundation/api/router.py:650"
+          "source": "Northstar_backend/foundation/api/router.py:674"
         },
         {
           "name": "read approvals",
           "effect": "read",
           "endpoint": "/api/v1/foundation/approvals",
           "method": "GET",
-          "source": "Northstar_backend/foundation/api/router.py:1351"
+          "source": "Northstar_backend/foundation/api/router.py:1375"
         },
         {
           "name": "read identity conflicts",
           "effect": "read",
           "endpoint": "/api/v1/foundation/identity/conflicts",
           "method": "GET",
-          "source": "Northstar_backend/foundation/api/router.py:718"
+          "source": "Northstar_backend/foundation/api/router.py:742"
         },
         {
           "name": "read usage summary",
           "effect": "read",
           "endpoint": "/api/v1/foundation/usage/summary",
           "method": "GET",
-          "source": "Northstar_backend/foundation/api/router.py:1331"
+          "source": "Northstar_backend/foundation/api/router.py:1355"
         },
         {
           "name": "read queue posture",
           "effect": "read",
           "endpoint": "/api/v1/foundation/jobs-durable/queue-posture",
           "method": "GET",
-          "source": "Northstar_backend/foundation/api/router.py:845"
+          "source": "Northstar_backend/foundation/api/router.py:869"
         },
         {
           "name": "read schedule posture",
           "effect": "read",
           "endpoint": "/api/v1/foundation/schedules/posture",
           "method": "GET",
-          "source": "Northstar_backend/foundation/api/router.py:995"
+          "source": "Northstar_backend/foundation/api/router.py:1019"
         },
         {
           "name": "read audit tail",
           "effect": "read",
           "endpoint": "/api/v1/foundation/audit",
           "method": "GET",
-          "source": "Northstar_backend/foundation/api/router.py:1407"
+          "source": "Northstar_backend/foundation/api/router.py:1431"
         },
         {
           "name": "read environment",
           "effect": "read",
           "endpoint": "/api/v1/foundation/environment",
           "method": "GET",
-          "source": "Northstar_backend/foundation/api/router.py:466"
+          "source": "Northstar_backend/foundation/api/router.py:490"
         },
         {
           "name": "read product count",
           "effect": "read",
           "endpoint": "/api/v1/foundation/products",
           "method": "GET",
-          "source": "Northstar_backend/foundation/api/router.py:659"
+          "source": "Northstar_backend/foundation/api/router.py:683"
         },
         {
           "name": "read identity candidates",
           "effect": "read",
           "endpoint": "/api/v1/foundation/identity/candidates",
           "method": "GET",
-          "source": "Northstar_backend/foundation/api/router.py:711"
+          "source": "Northstar_backend/foundation/api/router.py:735"
         },
         {
           "name": "read keyword imports",
           "effect": "read",
           "endpoint": "/api/v1/foundation/keywords/imports",
           "method": "GET",
-          "source": "Northstar_backend/foundation/api/router.py:1240"
+          "source": "Northstar_backend/foundation/api/router.py:1264"
         }
       ],
       "bojo_tool": {
@@ -958,18 +959,18 @@
         "vision": "live",
         "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: Northstar OS Retail Arbitrage | controls (shell chrome included): Home, Gallery, Tyrone, Desktop, Download, Documents",
         "backend": [
-          "Northstar_backend/foundation/api/router.py:1240",
-          "Northstar_backend/foundation/api/router.py:1331",
-          "Northstar_backend/foundation/api/router.py:1351",
-          "Northstar_backend/foundation/api/router.py:1407",
-          "Northstar_backend/foundation/api/router.py:466",
-          "Northstar_backend/foundation/api/router.py:650",
-          "Northstar_backend/foundation/api/router.py:659",
-          "Northstar_backend/foundation/api/router.py:711",
-          "Northstar_backend/foundation/api/router.py:718",
-          "Northstar_backend/foundation/api/router.py:755",
-          "Northstar_backend/foundation/api/router.py:845",
-          "Northstar_backend/foundation/api/router.py:995"
+          "Northstar_backend/foundation/api/router.py:1019",
+          "Northstar_backend/foundation/api/router.py:1264",
+          "Northstar_backend/foundation/api/router.py:1355",
+          "Northstar_backend/foundation/api/router.py:1375",
+          "Northstar_backend/foundation/api/router.py:1431",
+          "Northstar_backend/foundation/api/router.py:490",
+          "Northstar_backend/foundation/api/router.py:674",
+          "Northstar_backend/foundation/api/router.py:683",
+          "Northstar_backend/foundation/api/router.py:735",
+          "Northstar_backend/foundation/api/router.py:742",
+          "Northstar_backend/foundation/api/router.py:779",
+          "Northstar_backend/foundation/api/router.py:869"
         ],
         "declared_tools": [],
         "confidence": "high",
@@ -1031,84 +1032,84 @@
           "effect": "read",
           "endpoint": "/api/v1/foundation/jobs-durable",
           "method": "GET",
-          "source": "Northstar_backend/foundation/api/router.py:855"
+          "source": "Northstar_backend/foundation/api/router.py:879"
         },
         {
           "name": "create durable job",
           "effect": "write",
           "endpoint": "/api/v1/foundation/jobs-durable",
           "method": "POST",
-          "source": "Northstar_backend/foundation/api/router.py:868"
+          "source": "Northstar_backend/foundation/api/router.py:892"
         },
         {
           "name": "read job audit",
           "effect": "read",
           "endpoint": "/api/v1/foundation/jobs-durable/{job_id}/audit",
           "method": "GET",
-          "source": "Northstar_backend/foundation/api/router.py:904"
+          "source": "Northstar_backend/foundation/api/router.py:928"
         },
         {
           "name": "cancel job",
           "effect": "write",
           "endpoint": "/api/v1/foundation/jobs-durable/{job_id}/cancel",
           "method": "POST",
-          "source": "Northstar_backend/foundation/api/router.py:930"
+          "source": "Northstar_backend/foundation/api/router.py:954"
         },
         {
           "name": "retry job",
           "effect": "write",
           "endpoint": "/api/v1/foundation/jobs-durable/{job_id}/retry",
           "method": "POST",
-          "source": "Northstar_backend/foundation/api/router.py:944"
+          "source": "Northstar_backend/foundation/api/router.py:968"
         },
         {
           "name": "list schedules",
           "effect": "read",
           "endpoint": "/api/v1/foundation/schedules",
           "method": "GET",
-          "source": "Northstar_backend/foundation/api/router.py:960"
+          "source": "Northstar_backend/foundation/api/router.py:984"
         },
         {
           "name": "enable schedule",
           "effect": "write",
           "endpoint": "/api/v1/foundation/schedules/{schedule_id}/enable",
           "method": "POST",
-          "source": "Northstar_backend/foundation/api/router.py:1037"
+          "source": "Northstar_backend/foundation/api/router.py:1061"
         },
         {
           "name": "disable schedule",
           "effect": "write",
           "endpoint": "/api/v1/foundation/schedules/{schedule_id}/disable",
           "method": "POST",
-          "source": "Northstar_backend/foundation/api/router.py:1047"
+          "source": "Northstar_backend/foundation/api/router.py:1071"
         },
         {
           "name": "read handler registry",
           "effect": "read",
           "endpoint": "/api/v1/foundation/jobs-durable/handler-registry",
           "method": "GET",
-          "source": "Northstar_backend/foundation/api/router.py:836"
+          "source": "Northstar_backend/foundation/api/router.py:860"
         },
         {
           "name": "read queue posture",
           "effect": "read",
           "endpoint": "/api/v1/foundation/jobs-durable/queue-posture",
           "method": "GET",
-          "source": "Northstar_backend/foundation/api/router.py:845"
+          "source": "Northstar_backend/foundation/api/router.py:869"
         },
         {
           "name": "read schedule posture",
           "effect": "read",
           "endpoint": "/api/v1/foundation/schedules/posture",
           "method": "GET",
-          "source": "Northstar_backend/foundation/api/router.py:995"
+          "source": "Northstar_backend/foundation/api/router.py:1019"
         },
         {
           "name": "read one job",
           "effect": "read",
           "endpoint": "/api/v1/foundation/jobs-durable/{job_id}",
           "method": "GET",
-          "source": "Northstar_backend/foundation/api/router.py:891"
+          "source": "Northstar_backend/foundation/api/router.py:915"
         }
       ],
       "bojo_tool": {
@@ -1125,18 +1126,18 @@
         "vision": "live",
         "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: OC | Autothink UI at 127.0.0.1 | controls (shell chrome included): Home, Gallery, Tyrone, Desktop, Download, Documents",
         "backend": [
-          "Northstar_backend/foundation/api/router.py:1037",
-          "Northstar_backend/foundation/api/router.py:1047",
-          "Northstar_backend/foundation/api/router.py:836",
-          "Northstar_backend/foundation/api/router.py:845",
-          "Northstar_backend/foundation/api/router.py:855",
-          "Northstar_backend/foundation/api/router.py:868",
-          "Northstar_backend/foundation/api/router.py:891",
-          "Northstar_backend/foundation/api/router.py:904",
-          "Northstar_backend/foundation/api/router.py:930",
-          "Northstar_backend/foundation/api/router.py:944",
-          "Northstar_backend/foundation/api/router.py:960",
-          "Northstar_backend/foundation/api/router.py:995"
+          "Northstar_backend/foundation/api/router.py:1019",
+          "Northstar_backend/foundation/api/router.py:1061",
+          "Northstar_backend/foundation/api/router.py:1071",
+          "Northstar_backend/foundation/api/router.py:860",
+          "Northstar_backend/foundation/api/router.py:869",
+          "Northstar_backend/foundation/api/router.py:879",
+          "Northstar_backend/foundation/api/router.py:892",
+          "Northstar_backend/foundation/api/router.py:915",
+          "Northstar_backend/foundation/api/router.py:928",
+          "Northstar_backend/foundation/api/router.py:954",
+          "Northstar_backend/foundation/api/router.py:968",
+          "Northstar_backend/foundation/api/router.py:984"
         ],
         "declared_tools": [],
         "confidence": "high",
@@ -1198,56 +1199,56 @@
           "effect": "read",
           "endpoint": "/api/v1/foundation/keywords/search",
           "method": "GET",
-          "source": "Northstar_backend/foundation/api/router.py:1078"
+          "source": "Northstar_backend/foundation/api/router.py:1102"
         },
         {
           "name": "read gaps",
           "effect": "read",
           "endpoint": "/api/v1/foundation/keywords/gaps",
           "method": "GET",
-          "source": "Northstar_backend/foundation/api/router.py:1116"
+          "source": "Northstar_backend/foundation/api/router.py:1140"
         },
         {
           "name": "read search terms",
           "effect": "read",
           "endpoint": "/api/v1/foundation/keywords/search-terms",
           "method": "GET",
-          "source": "Northstar_backend/foundation/api/router.py:1126"
+          "source": "Northstar_backend/foundation/api/router.py:1150"
         },
         {
           "name": "read sources",
           "effect": "read",
           "endpoint": "/api/v1/foundation/keywords/sources",
           "method": "GET",
-          "source": "Northstar_backend/foundation/api/router.py:1180"
+          "source": "Northstar_backend/foundation/api/router.py:1204"
         },
         {
           "name": "list imports",
           "effect": "read",
           "endpoint": "/api/v1/foundation/keywords/imports",
           "method": "GET",
-          "source": "Northstar_backend/foundation/api/router.py:1240"
+          "source": "Northstar_backend/foundation/api/router.py:1264"
         },
         {
           "name": "submit import",
           "effect": "write",
           "endpoint": "/api/v1/foundation/keywords/imports",
           "method": "POST",
-          "source": "Northstar_backend/foundation/api/router.py:1207"
+          "source": "Northstar_backend/foundation/api/router.py:1231"
         },
         {
           "name": "read one keyword",
           "effect": "read",
           "endpoint": "/api/v1/foundation/keywords/{keyword_id}",
           "method": "GET",
-          "source": "Northstar_backend/foundation/api/router.py:1310"
+          "source": "Northstar_backend/foundation/api/router.py:1334"
         },
         {
           "name": "read rejected import rows",
           "effect": "read",
           "endpoint": "/api/v1/foundation/keywords/imports/{batch_id}/rejected",
           "method": "GET",
-          "source": "Northstar_backend/foundation/api/router.py:1264"
+          "source": "Northstar_backend/foundation/api/router.py:1288"
         }
       ],
       "bojo_tool": {
@@ -1280,14 +1281,14 @@
         "vision": "live",
         "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: OC | Autothink UI at 127.0.0.1 | controls (shell chrome included): Home, Gallery, Tyrone, Desktop, Download, Documents",
         "backend": [
-          "Northstar_backend/foundation/api/router.py:1078",
-          "Northstar_backend/foundation/api/router.py:1116",
-          "Northstar_backend/foundation/api/router.py:1126",
-          "Northstar_backend/foundation/api/router.py:1180",
-          "Northstar_backend/foundation/api/router.py:1207",
-          "Northstar_backend/foundation/api/router.py:1240",
+          "Northstar_backend/foundation/api/router.py:1102",
+          "Northstar_backend/foundation/api/router.py:1140",
+          "Northstar_backend/foundation/api/router.py:1150",
+          "Northstar_backend/foundation/api/router.py:1204",
+          "Northstar_backend/foundation/api/router.py:1231",
           "Northstar_backend/foundation/api/router.py:1264",
-          "Northstar_backend/foundation/api/router.py:1310"
+          "Northstar_backend/foundation/api/router.py:1288",
+          "Northstar_backend/foundation/api/router.py:1334"
         ],
         "declared_tools": [],
         "confidence": "high",
@@ -1437,7 +1438,7 @@
           "effect": "write",
           "endpoint": "/api/v1/foundation/signup",
           "method": "POST",
-          "source": "Northstar_backend/foundation/api/router.py:1756"
+          "source": "Northstar_backend/foundation/api/router.py:1780"
         }
       ],
       "bojo_tool": {
@@ -1454,7 +1455,7 @@
         "vision": "live",
         "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: Google | controls (shell chrome included): Ask Google, AI Mode, Do more with AI Mode, Create images, Twitch, Gmail",
         "backend": [
-          "Northstar_backend/foundation/api/router.py:1756"
+          "Northstar_backend/foundation/api/router.py:1780"
         ],
         "declared_tools": [
           "redeem_invite"
@@ -1506,7 +1507,7 @@
           "effect": "read",
           "endpoint": "/api/v1/foundation/admin/dashboard",
           "method": "GET",
-          "source": "Northstar_backend/foundation/api/router.py:2025"
+          "source": "Northstar_backend/foundation/api/router.py:2049"
         },
         {
           "name": "read tester accounts",
@@ -1530,7 +1531,7 @@
         "vision": "live",
         "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: BIGVIIBIN - Twitch | controls (shell chrome included): Gift a Sub, Subscribe, LIVE, Clip, Now Playing:, Dolly Babe",
         "backend": [
-          "Northstar_backend/foundation/api/router.py:2025",
+          "Northstar_backend/foundation/api/router.py:2049",
           "Northstar_backend/noncreative_reads.py:402"
         ],
         "declared_tools": [
@@ -1879,21 +1880,21 @@
           "effect": "read",
           "endpoint": "/api/v1/foundation/golden-goose/queue",
           "method": "GET",
-          "source": "Northstar_backend/foundation/api/router.py:414"
+          "source": "Northstar_backend/foundation/api/router.py:438"
         },
         {
           "name": "read item",
           "effect": "read",
           "endpoint": "/api/v1/foundation/golden-goose/{item_id}",
           "method": "GET",
-          "source": "Northstar_backend/foundation/api/router.py:427"
+          "source": "Northstar_backend/foundation/api/router.py:451"
         },
         {
           "name": "record decision",
           "effect": "write",
           "endpoint": "/api/v1/foundation/golden-goose/{item_id}/decision",
           "method": "POST",
-          "source": "Northstar_backend/foundation/api/router.py:443"
+          "source": "Northstar_backend/foundation/api/router.py:467"
         }
       ],
       "bojo_tool": {
@@ -1911,9 +1912,9 @@
         "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: twitch.tv/bigviibin | controls (shell chrome included): Following, Browse, Search, Subscribe, Bits: 29% off, Gift a Sub",
         "backend": [
           "Northstar_backend/foundation/api/router.py:401",
-          "Northstar_backend/foundation/api/router.py:414",
-          "Northstar_backend/foundation/api/router.py:427",
-          "Northstar_backend/foundation/api/router.py:443"
+          "Northstar_backend/foundation/api/router.py:438",
+          "Northstar_backend/foundation/api/router.py:451",
+          "Northstar_backend/foundation/api/router.py:467"
         ],
         "declared_tools": [
           "golden_goose_scan"
@@ -2046,14 +2047,14 @@
           "effect": "read",
           "endpoint": "/api/v1/foundation/keywords/search",
           "method": "GET",
-          "source": "Northstar_backend/foundation/api/router.py:1078"
+          "source": "Northstar_backend/foundation/api/router.py:1102"
         },
         {
           "name": "read keyword gaps",
           "effect": "read",
           "endpoint": "/api/v1/foundation/keywords/gaps",
           "method": "GET",
-          "source": "Northstar_backend/foundation/api/router.py:1116"
+          "source": "Northstar_backend/foundation/api/router.py:1140"
         }
       ],
       "bojo_tool": {
@@ -2076,8 +2077,8 @@
         "vision": "live",
         "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: Keyword Tracker | controls (shell chrome included): Track New, Reports, Design Studio, Golden Goose Finder, Listing Guardian, Competitor Monitor",
         "backend": [
-          "Northstar_backend/foundation/api/router.py:1078",
-          "Northstar_backend/foundation/api/router.py:1116",
+          "Northstar_backend/foundation/api/router.py:1102",
+          "Northstar_backend/foundation/api/router.py:1140",
           "Northstar_backend/noncreative_reads.py:336"
         ],
         "declared_tools": [
@@ -2216,14 +2217,14 @@
           "effect": "write",
           "endpoint": "/api/design-studio/listing-records",
           "method": "POST",
-          "source": "Northstar_backend/design_studio_api.py:1293"
+          "source": "Northstar_backend/design_studio_api.py:1307"
         },
         {
           "name": "read listing records",
           "effect": "read",
           "endpoint": "/api/design-studio/listing-records",
           "method": "GET",
-          "source": "Northstar_backend/design_studio_api.py:1270"
+          "source": "Northstar_backend/design_studio_api.py:1284"
         }
       ],
       "bojo_tool": {
@@ -2251,8 +2252,8 @@
         "vision": "live",
         "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: ListingForge | controls (shell chrome included): Standard, Advanced, Create Listing, Templates, Editor, Templates",
         "backend": [
-          "Northstar_backend/design_studio_api.py:1270",
-          "Northstar_backend/design_studio_api.py:1293",
+          "Northstar_backend/design_studio_api.py:1284",
+          "Northstar_backend/design_studio_api.py:1307",
           "Northstar_backend/main.py:1721"
         ],
         "declared_tools": [
@@ -2310,14 +2311,14 @@
           "effect": "read",
           "endpoint": "/api/design-studio/amazon-files",
           "method": "GET",
-          "source": "Northstar_backend/design_studio_api.py:1552"
+          "source": "Northstar_backend/design_studio_api.py:1566"
         },
         {
           "name": "read imported rows",
           "effect": "read",
           "endpoint": "/api/design-studio/amazon-files/{uid}/rows",
           "method": "GET",
-          "source": "Northstar_backend/design_studio_api.py:1569"
+          "source": "Northstar_backend/design_studio_api.py:1583"
         },
         {
           "name": "read harvested terms",
@@ -2338,7 +2339,7 @@
           "effect": "write",
           "endpoint": "/api/v1/foundation/jobs-durable",
           "method": "POST",
-          "source": "Northstar_backend/foundation/api/router.py:868",
+          "source": "Northstar_backend/foundation/api/router.py:892",
           "why": "a plan the seller can return to is the difference between a report and a tool; stored as a durable job and read back by id"
         }
       ],
@@ -2372,10 +2373,10 @@
         "vision": "live",
         "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: AdPilot | controls (shell chrome included): Standard, Advanced, Create Campaign, Upload report – bulk ads file, Campaign Detail, Search Terms",
         "backend": [
-          "Northstar_backend/design_studio_api.py:1552",
-          "Northstar_backend/design_studio_api.py:1569",
+          "Northstar_backend/design_studio_api.py:1566",
+          "Northstar_backend/design_studio_api.py:1583",
           "Northstar_backend/design_studio_api.py:843",
-          "Northstar_backend/foundation/api/router.py:868",
+          "Northstar_backend/foundation/api/router.py:892",
           "Northstar_backend/main.py:1737"
         ],
         "declared_tools": [
@@ -2509,17 +2510,38 @@
           "effect": "read",
           "endpoint": "/api/v1/foundation/economics/contract",
           "method": "GET",
-          "source": "Northstar_backend/foundation/api/router.py:1445"
+          "source": "Northstar_backend/foundation/api/router.py:1469"
         },
         {
           "name": "compute economics",
           "effect": "read",
           "endpoint": "/api/v1/foundation/economics/compute",
           "method": "POST",
-          "source": "Northstar_backend/foundation/api/router.py:1461",
+          "source": "Northstar_backend/foundation/api/router.py:1485",
           "note": "pure computation; no record is written"
         }
       ],
+      "input_aliases": {
+        "price": "selling_price",
+        "selling": "selling_price",
+        "cost": "acquisition_cost",
+        "unit_cost": "acquisition_cost",
+        "cogs": "acquisition_cost",
+        "acquisition": "acquisition_cost",
+        "referral_fee": "referral_fee_amount",
+        "referral_pct": "referral_fee_rate",
+        "referral_rate": "referral_fee_rate",
+        "fba_fee": "fba_fulfillment_fee",
+        "fulfillment_fee": "fba_fulfillment_fee",
+        "shipping": "inbound_freight",
+        "freight": "inbound_freight",
+        "prep": "prep_cost",
+        "ads": "advertising_cost",
+        "ad_cost": "advertising_cost",
+        "advertising": "advertising_cost",
+        "qty": "quantity"
+      },
+      "input_aliases_note": "Shorthand is renamed onto the engine's own input; the value is never invented or rescaled, and the rename is reported in aliased_inputs. A canonical key always wins over its alias.",
       "bojo_tool": {
         "name": "margin_report",
         "status": "wired",
@@ -2540,8 +2562,8 @@
         "vision": "screenshot",
         "vision_note": "committed capture of this route; not described live | blocked: window did not take the foreground | shot: reports/ui_audit_20261016/profitability.png | latest attempt blocked: neither the title nor the pixels changed",
         "backend": [
-          "Northstar_backend/foundation/api/router.py:1445",
-          "Northstar_backend/foundation/api/router.py:1461"
+          "Northstar_backend/foundation/api/router.py:1469",
+          "Northstar_backend/foundation/api/router.py:1485"
         ],
         "declared_tools": [
           "margin_report"
