@@ -10,6 +10,37 @@ A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.m
 > and `reports/ty/handoff.md`, then continue from the first unfinished unit. No
 > questions, no reports between cycles. Idle means re-plan.
 
+## Position, 2026-11-14 — Golden Goose is the first service at all five gates
+
+Independent verifier session (not the author), HEAD `e060503d`, read-only:
+`reports/ty/verify_golden_goose_20261114.md`. **G1–G5 all AGREE.** G1's e2e passed **2/2**
+(the persisted `GG-E2E-…` id read back from the queue and its review route); G2 reproduced
+**100.0 / 5 / 5** service-path offline with `network: none`; G3 completed the full click path on
+`chromium-desktop` (**Chromium**) and `chromium-mobile` (**WebKit**, iPhone 12); G4 live evaluate
+**200**, `persisted: true`, `purchase_ready: false` on a `sample: true` row, read-back
+`APPROVAL_REQUIRED`, live Amazon scan **unarmed and refused**; the service suite **518 passed**.
+**Golden Goose 5/5 — the first of the core six.** The verifier itself declined to call G5
+"closed" (one pass is not a regression baseline); the gate's definition is independent
+reproduction, which it did, and the caveats are kept in the digest.
+
+**The first pass was blocked by a dead backend**, not by the service: nothing was listening on
+8000 (the dev-start supervisor had died with it; only Vite survived), so the browser showed
+"Internal Server Error". I restored the backend in the dev posture — hidden uvicorn on
+127.0.0.1:8000, pid **3124**, `/health` ok, recorded in `dev-start.pids(.json)` — and the
+verifier re-ran, not me. Its two discrepancies are resolved: the UI banner
+(`build 83bcfd72`) is computed **at Vite start** while the server serves current source (the
+passing spec depends on the post-banner Golden Goose fix `536d3af3`), and 90.0 (scorecard) vs
+100.0 (service-path) are different populations, never the same number.
+
+`reports/ty/digest_2026-11-14.md`: **1 of 6 launch-ready**, Research 4/5 (G5 only), PPC 3/5
+(G4 `contract` empty payload, G5), Design Studio/Product pictures 3/5 (G1 generation — the
+quiet window's one render was **refused** with `URLError 10061`; not retried), Listings 3/5
+(G2 an honest zero, G5). Scorecards: 22 of 28 ≥ 85, 4 of 28 at bar on every dimension, top gap
+`listings` 7.2. Soak closed: 22 units, 0 launcher restarts, 1 RAM pause, min free RAM 0.89 GB.
+**Next build item: `ppc-g4-contract`** — the contract probe needs a real seeded upload so
+AdPilot's list action returns measured rows; then the G5 sweep. Soak, quiet-window waiter and
+`state/vision/PAUSE` untouched; no Amazon, spend, GPU, browser or credential access.
+
 ## Position, 2026-11-14 (UTC) — Product Finder earns its own seller score through `scan_products`
 
 The next ranked gap after the AdPilot refresh was **7.2, tied** between `listings` and
