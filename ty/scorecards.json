@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-11T19:35:56+00:00",
+  "at": "2026-11-14T01:33:47+00:00",
   "bar": 85.0,
   "weights": {
     "works": 0.23,
@@ -13,64 +13,6 @@
   "test_ids": 7465,
   "scan_findings": 1,
   "services": [
-    {
-      "id": "adpilot",
-      "label": "AdPilot",
-      "group": "Advertising",
-      "kind": "workspace",
-      "route": "/adpilot",
-      "impact": 0.7,
-      "bar": 85.0,
-      "score": 67.0,
-      "meets_bar": false,
-      "weakest": "seller",
-      "gap": 12.6,
-      "dimensions": {
-        "works": {
-          "score": 100.0,
-          "evidence": "13 test id(s) prove it"
-        },
-        "correct": {
-          "score": 60.0,
-          "evidence": "13 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
-        },
-        "seller": {
-          "score": 0.0,
-          "evidence": "no Seller-Tester output scored for this service"
-        },
-        "complete": {
-          "score": 100.0,
-          "evidence": "1/1 declared Bojo tools wired: plan_campaign"
-        },
-        "usable": {
-          "score": 100.0,
-          "evidence": "no readiness finding names this service"
-        },
-        "measured": {
-          "score": 100.0,
-          "evidence": "route /adpilot -> northstar-os-ui\\src\\pages\\internal\\AdPilot.jsx; app p95 3.4 ms"
-        },
-        "contract": {
-          "score": 0.0,
-          "evidence": "empty_payload: payload has no measured rows or fields (keys: uploads,note)"
-        }
-      },
-      "scenarios": [
-        {
-          "text": "hold ROAS while doubling spend on the winner",
-          "tag": "backed"
-        },
-        {
-          "text": "cut the keywords that only cost money",
-          "tag": "backed"
-        },
-        {
-          "text": "show me what the campaign did last week",
-          "tag": "backed"
-        }
-      ],
-      "purpose": "campaign control: budget, bids, and the report behind them"
-    },
     {
       "id": "product-finder",
       "label": "SourceScout",
@@ -299,6 +241,64 @@
         }
       ],
       "purpose": "support inside the beta without a human in the loop"
+    },
+    {
+      "id": "adpilot",
+      "label": "AdPilot",
+      "group": "Advertising",
+      "kind": "workspace",
+      "route": "/adpilot",
+      "impact": 0.7,
+      "bar": 85.0,
+      "score": 79.8,
+      "meets_bar": false,
+      "weakest": "contract",
+      "gap": 3.6,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "13 test id(s) prove it"
+        },
+        "correct": {
+          "score": 60.0,
+          "evidence": "13 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+        },
+        "seller": {
+          "score": 98.1,
+          "evidence": "6 Seller-Tester service-path outputs (population: service-path; path ad_copy), mean 98.1, 5 passed"
+        },
+        "complete": {
+          "score": 100.0,
+          "evidence": "1/1 declared Bojo tools wired: plan_campaign"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 100.0,
+          "evidence": "route /adpilot -> northstar-os-ui\\src\\pages\\internal\\AdPilot.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 0.0,
+          "evidence": "empty_payload: payload has no measured rows or fields (keys: uploads,note)"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "hold ROAS while doubling spend on the winner",
+          "tag": "backed"
+        },
+        {
+          "text": "cut the keywords that only cost money",
+          "tag": "backed"
+        },
+        {
+          "text": "show me what the campaign did last week",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "campaign control: budget, bids, and the report behind them"
     },
     {
       "id": "towncrier",
@@ -921,7 +921,7 @@
     },
     {
       "id": "foundation",
-      "label": "Operations Hub",
+      "label": "Foundation",
       "group": "Internal",
       "kind": "workspace",
       "route": "/foundation",
@@ -968,7 +968,7 @@
           "tag": "backed"
         }
       ],
-      "purpose": "Operations Hub"
+      "purpose": "Foundation"
     },
     {
       "id": "jobs",

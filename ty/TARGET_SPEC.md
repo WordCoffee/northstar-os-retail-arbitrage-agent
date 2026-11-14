@@ -1,132 +1,45 @@
 # Target spec — what production-ready means, per service
 
-Derived 2026-11-11T18:02:03+00:00 from `state/director/services.json`, 7465 measured test ids and 1 readiness findings. **Scores are measured, never asserted**: a dimension with no artefact scores 0 and says why.
+Derived 2026-11-14T01:33:47+00:00 from `state/director/services.json`, 7465 measured test ids and 1 readiness findings. **Scores are measured, never asserted**: a dimension with no artefact scores 0 and says why.
 
 Bar: **85 on every dimension** (not an average). A service is at the bar only when its weakest dimension clears it. Impact weight is what a paying seller needs first; gap = impact x (bar - score).
 
 | service | score | weakest | at bar | gap | impact |
 |---|---|---|---|---|---|
-| OfferChisel (`offerchisel`) | 67.0 | seller | no | 16.2 | 0.9 |
-| The Town Crier (`towncrier`) | 55.0 | seller | no | 13.5 | 0.45 |
-| AdPilot (`adpilot`) | 67.0 | seller | no | 12.6 | 0.7 |
-| SocialPulse (`socialpulse`) | 67.0 | seller | no | 8.1 | 0.45 |
 | SourceScout (`product-finder`) | 77.0 | seller | no | 7.2 | 0.9 |
 | Listing Guardian (`listings`) | 77.0 | seller | no | 7.2 | 0.9 |
+| OfferChisel (`offerchisel`) | 79.5 | contract | no | 5.0 | 0.9 |
 | Support (`beta-support`) | 77.0 | measured | no | 4.0 | 0.5 |
+| AdPilot (`adpilot`) | 79.8 | contract | no | 3.6 | 0.7 |
+| The Town Crier (`towncrier`) | 79.0 | contract | no | 2.7 | 0.45 |
+| SocialPulse (`socialpulse`) | 79.7 | contract | no | 2.4 | 0.45 |
 | Operations Hub (`hub`) | 100.0 | works | yes | 0.0 | 0.85 |
 | The Ledger (`ledger`) | 86.2 | complete | no | 0.0 | 0.8 |
 | Prospector (`prospector`) | 100.0 | works | yes | 0.0 | 0.9 |
-| Golden Goose (`goldengoose`) | 89.4 | correct | no | 0.0 | 0.95 |
 | The Auctioneer (`auctioneer`) | 86.2 | complete | no | 0.0 | 0.7 |
 | AutothinK (`autothink`) | 86.2 | complete | no | 0.0 | 0.5 |
 | The Watch (`thewatch`) | 86.2 | complete | no | 0.0 | 0.6 |
 | RankLedger (`rankledger`) | 86.2 | complete | no | 0.0 | 0.55 |
 | The Rival Board (`rivalboard`) | 86.2 | complete | no | 0.0 | 0.5 |
 | Account (`account`) | 86.2 | complete | no | 0.0 | 0.8 |
-| Operations Hub (`foundation`) | 86.2 | complete | no | 0.0 | 0.7 |
+| Foundation (`foundation`) | 86.2 | complete | no | 0.0 | 0.7 |
 | Jobs & Schedules (`jobs`) | 86.2 | complete | no | 0.0 | 0.4 |
 | Keywords & SEO (`keywords`) | 86.2 | complete | no | 0.0 | 0.6 |
 | Onboarding & Plan (`beta`) | 88.5 | contract | no | 0.0 | 0.9 |
 | Invite entry (`beta-signup`) | 88.5 | contract | no | 0.0 | 0.8 |
 | Tester Dashboard (`beta-ops`) | 88.5 | contract | no | 0.0 | 0.4 |
 | Design Studio (`design-studio`) | 89.5 | correct | no | 0.0 | 0.95 |
-| Golden Goose (`golden-goose`) | 89.4 | correct | no | 0.0 | 0.95 |
+| Golden Goose (`golden-goose`) | 90.0 | correct | no | 0.0 | 0.95 |
 | Keyword Tracker (`keyword-tracker`) | 100.0 | works | yes | 0.0 | 0.6 |
 | Competitor Monitor (`competitor-monitor`) | 88.5 | contract | no | 0.0 | 0.5 |
 | ListingForge (`listingforge`) | 90.0 | correct | no | 0.0 | 0.85 |
 | Profitability (`profitability`) | 100.0 | works | yes | 0.0 | 0.75 |
 
-At the bar today: **4 of 29**.
+At the bar today: **4 of 28**.
 
 Repo-wide findings (not charged to any service):
 
 - dead-module at `northstar-os-ui/src/lib/serviceGate.js`
-
-## OfferChisel (`offerchisel`)
-
-turn a product into an offer: price, title, bullets, images.
-
-- route `/offerchisel`, group Listings, kind workspace
-- **score 67.0 / bar 85** (impact 0.9, gap 16.2)
-
-| dimension | score | weight | evidence |
-|---|---|---|---|
-| works | 100.0 | 0.23 | 114 test id(s) prove it |
-| correct | 60.0 | 0.25 | 114 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
-| seller | 0.0 | 0.13 | no Seller-Tester output scored for this service |
-| complete | 100.0 | 0.12 | 1/1 declared Bojo tools wired: offer_recommendation |
-| usable | 100.0 | 0.07 | no readiness finding names this service |
-| measured | 100.0 | 0.1 | route /offerchisel -> northstar-os-ui\src\pages\roomAdapters.jsx; app p95 3.4 ms |
-| contract | 0.0 | 0.1 | fail: every action is an external paid-model call |
-
-Seller scenarios:
-- `backed` — turn this product into a listing that will not be suppressed
-- `backed` — rewrite the bullets for a different audience
-- `backed` — fix the listing that lost its buy box
-
-## The Town Crier (`towncrier`)
-
-seller-side social output that does not read like a robot.
-
-- route `/towncrier`, group Social, kind workspace
-- **score 55.0 / bar 85** (impact 0.45, gap 13.5)
-
-| dimension | score | weight | evidence |
-|---|---|---|---|
-| works | 100.0 | 0.23 | 28 test id(s) prove it |
-| correct | 60.0 | 0.25 | 28 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
-| seller | 0.0 | 0.13 | no Seller-Tester output scored for this service |
-| complete | 0.0 | 0.12 | no Bojo tool declared, so Bojo cannot drive it |
-| usable | 100.0 | 0.07 | no readiness finding names this service |
-| measured | 100.0 | 0.1 | route /towncrier -> northstar-os-ui\src\pages\roomAdapters.jsx; app p95 3.4 ms |
-| contract | 0.0 | 0.1 | fail: every action is an external paid-model call |
-
-Seller scenarios:
-- `backed` — post about a restock without sounding automated
-- `backed` — keep the voice consistent across three posts
-
-## AdPilot (`adpilot`)
-
-campaign control: budget, bids, and the report behind them.
-
-- route `/adpilot`, group Advertising, kind workspace
-- **score 67.0 / bar 85** (impact 0.7, gap 12.6)
-
-| dimension | score | weight | evidence |
-|---|---|---|---|
-| works | 100.0 | 0.23 | 13 test id(s) prove it |
-| correct | 60.0 | 0.25 | 13 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
-| seller | 0.0 | 0.13 | no Seller-Tester output scored for this service |
-| complete | 100.0 | 0.12 | 1/1 declared Bojo tools wired: plan_campaign |
-| usable | 100.0 | 0.07 | no readiness finding names this service |
-| measured | 100.0 | 0.1 | route /adpilot -> northstar-os-ui\src\pages\internal\AdPilot.jsx; app p95 3.4 ms |
-| contract | 0.0 | 0.1 | empty_payload: payload has no measured rows or fields (keys: uploads,note) |
-
-Seller scenarios:
-- `backed` — hold ROAS while doubling spend on the winner
-- `backed` — cut the keywords that only cost money
-- `backed` — show me what the campaign did last week
-
-## SocialPulse (`socialpulse`)
-
-schedule and judge social posts against a brand voice.
-
-- route `/socialpulse`, group Social, kind workspace
-- **score 67.0 / bar 85** (impact 0.45, gap 8.1)
-
-| dimension | score | weight | evidence |
-|---|---|---|---|
-| works | 100.0 | 0.23 | 28 test id(s) prove it |
-| correct | 60.0 | 0.25 | 28 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
-| seller | 0.0 | 0.13 | no Seller-Tester output scored for this service |
-| complete | 100.0 | 0.12 | 1/1 declared Bojo tools wired: plan_social |
-| usable | 100.0 | 0.07 | no readiness finding names this service |
-| measured | 100.0 | 0.1 | route /socialpulse -> northstar-os-ui\src\pages\internal\SocialPulse.jsx; app p95 3.4 ms |
-| contract | 0.0 | 0.1 | no_primary_action: registry records no actions for this service |
-
-Seller scenarios:
-- `backed` — post about a restock without sounding automated
-- `backed` — keep the voice consistent across three posts
 
 ## SourceScout (`product-finder`)
 
@@ -172,6 +85,28 @@ Seller scenarios:
 - `backed` — rewrite the bullets for a different audience
 - `backed` — fix the listing that lost its buy box
 
+## OfferChisel (`offerchisel`)
+
+turn a product into an offer: price, title, bullets, images.
+
+- route `/offerchisel`, group Listings, kind workspace
+- **score 79.5 / bar 85** (impact 0.9, gap 5.0)
+
+| dimension | score | weight | evidence |
+|---|---|---|---|
+| works | 100.0 | 0.23 | 114 test id(s) prove it |
+| correct | 60.0 | 0.25 | 114 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
+| seller | 96.4 | 0.13 | 5 Seller-Tester service-path outputs (population: service-path; paths offer_copy), mean 96.4, 3 passed |
+| complete | 100.0 | 0.12 | 1/1 declared Bojo tools wired: offer_recommendation |
+| usable | 100.0 | 0.07 | no readiness finding names this service |
+| measured | 100.0 | 0.1 | route /offerchisel -> northstar-os-ui\src\pages\roomAdapters.jsx; app p95 3.4 ms |
+| contract | 0.0 | 0.1 | fail: every action is an external paid-model call |
+
+Seller scenarios:
+- `backed` — turn this product into a listing that will not be suppressed
+- `backed` — rewrite the bullets for a different audience
+- `backed` — fix the listing that lost its buy box
+
 ## Support (`beta-support`)
 
 support inside the beta without a human in the loop.
@@ -192,6 +127,70 @@ support inside the beta without a human in the loop.
 Seller scenarios:
 - `backed` — an invitee signs up without help
 - `backed` — a tester reports a bug and sees it acknowledged
+
+## AdPilot (`adpilot`)
+
+campaign control: budget, bids, and the report behind them.
+
+- route `/adpilot`, group Advertising, kind workspace
+- **score 79.8 / bar 85** (impact 0.7, gap 3.6)
+
+| dimension | score | weight | evidence |
+|---|---|---|---|
+| works | 100.0 | 0.23 | 13 test id(s) prove it |
+| correct | 60.0 | 0.25 | 13 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
+| seller | 98.1 | 0.13 | 6 Seller-Tester service-path outputs (population: service-path; path ad_copy), mean 98.1, 5 passed |
+| complete | 100.0 | 0.12 | 1/1 declared Bojo tools wired: plan_campaign |
+| usable | 100.0 | 0.07 | no readiness finding names this service |
+| measured | 100.0 | 0.1 | route /adpilot -> northstar-os-ui\src\pages\internal\AdPilot.jsx; app p95 3.4 ms |
+| contract | 0.0 | 0.1 | empty_payload: payload has no measured rows or fields (keys: uploads,note) |
+
+Seller scenarios:
+- `backed` — hold ROAS while doubling spend on the winner
+- `backed` — cut the keywords that only cost money
+- `backed` — show me what the campaign did last week
+
+## The Town Crier (`towncrier`)
+
+seller-side social output that does not read like a robot.
+
+- route `/towncrier`, group Social, kind workspace
+- **score 79.0 / bar 85** (impact 0.45, gap 2.7)
+
+| dimension | score | weight | evidence |
+|---|---|---|---|
+| works | 100.0 | 0.23 | 28 test id(s) prove it |
+| correct | 60.0 | 0.25 | 28 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
+| seller | 92.1 | 0.13 | 5 Seller-Tester service-path outputs (population: service-path; paths caption), mean 92.1, 2 passed |
+| complete | 100.0 | 0.12 | 1/1 declared Bojo tools wired: write_content |
+| usable | 100.0 | 0.07 | no readiness finding names this service |
+| measured | 100.0 | 0.1 | route /towncrier -> northstar-os-ui\src\pages\roomAdapters.jsx; app p95 3.4 ms |
+| contract | 0.0 | 0.1 | fail: every action is an external paid-model call |
+
+Seller scenarios:
+- `backed` — post about a restock without sounding automated
+- `backed` — keep the voice consistent across three posts
+
+## SocialPulse (`socialpulse`)
+
+schedule and judge social posts against a brand voice.
+
+- route `/socialpulse`, group Social, kind workspace
+- **score 79.7 / bar 85** (impact 0.45, gap 2.4)
+
+| dimension | score | weight | evidence |
+|---|---|---|---|
+| works | 100.0 | 0.23 | 28 test id(s) prove it |
+| correct | 60.0 | 0.25 | 28 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
+| seller | 98.0 | 0.13 | 5 Seller-Tester service-path outputs (population: service-path; paths social_caption), mean 98.0, 4 passed |
+| complete | 100.0 | 0.12 | 1/1 declared Bojo tools wired: plan_social |
+| usable | 100.0 | 0.07 | no readiness finding names this service |
+| measured | 100.0 | 0.1 | route /socialpulse -> northstar-os-ui\src\pages\internal\SocialPulse.jsx; app p95 3.4 ms |
+| contract | 0.0 | 0.1 | no_primary_action: registry records no actions for this service |
+
+Seller scenarios:
+- `backed` — post about a restock without sounding automated
+- `backed` — keep the voice consistent across three posts
 
 ## Operations Hub (`hub`)
 
@@ -250,28 +249,6 @@ find products worth selling, with demand and competition evidence.
 | complete | 100.0 | 0.12 | 1/1 declared Bojo tools wired: catalog_pull |
 | usable | 100.0 | 0.07 | no readiness finding names this service |
 | measured | 100.0 | 0.1 | route /prospector -> northstar-os-ui\src\pages\roomAdapters.jsx; app p95 3.4 ms |
-| contract | 100.0 | 0.1 | GET /api/kirkland/scanner -> 200; 89 row(s) under 'products' |
-
-Seller scenarios:
-- `backed` — find a product in a category I have never sold
-- `backed` — compare landed cost across three suppliers
-- `backed` — tell me the margin at my fee tier
-
-## Golden Goose (`goldengoose`)
-
-the high-margin finder: score an opportunity and say why.
-
-- route `/goldengoose`, group Sourcing, kind workspace
-- **score 89.4 / bar 85** (impact 0.95, gap 0.0)
-
-| dimension | score | weight | evidence |
-|---|---|---|---|
-| works | 100.0 | 0.23 | 567 test id(s) prove it |
-| correct | 60.0 | 0.25 | 567 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
-| seller | 95.6 | 0.13 | 5 Seller-Tester service-path outputs (population: service-path; paths golden_goose), mean 95.6, 3 passed |
-| complete | 100.0 | 0.12 | 1/1 declared Bojo tools wired: golden_goose_scan |
-| usable | 100.0 | 0.07 | no readiness finding names this service |
-| measured | 100.0 | 0.1 | route /goldengoose -> northstar-os-ui\src\pages\roomAdapters.jsx; app p95 3.4 ms |
 | contract | 100.0 | 0.1 | GET /api/kirkland/scanner -> 200; 89 row(s) under 'products' |
 
 Seller scenarios:
@@ -408,9 +385,9 @@ Seller scenarios:
 - `backed` — change my plan without losing data
 - `backed` — see exactly what I am entitled to
 
-## Operations Hub (`foundation`)
+## Foundation (`foundation`)
 
-Operations Hub.
+Foundation.
 
 - route `/foundation`, group Internal, kind workspace
 - **score 86.2 / bar 85** (impact 0.7, gap 0.0)
@@ -557,13 +534,13 @@ Seller scenarios:
 the high-margin finder: score an opportunity and say why.
 
 - route `/golden-goose`, group Sourcing, kind workspace
-- **score 89.4 / bar 85** (impact 0.95, gap 0.0)
+- **score 90.0 / bar 85** (impact 0.95, gap 0.0)
 
 | dimension | score | weight | evidence |
 |---|---|---|---|
 | works | 100.0 | 0.23 | 567 test id(s) prove it |
 | correct | 60.0 | 0.25 | 567 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
-| seller | 95.6 | 0.13 | 5 Seller-Tester service-path outputs (population: service-path; paths golden_goose), mean 95.6, 3 passed; 'golden-goose' is the declared alias of 'goldengoose' (ty/services.json gives both ids the same declared tool and the same purpose) |
+| seller | 100.0 | 0.13 | 5 Seller-Tester service-path outputs (population: service-path; paths golden_goose), mean 100.0, 5 passed |
 | complete | 100.0 | 0.12 | 1/1 declared Bojo tools wired: golden_goose_scan |
 | usable | 100.0 | 0.07 | no readiness finding names this service |
 | measured | 100.0 | 0.1 | route /golden-goose -> northstar-os-ui\src\pages\internal\GoldenGoose.jsx; app p95 3.4 ms |

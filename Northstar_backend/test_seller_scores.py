@@ -62,6 +62,20 @@ def test_a_full_sample_is_the_measured_mean():
     assert "30 Seller-Tester outputs" in verdict["evidence"]
 
 
+def test_a_service_path_row_in_the_services_block_is_labelled_as_such():
+    # adpilot's ad_copy score lives in the services block but is a service-path row.
+    # The evidence must name the population the row declares, not call it a picture.
+    data = {"services": {"adpilot": {
+        "mean": 98.1, "scored": 6, "passed": 5,
+        "population": "service-path", "path": "ad_copy",
+    }}}
+    verdict = seller_scores.score_for("adpilot", data=data)
+    assert verdict["score"] == 98.1
+    assert "service-path" in verdict["evidence"]
+    assert "ad_copy" in verdict["evidence"]
+    assert "generated/composite" not in verdict["evidence"]
+
+
 def test_no_pass_on_disk_is_an_empty_result_not_a_crash():
     built = seller_scores.build(summary=None, briefs=BRIEFS)
     # None means "read from disk"; with no file the build reports the reason

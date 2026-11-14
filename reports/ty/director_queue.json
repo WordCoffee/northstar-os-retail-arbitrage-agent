@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-14T00:43:21+00:00",
+  "updated_at": "2026-11-14T01:35:55+00:00",
   "cycle": 3,
   "unit_in_flight": "",
   "unit_order": [
@@ -1098,6 +1098,30 @@
       "rank": 0
     },
     {
+      "id": "refresh-scorecards-adpilot",
+      "unit": "U",
+      "title": "Scorecard refresh: adpilot's measured seller score (98.1/6) was absent; the top gap was stale",
+      "status": "merged",
+      "owner": "",
+      "write_paths": [
+        "ty/scorecards.json",
+        "ty/TARGET_SPEC.md",
+        "tools/seller_scores.py",
+        "Northstar_backend/test_seller_scores.py"
+      ],
+      "branch": "ty/refresh-scorecards-adpilot",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "measured, not built: ty/scorecards.json at HEAD was generated 2026-11-11T19:35 and read adpilot seller 0.0 while ty/seller_scores.json carried 98.1 over 6 scored/5 passed (service-path, ad_copy, proof state/seller/ad_copy_proof.json) since 2026-11-13T10:11; regenerating gives adpilot 67.0 -> 79.8 (+12.8 = 0.13 x 98.1), gap 12.6 -> 3.6, weakest seller -> contract; row-level diff vs HEAD: ONLY adpilot changed of 28 rows, at-bar (every dimension >=85) 4 of 28 before/after, services >=85 21 of 28 before/after; TARGET_SPEC was 93 min older than the JSON and is reconciled (offerchisel/towncrier/socialpulse/golden-goose rows match the JSON that already held them); fixed a false evidence label (service-path row in the services block was printed as generated/composite) + test; 57 tests pass; report reports/ty/scorecard_refresh_20261113.md",
+      "created_at": "2026-11-14T01:34:30+00:00",
+      "updated_at": "2026-11-14T01:34:30+00:00",
+      "rank": 0
+    },
+    {
       "id": "sel-01c-cutout-provenance",
       "unit": "D12",
       "title": "Composite provenance: save the cutout and placement beside every composite so the product-region check can verify it",
@@ -1355,7 +1379,8 @@
       "evidence": "[\"tools/vision/v3_gate.py\", \"tools/vision/v3_then_soak.py\", \"tools/soak.py\"]",
       "created_at": "2026-11-13T19:07:29+00:00",
       "updated_at": "2026-11-13T19:07:29+00:00",
-      "rank": 1
+      "rank": 1,
+      "blocked_on": "state/vision/PAUSE (owner action) — never holds a worker slot"
     },
     {
       "id": "g1-design-studio-persist",
@@ -1590,7 +1615,8 @@
       "evidence": "[\"reports/ty/g1_design_studio_status.md\"]",
       "created_at": "2026-11-13T19:07:29+00:00",
       "updated_at": "2026-11-13T19:07:29+00:00",
-      "rank": 2
+      "rank": 2,
+      "blocked_on": "render lane: ComfyUI unreachable + 3.03 GB free RAM against a 3.0 GB floor"
     },
     {
       "id": "g1-listings",
@@ -1727,6 +1753,28 @@
       "evidence": "[\"Northstar_backend/scene_cleanup.py\", \"Northstar_backend/test_scene_cleanup.py\", \"tools/seller_tester/generators.py\", \"reports/ty/defects.md\"]",
       "created_at": "2026-11-11T17:06:27+00:00",
       "updated_at": "2026-11-13T19:07:28+00:00",
+      "rank": 3
+    },
+    {
+      "id": "fix-scorecards-json-write",
+      "unit": "U",
+      "title": "scorecards.py --json is documented measurement-only but writes both ty/scorecards.json and ty/TARGET_SPEC.md",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "tools/scorecards.py",
+        "Northstar_backend/test_scorecards.py"
+      ],
+      "branch": "ty/fix-scorecards-json-write",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-14T01:34:30+00:00",
+      "updated_at": "2026-11-14T01:34:30+00:00",
       "rank": 3
     },
     {
@@ -2280,7 +2328,8 @@
       "evidence": "[\"reports/ty/reg03_handlers_built.md\"]",
       "created_at": "2026-11-09T06:40:09+00:00",
       "updated_at": "2026-11-13T19:07:28+00:00",
-      "rank": 12
+      "rank": 12,
+      "note": "Marked on-staging 2026-11-13: the work is in the staging history, not on main (main is 1,385 commits behind and the gitleaks hook still refuses the public-history findings). Evidence: reports/ty/reported_jobs_status.json"
     },
     {
       "id": "block3-workspaces",

@@ -10,6 +10,46 @@ A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.m
 > and `reports/ty/handoff.md`, then continue from the first unfinished unit. No
 > questions, no reports between cycles. Idle means re-plan.
 
+## Position, 2026-11-14 (UTC) — the top-ranked gap was stale; AdPilot's seller score reaches the scorecard
+
+`python tools/director_gaps.py --rank` named **adpilot gap 12.6** (seller 0.0) as the largest
+gap. It was two days stale: `ty/scorecards.json` was generated `2026-11-11T19:35Z`, while
+`ty/seller_scores.json` carried adpilot **98.1 over 6 scored / 5 passed** (service-path,
+`ad_copy`, proof `state/seller/ad_copy_proof.json`) since `2026-11-13T10:11Z`. Regenerated:
+
+| | before | after |
+|---|---|---|
+| adpilot score | 67.0 | **79.8** (+12.8 = 0.13 × 98.1) |
+| seller | 0.0 | **98.1** |
+| gap | 12.6 | **3.6** |
+| weakest | seller | **contract** (`empty_payload`, keys uploads/note) |
+
+**Row-level diff against HEAD: only adpilot changed**, 28 services either side. At-bar
+(every dimension ≥ 85) **4 of 28** unchanged; services ≥ 85 **21 of 28** unchanged. The 96.2
+Design Studio image score is untouched and not blended.
+
+**Two real defects fell out of it.** `ty/TARGET_SPEC.md` was derived **93 minutes older** than
+the JSON it mirrors (offerchisel/towncrier/socialpulse/golden-goose rows stale, a duplicate
+`goldengoose` row, "29" services) — regenerated, and no JSON score changed for those services.
+And `score_for` printed every row in the `services` block as "generated/composite"; adpilot's
+row is `population: service-path`, so the scorecard would have published a false population.
+The evidence now names the row's own population and path; a test pins it. **57 tests pass.**
+Report: `reports/ty/scorecard_refresh_20261113.md`.
+
+**Filed, not fixed:** `tools/scorecards.py --json` is documented "measurement only" but writes
+both files (lines 472–473) — queued as `fix-scorecards-json-write` at rank 3. It is how this
+refresh was accidentally applied before the diff was taken.
+
+**Also fixed while resuming:** `director_queue.mirror()` used to rebuild every row from the
+store, so fields with no column (`blocked_on`, `note`) vanished on the 2026-11-13 import. It
+now keeps them; the two blocked reasons and the on-staging note are restored and survive a
+rewrite. 22 queue tests pass.
+
+**Next ranked gaps are 7.2, tied:** `listings` (seller 0.0 — an honest zero; its product belongs
+to listingforge) and `product-finder` (seller 0.0 — the research path is scored but declared
+unattributed in `seller_scores.json`). Soak, quiet-window waiter and `state/vision/PAUSE`
+untouched; no Amazon, no spend, no GPU, no browser, no credential read.
+
 ## Position, 2026-11-13 (later) — G1 Listings passes on beam-free
 
 The owner authorized **one model change for g1-listings: `beam-free`, and only that id**. It is

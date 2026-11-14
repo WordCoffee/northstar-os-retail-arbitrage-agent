@@ -536,8 +536,16 @@ def score_for(service_id: str, *, data: Optional[Dict[str, Any]] = None) -> Dict
     paths_scored = int(path_row.get("scored") or 0) if path_row else 0
 
     if made >= MIN_SCORED:
-        evidence = (f"{made} Seller-Tester outputs (generated/composite), "
-                    f"mean {row.get('mean')}, {row.get('passed')} passed")
+        # A service-path row may live in this block (adpilot's ad_copy score does), so the
+        # evidence names the population the row itself declares. Calling every row here
+        # "generated/composite" would misdescribe a service-path sample on the scorecard.
+        if str(row.get("population") or "") == SERVICE_POPULATION:
+            evidence = (f"{made} Seller-Tester service-path outputs (population: "
+                        f"{SERVICE_POPULATION}; path {row.get('path')}), mean "
+                        f"{row.get('mean')}, {row.get('passed')} passed")
+        else:
+            evidence = (f"{made} Seller-Tester outputs (generated/composite), "
+                        f"mean {row.get('mean')}, {row.get('passed')} passed")
         replay = row.get("replay") or {}
         if replay.get("scored"):
             evidence += (f"; {replay.get('scored')} replayed artefact(s) excluded as context "
