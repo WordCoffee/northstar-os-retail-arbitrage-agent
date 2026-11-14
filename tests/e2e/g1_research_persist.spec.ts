@@ -14,6 +14,11 @@ test.describe.configure({ timeout: 120000 })
 
 const ASIN = 'B0ZZ9ZZ999' // valid shape, deliberately improbable in any cache
 
+// The test uses a per-run ASIN, so the cleanup must delete THAT id, not the constant. It
+// deleted ASIN before, which leaked one research row per project on every run (measured
+// 2026-11-14).
+let createdAsin = ''
+
 // The API answers under the bff/v1 envelope; unwrap it in one place so the assertions read the
 // same shape the page reads.
 async function payload(res: any) {
@@ -22,11 +27,13 @@ async function payload(res: any) {
 }
 
 test.afterAll(async ({ request }) => {
-  await request.delete(`http://127.0.0.1:8000/api/products/research/${ASIN}`).catch(() => {})
+  if (!createdAsin) return
+  await request.delete(`http://127.0.0.1:8000/api/products/research/${createdAsin}`).catch(() => {})
 })
 
 test('research: lookup → save → reload → read back', async ({ page, request }) => {
   const asin = `${ASIN.slice(0, 9)}${Math.floor(Math.random() * 9)}`
+  createdAsin = asin
 
   await page.goto('/ui/product-finder')
   await expect(page.locator('[data-testid="pf-add-first"]')).toBeVisible({ timeout: 45000 })

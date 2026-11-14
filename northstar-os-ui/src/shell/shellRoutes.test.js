@@ -18,8 +18,10 @@ const here = dirname(fileURLToPath(import.meta.url))
 const APP = readFileSync(resolve(here, '../App.jsx'), 'utf8')
 const ROUTE_PATHS = [...APP.matchAll(/<Route path="([^"]+)"/g)].map((m) => m[1])
 
-test('App.jsx registers 72 routes', () => {
-  expect(ROUTE_PATHS).toHaveLength(72)
+// 73 since block3 added `/product-pictures`; the e2e gate (`tests/e2e/shell-chrome.spec.ts:57`)
+// says the same number and the reason. This test missed that bump on 2026-11-11 and was red.
+test('App.jsx registers 73 routes', () => {
+  expect(ROUTE_PATHS).toHaveLength(73)
 })
 
 test('every exempt path is a real route', () => {

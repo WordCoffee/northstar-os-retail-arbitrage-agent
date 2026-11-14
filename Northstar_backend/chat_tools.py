@@ -1841,6 +1841,30 @@ def _t_canvas_edit(args, ctx):
             "instruction": instruction, "assets": []}
 
 
+class _SEOProfileStore:
+    """The one method `track_keywords` asks a profile store for: ``get_profile(brand_key)``.
+
+    The account's SEO store is keyed by id and scoped by account, so it cannot be handed
+    straight to the tool. This adapter resolves the brand key inside the account and returns
+    the profile *body* the scorer needs.
+    """
+
+    def __init__(self, profiles: Any, account_id: Optional[str]) -> None:
+        self._profiles = profiles
+        self._account_id = account_id
+
+    def get_profile(self, brand_key: str) -> Optional[Dict[str, Any]]:
+        head = self._profiles.get_by_brand_key(self._account_id, str(brand_key).strip().lower())
+        if not head:
+            return None
+        full = self._profiles.get_profile(head["id"], account_id=self._account_id)
+        return (full or {}).get("body") or None
+
+    def brand_keys(self) -> List[str]:
+        rows = self._profiles.list_profiles(self._account_id, limit=2) or []
+        return [str(row.get("brand_key")) for row in rows if row.get("brand_key")]
+
+
 def _bojo_handler(domain_tool: str):
     """Adapter: a chat spec whose work is a registered Bojo domain handler.
 
@@ -1871,6 +1895,20 @@ def _bojo_handler(domain_tool: str):
             if "project_id" in params and payload.get("project_id") is None:
                 canvas = ctx.get("canvas") if isinstance(ctx.get("canvas"), dict) else {}
                 payload["project_id"] = ctx.get("project_id") or canvas.get("projectId")
+            if "profile_store" in params and payload.get("profile_store") is None:
+                # `track_keywords` was offered but could never run: the handler got no profile
+                # and no store, so every call answered "no brand SEO profile supplied"
+                # (audit 2026-11-14). Inject the account's own SEO store, and pick the brand
+                # when the account has exactly one profile; ambiguity still refuses by name.
+                db = ctx.get("db")
+                profiles = getattr(getattr(db, "seo", None), "profiles", None)
+                if profiles is not None:
+                    store = _SEOProfileStore(profiles, ctx.get("account_id"))
+                    payload["profile_store"] = store
+                    if not str(payload.get("brand_key") or "").strip():
+                        keys = store.brand_keys()
+                        if len(keys) == 1:
+                            payload["brand_key"] = keys[0]
         result = bojo_tools_registry.call(domain_tool, **payload)
         if not isinstance(result, dict):
             return {"ok": False, "summary": f"{domain_tool} returned no result",

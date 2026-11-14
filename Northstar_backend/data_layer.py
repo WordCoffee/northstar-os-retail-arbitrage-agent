@@ -2446,7 +2446,12 @@ class DesignStudioListingRecordsDB:
         rid = entry.get("id") or str(uuid.uuid4())
         rec = dict(entry)
         rec["id"] = rid
-        rec.setdefault("source", "listingforge-local")
+        # `source` is NOT NULL in the schema. A caller that dumps its model includes
+        # `source: null`, and setdefault left it null - the INSERT then failed and the
+        # IntegrityError branch returned an id for a row that was never written
+        # (measured 2026-11-14: the migration counted `created` with an empty store).
+        if rec.get("source") in (None, ""):
+            rec["source"] = "listingforge-local"
         rec.setdefault("updated_at", datetime.now(timezone.utc).isoformat())
         for k in self._JSON_COLS:
             if k in rec and rec[k] is not None and not isinstance(rec[k], str):
@@ -2464,7 +2469,9 @@ class DesignStudioListingRecordsDB:
                 "SELECT id FROM ds_listing_records WHERE account_id = ? AND legacy_key = ?",
                 (rec.get("account_id"), rec.get("legacy_key")),
             ).fetchone()
-            return row["id"] if row else rid
+            if row:
+                return row["id"]
+            raise
         return rid
 
     def list_for_account(self, account_id: str, limit: int = 200) -> List[Dict[str, Any]]:

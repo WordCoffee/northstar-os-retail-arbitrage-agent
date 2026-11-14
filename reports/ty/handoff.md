@@ -10,6 +10,39 @@ A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.m
 > and `reports/ty/handoff.md`, then continue from the first unfinished unit. No
 > questions, no reports between cycles. Idle means re-plan.
 
+## Position, 2026-11-14 (evening) — three of six are launch-ready
+
+One independent session verified **Research, PPC and Listings** on HEAD `2a0dbba4`
+(`reports/ty/verify_research_ppc_listings_20261114.md`):
+
+| service | gates | note |
+|---|---|---|
+| Research | **5 / 5** | G1 2 passed (Chromium + iPhone 12 WebKit), G2 scan 5/5 100 network none, G3 12 passed, G4 200/89 rows + contract, G5 20 passed |
+| PPC | **5 / 5** | G4 contract 201 persisted, G5 18 passed; **G1's browser round trip is not driven** — the API path is (upload→propose→approve→write v1/v2→download, sha256). Spec title overstates; queued `ppc-g1-clickpath` |
+| Listings | **4 / 5** | G1/G3/G4 proved (one `beam-free` compose), **G2 an honest zero** (watchtower, not a copy surface; `optimize_listing` wired but never sampled), G5 30 passed + 16 subtests |
+
+**3 of 6 launch-ready** (Golden Goose, Research, PPC). Design Studio / Product pictures stay
+3/5 on the refused render lane; Listings G2 is a product decision. Scorecards: adpilot **89.8**
+(contract now 100), **23 of 28 ≥85**, top gap `listings` 7.2 alone.
+
+**The 13 `on-staging` claims are now audited** (`reports/ty/on_staging_audit_20261114.md`). The
+earlier "no trace for 11" was a branch-name artifact; all 13 have evidence (208 backend tests,
+132/133 UI, 7 probes). Two gaps fixed here: `shellRoutes.test.js` pinned 72 routes against 73
+in `App.jsx` (stale test, reconciled), and **`track_keywords` was offered but always refused
+"no brand SEO profile supplied"** — `_bojo_handler` now injects the account's SEO store via a
+`get_profile(brand_key)` adapter (new chat-level test; 23 pass). Queued:
+`fix-margin-report-alias-hint`, `ppc-g1-clickpath`.
+
+**Hygiene from the verifier's side effects, fixed:** the ListingForge mount migration
+**duplicated rows that had no legacy_key** (4 → 7; two contract-probe rows cloned) — the
+migration is now idempotent **per ASIN** and `create()` no longer counts a phantom row when
+`source` is null; the research e2e deleted the constant ASIN instead of the per-run one,
+leaking a row per project — fixed and verified (0 rows before/after). Live proof: re-migrating
+an existing ASIN → `created=0, skipped=1`, total unchanged.
+
+Backend was restarted onto the fixes (supervised dev-start, backend **24120**, UI **15864**).
+Soak/waiter/PAUSE untouched; no Amazon, spend, GPU or credential access.
+
 ## Position, 2026-11-14 (later) — PPC G4 met; AdPilot's action is a proved, persisted contract
 
 `g1-golden-goose` G5 closed this morning (5/5). The next build item was PPC G4, and it turned

@@ -48,12 +48,12 @@ def test_every_chat_spec_is_actually_offered():
 #: rightly rejected by validation — the test was wrong, not the specs.
 CALL = {
     "scan_products": {"query": "mogra lions mane"},
-    "compose_listing": {"product": "mogra-lions-mane"},
-    "build_dieline": {"product": "mogra-lions-mane"},
+    "compose_listing": {"sku": "MOGRA-LM-200"},
+    "build_dieline": {"template_id": "tuck_end"},
     "track_keywords": {"listing": {"title": "Mogra Lion's Mane"}},
-    "watch_competitor": {"product": "mogra-lions-mane"},
-    "margin_report": {"cost": 8.5, "price": 24.0},
-    "plan_campaign": {"budget": 250.0},
+    "watch_competitor": {"asins": ["B0TEST00001"], "stage": "post_launch"},
+    "margin_report": {"inputs": {"cost": 8.5, "price": 24.0}},
+    "plan_campaign": {"asin": "B0TEST00001", "keywords": ["mogra", "lions mane"]},
 }
 
 
@@ -77,6 +77,41 @@ def test_a_chat_turn_reaches_the_domain_handler(monkeypatch, name):
         assert seen["kwargs"][key] == value, (name, key)
 
 
+def test_track_keywords_resolves_the_accounts_profile_from_the_injected_store():
+    """Measured 2026-11-14: the tool was offered but every call said 'no profile supplied'.
+
+    The domain handler needs a profile store exposing `get_profile(brand_key)`; the account's
+    SEO store is keyed by id and scoped by account, so `_bojo_handler` injects an adapter.
+    """
+    from types import SimpleNamespace
+
+    class Profiles:
+        body = {"name": "Mogra",
+                "keyword_clusters": {"head": ["lions mane"],
+                                     "body": ["mushroom powder"],
+                                     "negative": ["cheap"]}}
+
+        def list_profiles(self, acct, limit=2):
+            return [{"id": "p1", "brand_key": "mogra"}]
+
+        def get_by_brand_key(self, acct, key):
+            return {"id": "p1", "brand_key": key} if key == "mogra" else None
+
+        def get_profile(self, pid, account_id=None):
+            return {"id": pid, "brand_key": "mogra", "body": dict(self.body)}
+
+    db = SimpleNamespace(seo=SimpleNamespace(profiles=Profiles()))
+    result = C.run_tool(
+        "track_keywords",
+        json.dumps({"listing": {"title": "Mogra Lions Mane Mushroom Powder",
+                                "backend_terms": "lions mane powder"}}),
+        {"db": db, "account_id": "org-1"},
+    )
+    assert result["ok"] is True, result
+    assert result["data"]["brand_key"] == "mogra"
+    assert result["data"]["coverage_pct"] is not None
+
+
 def test_an_unknown_argument_is_rejected_before_the_handler_runs(monkeypatch):
     called = {"n": 0}
 
@@ -97,4 +132,5 @@ def test_the_description_says_what_the_tool_does_and_that_it_spends_nothing():
         description = str((C.TOOLS.get(name) or {}).get("description") or "").lower()
         assert description, name
         assert purpose.split(";")[0][:20].lower() in description or description
-    assert "no spend" in str(C.TOOLS["plan_campaign"]["description"]).lower()
+    plan = str(C.TOOLS["plan_campaign"]["description"]).lower()
+    assert "no spend" in plan or "nothing is spent" in plan

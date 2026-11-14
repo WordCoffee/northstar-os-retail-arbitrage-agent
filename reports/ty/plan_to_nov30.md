@@ -1,12 +1,14 @@
 # Plan to Nov 30 — the core six, gate by gate
 
-> **Revision 2026-11-14.** Golden Goose is **5/5** — G5 reproduced by an independent session
-> (`reports/ty/verify_golden_goose_20261114.md`). Research **G2 is closed** through
-> `scan_products` (score 90.0, seller 100.0, 5/5 briefs), and PPC G2 was closed on 11-13; the
-> remaining Research gap is G5. The quiet window's one render was **refused**, so Design
-> Studio's G1 generation is still unproven and is not retried without the owner's word. The
-> next build item is **PPC G4** (a seeded upload for the contract probe; `contract` is 0.0 on
-> a fresh store), then the G5 sweep. Today's table: `reports/ty/digest_2026-11-14.md`.
+> **Revision 2026-11-14 (evening).** Golden Goose, **Research** and **PPC** are each **5/5** —
+> G5 reproduced by independent sessions (`verify_golden_goose_20261114.md`,
+> `verify_research_ppc_listings_20261114.md`). PPC's G1 is proved at the API
+> (upload→propose→approve→write v1/v2→download) but **not yet by a browser round trip**; that
+> e2e is the next build item. **Listings is 4/5** — G1/G3/G4 verified, G2 an honest zero.
+> Design Studio/product pictures stay 3/5: the quiet window's one render was **refused**, and
+> generation is not retried without the owner's word. The 13 `on-staging` claims were audited
+> against the tree: all 13 have evidence, two small gaps fixed (shell route count, keyword
+> profile injection), one hint queued. Today's table: `reports/ty/digest_2026-11-14.md`.
 
 Today is **2026-11-13**. Freeze is **Nov 25** (fixes only after that), final report **Nov 30**.
 Days left: **17**.

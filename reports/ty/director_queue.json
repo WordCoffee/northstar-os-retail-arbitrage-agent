@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-14T12:02:00+00:00",
+  "updated_at": "2026-11-14T12:23:49+00:00",
   "cycle": 3,
   "unit_in_flight": "",
   "unit_order": [
@@ -1214,6 +1214,27 @@
       "rank": 0
     },
     {
+      "id": "audit-on-staging-claims",
+      "unit": "U",
+      "title": "Audit the 13 on-staging claims against the tree (commit traces, narrow tests, live probes)",
+      "status": "merged",
+      "owner": "",
+      "write_paths": [
+        "reports/ty/on_staging_audit_20261114.md"
+      ],
+      "branch": "ty/audit-on-staging-claims",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "read-only audit of all 13: earlier no-trace result was a branch-name artifact (work landed as ty/reg-03-handlers, ty/sel-02, ty/sel-03 or direct staging commits 1734b043, ad86d8b3, 693fdd24, 2c777714, 99411a70, 803cd38d, 88706b14). 13/13 have deliverable evidence; 208 backend tests pass / 0 fail, 133 UI cases (132 pass), 7 adapter probes, 2 CLIs. Three findings: ux-06-shell PARTIAL (shellRoutes.test.js pinned 72 routes vs App.jsx 73 - stale test, now fixed), tool-track-keywords PARTIAL (offered tool always refused 'no brand SEO profile supplied' - the adapter now injects the account's SEO store; fixed + test), tool-margin-report names referral_fee in ignored_inputs where the engine wants referral_fee_amount (queued as a hint fix). tool-compose-listing live probe was BLOCKED-ENV at audit time because the probe env lacked the key; g1-listings proved the live path. reports/ty/on_staging_audit_20261114.md",
+      "created_at": "2026-11-14T12:23:49+00:00",
+      "updated_at": "2026-11-14T12:23:49+00:00",
+      "rank": 0
+    },
+    {
       "id": "sel-01c-cutout-provenance",
       "unit": "D12",
       "title": "Composite provenance: save the cutout and placement beside every composite so the product-region check can verify it",
@@ -1985,6 +2006,28 @@
       "evidence": "[\"Northstar_backend/agents/golden_goose_finder/opportunity_scorer.py\", \"Northstar_backend/agents/golden_goose_finder/tests/test_opportunity_scorer.py\", \"state/seller/services_proof.json\"]",
       "created_at": "2026-11-11T17:43:51+00:00",
       "updated_at": "2026-11-13T19:07:28+00:00",
+      "rank": 4
+    },
+    {
+      "id": "fix-margin-report-alias-hint",
+      "unit": "U",
+      "title": "margin_report reports referral_fee as ignored instead of naming referral_fee_amount/rate",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "Northstar_backend/bojo_tools/economics.py",
+        "Northstar_backend/test_bojo_tools_economics.py"
+      ],
+      "branch": "ty/fix-margin-report-alias-hint",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-14T12:23:49+00:00",
+      "updated_at": "2026-11-14T12:23:49+00:00",
       "rank": 4
     },
     {

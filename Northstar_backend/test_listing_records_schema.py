@@ -31,3 +31,35 @@ def test_source_survives_a_dump_for_both_paths():
     bulk = dsa.ListingMigrateIn(records=[{"asin": "B0TEST", "source": "editor"}])
     assert single.model_dump()["source"] == "editor"
     assert bulk.records[0].model_dump()["source"] == "editor"
+
+
+def test_migration_is_idempotent_per_asin_not_only_per_legacy_key(tmp_path, monkeypatch):
+    """Measured 2026-11-14: the browser migration cloned rows created elsewhere.
+
+    The store deduped only on `legacy_key`, so a row without one (a contract probe, the
+    editor) was re-created as a listingforge-local copy: ds_listing_records went 4 -> 7.
+    """
+    import data_layer
+    from fastapi.testclient import TestClient
+    from main import app
+
+    monkeypatch.setattr(data_layer, "_SQLITE_PATH", tmp_path / "northstar.db")
+    db = data_layer.NorthstarDB()
+    monkeypatch.setattr(dsa, "get_northstar_db", lambda: db)
+    app.dependency_overrides[dsa.studio_account] = lambda: "org-migrate"
+    try:
+        client = TestClient(app)
+        first = client.post("/api/design-studio/listing-records",
+                            json={"asin": "B0DUP00001", "title": "created elsewhere"})
+        assert first.status_code == 200
+        out = client.post("/api/design-studio/listing-records/migrate", json={"records": [
+            {"asin": "B0DUP00001", "title": "browser copy", "legacy_key": "lf:B0DUP00001"},
+            {"asin": "B0NEW00002", "title": "new one", "legacy_key": "lf:B0NEW00002"},
+        ]}).json()
+        rows = db.design_studio.listing_records.list_for_account("org-migrate")
+    finally:
+        app.dependency_overrides = {}
+
+    assert out["created"] == 1
+    assert out["skipped"] == 1
+    assert sorted(row["asin"] for row in rows) == ["B0DUP00001", "B0NEW00002"]

@@ -1244,17 +1244,30 @@ def migrate_listing_records(body: ListingMigrateIn, acct: str = Depends(studio_a
     created = 0
     skipped = 0
     errors: List[Dict[str, Any]] = []
-    seen = db.design_studio.listing_records.existing_legacy_keys(acct)
+    store = db.design_studio.listing_records
+    seen = store.existing_legacy_keys(acct)
+    # Idempotency is per ASIN, not only per legacy key. A row created by another surface
+    # (a contract probe, the editor) has no legacy key, so a browser migration carrying the
+    # same ASIN used to create a duplicate: measured 2026-11-14, ds_listing_records 4 -> 7
+    # with two contract-probe rows cloned as listingforge-local copies.
+    present_asins = {str(row.get("asin") or "").strip().upper()
+                     for row in store.list_for_account(acct)}
     for raw in body.records:
         rec = raw.model_dump()
         key = rec.get("legacy_key")
+        asin = str(rec.get("asin") or "").strip().upper()
         if key and key in seen:
             skipped += 1
             continue
+        if asin and asin in present_asins:
+            skipped += 1
+            continue
         try:
-            db.design_studio.listing_records.create({**rec, "account_id": acct})
+            store.create({**rec, "account_id": acct})
             if key:
                 seen.add(key)
+            if asin:
+                present_asins.add(asin)
             created += 1
         except Exception as exc:  # noqa: BLE001 - reported, never swallowed
             errors.append({"asin": rec.get("asin"), "error": f"{exc.__class__.__name__}: {exc}"})
@@ -1263,7 +1276,8 @@ def migrate_listing_records(body: ListingMigrateIn, acct: str = Depends(studio_a
         "created": created,
         "skipped": skipped,
         "errors": errors,
-        "note": "Idempotent per account via the legacy key: re-running reports skipped, never duplicates.",
+        "note": ("Idempotent per account via the ASIN or the legacy key: re-running reports "
+                 "skipped, never duplicates."),
     }
 
 
