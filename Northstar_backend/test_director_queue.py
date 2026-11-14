@@ -272,6 +272,28 @@ def test_the_mirror_never_deletes_a_job_the_store_missed(repo):
     assert DQ.job("only-in-mirror") is None, "it is not in the store until it is imported"
 
 
+def test_the_mirror_preserves_fields_the_store_does_not_hold(repo):
+    """A `blocked_on` reason or a `note` has no store column, but it is resume context.
+
+    Measured 2026-11-13: importing the mirror rewrote every row from the store, and the
+    per-job notes and `blocked_on` reasons disappeared from the file a resume reads.
+    """
+    _job(repo, "with-note", ["pkg/"])
+    payload = json.loads(DQ.MIRROR.read_text(encoding="utf-8"))
+    for row in payload["jobs"]:
+        if row["id"] == "with-note":
+            row["blocked_on"] = "owner action"
+            row["note"] = "context that only the mirror carries"
+    DQ.MIRROR.write_text(json.dumps(payload), encoding="utf-8")
+
+    DQ.mirror()
+
+    after = json.loads(DQ.MIRROR.read_text(encoding="utf-8"))
+    row = next(r for r in after["jobs"] if r["id"] == "with-note")
+    assert row["blocked_on"] == "owner action"
+    assert row["note"] == "context that only the mirror carries"
+
+
 def test_import_mirror_adopts_missing_jobs_and_refreshes_changed_ones(repo):
     _job(repo, "stale", ["pkg/"])
     DQ.set_status("stale", "queued")

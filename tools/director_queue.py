@@ -408,12 +408,24 @@ def mirror(db: Optional[Path] = None, mirror_path: Optional[Path] = None) -> Dic
     rows = jobs(db=db)
     rows.sort(key=lambda row: (int(row.get("rank") or 0), row.get("created_at") or ""))
     known = {row["id"] for row in rows}
+    # Fields the store has no column for (a `blocked_on` reason, a `note`) are part of the
+    # resume record too. Rewriting a row from the store alone deleted them on 2026-11-13,
+    # so a store row keeps any key the previous mirror row carried that it does not.
+    previous_by_id = {str(row.get("id")): row for row in previous if row.get("id")}
+    merged_rows: List[Dict[str, Any]] = []
+    for row in rows:
+        prev = previous_by_id.get(str(row.get("id")))
+        if prev:
+            extras = {key: value for key, value in prev.items() if key not in row}
+            if extras:
+                row = {**row, **extras}
+        merged_rows.append(row)
     orphans: List[Dict[str, Any]] = []
     for row in previous:
         jid = str(row.get("id") or "")
         if jid and jid not in known and not any(o.get("id") == jid for o in orphans):
             orphans.append(row)
-    data["jobs"] = rows + orphans
+    data["jobs"] = merged_rows + orphans
     data["mirror_only_jobs"] = [str(row.get("id")) for row in orphans]
     data["updated_at"] = _now()
     path.parent.mkdir(parents=True, exist_ok=True)
