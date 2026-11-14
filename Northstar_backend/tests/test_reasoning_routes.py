@@ -53,9 +53,9 @@ class ReasoningRouteTests(unittest.TestCase):
         data = r.json()
         self.assertIn("models", data)
         self.assertIn("default_model", data)
-        self.assertEqual(data["default_model"], "step-5-preview-free")
-        self.assertEqual(data["verified_model"], "step-5-preview-free")
-        self.assertEqual(data["runtime_default_model"], "step-5-preview-free")
+        self.assertEqual(data["default_model"], "beam-free")
+        self.assertEqual(data["verified_model"], "beam-free")
+        self.assertEqual(data["runtime_default_model"], "beam-free")
         self.assertTrue(data["verified_usability"])
         self.assertEqual(data["provider"], "opencode-go")
         self.assertEqual(data["chat_endpoint"], "https://opencode.ai/zen/go/v1/chat/completions")
@@ -84,7 +84,7 @@ class ReasoningRouteTests(unittest.TestCase):
 
         by_id = {m["id"]: m for m in models}
         # Intended roles per the hardening policy.
-        self.assertEqual(by_id["step-5-preview-free"]["intended_role"], "default")
+        self.assertEqual(by_id["beam-free"]["intended_role"], "default")
         self.assertEqual(by_id["deepseek-v4.1-flash"]["intended_role"], "fallback")
         self.assertEqual(by_id["kimi-k2.7-code"]["intended_role"], "escalation")
         self.assertEqual(by_id["glm-5.3-flash"]["intended_role"], "experimental")
@@ -92,11 +92,11 @@ class ReasoningRouteTests(unittest.TestCase):
         # Configured vs verified vs active default are three distinct states.
         for m in models:
             self.assertTrue(m["configured"])
-        self.assertTrue(by_id["step-5-preview-free"]["verified_usability"])
+        self.assertTrue(by_id["beam-free"]["verified_usability"])
         self.assertFalse(by_id["deepseek-v4.1-flash"]["verified_usability"])
-        self.assertTrue(by_id["step-5-preview-free"]["is_runtime_default"])
+        self.assertTrue(by_id["beam-free"]["is_runtime_default"])
         self.assertFalse(by_id["deepseek-v4.1-flash"]["is_runtime_default"])
-        self.assertTrue(by_id["step-5-preview-free"]["usable"])
+        self.assertTrue(by_id["beam-free"]["usable"])
         self.assertFalse(by_id["deepseek-v4.1-flash"]["usable"])
 
     def test_listing_proposal_endpoint(self):

@@ -9,7 +9,7 @@ OpenCode Go contract (exact):
 - Base URL:       https://opencode.ai/zen/go/v1
 - Chat endpoint:  https://opencode.ai/zen/go/v1/chat/completions
 - Auth:           Authorization: Bearer <OPENCODE_GO_API_KEY>
-- Model IDs:      bare IDs, e.g. ``step-5-preview-free``
+- Model IDs:      bare IDs, e.g. ``beam-free``
 - Credential env: OPENCODE_GO_API_KEY
 - Enable flag:    OPENCODE_GO_ENABLED=1
 
@@ -70,8 +70,9 @@ ENABLED_ENV_VAR = "OPENCODE_GO_ENABLED"          # "1" arms live execution
 # ---------------------------------------------------------------------------
 
 # TEMPORARY MODEL-ROUTING POLICY (see docs/HOSTED_REASONING.md):
-#   Step 5 Preview Free is a temporary *preferred* model for non-creative
-#   internal engineering / management work only.
+#   Beam Free is the verified *preferred* model for non-creative internal
+#   engineering / management work only (owner-authorized 2026-11-13, replacing
+#   step-5-preview-free, which the provider withdrew).
 #   Non-creative = listings workflows, backend logic, APIs, database work,
 #   admin/dashboard work, integrations, test writing, debugging, service
 #   orchestration, logging, implementation planning.
@@ -86,11 +87,32 @@ ENABLED_ENV_VAR = "OPENCODE_GO_ENABLED"          # "1" arms live execution
 
 HOSTED_MODELS: List[Dict[str, Any]] = [
     {
+        "id": "beam-free",
+        "short_id": "beam-free",
+        "name": "Beam Free",
+        "role": "default",
+        "intended_role": "default",
+        "allowed_for_creative": False,
+        "provider": GO_PROVIDER_ID,
+        "family": "beam",
+        "context": 1048576,
+        "cost_per_1m_input": 0.0,
+        "cost_per_1m_output": 0.0,
+        "cost_per_1m_cache_read": 0.0,
+        "cost_per_1m_cache_write": 0.0,
+        "pricing_source": "OpenCode Go live catalog (2026-11-13): input $0, output $0",
+        "pricing_observed_at": "2026-11-13T00:00:00Z",
+        "verified_usability": True,
+        "verified_at": "2026-11-13T00:00:00Z",
+        "availability_note": "VERIFIED through the OpenCode Go endpoint: a real completion returned HTTP 200 in 622 ms, model id echoed 'beam-free', usage cost 0.",
+        "notes": "Owner-authorized free replacement (2026-11-13) for step-5-preview-free, which the provider withdrew. Non-creative hosted reasoning only.",
+    },
+    {
         "id": "step-5-preview-free",
         "short_id": "step-5-preview-free",
         "name": "Step 5 Preview Free",
-        "role": "default",
-        "intended_role": "default",
+        "role": "retired",
+        "intended_role": "retired",
         "allowed_for_creative": False,
         "provider": GO_PROVIDER_ID,
         "family": "step",
@@ -101,10 +123,10 @@ HOSTED_MODELS: List[Dict[str, Any]] = [
         "cost_per_1m_cache_write": 0.0,
         "pricing_source": "not applicable (free tier)",
         "pricing_observed_at": "2026-10-08T00:00:00Z",
-        "verified_usability": True,
+        "verified_usability": False,
         "verified_at": "2026-10-08T00:00:00Z",
-        "availability_note": "VERIFIED through the OpenCode Go endpoint: a real completion returned HTTP 200 (model id echoed unchanged).",
-        "notes": "Temporary preferred model for non-creative internal engineering/management tasks. Not used for creative/image work.",
+        "availability_note": "RETIRED upstream 2026-11-13: no longer in the provider catalog; a completion answers HTTP 400 'Upstream request failed: Model is unavailable.' Not usable, never selected.",
+        "notes": "Kept for provenance only. The verified runtime default moved to beam-free on 2026-11-13.",
     },
     {
         "id": "deepseek-v4.1-flash",
@@ -199,7 +221,8 @@ HOSTED_MODEL_IDS = {m["id"] for m in HOSTED_MODELS} | {m["id"] for m in HOSTED_E
 # Intended roles (spec vocabulary). A role is descriptive intent only — it never
 # grants usability. ``verified_usability`` is the sole gate.
 INTENDED_ROLES = {
-    "step-5-preview-free": "default",     # non-creative hosted reasoning only
+    "beam-free": "default",                # verified 2026-11-13; non-creative only
+    "step-5-preview-free": "retired",      # withdrawn upstream 2026-11-13
     "deepseek-v4.1-flash": "fallback",     # usable only after its own verification
     "glm-5.3-flash": "experimental",
     "mimo-v2.6-flash-free": "experimental",
@@ -247,14 +270,14 @@ def verified_models() -> List[str]:
 
 # The temporary *policy* preference for non-creative internal work. This is a
 # display/selection hint only — it is NOT a runtime default until verified.
-POLICY_PREFERRED_MODEL = "step-5-preview-free"
+POLICY_PREFERRED_MODEL = "beam-free"
 
-# Verified 2026-10-08: one minimal non-destructive completion
-# (model=step-5-preview-free, max_tokens=8) returned HTTP 200 through
-# https://opencode.ai/zen/go/v1/chat/completions. The generic pay-as-you-go
-# OpenCode route (/zen/v1/...) had previously returned a free-tier refusal, so
-# the two surfaces are confirmed to behave differently.
-VERIFIED_GO_MODEL: Optional[str] = "step-5-preview-free"
+# Verified 2026-11-13: one minimal non-destructive completion
+# (model=beam-free, max_tokens=64) returned HTTP 200 through
+# https://opencode.ai/zen/go/v1/chat/completions, model id echoed, usage cost 0.
+# It replaces step-5-preview-free, which is no longer in the provider catalog
+# and answers HTTP 400 "Upstream request failed: Model is unavailable.".
+VERIFIED_GO_MODEL: Optional[str] = "beam-free"
 
 # The runtime default is the verified model. No other model is a default.
 RUNTIME_DEFAULT_MODEL: Optional[str] = VERIFIED_GO_MODEL
@@ -562,7 +585,7 @@ class OpenCodeGoProvider(ReasoningProvider):
                 provider=GO_PROVIDER_ID,
                 error=(
                     "OpenCode Go refused this free-tier model: the provider states the free "
-                    "tier can only be used from inside OpenCode. Step 5 Preview Free is "
+                    "tier can only be used from inside OpenCode. The requested free model is "
                     "unavailable to this external runtime provider path. "
                     "No model was substituted."
                 ),

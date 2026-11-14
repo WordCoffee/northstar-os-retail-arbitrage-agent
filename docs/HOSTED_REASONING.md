@@ -25,7 +25,7 @@ all local non-creative models.
 | Model IDs | bare IDs, passed through exactly as selected |
 | Provider id | `opencode-go` |
 
-- Model IDs are **bare** — e.g. `step-5-preview-free`, `deepseek-v4.1-flash`,
+- Model IDs are **bare** — e.g. `beam-free`, `deepseek-v4.1-flash`,
   `kimi-k2.7-code`. No prefix is added or rewritten.
 - Only `OPENCODE_GO_API_KEY` is read as a credential. No other key name is
   consulted.
@@ -43,14 +43,23 @@ all local non-creative models.
   deterministic validation → before/after owner review → approved Excel/CSV
   export → manual upload by the owner.
 
-## TEMPORARY MODEL-ROUTING POLICY — STEP 5 DEFAULT FOR NON-CREATIVE WORK
+## TEMPORARY MODEL-ROUTING POLICY — BEAM FREE DEFAULT FOR NON-CREATIVE WORK
 
-**Purpose:** temporarily use Step 5 Preview Free as the default model for all
+> **Amendment 2026-11-13 (owner-authorized, one model change).** `step-5-preview-free`
+> was withdrawn from the OpenCode Go catalog; a completion now answers `HTTP 400
+> "Upstream request failed: Model is unavailable."`. The verified runtime default is
+> **`beam-free`** — in the live catalog at input $0 / output $0, proven by a real
+> completion (HTTP 200, 622 ms, model id echoed, usage cost 0). No other model id was
+> adopted. `step-5-preview-free` stays in the catalog for provenance and is refused by
+> name. Everything below that says "Beam Free" is the same policy, same scope, same
+> creative separation — only the verified model id changed.
+
+**Purpose:** temporarily use Beam Free as the default model for all
 non-creative operational work while it remains free on OpenCode Go. This is a
 temporary cost-saving and orchestration policy, not a permanent architecture
 decision.
 
-**Primary rule:** use Step 5 Preview Free as the default model for all
+**Primary rule:** use Beam Free as the default model for all
 non-creative tasks unless a task clearly belongs to a specialized model category
 defined below.
 
@@ -65,12 +74,12 @@ deployment scripts, environment handling, infrastructure glue; documentation,
 technical specs, implementation plans, task breakdowns; cross-service
 coordination and "manager" tasks across the platform.
 
-**Step 5 should manage by default:** listings-related services; general
+**Beam Free should manage by default:** listings-related services; general
 application services; back-office and operational workflows; integrations
 between services; task decomposition and execution planning; most day-to-day
 engineering work that is not image-generation creativity.
 
-**Step 5 should NOT manage by default:** creative remodel image generation;
+**Beam Free should NOT manage by default:** creative remodel image generation;
 interior/exterior redesign rendering; creative-pipeline prompt generation where
 a specialized image model is required; aesthetic design ideation; final creative
 judgment on remodel outputs; any task whose main goal is generating or editing
@@ -78,26 +87,26 @@ property imagery.
 
 **Creative-model rule:** for creative remodel, staging, landscaping, image
 editing, or visual transformation tasks, use the dedicated creative/image
-pipeline and its assigned visual models instead of Step 5. Step 5 may help with
-surrounding logic, orchestration, validation, or implementation planning, but it
-must not replace the creative rendering stack.
+pipeline and its assigned visual models instead of Beam Free. Beam Free may help
+with surrounding logic, orchestration, validation, or implementation planning,
+but it must not replace the creative rendering stack.
 
 **Default routing policy:**
 
 1. If the task is non-creative, operational, analytical, architectural,
-   backend, integration, testing, or management-related, route to Step 5 first.
+   backend, integration, testing, or management-related, route to Beam Free first.
 2. If the task is primarily visual, aesthetic, or image-generation-related, do
-   not route to Step 5 as the main worker.
+   not route to Beam Free as the main worker.
 3. If a task begins as non-creative but requires specialized visual generation,
-   let Step 5 coordinate the handoff rather than performing the visual work.
+   let Beam Free coordinate the handoff rather than performing the visual work.
 
 **Escalation policy:**
 
-- If Step 5 loops, stalls, loses context, or produces weak code quality,
+- If Beam Free loops, stalls, loses context, or produces weak code quality,
   escalate to **Kimi K2.7 Code** (explicit, never automatic).
 - Lightweight, repetitive, cheap-to-run engineering work may intentionally use
   **DeepSeek V4.1 Flash** as a lower-cost fallback.
-- Step 5 is the temporary default, not mandatory in every case.
+- Beam Free is the temporary default, not mandatory in every case.
 
 **Execution standards:** do not claim completion without verification; read
 relevant files before editing; make the smallest correct change set; preserve
@@ -106,36 +115,38 @@ tests, linting, and type checks; report exact files changed, exact commands
 run, exact outcomes; if uncertain, stop and state the uncertainty rather than
 inventing a result.
 
-**Northstar-specific priority:** Step 5 is the default manager for all
+**Northstar-specific priority:** Beam Free is the default manager for all
 non-creative platform work — listings, service coordination, backend
 workflows, agent logic, business rules, dashboard/admin work, and operational
 debugging.
 
 **Temporary policy note:** this routing policy is temporary and remains in
-effect only while Step 5 Preview Free is available and performing well enough
+effect only while Beam Free is available and performing well enough
 to justify default use.
 
-**Removal condition:** once Step 5 Preview Free is no longer free — or if its
-quality becomes unreliable — revert default non-creative routing back to the
-prior preferred model (`deepseek-v4.1-flash`).
+**Removal condition:** once Beam Free is no longer available or no longer free —
+or if its quality becomes unreliable — do not automatically adopt another id:
+the next model needs its own real completion and an owner decision, or the
+hosted path refuses by name.
 
 **Hard guardrail:** under no circumstances should this policy be interpreted to
-mean Step 5 becomes the default creative remodel renderer. Creative
+mean Beam Free becomes the default creative remodel renderer. Creative
 property-image generation must remain on the specialized visual pipeline.
 
 ## Model catalog
 
 | Role | Bare ID | Input $/1M | Output $/1M | Verified through Go |
 |------|---------|------------|-------------|---------------------|
-| Preferred (non-creative) | `step-5-preview-free` | Free | Free | **Yes — HTTP 200, 2026-10-08** |
+| Preferred (non-creative) | `beam-free` | Free | Free | **Yes — HTTP 200, 2026-11-13** |
+| Retired | `step-5-preview-free` | Free | Free | **No — withdrawn upstream 2026-11-13 (HTTP 400 "Model is unavailable.")** |
 | Standard | `deepseek-v4.1-flash` | $0.30 | $1.20 | No (not yet independently probed) |
 | Alternative | `glm-5.3-flash` | $0.15 | $0.50 | No |
 | Budget | `mimo-v2.6-flash-free` | Free | Free | No |
 | Escalation | `kimi-k2.7-code` | $0.95 | $4.00 | No |
 
-Only `step-5-preview-free` has a proven real completion through the corrected
-Go endpoint. Every other model is reported unverified, and no unverified model
-is ever a runtime default or an automatic fallback.
+Only `beam-free` has a proven real completion through the corrected
+Go endpoint. Every other model is reported unverified or retired, and no
+unverified model is ever a runtime default or an automatic fallback.
 
 ## Availability guardrail (hardened)
 
@@ -161,7 +172,8 @@ The adapter enforces fail-closed model selection:
 
 | Bare ID | Intended role | Rule |
 |---------|---------------|------|
-| `step-5-preview-free` | `default` | Non-creative hosted reasoning only. Verified. |
+| `beam-free` | `default` | Non-creative hosted reasoning only. Verified 2026-11-13. |
+| `step-5-preview-free` | `retired` | Withdrawn upstream 2026-11-13. Refused by name; kept for provenance. |
 | `deepseek-v4.1-flash` | `fallback` | Fallback **only after** its own successful verification. |
 | `kimi-k2.7-code` | `escalation` | Escalation **only after** its own successful verification; explicit, never automatic. |
 | `glm-5.3-flash` | `experimental` | Not verified. |
@@ -171,16 +183,22 @@ Every model carries `allowed_for_creative: false`, and the API exposes
 `hosted_reasoning_is_creative_renderer: false`.
 
 **Live probe of the fail-closed behaviour (2026-10-08, no secrets printed):**
-each model was submitted individually and only `step-5-preview-free` returned
+each model was submitted individually and only the then-verified model returned
 `success=True`; every other model returned `status=blocked` with a
 "not verified usable" message. With no model requested, the request resolved to
-`step-5-preview-free`.
+the then-verified model. The same rule holds today with `beam-free`.
 
-**Live verification performed (2026-10-08):** one minimal, non-destructive
-completion request — model `step-5-preview-free`, `max_tokens=8`, prompt
-`ping` — against
-`https://opencode.ai/zen/go/v1/chat/completions`.
-Result: **HTTP 200, success, model id echoed unchanged.** No provider error.
+**Live verification performed (2026-11-13):** one minimal, non-destructive
+completion request — model `beam-free`, `max_tokens=64`, prompt
+`Return {"ok": true, "word": "beam"}` — against
+`https://opencode.ai/zen/go/v1/chat/completions`, with the required
+`x-opencode-session` header.
+Result: **HTTP 200 in 622 ms, model id echoed `beam-free`, usage cost 0.**
+
+**Retirement record (2026-11-13):** `step-5-preview-free` is absent from the live
+catalog and answers `HTTP 400 {"error":{"type":"server_error","message":"Upstream
+request failed: Model is unavailable."}}`. It is marked unverified/retired, so a
+request for it is refused by name — never substituted.
 
 The earlier `403` free-tier refusal was observed only on the generic
 pay-as-you-go route, not on Go.
@@ -196,7 +214,7 @@ OPENCODE_GO_ENABLED=1
 
 # Optional overrides
 # OPENCODE_GO_ENDPOINT=https://opencode.ai/zen/go/v1/chat/completions
-# OPENCODE_GO_MODEL=step-5-preview-free
+# OPENCODE_GO_MODEL=beam-free
 # OPENCODE_GO_MAX_CONCURRENCY=2
 # OPENCODE_GO_TIMEOUT_SECONDS=120
 # OPENCODE_GO_MAX_TOKENS=4096
@@ -311,7 +329,8 @@ python -m unittest tests.test_reasoning_provider tests.test_reasoning_tasks test
 - [x] Owner-triggered live-test controls in UI
 - [x] Configuration and credential instructions
 - [x] Accurate provider-usage constraints documented
-- [x] Real OpenCode Go completion verified for `step-5-preview-free` (HTTP 200)
+- [x] Real OpenCode Go completion verified for `beam-free` (HTTP 200, 2026-11-13)
+- [x] Retired model `step-5-preview-free` refused by name, never substituted
 - [x] Fail-closed model selection (no silent fallback to an unverified model)
 - [x] Status API distinguishes configured / enabled / verified / active default
 - [x] Intended roles: default, fallback, escalation, experimental
@@ -320,10 +339,10 @@ python -m unittest tests.test_reasoning_provider tests.test_reasoning_tasks test
 
 ## Unresolved issues
 
-1. Only `step-5-preview-free` has been verified end-to-end.
+1. Only `beam-free` has been verified end-to-end.
    `deepseek-v4.1-flash`, `glm-5.3-flash`, `mimo-v2.6-flash-free`, and
    `kimi-k2.7-code` are catalogued but unverified — each needs its own real Go
-   completion before it is treated as usable.
+   completion before it is treated as usable. `step-5-preview-free` is retired.
 2. The FastAPI app does not load `.env` itself; operators must export the
    variables in the environment. Pre-existing behaviour, unchanged.
 3. `.env` line 98 is a raw `retailerapi.com key: <value>` entry that

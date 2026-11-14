@@ -52,8 +52,8 @@ def _audit_copy(text: str) -> Dict[str, Any]:
 logger = logging.getLogger(__name__)
 
 # No model is assumed at runtime. A task must name a model explicitly, or the
-# adapter fails closed. Step 5 Preview Free is a *policy preference* for
-# non-creative internal work only and is not a verified runtime default.
+# adapter fails closed. Beam Free is the verified *policy preference* for
+# non-creative internal work (2026-11-13) and is the adapter's runtime default.
 DEFAULT_TASK_MODEL = None
 
 
@@ -94,6 +94,12 @@ def _task_provenance(model: Optional[str], task_type: str, latency_ms: Optional[
 # ---------------------------------------------------------------------------
 # Listing proposal
 # ---------------------------------------------------------------------------
+
+# beam-free is a reasoning model: its reasoning tokens count toward the completion
+# budget. At the adapter's 4096-token default a full listing proposal was cut off
+# mid-JSON (2055 characters, HTTP 200, parse failed). 8192 returns the complete
+# document. This is a budget for the listing task only, not a different model.
+LISTING_MAX_TOKENS = 8192
 
 LISTING_PROMPT = """You are a product-listing analyst for Northstar OS, a private Amazon FBA workspace focused on private-label brand building and retail-arbitrage sourcing.
 Analyze the supplied listing data and propose optimized title, bullets, description, and attributes for the brand owner.
@@ -151,6 +157,7 @@ def listing_proposal(
         model=model or DEFAULT_TASK_MODEL,
         task_type="listing",
         session_id=f"listing:{sku}",
+        max_tokens=LISTING_MAX_TOKENS,
     )
     resp = p.complete(req)
     return _normalize_listing_response(resp, sku, title, bullets, description, attributes or {})

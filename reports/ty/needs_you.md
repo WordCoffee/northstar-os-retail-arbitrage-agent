@@ -554,6 +554,15 @@ current score (6 fixtures, 5 passed, mean 98.1) is published with the assumption
 
 ## G1-LIST-2. The composer key works; the provider withdrew the verified model (2026-11-13)
 
+**RESOLVED 2026-11-13 — owner authorized `beam-free`, and G1 Listings passed.** The catalog
+contains `beam-free` (input $0 / output $0); one real completion returned HTTP 200 in 622 ms
+with the model id echoed; `step-5-preview-free` is marked retired and refused by name. The
+listing was composed through the UI, persisted (`B0G1LOKAVJ`) and read back in clean desktop
+Chromium and iPhone 12 WebKit contexts. The listing task also gained an 8,192-token budget
+because the old 4,096 default truncated the JSON. Evidence:
+`reports/ty/g1_listings_beam_free_20261113.md`. Nothing is left on you for this entry; the
+original report is kept below.
+
 The key is present and the provider is armed — `GET /api/v1/reasoning/models` reports
 `credential_env=OPENCODE_GO_API_KEY`, `configured=true`, `enable_env=OPENCODE_GO_ENABLED`,
 `enabled=true`, `armed=true`. **No credential value was read or printed.** The gate no longer

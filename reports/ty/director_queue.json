@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-13T19:07:33+00:00",
+  "updated_at": "2026-11-14T00:43:21+00:00",
   "cycle": 3,
   "unit_in_flight": "",
   "unit_order": [
@@ -1075,6 +1075,29 @@
       "rank": 0
     },
     {
+      "id": "model-beam-free",
+      "unit": "U",
+      "title": "Verified runtime model: beam-free replaces the withdrawn step-5-preview-free",
+      "status": "merged",
+      "owner": "",
+      "write_paths": [
+        "Northstar_backend/adapters/reasoning_provider.py",
+        "Northstar_backend/reasoning_tasks.py",
+        "docs/HOSTED_REASONING.md"
+      ],
+      "branch": "ty/model-beam-free",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "owner-authorized one model change: beam-free (live catalog input 0 / output 0) proven with one real completion HTTP 200 622ms model echoed beam-free cost 0; VERIFIED_GO_MODEL/RUNTIME_DEFAULT_MODEL/POLICY_PREFERRED_MODEL = beam-free; step-5-preview-free retired, verified_usability false, refused by name; listing task budget LISTING_MAX_TOKENS=8192 because 4096 truncated the JSON (2055 chars, 200 OK, parse failed) and 8192 returned the complete 2919-char document; 63 reasoning tests pass; docs/HOSTED_REASONING.md model card updated; no paid id used",
+      "created_at": "2026-11-14T00:43:21+00:00",
+      "updated_at": "2026-11-14T00:43:21+00:00",
+      "rank": 0
+    },
+    {
       "id": "sel-01c-cutout-provenance",
       "unit": "D12",
       "title": "Composite provenance: save the cutout and placement beside every composite so the product-region check can verify it",
@@ -1573,7 +1596,7 @@
       "id": "g1-listings",
       "unit": "U",
       "title": "G1: compose and persist a listing through the UI",
-      "status": "blocked",
+      "status": "merged",
       "owner": "",
       "write_paths": [
         "northstar-os-ui/src/",
@@ -1587,9 +1610,9 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "compose refused by the provider, not the key: step-5-preview-free retired upstream (HTTP 400 Upstream request failed: Model is unavailable.); key present, enabled, armed; nothing persisted and the container row was deleted; instrument tests/e2e/g1_listings_persist.spec.ts (gate green, compose opt-in via G1_LISTINGS_LIVE=1); reports/ty/g1_listings_20261113.md; needs_you G1-LIST-2",
+      "evidence": "G1 met on beam-free (owner-authorized, only id used): compose through the ListingForge UI from supplied facts -> proposal ok on beam-free -> Apply -> Save Revision -> tenant-store row B0G1LOKAVJ (title, 5 bullets, 363-char description, backend_terms) asserted through GET /api/design-studio/listing-records -> read back in clean desktop Chromium and iPhone 12 WebKit contexts with all four fields equal; e2e 2 passed (21.6s) on chromium-desktop, 2 skipped on the phone project by design; store holds two real composed listings and no stub; instrument tests/e2e/g1_listings_persist.spec.ts; reports/ty/g1_listings_beam_free_20261113.md",
       "created_at": "2026-11-13T19:07:29+00:00",
-      "updated_at": "2026-11-13T19:07:33+00:00",
+      "updated_at": "2026-11-14T00:43:21+00:00",
       "rank": 2
     },
     {

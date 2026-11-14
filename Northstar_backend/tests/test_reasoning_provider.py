@@ -38,6 +38,7 @@ from adapters.reasoning_provider import (
 class CatalogTests(unittest.TestCase):
     def test_expected_model_ids_present(self):
         expected = {
+            "beam-free",
             "step-5-preview-free",
             "deepseek-v4.1-flash",
             "glm-5.3-flash",
@@ -45,8 +46,8 @@ class CatalogTests(unittest.TestCase):
         }
         self.assertTrue(expected.issubset(HOSTED_MODEL_IDS))
 
-    def test_default_is_step5_preview_free(self):
-        self.assertEqual(POLICY_PREFERRED_MODEL, "step-5-preview-free")
+    def test_default_is_beam_free(self):
+        self.assertEqual(POLICY_PREFERRED_MODEL, "beam-free")
 
     def test_runtime_default_requires_verification(self):
         # Guardrail: the runtime default is only ever the verified model.
@@ -75,7 +76,7 @@ class CatalogTests(unittest.TestCase):
 
     def test_exactly_one_model_is_verified(self):
         verified = [m for m in HOSTED_MODELS + HOSTED_ESCALATION_MODELS if m.get("verified_usability")]
-        self.assertEqual([m["id"] for m in verified], ["step-5-preview-free"])
+        self.assertEqual([m["id"] for m in verified], ["beam-free"])
 
     def test_verified_model_has_a_verified_at_stamp(self):
         m = next(x for x in HOSTED_MODELS if x["id"] == VERIFIED_GO_MODEL)
@@ -83,15 +84,15 @@ class CatalogTests(unittest.TestCase):
         self.assertTrue(m.get("verified_at"))
 
     def test_runtime_default_is_the_verified_model(self):
-        self.assertEqual(VERIFIED_GO_MODEL, "step-5-preview-free")
+        self.assertEqual(VERIFIED_GO_MODEL, "beam-free")
         self.assertEqual(RUNTIME_DEFAULT_MODEL, VERIFIED_GO_MODEL)
         p = OpenCodeGoProvider()
-        self.assertEqual(p.verified_model(), "step-5-preview-free")
-        self.assertEqual(p.resolve_model(None), "step-5-preview-free")
+        self.assertEqual(p.verified_model(), "beam-free")
+        self.assertEqual(p.resolve_model(None), "beam-free")
 
     def test_legacy_prefixed_id_is_stripped(self):
         p = OpenCodeGoProvider()
-        self.assertEqual(p.resolve_model("opencode-go/step-5-preview-free"), "step-5-preview-free")
+        self.assertEqual(p.resolve_model("opencode-go/beam-free"), "beam-free")
 
     def test_endpoint_override_env(self):
         with mock.patch.dict(os.environ, {"OPENCODE_GO_ENDPOINT": "https://example.invalid/go/v1/chat/completions"}, clear=False):
@@ -149,10 +150,13 @@ class CatalogTests(unittest.TestCase):
             self.assertGreaterEqual(m["cost_per_1m_input"], 0)
             self.assertGreaterEqual(m["cost_per_1m_output"], 0)
 
-    def test_step5_is_free_but_others_are_not(self):
+    def test_free_and_paid_models_are_listed(self):
         free = [m for m in HOSTED_MODELS if m["cost_per_1m_input"] == 0.0]
         paid = [m for m in HOSTED_MODELS if m["cost_per_1m_input"] > 0]
-        self.assertEqual([m["id"] for m in free], ["step-5-preview-free", "mimo-v2.6-flash-free"])
+        self.assertEqual(
+            [m["id"] for m in free],
+            ["beam-free", "step-5-preview-free", "mimo-v2.6-flash-free"],
+        )
         self.assertEqual(len(paid), 2)
 
     def test_resolve_model_defaults_to_verified_only(self):
@@ -164,7 +168,13 @@ class CatalogTests(unittest.TestCase):
 
     def test_resolve_model_accepts_verified_id(self):
         p = OpenCodeGoProvider()
-        self.assertEqual(p.resolve_model("step-5-preview-free"), "step-5-preview-free")
+        self.assertEqual(p.resolve_model("beam-free"), "beam-free")
+
+    def test_retired_step5_is_refused_by_name(self):
+        # The 2026-10-08 verification is void: the provider retired the model.
+        p = OpenCodeGoProvider()
+        with self.assertRaises(ModelNotUsableError):
+            p.resolve_model("step-5-preview-free")
 
     def test_resolve_model_rejects_unverified_model(self):
         # Hardening: an unverified model must never be selected silently.
@@ -195,7 +205,8 @@ class CatalogTests(unittest.TestCase):
             p.resolve_model("openai/gpt-5")
 
     def test_intended_roles(self):
-        self.assertEqual(intended_role("step-5-preview-free"), "default")
+        self.assertEqual(intended_role("beam-free"), "default")
+        self.assertEqual(intended_role("step-5-preview-free"), "retired")
         self.assertEqual(intended_role("deepseek-v4.1-flash"), "fallback")
         self.assertEqual(intended_role("kimi-k2.7-code"), "escalation")
         self.assertEqual(intended_role("glm-5.3-flash"), "experimental")
@@ -214,8 +225,8 @@ class CatalogTests(unittest.TestCase):
         self.assertEqual(
             set(by_id),
             {
-                "step-5-preview-free", "deepseek-v4.1-flash", "glm-5.3-flash",
-                "mimo-v2.6-flash-free", "kimi-k2.7-code",
+                "beam-free", "step-5-preview-free", "deepseek-v4.1-flash",
+                "glm-5.3-flash", "mimo-v2.6-flash-free", "kimi-k2.7-code",
             },
         )
         for e in entries:
@@ -225,12 +236,12 @@ class CatalogTests(unittest.TestCase):
             self.assertFalse(e["allowed_for_creative"])
         # Only the verified model is the active default.
         defaults = [e["id"] for e in entries if e["is_runtime_default"]]
-        self.assertEqual(defaults, ["step-5-preview-free"])
+        self.assertEqual(defaults, ["beam-free"])
         # Configured and verified are distinct concepts.
         for e in entries:
             self.assertTrue(e["configured"] and e["enabled"])
             self.assertIsInstance(e["verified_usability"], bool)
-        self.assertTrue(by_id["step-5-preview-free"]["verified_usability"])
+        self.assertTrue(by_id["beam-free"]["verified_usability"])
         self.assertFalse(by_id["deepseek-v4.1-flash"]["verified_usability"])
         self.assertFalse(by_id["kimi-k2.7-code"]["verified_usability"])
 
@@ -241,12 +252,15 @@ class CatalogTests(unittest.TestCase):
         self.assertTrue(st["enabled"])
         self.assertTrue(st["armed"])
         self.assertTrue(st["verified_usability"])
-        self.assertEqual(st["verified_model"], "step-5-preview-free")
-        self.assertEqual(st["runtime_default_model"], "step-5-preview-free")
-        self.assertEqual(st["verified_models"], ["step-5-preview-free"])
+        self.assertEqual(st["verified_model"], "beam-free")
+        self.assertEqual(st["runtime_default_model"], "beam-free")
+        self.assertEqual(st["verified_models"], ["beam-free"])
         self.assertEqual(
             set(st["unverified_models"]),
-            {"deepseek-v4.1-flash", "glm-5.3-flash", "mimo-v2.6-flash-free", "kimi-k2.7-code"},
+            {
+                "step-5-preview-free", "deepseek-v4.1-flash", "glm-5.3-flash",
+                "mimo-v2.6-flash-free", "kimi-k2.7-code",
+            },
         )
         self.assertFalse(st["hosted_reasoning_is_creative_renderer"])
 
@@ -331,18 +345,18 @@ class CompleteTests(unittest.TestCase):
                 provider="opencode-go",
                 data={
                     "choices": [{"message": {"content": "hello"}}],
-                    "model": "step-5-preview-free",
+                    "model": "beam-free",
                     "usage": {"prompt_tokens": 10, "completion_tokens": 5},
                 },
                 latency_ms=123.0,
                 http_status=200,
             )
             p = OpenCodeGoProvider()
-            req = ReasoningRequest(messages=[{"role": "user", "content": "hi"}], model="step-5-preview-free")
+            req = ReasoningRequest(messages=[{"role": "user", "content": "hi"}], model="beam-free")
             resp = p.complete(req)
             self.assertTrue(resp.success)
             self.assertEqual(resp.data["content"], "hello")
-            self.assertEqual(resp.data["model"], "step-5-preview-free")
+            self.assertEqual(resp.data["model"], "beam-free")
             self.assertEqual(resp.data["usage"]["prompt_tokens"], 10)
             self.assertEqual(resp.data["usage"]["completion_tokens"], 5)
             self.assertAlmostEqual(
@@ -353,7 +367,7 @@ class CompleteTests(unittest.TestCase):
             self.assertEqual(resp.latency_ms, 123.0)
 
             call_kwargs = mock_timed.call_args.kwargs
-            self.assertEqual(call_kwargs["json"]["model"], "step-5-preview-free")
+            self.assertEqual(call_kwargs["json"]["model"], "beam-free")
             self.assertEqual(
                 call_kwargs["headers"]["Authorization"],
                 "Bearer " + os.environ["OPENCODE_GO_API_KEY"],
@@ -389,7 +403,7 @@ class CompleteTests(unittest.TestCase):
                 http_status=200,
             )
             p = OpenCodeGoProvider()
-            resp = p.complete(ReasoningRequest(messages=[{"role": "user", "content": "hi"}], model="step-5-preview-free"))
+            resp = p.complete(ReasoningRequest(messages=[{"role": "user", "content": "hi"}], model="beam-free"))
             self.assertFalse(resp.success)
             self.assertEqual(resp.status, ProviderStatus.ERROR)
             self.assertIn("Malformed", resp.error)
@@ -426,7 +440,7 @@ class CompleteTests(unittest.TestCase):
                 http_status=429,
             )
             p = OpenCodeGoProvider()
-            resp = p.complete(ReasoningRequest(messages=[{"role": "user", "content": "hi"}], model="step-5-preview-free"))
+            resp = p.complete(ReasoningRequest(messages=[{"role": "user", "content": "hi"}], model="beam-free"))
             self.assertFalse(resp.success)
             self.assertEqual(resp.status, ProviderStatus.RATE_LIMITED)
 
@@ -467,7 +481,7 @@ class StreamTests(unittest.TestCase):
 
             mock_get_client.return_value = FakeClient()
             p = OpenCodeGoProvider()
-            chunks = list(p.complete_stream(ReasoningRequest(messages=[{"role": "user", "content": "hi"}], model="step-5-preview-free")))
+            chunks = list(p.complete_stream(ReasoningRequest(messages=[{"role": "user", "content": "hi"}], model="beam-free")))
             self.assertEqual(len(chunks), 3)
             self.assertTrue(all(c.success for c in chunks))
             self.assertEqual(chunks[0].data["content"], "Hello ")

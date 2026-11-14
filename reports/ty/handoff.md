@@ -10,7 +10,37 @@ A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.m
 > and `reports/ty/handoff.md`, then continue from the first unfinished unit. No
 > questions, no reports between cycles. Idle means re-plan.
 
+## Position, 2026-11-13 (later) — G1 Listings passes on beam-free
+
+The owner authorized **one model change for g1-listings: `beam-free`, and only that id**. It is
+in the live Go catalog (input $0 / output $0) and one real completion returned **HTTP 200 in
+622 ms** with the model id echoed and usage cost 0. `VERIFIED_GO_MODEL`,
+`RUNTIME_DEFAULT_MODEL`, `POLICY_PREFERRED_MODEL` and the catalog roles now name `beam-free`;
+`step-5-preview-free` is kept for provenance, marked `retired`, and **refused by name**. No
+paid id (`step-5-preview`, `deepseek-v4.1-flash`, …) was used.
+
+**G1 Listings is met.** Compose through the ListingForge UI from supplied facts (proposal `ok`
+on `beam-free`) → Apply → Save Revision → tenant-store row **`B0G1LOKAVJ`** asserted through the
+API (title, 5 bullets, 363-char description, backend terms) → read back in clean **desktop
+Chromium** and **iPhone 12 WebKit** contexts, all four fields equal. e2e: **2 passed (21.6 s)**
+on chromium-desktop; the phone project skips the file because the test opens its own WebKit
+engine for the phone read-back. Store holds two real composed listings; the draft container row
+from an intermediate failed attempt was deleted — **no stub**.
+
+**Defect found and fixed on the way:** `beam-free` is a reasoning model and its reasoning
+tokens count toward the completion budget. At the adapter's 4096-token default it returned
+HTTP 200 with a **truncated JSON** (2,055 chars, parse failed); 8,192 returns the complete
+2,919-char document. `reasoning_tasks.LISTING_MAX_TOKENS = 8192` now budgets the listing task
+only (a test pins it); ad-copy and spreadsheet defaults are unchanged. **63** reasoning tests
+pass. Report: `reports/ty/g1_listings_beam_free_20261113.md`; needs_you **G1-LIST-2 is
+resolved**. The backend was restarted twice through the dev-start posture (hidden uvicorn,
+127.0.0.1) and `dev-start.pids(.json)` records the live listener. Soak, quiet-window waiter and
+`state/vision/PAUSE` untouched.
+
 ## Position, 2026-11-13 — G1 Listings is blocked at the provider, and the key is not the reason
+
+> Superseded later the same day: the owner authorized `beam-free` and G1 passed. See the block
+> above and `reports/ty/g1_listings_beam_free_20261113.md`. Kept as the record of the refusal.
 
 The owner restarted the stack (`scripts/dev-start.ps1`): `/health` ok, UI 200. The composer
 credential gate is **confirmed by name only** — `GET /api/v1/reasoning/models` →

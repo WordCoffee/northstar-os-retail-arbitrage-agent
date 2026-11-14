@@ -11,6 +11,7 @@ import unittest
 from adapters.base import ProviderResponse, ProviderStatus
 from adapters.reasoning_provider import MockReasoningProvider, ReasoningProvider
 from reasoning_tasks import (
+    LISTING_MAX_TOKENS,
     ad_copy_proposal,
     listing_proposal,
     reasoning_run,
@@ -66,6 +67,48 @@ class ListingProposalTests(unittest.TestCase):
         self.assertEqual(result["sku"], "SKU-123")
         self.assertEqual(result["proposed"]["attributes"]["color"], "blue")
         self.assertIn("Proposed title exceeds 200 characters.", result["warnings"])
+
+    def test_listing_proposal_budgets_for_reasoning_tokens(self):
+        # beam-free (reasoning model) truncated the JSON at the 4096 default on
+        # 2026-11-13; the listing task now asks for 8192. Pin the number.
+        class Capturing(ReasoningProvider):
+            name = "capturing"
+            required_env = []
+            optional_env = []
+
+            def available(self):
+                return True
+
+            def armed(self):
+                return True
+
+            def complete(self, request):
+                self.last_request = request
+                return ProviderResponse(
+                    success=True,
+                    status=ProviderStatus.OK,
+                    provider=self.name,
+                    data={
+                        "content": json.dumps({
+                            "proposed": {"title": "t", "bullets": ["b"], "description": "d"},
+                            "reasons": [],
+                            "missing_evidence": [],
+                            "warnings": [],
+                        }),
+                        "model": "beam-free",
+                    },
+                )
+
+        provider = Capturing()
+        listing_proposal(
+            sku="SKU-123",
+            title="Old title",
+            bullets=["b"],
+            description="Old desc",
+            provider=provider,
+        )
+        self.assertEqual(provider.last_request.max_tokens, LISTING_MAX_TOKENS)
+        self.assertEqual(LISTING_MAX_TOKENS, 8192)
 
     def test_listing_proposal_detects_prohibited_words(self):
         provider = MockReasoningProvider(
