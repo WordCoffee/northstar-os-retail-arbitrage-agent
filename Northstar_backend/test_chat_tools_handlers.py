@@ -134,3 +134,25 @@ def test_the_description_says_what_the_tool_does_and_that_it_spends_nothing():
         assert purpose.split(";")[0][:20].lower() in description or description
     plan = str(C.TOOLS["plan_campaign"]["description"]).lower()
     assert "no spend" in plan or "nothing is spent" in plan
+
+
+def test_toolkit_tools_are_offered_and_reach_their_handlers(monkeypatch):
+    calls = {}
+
+    def fake_call(tool_name, **kwargs):
+        calls[tool_name] = kwargs
+        return {"ok": True, "tool": tool_name, "data": {}}
+
+    monkeypatch.setattr(R, "call", fake_call)
+    calls_in = {
+        "generate_api_client": {"capture": {"requests": [
+            {"method": "GET", "url": "https://x.test/a"}]}},
+        "find_reference_media": {"query": "ceramic mug"},
+        "propose_improvements": {},
+        "route_local_model": {"task": "classify"},
+    }
+    for name, args in calls_in.items():
+        assert C.is_offered(name), name
+        result = C.run_tool(name, json.dumps(args), {})
+        assert result["ok"] is True, (name, result)
+        assert calls[name] == args, (name, calls[name], args)

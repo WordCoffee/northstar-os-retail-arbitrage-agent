@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-14T22:11:53+00:00",
+  "updated_at": "2026-11-15T04:16:32+00:00",
   "cycle": 3,
   "unit_in_flight": "",
   "unit_order": [
@@ -1232,6 +1232,32 @@
       "evidence": "read-only audit of all 13: earlier no-trace result was a branch-name artifact (work landed as ty/reg-03-handlers, ty/sel-02, ty/sel-03 or direct staging commits 1734b043, ad86d8b3, 693fdd24, 2c777714, 99411a70, 803cd38d, 88706b14). 13/13 have deliverable evidence; 208 backend tests pass / 0 fail, 133 UI cases (132 pass), 7 adapter probes, 2 CLIs. Three findings: ux-06-shell PARTIAL (shellRoutes.test.js pinned 72 routes vs App.jsx 73 - stale test, now fixed), tool-track-keywords PARTIAL (offered tool always refused 'no brand SEO profile supplied' - the adapter now injects the account's SEO store; fixed + test), tool-margin-report names referral_fee in ignored_inputs where the engine wants referral_fee_amount (queued as a hint fix). tool-compose-listing live probe was BLOCKED-ENV at audit time because the probe env lacked the key; g1-listings proved the live path. reports/ty/on_staging_audit_20261114.md",
       "created_at": "2026-11-14T12:23:49+00:00",
       "updated_at": "2026-11-14T12:23:49+00:00",
+      "rank": 0
+    },
+    {
+      "id": "toolkit-capability-release",
+      "unit": "U",
+      "title": "Capability toolkit: capture->client, Openverse media, bla-agents hardening, UI benchmarking, proactive proposals, local mesh routing",
+      "status": "merged",
+      "owner": "",
+      "write_paths": [
+        "tools/ty_toolkit/",
+        "Northstar_backend/bojo_tools/research_toolkit.py",
+        "Northstar_backend/chat_tools.py",
+        "ty/service_registry.json",
+        "config/local_models.example.json",
+        "scripts/harden-ui.ps1"
+      ],
+      "branch": "ty/toolkit-capability-release",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "six modules in tools/ty_toolkit: capture (HAR/JSON -> typed Python/TS, no crawl), openverse (licence+size gates, exact 504 refusal), hardening (bla-agents 3.3.2 MIT evaluated; inspect-release 69 files/0 findings/no network; harden on a copy 60+ assets, 3 refused by name, live dist tree hash unchanged), ui_benchmark (structural spec compare), proposals (ranked, owner-gated, writes nothing), mesh_route (local only when a health probe answers, cloud fallback). Four wired Bojo tools (generate_api_client, find_reference_media, propose_improvements, route_local_model) + two declared CLIs (benchmark_ui_spec, evaluate_scraper_hardening). Registry 54 tools / 52 wired / 2 declared; repair_citations --check and build --check exit 0; 21 toolkit+chat tests, 39 registry+offering, 60 combined; Playwright g1_research_persist 2 passed on the restarted stack. reports/ty/toolkit_integration_20261114.md",
+      "created_at": "2026-11-15T04:16:32+00:00",
+      "updated_at": "2026-11-15T04:16:32+00:00",
       "rank": 0
     },
     {

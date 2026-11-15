@@ -1643,12 +1643,15 @@ SERVICES = [
              "render, plan A+ pages and social sets at exact pixel sizes, storyboard "
              "video, write screened copy, add voiceover")},
     {"id": "research", "label": "Research & Corpus",
-     "tools": ["corpus_search", "corpus_vector_search", "corpus_drift", "knowledge_lookup"],
-     "can": "search the local corpus, report drift, look up a rule with its source"},
+     "tools": ["corpus_search", "corpus_vector_search", "corpus_drift", "knowledge_lookup",
+               "generate_api_client", "find_reference_media"],
+     "can": ("search the local corpus, report drift, look up a rule with its source, generate "
+             "a typed HTTP client from a capture, and source openly licensed reference media")},
     {"id": "system", "label": "System & Improvement",
      "tools": ["system_status", "improvement_status", "service_catalog",
-               "purpose_command", "plan_project"],
-     "can": "report engine health, coverage and gaps, list its own skills, plan a project"},
+               "purpose_command", "plan_project", "propose_improvements", "route_local_model"],
+     "can": ("report engine health, coverage and gaps, list its own skills, plan a project, "
+             "propose measured improvements and route light tasks to a local model")},
     {"id": "beta", "label": "Private Beta",
      "tools": ["onboarding_status", "submit_support_ticket", "redeem_invite",
                "beta_cohort"],
@@ -2056,6 +2059,66 @@ _BOJO_SPECS = {
                 "stage": {"type": "string", "maxLength": 30},
             },
             "required": ["asins", "stage"],
+        },
+    },
+    "generate_api_client": {
+        "description": (
+            "Generate a typed Python or TypeScript HTTP client from a capture the operator "
+            "supplies (a HAR export or a list of requests). It never crawls, never guesses an "
+            "endpoint and never stores a credential; the capture is the evidence."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "capture": {"type": "object",
+                            "description": "a HAR document or {requests: [...]} capture"},
+                "language": {"type": "string", "enum": ["python", "typescript"]},
+                "name": {"type": "string", "maxLength": 60},
+            },
+            "required": ["capture"],
+        },
+    },
+    "find_reference_media": {
+        "description": (
+            "Search Openverse for openly licensed reference photography. Rows carry licence, "
+            "licence URL and source page; a wrong licence or an image below the pixel gate is "
+            "refused by name, never silently kept."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "query": {"type": "string", "maxLength": 160},
+                "page_size": {"type": "integer", "minimum": 1, "maximum": 20},
+                "min_side": {"type": "integer", "minimum": 1, "maximum": 4000},
+            },
+            "required": ["query"],
+        },
+    },
+    "propose_improvements": {
+        "description": (
+            "Return ranked, measured improvement proposals from the scorecards, the director "
+            "queue and needs_you. It is a suggestion surface: it writes no queue entry and "
+            "changes no state."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {"limit": {"type": "integer", "minimum": 1, "maximum": 20}},
+            "required": [],
+        },
+    },
+    "route_local_model": {
+        "description": (
+            "Choose a local or cloud model route for a light task. A local endpoint is used only "
+            "when the config enables it and a health check says it is up; otherwise the verified "
+            "free cloud model answers, with the reason."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "task": {"type": "string", "enum": ["classify", "extract", "summarise", "embed"]},
+                "config": {"type": "object", "description": "optional local_models config"},
+            },
+            "required": ["task"],
         },
     },
 }

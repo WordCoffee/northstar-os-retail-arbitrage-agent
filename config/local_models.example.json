@@ -1,0 +1,28 @@
+{
+  "schema": "northstar.local_models.v1",
+  "enabled": false,
+  "note": "Copy to config/local_models.json and set enabled=true to attach local inference. No endpoint is treated as healthy until a health probe answers.",
+  "endpoints": [
+    {
+      "id": "ollama-local",
+      "provider": "ollama",
+      "base_url": "http://127.0.0.1:11434/v1",
+      "model": "qwen3:4b",
+      "tasks": ["classify", "extract"],
+      "cost": "0"
+    },
+    {
+      "id": "webai-local",
+      "provider": "webai",
+      "base_url": "http://127.0.0.1:8080/v1",
+      "model": "light-local",
+      "tasks": ["summarise", "embed"],
+      "cost": "0"
+    }
+  ],
+  "cloud_fallback": {
+    "provider": "opencode-go",
+    "model": "beam-free",
+    "reason": "the verified free hosted model"
+  }
+}

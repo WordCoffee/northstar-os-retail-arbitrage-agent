@@ -10,6 +10,35 @@ A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.m
 > and `reports/ty/handoff.md`, then continue from the first unfinished unit. No
 > questions, no reports between cycles. Idle means re-plan.
 
+## Position, 2026-11-14 (toolkit release) — six capabilities, four wired tools
+
+`tools/ty_toolkit/` now holds six modules, each a pure core plus a CLI. Four are real Bojo tools
+(handler + chat spec + registry entry): `generate_api_client` (prospector), `find_reference_media`
+(design-studio), `propose_improvements` (hub), `route_local_model` (autothink). Two are declared
+CLIs: `benchmark_ui_spec` (design-studio) and `evaluate_scraper_hardening` (hub). Registry after
+regeneration: **54 tools — 52 wired, 2 declared, 5 unclaimed**; `repair_citations --check` and
+`build --check` exit 0.
+
+**External status, measured:** `reverse-api-engineer` is MIT on GitHub but **not an npm package**
+and is **not installed** — the wrapper's built-in capture→client path is what runs, and `--status`
+says so. Openverse is wired but returned **HTTP 504 twice today**; the refusal is exact.
+`bla-agents` is npm **3.3.2 MIT**: `inspect-release` on a copy of the built UI read **69 files /
+1.65 MB / 0 findings / no network**, and `harden` wrote 60+ assets under `.bla-hardened/`, refused
+**3 by name** (`index`, `studio`, `vendor`), and left the originals untouched — **the live `dist/`
+tree hash is unchanged**. Nothing is shipped from a copy. `scripts/harden-ui.ps1` is the opt-in
+wrap.
+
+**Tests:** toolkit + chat handlers **21**, registry + tool-offering **39** (60 combined), and
+Playwright `g1_research_persist` **2 passed (6.5 s)** on the restarted stack (backend 19120, UI
+9280). The generated Python client compiles; the UI comparator flags the missing landmarks; the
+proposals surface writes 6 ranked items from 41 measured, owner gates flagged. Report:
+`reports/ty/toolkit_integration_20261114.md`.
+
+**Not done here, still outstanding from the interrupted sweep:** `state/vision/PAUSE` is present,
+the media lane is off, and the history purge was not applied — a full backup bundle exists
+(`northstar-pre-final-20261114-214330.bundle`, SHA256 `82FA4660…D337A`), `gitleaks` found **18
+leaks** in history, and the prepared rewrite is stale. That stays an owner-reviewed operation.
+
 ## Position, 2026-11-14 (close-out) — the last two queued units are closed
 
 **`ppc-g1-clickpath`** — `tests/e2e/ppc_primary_action.spec.ts` now drives the real browser

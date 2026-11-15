@@ -1,10 +1,10 @@
 {
   "schema": "northstar.bojo_tool_list.v1",
   "generated_from": "ty/service_registry.json",
-  "count": 48,
+  "count": 54,
   "totals": {
-    "wired": 48,
-    "declared": 0,
+    "wired": 52,
+    "declared": 2,
     "unclaimed": 5
   },
   "tools": [
@@ -24,6 +24,13 @@
       "service": "design-studio",
       "also_used_by": [],
       "reason": "chat_tools.TOOLS['apply_label'] composites the operator's real logo and copy onto a rendered pouch plate - the studio's finishing step."
+    },
+    {
+      "name": "benchmark_ui_spec",
+      "status": "declared",
+      "service": "design-studio",
+      "also_used_by": [],
+      "reason": "tools/ty_toolkit/ui_benchmark.py compares a captured page's structural spec with a reference and returns actionable deltas; it browses nothing and is a CLI."
     },
     {
       "name": "beta_cohort",
@@ -103,6 +110,27 @@
       "service": "design-studio",
       "also_used_by": [],
       "reason": "chat_tools.TOOLS['design_brief'] turns a request into a structured brief (palette, suggested dielines) before any render."
+    },
+    {
+      "name": "evaluate_scraper_hardening",
+      "status": "declared",
+      "service": "hub",
+      "also_used_by": [],
+      "reason": "tools/ty_toolkit/hardening.py evaluates bla-agents (MIT) and applies it only to a copied build artifact with allow_install; it is a CLI, not a chat tool."
+    },
+    {
+      "name": "find_reference_media",
+      "status": "wired",
+      "service": "design-studio",
+      "also_used_by": [],
+      "reason": "chat_tools.TOOLS['find_reference_media'] sources openly licensed reference photography from Openverse with licence and pixel gates, for conditioning and staging references."
+    },
+    {
+      "name": "generate_api_client",
+      "status": "wired",
+      "service": "prospector",
+      "also_used_by": [],
+      "reason": "chat_tools.TOOLS['generate_api_client'] turns an operator-supplied HAR/JSON capture into a typed client; it never crawls and never stores a credential."
     },
     {
       "name": "generate_image",
@@ -240,11 +268,25 @@
       "reason": "chat_tools.TOOLS['ppc_plan'] turns ad reports into a validated change plan."
     },
     {
+      "name": "propose_improvements",
+      "status": "wired",
+      "service": "hub",
+      "also_used_by": [],
+      "reason": "chat_tools.TOOLS['propose_improvements'] ranks measured improvements from the scorecards, queue and needs_you; it writes nothing and surfaces owner-gated items as owner-gated."
+    },
+    {
       "name": "redeem_invite",
       "status": "wired",
       "service": "beta-signup",
       "also_used_by": [],
       "reason": "chat_tools.TOOLS['redeem_invite'] redeems an invite code through InviteService.signup, the service behind POST /api/v1/foundation/signup, with the route's non-revealing denial."
+    },
+    {
+      "name": "route_local_model",
+      "status": "wired",
+      "service": "autothink",
+      "also_used_by": [],
+      "reason": "chat_tools.TOOLS['route_local_model'] picks a local/mesh endpoint for a light task only when a health probe answers, else the free cloud model with the reason."
     },
     {
       "name": "scan_products",
@@ -453,7 +495,9 @@
         "corpus_search",
         "corpus_vector_search",
         "corpus_drift",
-        "knowledge_lookup"
+        "knowledge_lookup",
+        "generate_api_client",
+        "find_reference_media"
       ],
       "unclaimed_here": [
         "corpus_search",
@@ -469,7 +513,9 @@
         "improvement_status",
         "service_catalog",
         "purpose_command",
-        "plan_project"
+        "plan_project",
+        "propose_improvements",
+        "route_local_model"
       ],
       "unclaimed_here": [
         "purpose_command"
@@ -492,14 +538,18 @@
     "build_dieline",
     "catalog_pull",
     "compose_listing",
+    "find_reference_media",
+    "generate_api_client",
     "golden_goose_scan",
     "hub_status",
     "margin_report",
     "offer_recommendation",
     "onboarding_status",
     "plan_campaign",
+    "propose_improvements",
     "read_open_design",
     "redeem_invite",
+    "route_local_model",
     "scan_products",
     "submit_support_ticket",
     "track_keywords",

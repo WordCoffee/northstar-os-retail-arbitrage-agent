@@ -76,6 +76,18 @@
           "name": "system_status",
           "status": "wired",
           "reason": "chat_tools.TOOLS['system_status'] reports the local media engine and chat model posture - the engine half of hub's status page."
+        },
+        {
+          "name": "propose_improvements",
+          "status": "wired",
+          "reason": "chat_tools.TOOLS['propose_improvements'] ranks measured improvements from the scorecards, queue and needs_you; it writes nothing and surfaces owner-gated items as owner-gated.",
+          "source": "tools/ty_toolkit/proposals.py:1"
+        },
+        {
+          "name": "evaluate_scraper_hardening",
+          "status": "declared",
+          "reason": "tools/ty_toolkit/hardening.py evaluates bla-agents (MIT) and applies it only to a copied build artifact with allow_install; it is a CLI, not a chat tool.",
+          "source": "tools/ty_toolkit/hardening.py:1"
         }
       ],
       "has_controls": false,
@@ -229,7 +241,14 @@
         "status": "wired",
         "reason": "chat_tools.TOOLS['catalog_pull'] and bojo_tools.sourcing['catalog_pull'] pull sourcing rows and report the source honestly."
       },
-      "also_declares": [],
+      "also_declares": [
+        {
+          "name": "generate_api_client",
+          "status": "wired",
+          "reason": "chat_tools.TOOLS['generate_api_client'] turns an operator-supplied HAR/JSON capture into a typed client; it never crawls and never stores a credential.",
+          "source": "tools/ty_toolkit/capture.py:1"
+        }
+      ],
       "has_controls": true,
       "gap": null,
       "controls_evidence": "northstar-os-ui/src/pages/Prospector.jsx:119 filter input, :122 Min ROI slider, :125 'Run live scan'; :167 Export and :168 'Pin top 3'.",
@@ -575,6 +594,12 @@
           "name": "plan_project",
           "status": "wired",
           "reason": "chat_tools.TOOLS['plan_project'] builds an agent-kernel plan with lanes for a build-anything run; AutothinK is where those runs happen."
+        },
+        {
+          "name": "route_local_model",
+          "status": "wired",
+          "reason": "chat_tools.TOOLS['route_local_model'] picks a local/mesh endpoint for a light task only when a health probe answers, else the free cloud model with the reason.",
+          "source": "tools/ty_toolkit/mesh_route.py:1"
         }
       ],
       "has_controls": true,
@@ -1637,6 +1662,18 @@
         "reason": "chat_tools.TOOLS['generate_image'] renders one image locally and refuses to paint text, logos or barcodes."
       },
       "also_declares": [
+        {
+          "name": "find_reference_media",
+          "status": "wired",
+          "reason": "chat_tools.TOOLS['find_reference_media'] sources openly licensed reference photography from Openverse with licence and pixel gates, for conditioning and staging references.",
+          "source": "tools/ty_toolkit/openverse.py:1"
+        },
+        {
+          "name": "benchmark_ui_spec",
+          "status": "declared",
+          "reason": "tools/ty_toolkit/ui_benchmark.py compares a captured page's structural spec with a reference and returns actionable deltas; it browses nothing and is a CLI.",
+          "source": "tools/ty_toolkit/ui_benchmark.py:1"
+        },
         {
           "name": "list_templates",
           "status": "wired",

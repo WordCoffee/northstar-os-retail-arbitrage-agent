@@ -27,6 +27,9 @@ from .keywords import TOOLS as _KEYWORD_TOOLS
 from .keywords import track_keywords
 from .publishing import TOOLS as _PUBLISHING_TOOLS
 from .publishing import build_dieline, compose_listing
+from .research_toolkit import TOOLS as _RESEARCH_TOOLKIT_TOOLS
+from .research_toolkit import (find_reference_media, generate_api_client,
+                               propose_improvements, route_local_model)
 from .sourcing import TOOLS as _SOURCING_TOOLS
 from .sourcing import catalog_pull, golden_goose_scan
 from .sourcing_extra import TOOLS as _SOURCING_EXTRA_TOOLS
@@ -43,6 +46,7 @@ TOOLS = {
     **_COMPETITOR_TOOLS,
     **_ECONOMICS_TOOLS,
     **_CAMPAIGN_TOOLS,
+    **_RESEARCH_TOOLKIT_TOOLS,
 }
 
 __all__ = [
@@ -56,4 +60,8 @@ __all__ = [
     "watch_competitor",
     "margin_report",
     "plan_campaign",
+    "generate_api_client",
+    "find_reference_media",
+    "propose_improvements",
+    "route_local_model",
 ]

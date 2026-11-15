@@ -22,6 +22,7 @@ _MODULES = (
     "bojo_tools.foundation_ops",
     "bojo_tools.design",
     "bojo_tools_ops",
+    "bojo_tools.research_toolkit",
 )
 
 #: Retired domain tools: name → one-line reason. The handler stays in its module and
