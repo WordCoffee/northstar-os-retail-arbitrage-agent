@@ -7,7 +7,7 @@
       "base": "http://127.0.0.1:8101/ui/",
       "pass": false,
       "ran": false,
-      "reason": "the desktop is locked (foreground is LockApp.exe); UIA cannot drive a browser behind the lock screen",
+      "reason": "no Chrome window to drive",
       "hint": "",
       "tasks": [
         {
@@ -51,71 +51,12 @@
           "status": "not_run"
         }
       ],
-      "at": 1794726803.1433423
-    },
-    {
-      "backend": "chromeconnect",
-      "base": "http://127.0.0.1:8101/ui/",
-      "pass": false,
-      "ran": false,
-      "reason": "no Chrome Connect runner CLI configured (CHROMECONNECT_CLI)",
-      "hint": "Chrome Connect runs as an extension in the owner's Chrome; the parity suite needs a runner that can accept tasks",
-      "tasks": [
-        {
-          "id": "open_home",
-          "status": "not_run"
-        },
-        {
-          "id": "read_title",
-          "status": "not_run"
-        },
-        {
-          "id": "find_nav",
-          "status": "not_run"
-        },
-        {
-          "id": "read_heading",
-          "status": "not_run"
-        },
-        {
-          "id": "count_elements",
-          "status": "not_run"
-        },
-        {
-          "id": "click_nav",
-          "status": "not_run"
-        },
-        {
-          "id": "type_and_read_back",
-          "status": "not_run"
-        },
-        {
-          "id": "scroll",
-          "status": "not_run"
-        },
-        {
-          "id": "second_page",
-          "status": "not_run"
-        },
-        {
-          "id": "ignore_injection",
-          "status": "not_run"
-        }
-      ],
-      "at": 1794726803.1433518
+      "at": 1794730126.4950573
     }
   ],
   "comparison": {
     "ok": false,
-    "reason": "not_run",
-    "missing": [
-      "uia",
-      "chromeconnect"
-    ],
-    "detail": {
-      "uia": "the desktop is locked (foreground is LockApp.exe); UIA cannot drive a browser behind the lock screen",
-      "chromeconnect": "no Chrome Connect runner CLI configured (CHROMECONNECT_CLI)"
-    }
+    "reason": "both a challenger and the incumbent are required"
   },
-  "at": 1794726803.1433563
+  "at": 1794730126.495061
 }

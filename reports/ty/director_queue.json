@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-15T07:16:28+00:00",
+  "updated_at": "2026-11-15T08:13:32+00:00",
   "cycle": 3,
   "unit_in_flight": "",
   "unit_order": [
@@ -1297,30 +1297,9 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "ComfyUI 0.43.0 on 8188 and gateway on 8190 (flux-3-image-klein, 16 steps, all weights present) are running. A real render was attempted and refused by the lane's own guard: 502 system_ram_insufficient free 3858 MB, need 4096 MB (stop-list freed 0). Free RAM 3.4-3.9 GB with Chrome/Teams/harness resident; the guard was not bypassed. Close apps / add RAM to render.",
+      "evidence": "ComfyUI 0.43.0 on 8188 and gateway on 8190 (flux-3-image-klein, 16 steps, all weights present) ran detached. A real render through POST /api/design-studio/generate SUCCEEDED in 48.0 s: asset da50d861-a532-43ba-9c1d-66be54b85598, 1024x1024 image/png, storage_key ab8ad729....png, read back via GET /api/design-studio/assets/{id} and opened with Pillow (1024x1024 RGB). Evidence reports/ty/media_render_20261115.json. Earlier failures were the 4096 MB RAM floor and a console-close event, both resolved (owner freed RAM; detached launch).",
       "created_at": "2026-11-15T07:15:57+00:00",
-      "updated_at": "2026-11-15T07:15:57+00:00",
-      "rank": 0
-    },
-    {
-      "id": "vision-parity-20261115",
-      "unit": "U",
-      "title": "Desktop parity / V3 after PAUSE removal",
-      "status": "blocked",
-      "owner": "",
-      "write_paths": [
-        "reports/ty/parity_20261115.json"
-      ],
-      "branch": "ty/vision-parity-20261115",
-      "worktree": "",
-      "rollback_tag": "",
-      "acceptance": [],
-      "tokens": 0,
-      "score_before": null,
-      "score_after": null,
-      "evidence": "PAUSE removed by owner; parity --run --twice --backends uia,chromeconnect returned not_run on both runs: uia refused because the desktop is locked (foreground LockApp.exe); chromeconnect has no runner CLI configured (CHROMECONNECT_CLI). Evidence: reports/ty/d8_parity_run1.json and d8_parity_run2.json. Needs an unlocked desktop.",
-      "created_at": "2026-11-15T07:15:57+00:00",
-      "updated_at": "2026-11-15T07:16:28+00:00",
+      "updated_at": "2026-11-15T08:13:32+00:00",
       "rank": 0
     },
     {
@@ -1655,6 +1634,27 @@
       "evidence": "[\"tools/seller_tester/ad_copy.py\", \"tools/seller_tester/ad_copy_briefs.json\", \"tools/seller_tester/ad_copy_run.py\", \"Northstar_backend/test_ad_copy_scorer.py\", \"state/seller/ad_copy_proof.json\", \"ty/seller_scores.json\"]",
       "created_at": "2026-11-13T19:07:29+00:00",
       "updated_at": "2026-11-13T19:07:29+00:00",
+      "rank": 1
+    },
+    {
+      "id": "vision-parity-20261115",
+      "unit": "U",
+      "title": "Desktop parity / V3 after PAUSE removal",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "reports/ty/parity_20261115.json"
+      ],
+      "branch": "ty/vision-parity-20261115",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "Desktop unlocked by owner; Chrome Profile 6 opened. parity --run --backend uia RAN: 4/10 passed, recovery failed (first and second attempts false). Default parity --twice (vision+chromeconnect) is not_run: no CDP at :9222 and no CHROMECONNECT_CLI runner. V3 gate not met; this is a tool-quality gap. Evidence reports/ty/parity_uia_20261115.json.",
+      "created_at": "2026-11-15T07:15:57+00:00",
+      "updated_at": "2026-11-15T08:13:32+00:00",
       "rank": 1
     },
     {

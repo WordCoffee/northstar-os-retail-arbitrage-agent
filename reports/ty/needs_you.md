@@ -614,6 +614,14 @@ spend approval. Nothing else in the queue is blocked by this.
 
 ## FINAL-1. Two machine-state actions to finish the last two gates (2026-11-15)
 
+**RESOLVED 2026-11-15 — both actions were taken.** The desktop was unlocked and the RAM floor was
+lifted. A real render succeeded (asset `da50d861…`, 1024×1024, 48.0 s, persisted and read back), and
+UIA parity ran for real: **4 / 10 passed, recovery failed**. The remaining V3 gap is tool quality,
+not a lock or RAM condition; it is queued as `vision-parity-20261115`. Chrome Connect still has no
+runner CLI, so a challenger-vs-incumbent verdict cannot be produced yet.
+
+The original entries are kept below for the record.
+
 The pause is lifted and the media lane is armed; two hardware/desktop conditions still hold.
 
 **a) Unlock and sign in to the Windows session, and leave it unlocked.** The parity suite refuses

@@ -21,14 +21,19 @@ removed because GitHub refused the push over its 100 MB limit. Backups:
 archived before removal. **Every commit hash in reports before this purge is stale; tag names are
 stable.** Reports: `security_history_purge_20261115.md`, `final_green_20261115.md`.
 
-**PAUSE lifted, media lane armed.** `state/vision/PAUSE` removed on the owner's word. ComfyUI
-**0.43.0** on :8188 and the FLUX gateway on :8190 (`flux-3-image-klein`, all weights present) are
-running with `NORTHSTAR_NO_MEDIA=0`. Two hardware-blocked attempts, recorded exactly:
+**PAUSE lifted, media lane armed — and it renders.** `state/vision/PAUSE` removed on the owner's
+word. The owner unlocked the desktop and lifted the RAM pressure; ComfyUI **0.43.0** on :8188 and
+the FLUX gateway on :8190 (`flux-3-image-klein`, all weights present) are running **detached**
+(the earlier instances died on a console-close event, not on memory). A real render through
+`/api/design-studio/generate` **succeeded**: asset **`da50d861…`**, **1024×1024 PNG**, **48.0 s**,
+persisted and read back through `GET /api/design-studio/assets/{id}`; evidence
+`reports/ty/media_render_20261115.json`.
 
-| attempt | refusal |
-|---|---|
-| render via `/api/design-studio/generate` | `502 system_ram_insufficient: free 3858 MB, need 4096 MB (after stop-list freed 0 MB)` — free RAM is 3.4–3.9 GB with Chrome/Teams/harness resident; guard **not** bypassed |
-| `tools.vision.parity --run --twice` | both runs `not_run`: **desktop locked** (`LockApp.exe`) for UIA; no Chrome Connect runner CLI (`CHROMECONNECT_CLI`) |
+**UIA parity ran, and it is 4/10.** With Chrome Profile 6 open and the desktop unlocked:
+`parity --run --backend uia` → **4 / 10 passed, recovery failed**. The default parity
+(`--twice`, vision + chromeconnect) is `not_run`: no CDP :9222 and no `CHROMECONNECT_CLI` runner,
+so the challenger-vs-incumbent verdict cannot be produced. The V3 gate is **not met**; the gap is
+tool quality (4/10), tracked as a queued unit. Evidence: `parity_uia_20261115.json`.
 
 **Verification:** `production_assert` **12 pass / 0 fail / 0 skip / 10 advisory** exit 0;
 `pytest` registry + tool-offering + toolkit + chat + ad-copy **69 passed**; registry

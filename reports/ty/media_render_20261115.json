@@ -1,0 +1,36 @@
+{
+  "schema": "northstar.media_render.v1",
+  "at": "2026-11-15T08:10:00+00:00",
+  "engine": {
+    "runtime": "comfyui",
+    "version": "0.43.0",
+    "model": "flux3-image-klein-nvfp4",
+    "gateway": "http://127.0.0.1:8190",
+    "armed": true,
+    "media_gen_live": "1"
+  },
+  "request": {
+    "endpoint": "POST /api/design-studio/generate",
+    "kind": "image",
+    "width": 1024,
+    "height": 1024,
+    "tier": "draft",
+    "text_safe": true,
+    "brief": "A 200 g resealable kraft stand-up pouch of Mogra Organics lion's mane mushroom powder, centered on a clean white studio background, soft even light, no text, product photography"
+  },
+  "result": {
+    "ok": true,
+    "seconds": 48.0,
+    "asset_id": "da50d861-a532-43ba-9c1d-66be54b85598",
+    "name": "image - flux3-image-klein-nvfp4 - 2026-11-15T08:10",
+    "asset_type": "generated-image",
+    "mime_type": "image/png",
+    "width": 1024,
+    "height": 1024,
+    "storage_key": "ab8ad729...",
+    "path": "Northstar_backend/data/studio_generated/ab8ad729....png",
+    "bytes": 1316214,
+    "sha256_prefix": "c6168170c3dd6b69"
+  },
+  "read_back": "GET /api/design-studio/assets/da50d861-a532-43ba-9c1d-66be54b85598 returned the persisted row (name, storage_key, 1024x1024, image/png); Pillow opened the file at 1024x1024 RGB."
+}

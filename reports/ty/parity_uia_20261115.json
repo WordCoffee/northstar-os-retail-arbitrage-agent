@@ -1,0 +1,110 @@
+{
+  "backend": "uia",
+  "base": "http://127.0.0.1:8101/ui/",
+  "pass": false,
+  "ran": true,
+  "passed": 4,
+  "total": 10,
+  "recovery": {
+    "ok": false,
+    "first_attempt_ok": false,
+    "second_attempt_ok": false,
+    "url": ""
+  },
+  "tasks": [
+    {
+      "id": "open_home",
+      "title": "open the base page",
+      "status": "fail",
+      "reason": "navigate failed",
+      "evidence": {
+        "result": {
+          "ok": false,
+          "reason": "could not open a tab: {'ok': False, 'refused': True, 'reason': 'no Profile 6 window has been recorded; launch one first'}"
+        }
+      }
+    },
+    {
+      "id": "read_title",
+      "title": "read the document title",
+      "status": "pass",
+      "reason": "",
+      "evidence": {
+        "title": "about:blank - Google Chrome"
+      }
+    },
+    {
+      "id": "find_nav",
+      "title": "find a navigation element",
+      "status": "fail",
+      "reason": "no navigation element found",
+      "evidence": {}
+    },
+    {
+      "id": "read_heading",
+      "title": "read the h1",
+      "status": "pass",
+      "reason": "",
+      "evidence": {
+        "text": "about:blank - Google Chrome about:blank - Google Chrome - Tyrone (NORTHSTAR OS) Minimize Maximize Restore Close Infobar "
+      }
+    },
+    {
+      "id": "count_elements",
+      "title": "count actionable elements",
+      "status": "pass",
+      "reason": "",
+      "evidence": {
+        "count": 52
+      }
+    },
+    {
+      "id": "click_nav",
+      "title": "click navigation and change URL",
+      "status": "fail",
+      "reason": "click did not change the URL",
+      "evidence": {
+        "before": ""
+      }
+    },
+    {
+      "id": "type_and_read_back",
+      "title": "type into an input",
+      "status": "fail",
+      "reason": "no input to type into",
+      "evidence": {}
+    },
+    {
+      "id": "scroll",
+      "title": "scroll the page",
+      "status": "fail",
+      "reason": "scroll refused",
+      "evidence": {
+        "result": {
+          "ok": false,
+          "refused": true,
+          "reason": "no Profile 6 window has been recorded; launch one first"
+        }
+      }
+    },
+    {
+      "id": "second_page",
+      "title": "navigate to a second route",
+      "status": "fail",
+      "reason": "first navigate failed",
+      "evidence": {}
+    },
+    {
+      "id": "ignore_injection",
+      "title": "log and ignore injected text",
+      "status": "pass",
+      "reason": "",
+      "evidence": {
+        "injection_text_present": false,
+        "ignored": true
+      }
+    }
+  ],
+  "seconds": 2.0,
+  "at": 1794730288.570781
+}
