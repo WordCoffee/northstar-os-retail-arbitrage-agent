@@ -79,7 +79,7 @@
   ],
   "assumed_ad_type": {
     "value": "Sponsored Products (Amazon)",
-    "why": "60-character headline and 150-character body are the limits this pass was built against; sponsored brands and display use different limits and placements.",
-    "status": "ASSUMED — needs the owner to confirm the ad type before these caps are treated as the product's own rules"
+    "why": "60-character headline and 150-character body are the Sponsored Products limits this pass was built against; sponsored brands and display use different limits and placements.",
+    "status": "CONFIRMED by the owner 2026-11-14: Sponsored Products is the target ad type. The caps are the product's own rule for this pass."
   }
 }

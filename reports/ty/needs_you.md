@@ -540,6 +540,11 @@ blocked by this; the working copy and the local bundle stay as they are until yo
 
 ## PPC-2. Confirm the ad type the ad-copy caps assume (2026-11-13)
 
+**RESOLVED 2026-11-14 — owner confirmed Sponsored Products.** The caps are now the product's own
+rule for this pass (`tools/seller_tester/ad_copy.py` → `AD_TYPE`, briefs → `status: CONFIRMED`),
+recorded in `ty/product_decisions.json`; the score is unchanged (6 fixtures, 5 passed, mean 98.1).
+Sponsored Brands / Display stay out of scope until separately requested.
+
 The AdPilot ad-copy score uses **60-character headlines and 150-character bodies**, which I took to
 be **Amazon Sponsored Products** limits. Sponsored Brands and Sponsored Display use different caps
 and different placements, so this is recorded as an assumption (`tools/seller_tester/ad_copy.py`
@@ -604,4 +609,37 @@ so **no stub listing exists**.
 
 I will **not** select `step-5-preview` or any other paid model without a separate, explicit
 spend approval. Nothing else in the queue is blocked by this.
+
+---
+
+## FINAL-1. Two machine-state actions to finish the last two gates (2026-11-15)
+
+The pause is lifted and the media lane is armed; two hardware/desktop conditions still hold.
+
+**a) Unlock and sign in to the Windows session, and leave it unlocked.** The parity suite refuses
+because the foreground is `LockApp.exe`:
+
+```
+python -m tools.vision.parity --run --twice --backends uia,chromeconnect
+→ both runs not_run: uia "the desktop is locked"; chromeconnect "no CHROMECONNECT_CLI runner"
+```
+
+Unlocking closes the V3/parity gate. Ty never enters a Windows password and never attempts to
+unlock.
+
+**b) Free ~300–700 MB RAM (or add memory) so a render fits the lane's floor.** ComfyUI 0.43.0 and
+the FLUX 3 Klein gateway are running and healthy, but the product's own budget guard refused the
+render:
+
+```
+502 system_ram_insufficient: free 3858 MB, need 4096 MB (after stop-list freed 0 MB)
+```
+
+Current free RAM is 3.4–3.9 GB with Chrome, Teams and the agent harness resident. The guard was
+**not** bypassed. Close unused applications/tabs (Teams and extra Chrome windows are the largest
+non-system consumers), then the same `POST /api/design-studio/generate` will render and persist an
+asset.
+
+Everything else is green: `production_assert` 12/0/0/10, 69 backend tests, registry checks 0,
+Playwright 8 passed, and gitleaks 0 on both the rewritten remote and the local repo.
 

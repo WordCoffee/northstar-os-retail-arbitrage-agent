@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-15T04:16:32+00:00",
+  "updated_at": "2026-11-15T07:16:28+00:00",
   "cycle": 3,
   "unit_in_flight": "",
   "unit_order": [
@@ -1258,6 +1258,92 @@
       "evidence": "six modules in tools/ty_toolkit: capture (HAR/JSON -> typed Python/TS, no crawl), openverse (licence+size gates, exact 504 refusal), hardening (bla-agents 3.3.2 MIT evaluated; inspect-release 69 files/0 findings/no network; harden on a copy 60+ assets, 3 refused by name, live dist tree hash unchanged), ui_benchmark (structural spec compare), proposals (ranked, owner-gated, writes nothing), mesh_route (local only when a health probe answers, cloud fallback). Four wired Bojo tools (generate_api_client, find_reference_media, propose_improvements, route_local_model) + two declared CLIs (benchmark_ui_spec, evaluate_scraper_hardening). Registry 54 tools / 52 wired / 2 declared; repair_citations --check and build --check exit 0; 21 toolkit+chat tests, 39 registry+offering, 60 combined; Playwright g1_research_persist 2 passed on the restarted stack. reports/ty/toolkit_integration_20261114.md",
       "created_at": "2026-11-15T04:16:32+00:00",
       "updated_at": "2026-11-15T04:16:32+00:00",
+      "rank": 0
+    },
+    {
+      "id": "security-history-purge",
+      "unit": "U",
+      "title": "Final git history purge: 18 historical findings to 0, rewritten main/staging pushed",
+      "status": "merged",
+      "owner": "",
+      "write_paths": [
+        "reports/ty/security_history_purge_20261115.md"
+      ],
+      "branch": "ty/security-history-purge",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "owner-authorized: backup bundle 00B28480...BB7F; 18 findings (12 sourcegraph tokens in 3 captured pages, 4 generic-api-key in a chat export, 1 github-pat, 1 synthetic guard-test token) -> 0 on the rewritten mirror and 0 on the working repo (1824 commits, 553 MB); five files removed from all history, synthetic token replaced, 406 MB audio removed for GitHub's 100 MB limit; force-pushed all 47 branches and tags, main 98875d7f / staging d9e778c1; 25+4 stale worktrees removed (dirty ones archived), 22 branches re-pointed, stash dropped, reflog expired, gc; backups in Northstar-backups. Caveat: GitHub keeps unreachable objects by SHA until its GC/support.",
+      "created_at": "2026-11-15T07:15:57+00:00",
+      "updated_at": "2026-11-15T07:15:57+00:00",
+      "rank": 0
+    },
+    {
+      "id": "media-lane-armed",
+      "unit": "U",
+      "title": "Arm the media lane (NORTHSTAR_NO_MEDIA=0) and verify ComfyUI + FLUX gateway",
+      "status": "merged",
+      "owner": "",
+      "write_paths": [
+        "reports/ty/final_green_20261115.md"
+      ],
+      "branch": "ty/media-lane-armed",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "ComfyUI 0.43.0 on 8188 and gateway on 8190 (flux-3-image-klein, 16 steps, all weights present) are running. A real render was attempted and refused by the lane's own guard: 502 system_ram_insufficient free 3858 MB, need 4096 MB (stop-list freed 0). Free RAM 3.4-3.9 GB with Chrome/Teams/harness resident; the guard was not bypassed. Close apps / add RAM to render.",
+      "created_at": "2026-11-15T07:15:57+00:00",
+      "updated_at": "2026-11-15T07:15:57+00:00",
+      "rank": 0
+    },
+    {
+      "id": "vision-parity-20261115",
+      "unit": "U",
+      "title": "Desktop parity / V3 after PAUSE removal",
+      "status": "blocked",
+      "owner": "",
+      "write_paths": [
+        "reports/ty/parity_20261115.json"
+      ],
+      "branch": "ty/vision-parity-20261115",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "PAUSE removed by owner; parity --run --twice --backends uia,chromeconnect returned not_run on both runs: uia refused because the desktop is locked (foreground LockApp.exe); chromeconnect has no runner CLI configured (CHROMECONNECT_CLI). Evidence: reports/ty/d8_parity_run1.json and d8_parity_run2.json. Needs an unlocked desktop.",
+      "created_at": "2026-11-15T07:15:57+00:00",
+      "updated_at": "2026-11-15T07:16:28+00:00",
+      "rank": 0
+    },
+    {
+      "id": "owner-decisions-20261115",
+      "unit": "U",
+      "title": "Record the owner decisions: listings G2 honest zero, PPC Sponsored Products, reference media defaults",
+      "status": "merged",
+      "owner": "",
+      "write_paths": [
+        "ty/product_decisions.json",
+        "tools/seller_tester/ad_copy.py",
+        "tools/seller_tester/ad_copy_briefs.json"
+      ],
+      "branch": "ty/owner-decisions-20261115",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "ty/product_decisions.json records all three. Listings G2 accepted as an honest zero (watchtower, no forced copy target). PPC AD_TYPE=Sponsored Products confirmed in ad_copy.py and the briefs (status CONFIRMED; 9 tests pass, score unchanged 98.1/6/5). Reference defaults CC0/BY/BY-SA at 800 px short side, category term required; owner photos remain preferred where present.",
+      "created_at": "2026-11-15T07:15:58+00:00",
+      "updated_at": "2026-11-15T07:15:58+00:00",
       "rank": 0
     },
     {

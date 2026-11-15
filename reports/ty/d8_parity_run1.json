@@ -7,7 +7,7 @@
       "base": "http://127.0.0.1:8101/ui/",
       "pass": false,
       "ran": false,
-      "reason": "no Chrome window to drive",
+      "reason": "the desktop is locked (foreground is LockApp.exe); UIA cannot drive a browser behind the lock screen",
       "hint": "",
       "tasks": [
         {
@@ -51,7 +51,7 @@
           "status": "not_run"
         }
       ],
-      "at": 1794389496.8251185
+      "at": 1794726803.1433423
     },
     {
       "backend": "chromeconnect",
@@ -102,7 +102,7 @@
           "status": "not_run"
         }
       ],
-      "at": 1794389496.825132
+      "at": 1794726803.1433518
     }
   ],
   "comparison": {
@@ -113,9 +113,9 @@
       "chromeconnect"
     ],
     "detail": {
-      "uia": "no Chrome window to drive",
+      "uia": "the desktop is locked (foreground is LockApp.exe); UIA cannot drive a browser behind the lock screen",
       "chromeconnect": "no Chrome Connect runner CLI configured (CHROMECONNECT_CLI)"
     }
   },
-  "at": 1794389496.8251374
+  "at": 1794726803.1433563
 }

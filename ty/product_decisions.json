@@ -1,0 +1,30 @@
+{
+  "schema": "northstar.product_decisions.v1",
+  "updated_at": "2026-11-15T00:00:00+00:00",
+  "decisions": [
+    {
+      "id": "listings-g2",
+      "service": "listings",
+      "decision": "Accept the honest zero for the seller dimension.",
+      "scope": "Listings remains a health/alert watchtower (alerts, diffs, history, escalations) and does not get a forced copy-generation target. The copy artefact belongs to ListingForge (compose_listing); borrowing its score would be a false attribution.",
+      "owner": "Tyrone (owner decision, 2026-11-14)",
+      "effect": "No code change. G2 stays 0.0 by design; the digest and scorecard label it an honest zero."
+    },
+    {
+      "id": "ppc-ad-type",
+      "service": "adpilot",
+      "decision": "Sponsored Products is the target ad type for the ad-copy caps.",
+      "scope": "60-character headline and 150-character body remain the product's own rules for this pass. Sponsored Brands and Sponsored Display are out of scope until separately requested.",
+      "owner": "Tyrone (owner decision, 2026-11-14)",
+      "effect": "tools/seller_tester/ad_copy.py records AD_TYPE = Sponsored Products (owner-confirmed); the briefs carry the confirmation; the score is unchanged (98.1 over 6, 5 passed)."
+    },
+    {
+      "id": "reference-media-defaults",
+      "service": "design-studio",
+      "decision": "Use the documented reference-media defaults.",
+      "scope": "Open-licensed references only (CC0/BY/BY-SA), 800 px minimum short side, category term required; owner-supplied product photographs remain preferred where present. Missing owner photographs (Neck Nirvana, deeper Mogra coverage) limit depth but do not block the pipeline.",
+      "owner": "Tyrone (owner decision, 2026-11-14)",
+      "effect": "tools/reference_coverage.py defaults already match; the Openverse connector follows the same gates."
+    }
+  ]
+}

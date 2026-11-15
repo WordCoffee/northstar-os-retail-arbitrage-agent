@@ -10,6 +10,39 @@ A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.m
 > and `reports/ty/handoff.md`, then continue from the first unfinished unit. No
 > questions, no reports between cycles. Idle means re-plan.
 
+## Position, 2026-11-15 — owner gates lifted, history purged, three of six launch-ready
+
+**History purge done and verified.** 18 findings → **0** on the rewritten mirror and **0** on the
+working repo (1,824 commits, 553 MB). Remote rewritten: **main `98875d7f`**, **staging `d9e778c1`**;
+all 47 branches and every tag pushed. Five files removed from all history (both chat exports and
+the three captured pages), the synthetic guard-test token replaced, and a 406 MB audio artifact
+removed because GitHub refused the push over its 100 MB limit. Backups:
+`northstar-pre-purge-20261114-234441.bundle` (SHA256 `00B28480…BB7F`) plus four dirty worktrees
+archived before removal. **Every commit hash in reports before this purge is stale; tag names are
+stable.** Reports: `security_history_purge_20261115.md`, `final_green_20261115.md`.
+
+**PAUSE lifted, media lane armed.** `state/vision/PAUSE` removed on the owner's word. ComfyUI
+**0.43.0** on :8188 and the FLUX gateway on :8190 (`flux-3-image-klein`, all weights present) are
+running with `NORTHSTAR_NO_MEDIA=0`. Two hardware-blocked attempts, recorded exactly:
+
+| attempt | refusal |
+|---|---|
+| render via `/api/design-studio/generate` | `502 system_ram_insufficient: free 3858 MB, need 4096 MB (after stop-list freed 0 MB)` — free RAM is 3.4–3.9 GB with Chrome/Teams/harness resident; guard **not** bypassed |
+| `tools.vision.parity --run --twice` | both runs `not_run`: **desktop locked** (`LockApp.exe`) for UIA; no Chrome Connect runner CLI (`CHROMECONNECT_CLI`) |
+
+**Verification:** `production_assert` **12 pass / 0 fail / 0 skip / 10 advisory** exit 0;
+`pytest` registry + tool-offering + toolkit + chat + ad-copy **69 passed**; registry
+`repair_citations --check` and `build --check` exit **0**; Playwright research + listings +
+golden-goose + PPC primary action (desktop + iPhone 12 WebKit) **8 passed, 2 skipped (43.3 s)**.
+
+**Owner decisions recorded** in `ty/product_decisions.json`: Listings G2 accepted as an honest
+zero; PPC target **Sponsored Products** (code + briefs confirmed, 9 tests); reference defaults
+CC0/BY/BY-SA at 800 px.
+
+**What only the owner can finish now:** unlock/sign in to the desktop (parity/V3) and close
+applications to free ~300–700 MB RAM (the 4,096 MB render floor). SEC-2's encrypted off-machine
+copy still needs a passphrase and destination. GitHub's unreachable objects need a support request.
+
 ## Position, 2026-11-14 (toolkit release) — six capabilities, four wired tools
 
 `tools/ty_toolkit/` now holds six modules, each a pure core plus a CLI. Four are real Bojo tools
